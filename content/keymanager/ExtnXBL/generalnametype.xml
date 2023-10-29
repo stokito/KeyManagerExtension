@@ -1,0 +1,248 @@
+<?xml version="1.0"?>
+<!-- @(#) $Id: generalnametype.xml,v 1.8 2009/04/16 13:11:53 subrata Exp $ -->
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is Avaya Labs Research, Avaya Inc. Code.
+   -
+   - The Initial Developer of the Original Code is
+   - Subrata Mazumdar, Avaya Labs Research, Avaya Inc.
+   - Portions created by the Initial Developer are Copyright (C) 2007.
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Subrata Mazumdar (mazum@avaya.com)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+<!DOCTYPE bindings
+    	[
+	<!ENTITY % certManager.dtd SYSTEM "chrome://pippki/locale/certManager.dtd">
+	%certManager.dtd;
+	<!ENTITY % keyManager.dtd SYSTEM "chrome://keymanager/locale/keyManager.dtd">
+	%keyManager.dtd;
+	]>
+
+<bindings id="generalnametypeBindings"
+    xmlns="http://www.mozilla.org/xbl"
+    xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    xmlns:xbl="http://www.mozilla.org/xbl">
+
+    <script type="application/x-javascript" src="chrome://keymanager/content/GeneralNameItem.js"/>
+
+    <binding id="generalnametypeBinding">
+    	<!-- content, property, method and event descriptions go here -->
+    	<content>
+            <xul:menulist anonid="certextn.stdx509extn.generalname.item.nameType"
+		xbl:inherits="value=type,tooltiptext=typetooltip,disabled=typedisabled,readonly"
+		tooltiptext="&keymgr.create.generalName.item.nameType.tooltip;"
+		oncommand="getBindingParent(this).onListItemSelection(this, event)"
+		>
+          	<xul:menupopup>
+          	    <xul:menuitem anonid="certextn.stdx509extn.generalname.item.nameType.rfc822Name"
+          	        label="&keymgr.create.generalName.item.nameType.rfc822Name;"
+          		tooltiptext="&keymgr.create.generalName.item.nameType.rfc822Name.tooltip;"
+          		selected="true"
+          		value="rfc822Name"
+          		numvalue="2"
+          		/>
+          	    <xul:menuitem anonid="certextn.stdx509extn.generalname.item.nameType.dnsName"
+          		label="&keymgr.create.generalName.item.nameType.dnsName;"
+          		tooltiptext="&keymgr.create.generalName.item.nameType.dnsName.tooltip;"
+          		value="dnsName"
+          		numvalue="3"
+          		/>
+          	    <xul:menuitem anonid="certextn.stdx509extn.generalname.item.nameType.x400"
+			xbl:inherits="disabled=x400disabled"
+          		label="&keymgr.create.generalName.item.nameType.x400;"
+          		tooltiptext="&keymgr.create.generalName.item.nameType.x400.tooltip;"
+          		value="x400"
+          		numvalue="4"
+          		/>
+          	    <xul:menuitem anonid="certextn.stdx509extn.generalname.item.nameType.directoryName"
+          		label="&keymgr.create.generalName.item.nameType.directoryName;"
+          		tooltiptext="&keymgr.create.generalName.item.nameType.directoryName.tooltip;"
+          		value="directoryName"
+          		numvalue="5"
+          		/>
+          	    <xul:menuitem anonid="certextn.stdx509extn.generalname.item.nameType.ediPartyName"
+          		label="&keymgr.create.generalName.item.nameType.ediPartyName;"
+          		tooltiptext="&keymgr.create.generalName.item.nameType.ediPartyName.tooltip;"
+          		value="ediPartyName"
+          		numvalue="6"
+          		/>
+          	    <xul:menuitem anonid="certextn.stdx509extn.generalname.item.nameType.uri"
+          		label="&keymgr.create.generalName.item.nameType.URI;"
+          		tooltiptext="&keymgr.create.generalName.item.nameType.URI.tooltip;"
+          		value="uri"
+          		numvalue="7"
+          		/>
+          	    <xul:menuitem anonid="certextn.stdx509extn.generalname.item.nameType.ipAddress"
+          		label="&keymgr.create.generalName.item.nameType.ipAddress;"
+          		tooltiptext="&keymgr.create.generalName.item.nameType.ipAddress.tooltip;"
+          		value="ipAddress"
+          		numvalue="8"
+          		/>
+          	    <xul:menuitem anonid="certextn.stdx509extn.generalname.item.nameType.regID"
+          		label="&keymgr.create.generalName.item.nameType.regID;"
+          		tooltiptext="&keymgr.create.generalName.item.nameType.regID.tooltip;"
+          		value="regID"
+          		numvalue="9"
+          		/>
+          	    <xul:menuitem anonid="certextn.stdx509extn.generalname.item.nameType.nscpNickname"
+          		label="&keymgr.create.generalName.item.nameType.nscpNickname;"
+          		tooltiptext="&keymgr.create.generalName.item.nameType.nscpNickname.tooltip;"
+			value="nscpNickname"
+			numvalue="10"
+          		/>
+          	    <xul:menuitem anonid="certextn.stdx509extn.generalname.item.nameType.otherName"
+			xbl:inherits="disabled=othernamedisabled"
+          		label="&keymgr.create.generalName.item.nameType.otherName;"
+          		tooltiptext="&keymgr.create.generalName.item.nameType.otherName.tooltip;"
+          		value="otherName"
+          		numvalue="1"
+          		/>
+		</xul:menupopup>
+            </xul:menulist>
+    	</content>
+	<implementation>
+	    <field name="mGeneralNameTypeMenuElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certextn.stdx509extn.generalname.item.nameType");
+	    </field>
+	    <field name="mGeneralNameItemTypeValueMap"/>
+
+	    <property name="type"
+	        onget="return this.value;"
+	    	onset="this.value = val; return val;"
+		/>
+	    <property name="typenum" readonly="true"
+	        onget="return this.selectedItem.getAttribute('numvalue');"
+		/>
+	    <property name="value"
+	        onget="return this.mGeneralNameTypeMenuElem.value;"
+	    	onset="this.mGeneralNameTypeMenuElem.value = val; this.refresh(); return val;"
+		/>
+	    <property name="selectedIndex"
+	        onget="return this.mGeneralNameTypeMenuElem.selectedIndex;"
+	    	onset="this.mGeneralNameTypeMenuElem.selectedIndex = val; this.refresh(); return val;"
+		/>
+	    <property name="selectedItem"
+	        onget="return this.mGeneralNameTypeMenuElem.selectedItem;"
+	    	onset="this.mGeneralNameTypeMenuElem.selectedItem = val; this.refresh(); return val;"
+		/>
+	    <property name="readonly"
+	        onget="return this.mGeneralNameTypeMenuElem.disabled;"
+	    	onset="this.mGeneralNameTypeMenuElem.disabled=val; return val;"
+		/>
+
+	    <constructor>
+		<![CDATA[
+		this.initGeneralNameItemTypeValueMap();
+
+		this.refresh();
+
+		]]>
+	    </constructor>
+
+	    <method name="refresh">
+	        <body>
+		<![CDATA[
+		this.onListItemSelection(this.mGeneralNameTypeMenuElem);
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="reset">
+	        <body>
+		<![CDATA[
+		this.mGeneralNameTypeMenuElem.selectedIndex = 0;
+		this.refresh();
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="initGeneralNameItemTypeValueMap">
+	        <body>
+		<![CDATA[
+                this.mGeneralNameItemTypeValueMap = new Object();
+		var menuItemNodes = this.mGeneralNameTypeMenuElem.getElementsByTagName("menuitem");
+		if (menuItemNodes.length <= 0) {
+		    	var tagName = "xul:" + "menuitem";
+		        menuItemNodes = this.mGeneralNameTypeMenuElem.getElementsByTagName(tagName);
+		}
+		for (var i = 0; i < menuItemNodes.length; i++) {
+		    var menuItemElem = menuItemNodes.item(i);
+		    var itemName =  menuItemElem.value;
+		    var itemValue =  menuItemElem.getAttribute("numvalue");
+                    this.mGeneralNameItemTypeValueMap[itemName]	= itemValue;
+		}
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="mapGeneralNameTypeToValue">
+		<parameter name="itemType"/>
+	        <body>
+		<![CDATA[
+                if (!this.mGeneralNameItemTypeValueMap) {
+    	            this.initGeneralNameItemTypeValueMap();
+                }
+                return this.mGeneralNameItemTypeValueMap[itemType];
+		]]>
+	        </body>
+	    </method>
+
+
+	    <method name="onListItemSelection">
+		<parameter name="aNameTypeMenuListElem"/>
+		<parameter name="ev"/>
+	        <body>
+		<![CDATA[
+		/*
+		if (ev) {
+		    ev.stopPropagation();
+		}
+		*/
+		var selectedListItemElem = aNameTypeMenuListElem.selectedItem;
+
+                if (!selectedListItemElem) {
+    	            return;
+                }
+		var otherName = false;
+                if (selectedListItemElem.value == "otherName") {
+		    otherName = true;
+                }
+
+		]]>
+	        </body>
+	    </method>
+
+
+	</implementation>
+    </binding>
+
+</bindings>
+

@@ -1,0 +1,1285 @@
+<?xml version="1.0"?>
+<!-- @(#) $Id: certextn.xml,v 1.27 2012/10/03 23:09:41 subrata Exp $ -->
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is Avaya Labs Research, Avaya Inc. Code.
+   -
+   - The Initial Developer of the Original Code is
+   - Subrata Mazumdar, Avaya Labs Research, Avaya Inc.
+   - Portions created by the Initial Developer are Copyright (C) 2007.
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Subrata Mazumdar (mazum@avaya.com)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+
+<!DOCTYPE bindings SYSTEM "chrome://keymanager/locale/keyManager.dtd">
+
+<bindings id="certextnBindings"
+    xmlns="http://www.mozilla.org/xbl"
+    xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    xmlns:xbl="http://www.mozilla.org/xbl">
+
+    <binding id="certextnbaseBinding">
+        <!--
+        <resources>
+        </resources>
+        -->
+    	<!-- content, property, method and event descriptions go here -->
+    	<content>
+    	</content>
+	<implementation>
+
+	    <field name="mIOService" readonly="true">
+    		Components.classes["@mozilla.org/network/io-service;1"]
+			          .getService(Components.interfaces.nsIIOService);
+	    </field>
+	    <field name="mDebug">
+	    true
+	    </field>
+	    <field name="mMaxLogLevel">
+	    4
+	    </field>
+	    <field name="mLogTraceLevel">
+	    8
+	    </field>
+	    <field name="mLogDebugLevel">
+	    6
+	    </field>
+	    <field name="mLogErrorLevel">
+	    2
+	    </field>
+	    <field name="mLogLevel">
+	    4
+	    </field>
+	    <field name="mXPathEvaluator">
+	    </field>
+	    <field name="mXmlParser">
+		new DOMParser();
+	    </field>
+	    <field name="mXmlSerializer">
+    		new XMLSerializer();
+	    </field>
+
+	    <method name="trim">
+		<parameter name="aStr"/>
+		<body>
+		<![CDATA[
+                // var newStr = (new java.lang.String(aStr)).trim();
+                // return newStr;
+                var sInString = aStr.replace( /^\s+/g, "" );// strip leading
+                return sInString.replace( /\s+$/g, "" );// strip trailing
+		]]>
+		</body>
+	    </method>
+
+	    <method name="Log">
+		<parameter name="level"/>
+		<parameter name="message"/>
+		<body>
+		<![CDATA[
+		if (level > this.mMaxLogLevel) {
+		    return;
+		}
+		dump("LOG(" + level + ") :  " + message + "\n");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="LogDebug">
+		<parameter name="message"/>
+		<body>
+		<![CDATA[
+		this.Log(this.mLogDebugLevel, message);
+		]]>
+		</body>
+	    </method>
+
+	    <method name="LogTrace">
+		<parameter name="message"/>
+		<body>
+		<![CDATA[
+		this.Log(this.mLogTraceLevel, message);
+		]]>
+		</body>
+	    </method>
+
+	    <method name="LogError">
+		<parameter name="message"/>
+		<body>
+		<![CDATA[
+		this.Log(this.mLogErrorLevel, message);
+		]]>
+		</body>
+	    </method>
+
+	    <method name="getDocElemByAttributeId">
+		<parameter name="aDocElem"/>
+		<parameter name="aElemAttrName"/>
+		<parameter name="aElemAttrValue"/>
+		<body>
+		<![CDATA[
+		var xpathExpr = null;
+		if (!aElemAttrValue || (aElemAttrValue == "*")) {
+		    // xpathExpr = "//*[@" + aElemAttrName + "]";
+		    xpathExpr = "//*[@" + aElemAttrName + "]";
+		}
+		else {
+		    xpathExpr = "//*[@" + aElemAttrName + "=\"" + aElemAttrValue + "\"]";
+		}
+		return this.evaluateXPath(aDocElem, xpathExpr);
+		]]>
+		</body>
+	    </method>
+
+	    <method name="getAnyXmlDocElem">
+		<parameter name="aDocElem"/>
+		<parameter name="aElemTag"/>
+		<body>
+		<![CDATA[
+		if (!aDocElem || !aElemTag) {
+	            this.LogError("certextnbaseBinding.getAnyXmlDocElem(): NULL Arguments.");
+    	            return null;
+		}
+                var docElemList = aDocElem.getElementsByTagName(aElemTag);
+                if (!docElemList || (docElemList.length == 0)) {
+	            this.LogError("certextnbaseBinding.getAnyXmlDocElem(): couldn't find elem Tag: " + aElemTag + "");
+    	            return null;
+                }
+                var selectedDocElem = docElemList.item(0);
+                return selectedDocElem;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="getAnyXmlDocElemAttribute">
+		<parameter name="aDocElem"/>
+		<parameter name="aElemTag"/>
+		<parameter name="aElemAttributeName"/>
+		<body>
+		<![CDATA[
+                var selectedDocElem = this.getAnyXmlDocElem(aDocElem, aElemTag);
+                if (!selectedDocElem) {
+    	            return null;
+                }
+                var docElemAttribValue = selectedDocElem.getAttribute(aElemAttributeName);
+                return docElemAttribValue;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="getXmlDocElemChildByAttrNVP">
+		<parameter name="aDocElem"/>
+		<parameter name="aElemAttrId"/>
+		<parameter name="aElemAttrValue"/>
+		<body>
+		<![CDATA[
+                var elemChildNodeList = aDocElem.childNodes;
+                if (elemChildNodeList.length == 0) {
+    	            return null;
+                }
+                for (var i = 0; i < elemChildNodeList.length; i++) {
+                    var elemNode = elemChildNodeList.item(i);
+	            if (!elemNode) {
+	                continue;
+	            }
+	            var /* nsIDOMElement */ elemChild = null;
+	            try {
+	                elemChild = elemNode.QueryInterface(Components.interfaces.nsIDOMElement);
+	            } catch (ex) {
+	                continue;
+	            }
+	            this.LogDebug("elemNode: " + elemNode + " tag: " + elemNode.nodeName + "");
+	            if (elemChild.getAttribute(aElemAttrId) == aElemAttrValue) {
+	                return elemChild;
+	            }
+                }
+                return null;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="getElementsByXPath">
+		<parameter name="aNode"/>
+		<parameter name="aExpr"/>
+		<body>
+		<![CDATA[
+		return this.evaluateXPath(aNode, aExpr);
+		]]>
+		</body>
+	    </method>
+
+	    <method name="evaluateXPath">
+		<parameter name="aNode"/>
+		<parameter name="aExpr"/>
+		<body>
+		<![CDATA[
+                // Evaluate an XPath expression aExpression against a given DOM node
+                // or Document object (aNode), returning the results as an array
+
+		/*
+		if (!this.mXmlSerializer) {
+    		    this.mXmlSerializer = new XMLSerializer();
+		}
+		var xmlDocDataStr = this.mXmlSerializer.serializeToString(aNode);
+		this.LogDebug( "evaluateXPath(): xmlDocDataStr:\n" + xmlDocDataStr + "");
+		*/
+		this.LogDebug( "evaluateXPath(): aExpr: " + aExpr);
+
+		if (!this.mXPathEvaluator) {
+		    this.mXPathEvaluator = new XPathEvaluator();
+		}
+		var ownerDocument = aNode.ownerDocument;
+    		var nsResolver = this.mXPathEvaluator.createNSResolver(
+				(ownerDocument == null)?aNode.documentElement:ownerDocument.documentElement
+				);
+		this.LogDebug( "evaluateXPath(): nsResolver: " + nsResolver);
+
+    		var foundElemList = [];
+    		var result = null;
+    		try {
+    		    result = this.mXPathEvaluator.evaluate(aExpr, aNode, nsResolver, 0, null);
+    		} catch(ex) {
+    		    this.LogError("evaluateXPath(): mXPathEvaluator.evaluate() failed - ex: " + ex + "");
+    		}
+    		this.LogDebug( "evaluateXPath(): result: " + result);
+    		if (!result) {
+    		    return foundElemList;
+    		}
+
+    		var res;
+    		while (res = result.iterateNext()) {
+    		    // this.LogDebug( "evaluateXPath(): res: " + res);
+		    foundElemList.push(res);
+    		}
+    		return foundElemList;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="setAttrRecurse">
+		<parameter name="targetElem"/>
+		<parameter name="attrName"/>
+		<parameter name="attrValue"/>
+		<body>
+		<![CDATA[
+		this.LogTrace( "setAttrRecurse(): targetElem: " + targetElem.tagName + "");
+		for (var i = 0; i < targetElem.childNodes.length; i++) {
+    	            var childNode = targetElem.childNodes.item(i);
+    	            if (childNode.nodeType != Components.interfaces.nsIDOMNode.ELEMENT_NODE) {
+		    	continue;
+		    }
+		    this.setAttrRecurse(childNode, attrName, attrValue);
+		}
+		if (targetElem.tagName == this.tagName) {
+		    return;
+		}
+		if ((attrValue == false) || (attrValue == "false")) {
+		    targetElem.removeAttribute(attrName);
+		}
+		else {
+		    targetElem.setAttribute(attrName, attrValue);
+		}
+		if (attrName == "readonly") {
+		    if ((attrValue == true) || (attrValue == "true")) {
+		    	targetElem.readonly = true;
+		    }
+		    else {
+		    	targetElem.readonly = false;
+		    }
+		}
+		return;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="transfromXmlDocByXSLT">
+		<parameter name="aInputXmlDoc"/>
+		<parameter name="aXsltFileName"/>
+		<body>
+		<![CDATA[
+		this.this.LogTrace( "certextnbaseBinding.transfromXmlDocByXSLT():................Start.");
+
+
+		var xslDocBaseURI = "chrome://xmldsigffext/content/samltok";
+		var xslDocFileName = "xsl/" + aXsltFileName
+		var xslDocFileURI = xslDocBaseURI + "/" + xslDocFileName;
+		this.LogDebug( "transfromXmlDocByXSLT(): xslDocFileURI: " + xslDocFileURI + "");
+
+		var xsltDocDataStr = this.readDataFromURIStr(xslDocFileURI);
+
+		// Transform XML doc by  XSLT doc
+		var xsltDoc = null;
+		try {
+		    xsltDoc = this.mXmlParser.parseFromString(xsltDocDataStr, "text/xml");
+		} catch (ex) {
+		    this.LogError( "transformXmlDocData(): loading of XML and XSLT doc failed - ex: " + ex + "");
+		    return null;
+		}
+		// var xsltDocDataStr = this.mXmlSerializer.serializeToString(xsltDoc);
+		// this.LogDebug( "xsltDocDataStr:\n" + xsltDocDataStr + "");
+	    
+		var outXmlDoc = null;
+		try {
+		    var xsltProcessor = new XSLTProcessor();
+		    xsltProcessor.importStylesheet(xsltDoc);
+		    outXmlDoc =  xsltProcessor.transformToDocument(aInputXmlDoc);
+		} catch (ex) {
+		    this.LogError( "transformXmlDocData(): xsltProcessor.importStylesheet() failed - ex: " + ex + "");
+		    return null;
+		}
+		var outXmlDocStr = this.mXmlSerializer.serializeToString(outXmlDoc);
+		this.LogDebug( "certextnbaseBinding.transfromXmlDocByXSLT(): outXmlDocStr:\n" + outXmlDocStr);
+
+		this.this.LogTrace( "certextnbaseBinding.transfromXmlDocByXSLT():................End.");
+		return outXmlDoc;  
+		]]>
+		</body>
+	    </method>
+
+	    <method name="readDataFromURI">
+		<parameter name="dataURI"/>
+		<body>
+		<![CDATA[
+    		this.LogTrace("certextnbaseBinding.readDataFromURI():................Start.");
+
+    		// get a channel for that nsIURI
+    		var channel = this.mIOService.newChannelFromURI(dataURI);
+    		if (!channel) {
+    		    this.LogError("readDataFromURI(): mIOService.newChannelFromURI() failed.");
+    		    return null;
+    		}
+
+    		var channelIS = null;
+    		var jarChannel = null;
+		try {
+		    jarChannel = channel.QueryInterface(Components.interfaces.nsIJARChannel);
+		} catch(ex) { }
+    		if (jarChannel) {
+    		    channelIS = jarChannel.open();
+    		}
+    		else {
+    		    channelIS = channel.open();
+    		}
+    		if (!channelIS) {
+    		    this.LogError("readDataFromURI(): channel.open() failed.");
+    		    return null;
+    		}
+		
+    		var siStream = Components.classes["@mozilla.org/scriptableinputstream;1"]
+			.createInstance(Components.interfaces.nsIScriptableInputStream);
+    		siStream.init(channelIS);
+
+    		var dataCnt = 0;
+    		try {
+    		    // dataCnt = jarChannelIS.available();
+    		    dataCnt = siStream.available();
+    		} catch (ex) {
+    		}
+    		if (dataCnt == 0) {
+    		    this.LogError("readDataFromURI(): siStream.available() failed.");
+    		    return null;
+    		}
+
+    		var urlDataStr = "";
+    		var str = siStream.read(-1);
+    		while (str.length > 0) {
+		    urlDataStr += str;
+		    str = siStream.read(-1);
+    		}
+
+    		siStream.close();
+    		channelIS.close();
+
+    		this.LogTrace("certextnbaseBinding.readDataFromURI():................End.");
+    		return urlDataStr;
+
+		]]>
+		</body>
+	    </method>
+
+	    <method name="readDataFromURIStr">
+		<parameter name="dataURIStr"/>
+		<body>
+		<![CDATA[
+    		this.LogTrace("readDataFromURIStr(" + dataURIStr + "):................Start.");
+
+    		// create an nsIURI
+    		var dataURI = this.mIOService.newURI(dataURIStr, null, null);
+
+    		var dataStr =  this.readDataFromURI(dataURI);
+
+    		this.LogTrace("readDataFromURIStr(" + dataURIStr + "):................End.");
+		
+    		return dataStr;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="parseXmlDocByURI">
+		<parameter name="aXmlDocURI"/>
+		<body>
+		<![CDATA[
+    		// this.LogTrace("parseXmlDocByURI(): ..........Start.");
+
+		if (!aXmlDocURI) {
+    		    return null;
+		}
+    		var extProfileXmlData = this.readDataFromURI(aXmlDocURI);
+    		if (!extProfileXmlData || (extProfileXmlData.length <= 0)) {
+    		    this.LogError("parseXmlDocByURI(): readDataFromURI() failed.");
+    		    return null;
+    		}
+
+    		// var xmlSerializer = new XMLSerializer();
+    		var xmlParser = new DOMParser();
+
+    		var xmlDoc = null;
+    		try {
+    		    xmlDoc = xmlParser.parseFromString(extProfileXmlData, "text/xml");
+    		} catch (ex) {
+    		    this.LogError("parseXmlDocByURI(): gXmlParser.parseFromString() failed - ex: " + ex + "");
+		    return null;
+    		}
+    		// this.LogTrace("parseXmlDocByURI(): ..........End.");
+		return xmlDoc;
+		]]>
+		</body>
+	    </method>
+
+
+	    <method name="serialize">
+		<body>
+		<![CDATA[
+		if (!this.mXmlSerializer) {
+    		    this.mXmlSerializer = new XMLSerializer();
+		}
+		var xmlDocDataStr = this.mXmlSerializer.serializeToString(this);
+		this.LogDebug( "xmlDocDataStr:\n" + xmlDocDataStr + "");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="setReadonly">
+		<parameter name="aCertExtnElem"/>
+		<parameter name="aEditableFlag"/>
+	        <body>
+		<![CDATA[
+                this.LogTrace("certextnbaseBinding.setReadonly(): .......................Start.");
+                var /* NodeList */ certExtnPropElemList = aCertExtnElem.getElementsByAttribute("certPropName", "*");
+                for (var i = 0; i < certExtnPropElemList.length; i++) {
+	            var certPropElem = certExtnPropElemList.item(i);
+	            if (certPropElem == null) {
+	                continue;
+		    }
+		    /*
+		    if (((certPropElem.tagName == "xul:textbox") || (certPropElem.localName == "textbox"))
+		    	|| ((certPropElem.tagName == "xul:hashalgmenu") || (certPropElem.localName == "hashalgmenu"))){
+		    */
+		    if ((certPropElem.tagName == "xul:textbox") || (certPropElem.localName == "textbox")) {
+		    	certPropElem.removeAttribute("readonly");
+		        if (aEditableFlag) {
+		    	    certPropElem.setAttribute("readonly", true);
+		        }
+	                continue;
+		    }
+		    certPropElem.removeAttribute("disabled");
+		    if (aEditableFlag) {
+		        certPropElem.setAttribute("disabled", true);
+		    }
+		}
+                this.LogTrace("certextnbaseBinding.setReadonly(): .......................End.");
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="resetCertExtn">
+		<parameter name="aCertExtnElem"/>
+	        <body>
+		<![CDATA[
+                this.LogTrace("certextnbaseBinding.resetCertExtn(): .......................Start.");
+                var /* NodeList */ certExtnPropElemList = aCertExtnElem.getElementsByAttribute("certPropName", "*");
+                for (var i = 0; i < certExtnPropElemList.length; i++) {
+	            var certPropElem = certExtnPropElemList.item(i);
+	            if (certPropElem == null) {
+	                continue;
+		    }
+	            if ((certPropElem.tagName == "xul:checkbox") || (certPropElem.localName == "checkbox")) {
+	                certPropElem.checked = false;
+			var defValue = certPropElem.getAttribute("checked");
+			if (defValue && (defValue == "true")) {
+	                    certPropElem.checked = true;
+			}
+	            }
+	            else if ((certPropElem.tagName == "xul:radiogroup") || (certPropElem.localName == "radiogroup")) {
+	                certPropElem.selectedIndex = 0;
+	            }
+		    /*
+	            else if ((certPropElem.tagName == "xul:radio") || (certPropElem.localName == "radio")) {
+			var defValue = certPropElem.getAttribute("selected");
+			if (defValue && (defValue == "true")) {
+	                    certPropElem.selected = true;
+			}
+	            }
+		    */
+	            else if ((certPropElem.tagName == "xul:menulist") || (certPropElem.localName == "menulist")) {
+			var defValue = certPropElem.getAttribute("value");
+			if (defValue) {
+			    certPropElem.value = defValue;
+			}
+			else {
+		    	    certPropElem.selectedIndex = 0;
+			}
+	            }
+	            else if ((certPropElem.tagName == "xul:textbox") || (certPropElem.localName == "textbox")) {
+	                certPropElem.value = "";
+	            }
+	            else if (certPropElem.tagName == "xul:label") {
+	                certPropElem.value = "";
+	            }
+		}
+                this.LogTrace("certextnbaseBinding.resetCertExtn(): .......................End.");
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="containsAnyProperty">
+		<parameter name="aBaseElem"/>
+		<parameter name="aCertProps"/>
+		<parameter name="aPropName"/>
+	        <body>
+		<![CDATA[
+		if (aBaseElem.containsProperty) {
+		    if (aBaseElem.containsProperty(aCertProps, aPropName)) {
+		    	return true;
+		    }
+		}
+
+		var propName = aPropName;
+		if (!propName) {
+		    propName = "certPropName";
+		}
+
+		var containsProperty =  false;
+                var /* NodeList */ certExtnPropElemList = aBaseElem.getElementsByAttribute(propName, "*");
+		this.LogDebug("certExtnPropElemList.length: " + certExtnPropElemList.length + "");
+                for (var i = 0; i < certExtnPropElemList.length; i++) {
+	            var certPropElem = certExtnPropElemList.item(i);
+	            if (certPropElem == null) {
+	                continue;
+	            }
+
+	            var propKey = certPropElem.getAttribute(propName);
+	            if ((propKey == null) || (propKey == "")) {
+	                continue;
+	            }
+
+	            var certPropElemId = certPropElem.getAttribute("anonid");
+    	            this.LogDebug("    certPropElem[" + i + "]: " + certPropElemId + " propKey: " + propKey + "");
+
+		    var propValue = null;
+		    try {
+		    	propValue = aCertProps.getStringProperty(propKey);
+		    } catch(ex) {}
+		    if (propValue) {
+		    	return true;
+		    }
+		}
+		return false;
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="certExtnToProps">
+		<parameter name="aCertExtnElem"/>
+		<parameter name="aCertProps"/>
+	        <body>
+		<![CDATA[
+                this.LogTrace("certextnbaseBinding.certExtnToProps(): .......................Start.");
+
+		if (!aCertExtnElem) {
+		    return;
+		}
+		/*
+		if (!aCertExtnElem.active) {
+		    return;
+		}
+		*/
+
+                this.LogTrace("certextnbaseBinding.certExtnToProps(): .......................10.");
+                var propKey = null;
+                var propValue = null;
+                var propOldValue = null;
+                var trueValue = "true";
+
+		if (aCertExtnElem.toCertProps) {
+                    this.LogTrace("certextnbaseBinding.certExtnToProps(): .......................12.");
+		    aCertExtnElem.toCertProps(aCertProps);
+		    // this.dumpProperties(aCertProps, "Extension-Base");
+		}
+
+                this.LogDebug("certextnbaseBinding.certExtnToProps : {");
+                var /* NodeList */ certExtnPropElemList = aCertExtnElem.getElementsByAttribute("certPropName", "*");
+                for (var i = 0; i < certExtnPropElemList.length; i++) {
+	            var certPropElem = certExtnPropElemList.item(i);
+	            if (certPropElem == null) {
+	                continue;
+	            }
+		    /*
+		    this.LogDebug("    " + i + " : <" + certPropElem.tagName +
+		    	" anonid=\"" + certPropElem.getAttribute("anonid") + "\"/>");
+		    */
+
+	            if (certPropElem.hidden) {
+	                continue;
+	            }
+            
+	            var propKey = certPropElem.getAttribute("certPropName");
+	            if ((propKey == null) || (propKey == "")) {
+	                continue;
+	            }
+	            // var certPropElemId = certPropElem.getAttribute("anonid");
+    	            // this.LogDebug("    certPropName: " + certPropElemId + " propKey: " + propKey + "");
+            
+	            propValue = "";
+	            if ((certPropElem.tagName == "xul:checkbox") || (certPropElem.localName == "checkbox")) {
+	                if (certPropElem.checked) {
+	    	            propValue = trueValue;
+	                }
+	            }
+	            else if ((certPropElem.tagName == "xul:textbox") || (certPropElem.localName == "textbox")) {
+	                propValue = certPropElem.value;
+	            }
+	            else if ((certPropElem.tagName == "xul:radiogroup") || (certPropElem.localName == "radiogroup")) {
+	                if (certPropElem.selectedItem) {
+	    	            propValue = certPropElem.selectedItem.value;
+	                }
+	            }
+	            else if ((certPropElem.tagName == "xul:radio") || (certPropElem.localName == "radio")) {
+	                if (certPropElem.selected) {
+	    	            // propValue = certPropElem.value;
+	    	            propValue = trueValue;
+	                }
+	            }
+	            else if ((certPropElem.tagName == "xul:menulist") || (certPropElem.localName == "menulist")) {
+	                propValue = certPropElem.value;
+	            }
+	            else if ((certPropElem.tagName == "xul:label") || (certPropElem.localName == "label")) {
+	                propValue = certPropElem.value;
+	            }
+	            else if (certPropElem.value) {
+	                propValue = certPropElem.value;
+	            }
+	            if (propValue && (propValue != "")) {
+	                propOldValue = aCertProps.setStringProperty(propKey, propValue);
+    	                this.LogDebug("    propKey: " + propKey + " propValue: " + propValue + "");
+	            }
+                }
+		this.LogDebug("}");
+
+                this.LogTrace("certextnbaseBinding.certExtnToProps(): .......................End.");
+		this.LogTrace("");
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="updateCertExtnProps">
+		<parameter name="aCertExtnElem"/>
+		<parameter name="aCertProps"/>
+		<parameter name="aMergeProps"/>
+	        <body>
+		<![CDATA[
+                this.LogTrace("certextnbaseBinding.updateCertExtnProps(): .......................Start.");
+
+                var propKey;
+                var propValue;
+                var propOldValue;
+                var trueValue = "true";
+
+	        var baseExtnElemId = aCertExtnElem.getAttribute("anonid");
+                this.LogDebug("certextnbaseBinding.updateCertExtnProps(): baseExtnElemId: " + baseExtnElemId + "");
+
+                var /* NodeList */ certExtnPropElemList = aCertExtnElem.getElementsByAttribute("certPropName", "*");
+                this.LogDebug("certextnbaseBinding.updateCertExtnProps : {");
+                for (var i = 0; i < certExtnPropElemList.length; i++) {
+	            var certPropElem = certExtnPropElemList.item(i);
+	            if (certPropElem == null) {
+	                continue;
+	            }
+		    /*
+		    this.LogDebug("    " + i + " : <" + certPropElem.tagName +
+		    	" anonid=\"" + certPropElem.getAttribute("anonid") + "\"/>");
+		    */
+
+	            var propKey = certPropElem.getAttribute("certPropName");
+	            if ((propKey == null) || (propKey == "")) {
+	                continue;
+	            }
+	            // var certPropElemId = certPropElem.getAttribute("anonid");
+    	            // this.LogDebug("    certPropName: " + certPropElemId + " propKey: " + propKey + "");
+            
+	            propValue = null;
+		    try {
+		    	propValue = aCertProps.getStringProperty(propKey);
+		    } catch (ex) {propValue = null;}
+		    // if ((propValue == null) || (propValue == "")) {
+		    if (propValue == null) {
+		    	continue;
+		    }
+    	            this.LogDebug("  propKey: " + propKey + " propValue: |" + propValue + "|");
+
+	            if ((certPropElem.tagName == "xul:checkbox") || (certPropElem.localName == "checkbox")) {
+			if (propValue == trueValue) {
+			    certPropElem.checked = true;
+	                }
+			else {
+			    certPropElem.checked = false;
+			}
+	            }
+	            else if ((certPropElem.tagName == "xul:radiogroup") || (certPropElem.localName == "radiogroup")) {
+			var radioElems = certPropElem.getElementsByTagName("radio");
+		        if (radioElems.length <= 0) {
+		    	        var tagName = "xul:" + "radio";
+		                radioElems = certPropElem.getElementsByTagName(tagName);
+		        }
+			for (var j = 0; j < radioElems.length; j++) {
+			    var radioElem = radioElems.item(j);
+			    if (radioElem.value == propValue) {
+			    	// radioElem.selected = true;
+				certPropElem.selectedItem = radioElem;
+			    }
+			}
+	            }
+	            else if ((certPropElem.tagName == "xul:radio") || (certPropElem.localName == "radio")) {
+			if (propValue == trueValue) {
+			    // certPropElem.selected = true;
+			    certPropElem.radioGroup.selectedItem = certPropElem;
+			}
+			/*
+			else {
+			    certPropElem.selected = false;
+			}
+			*/
+	            }
+	            else if ((certPropElem.tagName == "xul:menulist") || (certPropElem.localName == "menulist")) {
+	                certPropElem.value = propValue;
+	            }
+	            else if ((certPropElem.tagName == "xul:textbox") || (certPropElem.localName == "textbox")) {
+	                certPropElem.value = propValue;
+	            }
+	            else if ((certPropElem.tagName == "xul:label") || (certPropElem.localName == "label")) {
+	                certPropElem.value = propValue;
+		    }
+		    /*
+	            else if (certPropElem.value) {
+		    }
+		    */
+		    else {
+    	            	this.LogDebug("  tagName " + certPropElem.tagName + " propKey: " + propKey + " propValue: |" + propValue + "|");
+	                certPropElem.value = propValue;
+	            }
+    	            this.LogDebug("  propKey: " + propKey + " certPropElem: |" + certPropElem.value + "|");
+                }
+		this.LogDebug("}");
+
+		if (aMergeProps) {
+		    if (aCertExtnElem.mergeCertProps) {
+		        aCertExtnElem.mergeCertProps(aCertProps);
+		    }
+		}
+		else {
+		    if (aCertExtnElem.updateCertProps) {
+		        aCertExtnElem.updateCertProps(aCertProps);
+		    }
+		}
+
+                this.LogTrace("certextnbaseBinding.updateCertExtnProps(): .......................End.");
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="mergeProperties">
+		<parameter name="aCertProps1"/>
+		<parameter name="aCertProps2"/>
+	        <body>
+		<![CDATA[
+                this.LogTrace("csrdatasourceBinding.mergeProperties():................Start.");
+		if (!aCertProps1 || !aCertProps2) {
+		    return;
+		}
+
+                var propEnum = aCertProps2.enumerate();
+                while (propEnum.hasMoreElements ()) {
+                    var propElem = propEnum.getNext ();
+                    var propItem = propElem.QueryInterface (Components.interfaces.nsIPropertyElement);
+                    var propKey = propItem.key;
+                    var propValue = propItem.value;
+		    aCertProps1.setStringProperty(propKey, propValue);
+                }
+                this.LogTrace("csrdatasourceBinding.mergeProperties():................End.");
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="dumpProperties">
+		<parameter name="aCertProps"/>
+		<parameter name="msg"/>
+	        <body>
+		<![CDATA[
+                if (msg) {dump(msg + " ");}
+		if (!aCertProps) {
+                    dump("Properties {}\n");
+		    return;
+		}
+		var propKeyList = [];
+                var propEnum = aCertProps.enumerate();
+                while (propEnum.hasMoreElements ()) {
+                    var propElem = propEnum.getNext ();
+                    var propItem = propElem.QueryInterface (Components.interfaces.nsIPropertyElement);
+                    var propKey = propItem.key;
+                    // var propValue = propItem.value;
+	            // this.LogDebug("    " + propKey + " = " + propValue + "");
+		    propKeyList[propKeyList.length] = propKey;
+                }
+		if (propKeyList.length <= 0) {
+                    dump("Properties {no elements.}\n");
+		    return;
+		}
+		// this.LogDebug("propKeyList.length: " + propKeyList.length + "");
+
+		propKeyList = propKeyList.sort();
+		// this.LogDebug("propKeyList.length(sorted): " + propKeyList.length + "");
+		dump("Properties {\n");
+		for (var i = 0; i < propKeyList.length; i++) {
+		    var propKey =  propKeyList[i];
+                    var propValue = null;
+		    try {
+		    	propValue = aCertProps.getStringProperty(propKey);
+		    } catch(ex) {}
+	            dump("    " + propKey + " = " + propValue + "\n");
+                }
+                dump("}\n\n");
+
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="dumpCertProperties">
+		<parameter name="aCertProps"/>
+		<parameter name="msg"/>
+	        <body>
+		<![CDATA[
+		// this.dumpProperties(aCertProps, msg);
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="autoCompleteAction">
+		<parameter name="targetElem"/>
+	        <body>
+		<![CDATA[
+                var formFieldKey = targetElem.getAttribute("autocompletesearchparam");
+		// dump("autoCompleteAction(): formFieldKey: " + formFieldKey + "\n");
+		if (!formFieldKey) {
+		    return;
+		}
+                var formFieldValue = targetElem.value;
+                if (formFieldValue == "") {
+    	            return;
+                }
+
+                var formhistory = null;
+                if ("nsIFormHistory" in Components.interfaces){
+                    formhistory = Components.classes["@mozilla.org/satchel/form-history;1"].
+        			            getService(Components.interfaces.nsIFormHistory);
+                }
+                else if ("nsIFormHistory2" in Components.interfaces){
+                    formhistory = Components.classes["@mozilla.org/satchel/form-history;1"].
+        			            getService(Components.interfaces.nsIFormHistory2);
+                }
+                if (!formhistory) {
+    	            return;
+                }
+
+                // use the same value for key as "autocompletesearchparam" in textbox:
+                formhistory.addEntry(formFieldKey, formFieldValue);
+
+		]]>
+	        </body>
+	    </method>
+
+	</implementation>
+    </binding>
+
+    <binding id="certextnutilBinding"
+	extends="chrome://keymanager/content/ExtnXBL/certextn.xml#certextnbaseBinding"
+        >
+    </binding>
+
+
+    <binding id="certextnBinding"
+	extends="chrome://keymanager/content/ExtnXBL/certextn.xml#certextnbaseBinding"
+	>
+        <!--
+        <resources>
+    	    <script type="application/x-javascript" src="chrome://keymanager/content/XBL/certextn2props.js"/>
+	    <stylesheet src="../../skin/kmbindings.css"/>
+        </resources>
+        -->
+    	<!-- content, property, method and event descriptions go here -->
+    	<content>
+            <xul:groupbox anonid="certextn.base.group" flex="1" 
+	        xbl:inherits="activePropName,criticalPropName,readonly,mandatory,flex"
+		orient="horizontal"
+		xstyle="border: 2px solid red"
+	    	>
+	        <xul:caption class="header" xbl:inherits="label=captionlabel"/>
+	        <xul:vbox pack="start">
+                        <xul:checkbox anonid="certextn.mandatory"
+		            xbl:inherits="label=mandatorylabel,hidden=mandatoryhidden,checked=mandatory,disabled,tooltiptext=mandatorytooltip,certPropName=mandatoryPropName"
+	        	    label="&keymgr.cert.csr.form.tab.stdx509ext.mandatory.label;"
+	        	    tooltiptext="&keymgr.cert.csr.form.tab.stdx509ext.mandatory.tooltip;"
+		            checked="false"
+			    certPropName=""
+		            oncommand="getBindingParent(this).handleMandatoryExtensionChange(this, event);"
+		            /> 
+                        <xul:checkbox anonid="certextn.active"
+		            xbl:inherits="label=activelabel,hidden=activehidden,checked=active,disabled,tooltiptext=activetooltip,certPropName=activePropName"
+	        	    label="&keymgr.cert.csr.form.tab.stdx509ext.activeext.label;"
+	        	    tooltiptext="&keymgr.cert.csr.form.tab.stdx509ext.activeext.tooltip;"
+		            checked="false"
+			    certPropName=""
+		            oncommand="getBindingParent(this).handleActivateExtensionChange(this, event);"
+			    /> 
+                        <xul:checkbox anonid="certextn.critical"
+		            xbl:inherits="label=criticallabel,hidden=criticalhidden,checked=critical,disabled,tooltiptext=criticaltooltip,certPropName=criticalPropName"
+	        	    label="&keymgr.cert.csr.form.tab.stdx509ext.critical.label;"
+	        	    tooltiptext="&keymgr.cert.csr.form.tab.stdx509ext.critical.tooltip;"
+		            checked="false"
+			    certPropName=""
+		            /> 
+	        </xul:vbox>
+	        <xul:groupbox anonid="certextn.options" xflex="1"
+		    xbl:inherits="label=optionslabel,hidden=optionshidden,disabled,readonly,flex=optionsflex"
+		    pack="start"
+		    xstyle="border: 2px solid blue"
+		    >
+		    <children/>
+	        </xul:groupbox>
+            </xul:groupbox>
+    	</content>
+	<implementation>
+	    <field name="mCertDB">
+		Components.classes["@mozilla.org/security/x509certdb;1"].getService(Components.interfaces.nsIX509CertDB);
+	    </field>
+	    <field name="mExtnBaseGroupElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certextn.base.group");
+	    </field>
+	    <field name="mActiveElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certextn.active");
+	    </field>
+	    <field name="mCriticalElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certextn.critical");
+	    </field>
+	    <field name="mMandatoryElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certextn.mandatory");
+	    </field>
+	    <field name="mOptionsGroupElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certextn.options");
+	    </field>
+
+	    <property name="active">
+	        <getter>
+		<![CDATA[
+	        return this.mActiveElem.checked;
+		]]>
+	        </getter>
+	        <setter>
+		<![CDATA[
+	    	if (val == true) {
+		    this.setAttribute('active',true);
+		    this.mActiveElem.checked = true;
+		}
+                else {
+		    this.removeAttribute('active');
+		    this.mActiveElem.checked = false;
+		}
+		this.handleActivateExtensionChange(this.mActiveElem);
+		return val;
+		]]>
+	        </setter>
+	    </property>
+	    <property name="critical"
+	        onget="return this.mCriticalElem.checked;"
+	    	onset="if (val == true) this.setAttribute('critical',true);
+                       else this.removeAttribute('critical');
+		       this.mCriticalElem.checked = val;
+                       return val;"
+		/>
+	    <property name="mandatory">
+	        <getter>
+		<![CDATA[
+		return this.mMandatoryElem.checked;
+		]]>
+	        </getter>
+	        <setter>
+		<![CDATA[
+	    	if (val) {
+		    this.mMandatoryElem.checked = true;
+		    this.setAttribute('mandatory',true);
+		}
+		else {
+		    this.mMandatoryElem.checked = false;
+                    this.removeAttribute('mandatory');
+		}
+		this.handleMandatoryExtensionChange(this.mMandatoryElem);
+		return val;
+		]]>
+	        </setter>
+	    </property>
+	    <property name="readonly">
+	        <getter>
+		<![CDATA[
+	        return this.getAttribute('readonly')
+		]]>
+	        </getter>
+	        <setter>
+		<![CDATA[
+		var currval = this.readonly;
+		if (currval && val) {
+		    return val;
+		}
+		if (!currval && !val) {
+		    return val;
+		}
+		if (val) {
+		    this.activateControl(!val);
+		    this.setAttribute('readonly',true);
+		}
+		else {
+		    this.removeAttribute('readonly');
+		    this.activateControl(!val);
+		}
+		return val;
+		]]>
+	        </setter>
+	    </property>
+
+	    <property name="disabled">
+	        <getter>
+		<![CDATA[
+	        return this.getAttribute('disabled')
+		]]>
+	        </getter>
+	        <setter>
+		<![CDATA[
+		this.readonly = val;
+
+		this.removeAttribute('disabled');
+	    	if (val) {
+		    this.setAttribute('disabled',true);
+		}
+		return val;
+		]]>
+	        </setter>
+	    </property>
+	    <property name="criticaldisabled"
+	        onget="return this.mCriticalElem.disabled;"
+	    	onset="this.mCriticalElem.disabled = val;return val;"
+		/>
+
+	    <constructor>
+		<![CDATA[
+		this.LogTrace("certextn.constructor():......................Start.");
+
+
+		this.refresh();
+
+		this.LogTrace("certextn.constructor():......................End.");
+		]]>
+	    </constructor>
+
+	    <method name="refresh">
+	        <body>
+		<![CDATA[
+		this.handleMandatoryExtensionChange(this.mMandatoryElem);
+		this.handleActivateExtensionChange(this.mActiveElem);
+
+		var readonly = this.getAttribute("readonly");
+		var disabled = this.getAttribute("disabled");
+		// this.LogDebug("certextnBinding.refresh(" + this.getAttribute("anonid") + ": readonly: "  + readonly + "");
+
+		if (readonly || disabled) {
+		    this.disabled = true;
+		}
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="reset">
+	        <body>
+		<![CDATA[
+		this.critical = false;
+		this.active = false;
+		this.mandatory = false;
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="handleActivateExtensionChange">
+		<parameter name="aActiveElem"/>
+		<parameter name="ev"/>
+	        <body>
+		<![CDATA[
+		this.LogTrace("certextnBinding.handleActivateExtensionChange():.............Start.");
+		/*
+		if (ev) {
+		    ev.stopPropagation();
+		}
+		*/
+
+		this.mCriticalElem.hidden = !aActiveElem.checked;
+		this.mOptionsGroupElem.collapsed = !aActiveElem.checked;
+		// this.mOptionsGroupElem.hidden = !aActiveElem.checked;
+
+		if (!aActiveElem.checked) {
+		    this.critical = false;
+		}
+
+		this.LogTrace("certextnBinding.handleActivateExtensionChange():.............End.");
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="handleMandatoryExtensionChange">
+		<parameter name="aMandatoryElem"/>
+		<parameter name="ev"/>
+	        <body>
+		<![CDATA[
+		this.LogTrace("certextnBinding.handleMandatoryExtensionChange(" + this.getAttribute("anonid") + ")..................Start.");
+		if (ev) {
+		    ev.stopPropagation();
+		}
+
+		this.mMandatoryElem.hidden = !aMandatoryElem.checked;
+	    	if (aMandatoryElem.checked) {
+		    if (!this.active) {
+			this.active = true;
+		    }
+		}
+
+		// Enable the active element only if the extension does not 
+		// have attribute readonly 
+		var readonly = this.getAttribute("readonly");
+		// this.LogDebug("certextnBinding.handleMandatoryExtensionChange(" + this.getAttribute("anonid") + ": readonly: "  + readonly + "");
+		if (!readonly) {
+		    // Actually, we should not be here at all for readonly element 
+		    // becuase this checkbox cannot be modified for readonly element.
+		    this.mActiveElem.disabled = aMandatoryElem.checked;
+		    // this.LogDebug("certextnBinding.handleMandatoryExtensionChange(" + this.getAttribute("anonid") + ": aMandatoryElem.checked: "  + aMandatoryElem.checked + "");
+		}
+		this.LogTrace("certextnBinding.handleMandatoryExtensionChange(" + this.getAttribute("anonid") + ")..................End.");
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="activateControl">
+		<parameter name="aControlFlag"/>
+	        <body>
+		<![CDATA[
+		this.LogTrace("certextnBinding.activateControl():..........................Start.");
+
+		var readonly = this.getAttribute("readonly");
+		if (readonly) {
+		    return;
+		}
+
+		this.mActiveElem.disabled = !aControlFlag;
+		this.mCriticalElem.disabled = !aControlFlag;
+		this.mMandatoryElem.disabled = !aControlFlag;
+
+		this.LogTrace("certextnBinding.activateControl():..........................End.");
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="containsProperty">
+		<parameter name="aCertProps"/>
+		<parameter name="aPropName"/>
+	        <body>
+		<![CDATA[
+		return this.containsAnyProperty(this.mExtnBaseGroupElem, aCertProps, aPropName);
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="toCertProps">
+		<parameter name="aCertProps"/>
+	        <body>
+		<![CDATA[
+
+		this.LogTrace("certextnBinding.toCertProps():.............Start.");
+
+		if (!this.active) {
+		    return;
+		}
+
+		this.certExtnToProps(this.mExtnBaseGroupElem, aCertProps);
+
+		this.LogTrace("certextnBinding.toCertProps():.............End.");
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="updateCertProps">
+		<parameter name="aCertProps"/>
+	        <body>
+		<![CDATA[
+		this.updateCertExtnProps(this.mExtnBaseGroupElem, aCertProps);
+		this.refresh();
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="mergeCertProps">
+		<parameter name="aCertProps"/>
+	        <body>
+		<![CDATA[
+		this.updateCertExtnProps(this.mExtnBaseGroupElem, aCertProps, true);
+		this.refresh();
+		]]>
+	        </body>
+	    </method>
+
+	</implementation>
+    </binding>
+
+
+</bindings>
+

@@ -1,0 +1,257 @@
+<?xml version="1.0"?>
+<!-- @(#) $Id: keymanagerToolsOverlay.xul,v 1.44 2012/10/07 17:19:41 subrata Exp $ -->
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is Avaya Labs Research, Avaya Inc. Code.
+   -
+   - The Initial Developer of the Original Code is
+   - Subrata Mazumdar, Avaya Labs Research, Avaya Inc.
+   - Portions created by the Initial Developer are Copyright (C) 2007.
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Subrata Mazumdar (mazum@avaya.com)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+
+
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+
+<?xul-overlay href="chrome://keymanager/content/firstrun/keymanagerFirstrun.xul"?>
+<?xul-overlay href="chrome://keymanager/content/keymanagerMainToolsOverlay.xul"?>
+<?xul-overlay href="chrome://keymanager/content/tools/genkeycsr/genkeycsrToolsOverlay.xul"?>
+<?xul-overlay href="chrome://keymanager/content/tools/signcerttool/signcerttoolToolsOverlay.xul"?>
+<?xul-overlay href="chrome://keymanager/content/tools/scepclient/scepclientToolsOverlay.xul"?>
+<?xul-overlay href="chrome://keymanager/content/tools/xpsigntoolext/xpsigntoolextToolsOverlay.xul"?>
+<?xul-overlay href="chrome://keymanager/content/tools/attrcertext/attrcertextToolsOverlay.xul"?>
+<?xul-overlay href="chrome://keymanager/content/tools/certenroll/CertEnrollToolsOverlay.xul"?>
+<?xul-overlay href="chrome://keymanager/content/tools/pkcsfilemgr/pkcsfilemgrToolsOverlay.xul"?>
+<?xul-overlay href="chrome://keymanager/content/tools/sshclient/sshclientToolsOverlay.xul"?>
+<?xul-overlay href="chrome://keymanager/content/tools/jksmanagecert/jksmanagecertToolsOverlay.xul"?>
+
+<?xul-overlay href="chrome://keymanager/content/tools/softtokendbmgr/SoftTokenDBManagerBrowserOverlay.xul"?>
+
+
+<!DOCTYPE window SYSTEM "chrome://keymanager/locale/keymanagerOverlay.dtd">
+
+<overlay id="keymanagerOverlayWin"
+    xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    >
+
+<!--
+Source: http://xulplanet.com/tutorials/xultu/overlay.html
+-->
+
+<script type="application/x-javascript">
+<![CDATA[
+
+function keymanagerOverlay_initTokenTestPassword()
+{
+    dump("keymanagerOverlay_initTokenTestPassword()...................Start.\n");
+
+    var testOption = false;
+    var testPassword = null;
+    do {
+        try {
+            var Prefs = Components.classes["@mozilla.org/preferences-service;1"]
+			.getService(Components.interfaces.nsIPrefService);
+
+            var prefBranchPrefixId = "extensions.avpki.tools.test.";
+            var prefsBranch = Prefs.getBranch(prefBranchPrefixId);
+            if (!prefsBranch) {
+    	        break;
+            }
+            var prefBoolValue = prefsBranch.getBoolPref("enabled");
+	    if (prefBoolValue) {
+	        testOption = true;
+	    }
+	    if (!testOption) {
+	        break;
+	    }
+            var prefStringValue = prefsBranch.getCharPref("password");
+	    if (prefStringValue && (prefStringValue != "")) {
+	        testPassword = prefStringValue;
+	    }
+        } catch (e) { }
+    } while (0);
+
+    if (!testOption || !testPassword) {
+    	dump("keymanagerOverlay_initTokenTestPassword()...................End(1).\n");
+	return;
+    }
+
+    try {
+        var tokenPassword = testPassword;
+        var tokendb = Components.classes["@mozilla.org/security/pk11tokendb;1"].
+                                getService(Components.interfaces.nsIPK11TokenDB);
+        var token = tokendb.getInternalKeyToken();
+        if (token) {
+            token.checkPassword(tokenPassword);
+            token.login(false);
+    	    dump("keymanagerOverlay_initTokenTestPassword(): Successfully logged-in using test password.\n");
+        }
+    } catch (ex) {}
+
+    dump("keymanagerOverlay_initTokenTestPassword()...................End.\n");
+}
+
+function keymanagerOverlay_loginToInternalKeyToken()
+{
+    var /* nsIPK11Token */ token = null;
+
+    try {
+    	var xTokendb = Components.classes["@mozilla.org/security/pk11tokendb;1"]
+    				.getService(Components.interfaces.nsIPK11TokenDB);
+    	token = xTokendb.getInternalKeyToken();
+    } catch(ex) {}
+    if (!token) {
+    	return;
+    }
+
+    keymanagerOverlay_initTokenTestPassword();
+
+    try {
+    	token.login(false);
+    } catch (ex) {}
+}
+
+function getWindowMediator()
+{
+    const kWindowMediatorContractID = "@mozilla.org/appshell/window-mediator;1";
+    const kWindowMediatorIID = Components.interfaces.nsIWindowMediator;
+    const kWindowMediator = Components.classes[kWindowMediatorContractID].getService(kWindowMediatorIID);
+    return kWindowMediator;
+}
+
+
+/*
+function displayKMUsageDocument()
+{
+    var kmUsageDocumentURL = "chrome://keymanager/content/firstrun/keymanagerInfo.html";
+    window.open(kmUsageDocumentURL, "_blank", "resizable,toolbar=1,location=1,status=1,scrollbars=1,width=900,height=700");
+}
+*/
+
+]]>
+
+</script>
+
+
+///////////////////////////////////////////////////////////////////
+// Tools menu.
+///////////////////////////////////////////////////////////////////
+<!-- 
+  Source: http://kb.mozillazine.org/Extension_guidelines
+-->
+<!--
+<menupopup id="menu_ToolsPopup">
+  <menu id="menu_AvLabsKeyManagerToolbox"
+      label="&keymanager.toolbox.menu.title;"
+      insertafter="devToolsSeparator"
+      >
+    <menupopup id="menu_AvLabsKeyManagerToolboxPopup">
+    </menupopup>
+  </menu>
+</menupopup>
+-->
+
+///////////////////////////////////////////////////////////////////
+// Mozilla/Seamonkey/Thunderbird menu.
+///////////////////////////////////////////////////////////////////
+<menupopup id="taskPopup">
+  <menu id="menu_AvLabsKeyManagerToolbox"
+      label="&keymanager.toolbox.menu.title;"
+      insertafter="downloadmgr,javaScriptConsole"
+      >
+    <menupopup id="menu_AvLabsKeyManagerToolboxPopup">
+
+	<!--
+    	<menuseparator/>
+        <menuitem id="keymanager.tool.tb.menuitem"
+	  label="&keymanager.browser.overlay.title; (v &keymanager.version;)"
+          oncommand="runKeyManager();"
+          />
+
+        <menuitem id="keymanager.osslkeyconf.form.tb.menuitem"
+	  label="&keymanager.osslkeyconf.overlay.title; (v &keymanager.version;)"
+          oncommand="runOsslKeyConfig();"
+          />
+        <menuitem id="keymanager.doc.form.tb.menuitem"
+	  label="&keymanager.doc.overlay.title; "
+          oncommand="displayKMUsageDocument();"
+          />
+        -->
+    </menupopup>
+  </menu>
+</menupopup>
+
+///////////////////////////////////////////////////////////////////
+// Sunbird menu.
+///////////////////////////////////////////////////////////////////
+<menupopup id="toolsPopup">
+  <menu id="menu_AvLabsKeyManagerToolbox"
+      label="&keymanager.toolbox.menu.title;"
+      insertafter="downloadmgr,javaScriptConsole"
+      >
+    <menupopup id="menu_AvLabsKeyManagerToolboxPopup">
+	<!--
+    	<menuseparator/>
+        <menuitem id="keymanager.tool.sb.menuitem"
+	  label="&keymanager.browser.overlay.title; (v &keymanager.version;)"
+          oncommand="runKeyManager();"
+          />
+        <menuitem id="keymanager.osslkeyconf.form.sb.menuitem"
+	  label="&keymanager.osslkeyconf.overlay.title; (v &keymanager.version;)"
+          oncommand="runOsslKeyConfig();"
+          />
+        <menuitem id="keymanager.doc.form.sb.menuitem"
+	  label="&keymanager.doc.overlay.title; "
+          oncommand="displayKMUsageDocument();"
+          />
+	-->
+    </menupopup>
+  </menu>
+</menupopup>
+
+///////////////////////////////////////////////////////////////////
+// Spicebird menu.
+///////////////////////////////////////////////////////////////////
+<menupopup id="tools-developer-menupopup">
+  <menu id="menu_AvLabsKeyManagerToolbox"
+      label="&keymanager.toolbox.menu.title;"
+      insertafter="devToolsSeparator"
+      >
+    <menupopup id="menu_AvLabsKeyManagerToolboxPopup">
+    </menupopup>
+  </menu>
+</menupopup>
+
+
+
+</overlay>
+

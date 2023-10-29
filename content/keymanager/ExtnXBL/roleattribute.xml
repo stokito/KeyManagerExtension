@@ -1,0 +1,365 @@
+<?xml version="1.0"?>
+<!-- @(#) $Id: roleattribute.xml,v 1.8 2009/04/16 13:11:53 subrata Exp $ -->
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is Avaya Labs Research, Avaya Inc. Code.
+   -
+   - The Initial Developer of the Original Code is
+   - Subrata Mazumdar, Avaya Labs Research, Avaya Inc.
+   - Portions created by the Initial Developer are Copyright (C) 2007.
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Subrata Mazumdar (mazum@avaya.com)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+
+<!DOCTYPE bindings SYSTEM "chrome://keymanager/locale/keyManager.dtd">
+
+<bindings id="roleattributeBindings"
+    xmlns="http://www.mozilla.org/xbl"
+    xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    xmlns:xbl="http://www.mozilla.org/xbl">
+
+    <binding id="rolesyntaxBinding"
+	extends="chrome://keymanager/content/ExtnXBL/certextn.xml#certextnbaseBinding"
+        >
+        <!--
+        <resources>
+    	    <script type="application/x-javascript" src="chrome://keymanager/content/ExtnXBL/certextn2props.js"/>
+	    <stylesheet src="chrome://keymanager/skin/kmbindings.css"/>
+        </resources>
+        -->
+    	<!-- content, property, method and event descriptions go here -->
+    	<content>
+		<xul:grid flex="1" anonid="attrcert.rolesyntax"> 
+                    <xul:columns>
+                    	<xul:column/>
+                    	<xul:column flex="1"/>
+                    </xul:columns>
+                    <xul:rows>
+                    	<xul:row align="centre">
+			    <xul:label value="Role Authority"
+				xbl:inherits="value=ralabel"
+			        />
+			    <xul:generalnamelistsimple anonid="attrcert.rolesyntax.role.authority"
+				xbl:inherits="type=ratype,typetooltip=ratypetooltip,typedisabled=ratypedisabled,valuetooltip=ravaluetooltip,valuedisabled=ravaluedisabled,addlabel=raaddlabel,addtooltip=raaddtooltip,removelabel=raremovelabel,removetooltip=raremovetooltip,listlabel=ralistlabel,listtooltip=ralisttooltip,rows=rarows,certPropName=raCertPropName,readonly,newnamesearchparam=ranewnamesearchparam"
+				type="uri"
+				newnamesearchparam="attrcert.rolesyntax.role.authority"
+				xtypedisabled="true"
+				valuetooltip="(OPTIONAL) Enter the ploicy authority for the role"
+			        certPropName="role-authority"
+    		    		onchange="getBindingParent(this).handleRoleAuthorityChange(this, event)"
+			        />
+                  	</xul:row>
+                    	<xul:row align="centre">
+			    <xul:label value="Role Name"
+				xbl:inherits="value=namelabel"
+			        />
+			    <xul:generalnamesimple anonid="attrcert.rolesyntax.role.name"
+				xbl:inherits="type=nametype,typetooltip=nametypetooltip,typedisabled=nametypedisabled,valuetooltip=namevaluetooltip,valuedisabled=namevaluedisabled,certPropName=roleNameCertPropName,readonly,namesearchparam=rolenamesearchparam"
+				type="uri"
+				namesearchparam="attrcert.rolesyntax.role.name"
+				typedisabled="true"
+			        certPropName="role-name"
+		            />
+                  	</xul:row>
+                    </xul:rows>
+                </xul:grid>
+    	</content>
+	<implementation>
+	    <field name="mBaseExtnElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "attrcert.rolesyntax");
+	    </field>
+	    <field name="mRoleAuthorityElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "attrcert.rolesyntax.role.authority");
+	    </field>
+	    <field name="mRoleNameElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "attrcert.rolesyntax.role.name");
+	    </field>
+
+	    <property name="readonly"
+	        onget="return this.mBaseExtnElem.readonly;"
+	    	onset="this.mBaseExtnElem.readonly = val;
+		       this.setReadonly(this.mBaseExtnElem, val);
+		       this.mRoleAuthorityElem.removeAttribute('readonly');
+		       this.mRoleNameElem.removeAttribute('readonly');
+		       if (val) {
+		       this.mRoleAuthorityElem.setAttribute('readonly',val);
+		       this.mRoleNameElem.setAttribute('readonly',val);
+		       }
+		       this.mRoleAuthorityElem.readonly=val;
+		       this.mRoleNameElem.readonly=val;
+		       if(!val) {this.refresh();}
+		       return val;"
+		/>
+	    <property name="disabled"
+	        onget="return this.mBaseExtnElem.disabled;"
+	    	onset="this.mBaseExtnElem.disabled = val;return val;"
+		/>
+
+	    <constructor>
+		<![CDATA[
+		// this.LogTrace("rolesyntaxBinding.constructor():......................Start.\n");
+
+		this.refresh();
+
+		// this.LogTrace("rolesyntaxBinding.constructor():......................End.\n");
+		]]>
+	    </constructor>
+
+	    <method name="refresh">
+	        <body>
+		<![CDATA[
+		]]>
+	        </body>
+	    </method>
+
+
+	    <method name="reset">
+	        <body>
+		<![CDATA[
+		this.mRoleAuthorityElem.reset();
+		this.mRoleNameElem.reset();
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="handleRoleAuthorityChange">
+		<parameter name="targetElem"/>
+		<parameter name="ev"/>
+	        <body>
+		<![CDATA[
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="toCertProps">
+		<parameter name="aCertProps"/>
+	        <body>
+		<![CDATA[
+		this.certExtnToProps(this.mBaseExtnElem, aCertProps);
+		// this.dumpProperties(aCertProps);
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="updateCertProps">
+		<parameter name="aCertProps"/>
+	        <body>
+		<![CDATA[
+		this.reset();
+		this.updateCertExtnProps(this.mBaseExtnElem, aCertProps);
+		this.refresh();
+
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="mergeCertProps">
+		<parameter name="aCertProps"/>
+	        <body>
+		<![CDATA[
+		this.updateCertExtnProps(this.mBaseExtnElem, aCertProps, true);
+		this.refresh();
+		]]>
+	        </body>
+	    </method>
+
+	</implementation>
+    </binding>
+
+    <binding id="roleattributeBinding"
+	extends="chrome://keymanager/content/ExtnXBL/certextn.xml#certextnbaseBinding"
+        >
+        <!--
+        <resources>
+    	    <script type="application/x-javascript" src="chrome://keymanager/content/ExtnXBL/certextn2props.js"/>
+	    <stylesheet src="chrome://keymanager/skin/kmbindings.css"/>
+        </resources>
+        -->
+    	<!-- content, property, method and event descriptions go here -->
+    	<content>
+	    <xul:certextn anonid="attrcert.attribute.roleattribute"
+	        xbl:inherits="captionlabel,active,activelabel,activetooltip,activePropName,mandatory,mandatorylabel,mandatorytooltip,mandatoryPropName"
+	        captionlabel="Role Attribute"
+		activePropName="role-attribute"
+		criticalhidden="true"
+		mandatoryhidden="true"
+		flex="1"
+		optionsflex="1"
+    		oncommand="getBindingParent(this).handleActivateAttr(this, event)"
+		>
+		<xul:rolesyntax anonid="attrcert.attribute.roleattribute.value" flex="1"
+		    xbl:inherits="ralabel,ratype,ratypetooltip,ratypedisabled,ravaluetooltip,ravaluedisabled,raaddlabel,raaddtooltip,raremovelabel,raremovetooltip,ralistlabel,ralisttooltip,rarows,ranewnamesearchparam,raCertPropName,namelabel,nametype,nametypetooltip,nametypedisabled,namevaluetooltip,namevaluedisabled,roleNameCertPropName,rolenamesearchparam,readonly"
+		    ralabel="Role Authority"
+		    ratype="uri"
+		    xratypedisabled="true"
+		    ravaluetooltip="(OPTIONAL) Enter the role authorities"
+		    namelabel="Role Name"
+		    nametype="uri"
+		    nametypedisabled="true"
+		    namevaluetooltip="Enter Role Name"
+		    ranewnamesearchparam="attrcert.rolesyntax.role.authority"
+		    rolenamesearchparam="attrcert.rolesyntax.role.name"
+		    raCertPropName="role-attribute-role-authority"
+		    roleNameCertPropName="role-attribute-role-name"
+		    />
+	    </xul:certextn>
+    	</content>
+	<implementation>
+	    <field name="mBaseExtnElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "attrcert.attribute.roleattribute");
+	    </field>
+	    <field name="mAttributeValueElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "attrcert.attribute.roleattribute.value");
+	    </field>
+
+	    <property name="active"
+	        onget="return this.mBaseExtnElem.active;"
+	    	onset="this.mBaseExtnElem.active = val;return val;"
+		/>
+	    <property name="readonly"
+	        onget="return this.mBaseExtnElem.readonly;"
+	    	onset="this.mBaseExtnElem.readonly = val;
+		       this.setReadonly(this.mBaseExtnElem, val);
+		       this.mAttributeValueElem.readonly=val;
+		       if(!val) {this.refresh();}
+		       return val;"
+		/>
+	    <property name="disabled"
+	        onget="return this.mBaseExtnElem.disabled;"
+	    	onset="this.mBaseExtnElem.disabled = val;return val;"
+		/>
+
+	    <constructor>
+		<![CDATA[
+		// this.LogTrace("roleattributeBinding.constructor():......................Start.\n");
+
+		this.refresh();
+
+		// this.LogTrace("roleattributeBinding.constructor():......................End.\n");
+		]]>
+	    </constructor>
+
+	    <method name="refresh">
+	        <body>
+		<![CDATA[
+		// Force the critical checkbox to be hidden
+		// TODO: do this at the base class for attribute.
+		this.handleActivateAttr();
+		]]>
+	        </body>
+	    </method>
+
+
+	    <method name="reset">
+	        <body>
+		<![CDATA[
+		// this.LogTrace("roleattributeBinding.reset():......................Start.\n");
+
+		this.mAttributeValueElem.reset();
+		this.resetCertExtn(this.mBaseExtnElem);
+		this.mBaseExtnElem.reset();
+
+		// this.LogTrace("roleattributeBinding.reset():......................End.\n");
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="handleActivateAttr">
+		<parameter name="targetElem"/>
+		<parameter name="ev"/>
+	        <body>
+		<![CDATA[
+		this.mBaseExtnElem.removeAttribute("criticalhidden");
+		this.mBaseExtnElem.setAttribute("criticalhidden", true);
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="toCertProps">
+		<parameter name="aCertProps"/>
+	        <body>
+		<![CDATA[
+
+		if (!this.active) {
+		    return;
+		}
+
+		this.certExtnToProps(this.mBaseExtnElem, aCertProps);
+		this.mAttributeValueElem.toCertProps(aCertProps);
+
+		// this.dumpProperties(aCertProps);
+
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="updateCertProps">
+		<parameter name="aCertProps"/>
+	        <body>
+		<![CDATA[
+
+		if (! this.containsAnyProperty(this.mBaseExtnElem, aCertProps)) {
+		    return;
+		}
+
+		this.reset();
+		this.updateCertExtnProps(this.mBaseExtnElem, aCertProps);
+
+		this.mAttributeValueElem.updateCertProps(aCertProps);
+
+		this.refresh();
+
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="mergeCertProps">
+		<parameter name="aCertProps"/>
+	        <body>
+		<![CDATA[
+		if (! this.containsAnyProperty(this.mBaseExtnElem, aCertProps)) {
+		    return;
+		}
+
+		this.updateCertExtnProps(this.mBaseExtnElem, aCertProps, true);
+
+		this.mAttributeValueElem.mergeCertProps(aCertProps);
+
+		this.refresh();
+		]]>
+	        </body>
+	    </method>
+
+	</implementation>
+    </binding>
+
+</bindings>
+

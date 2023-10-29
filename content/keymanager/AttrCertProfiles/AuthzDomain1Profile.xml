@@ -1,0 +1,52 @@
+<AttrCertProfile>
+
+    <profileItem name="version" value="1.0"/>
+
+    <!-- AC Attributes -->
+    <profileItem name="access-identity-attribute"	value="true"/>
+    <profileItem name="access-identity-attribute-ident"	value="uri:http://www.authzdomain1.org/ACService/AccessId/Identiy-222"/>
+    <profileItem name="access-identity-attribute-service" value="uri:http://www.authzdomain1.org/ACService/AccessId/Service-222"/>
+
+    <profileItem name="authinfo-attribute"		value="true"/>
+    <profileItem name="authinfo-attribute-ident"	value="uri:http://www.authzdomain1.org/ACService/AuthInfo/Identity-5555"/>
+    <profileItem name="authinfo-attribute-service"	value="uri:http://www.authzdomain1.org/ACService/AuthInfo/Service-1222/YYYY/HHHJJJ"/>
+
+    <profileItem name="charging-identity-attribute"	value="true"/>
+    <profileItem name="charging-identity-attribute-policy-authority" value="uri:http://www.authzdomain1.org/ACService/ChrgIdPA/P1"/>
+    <profileItem name="charging-identity-attribute-values" value="octets:v1|octets:LLKAAAAAAALLLLAKKAKKALLLLLLLLLLLLLAKJAKA"/>
+
+    <profileItem name="group-attribute"			value="true"/>
+    <profileItem name="group-attribute-policy-authority" value="uri:http://www.authzdomain1.org/ACService/GroupPA/P1"/>
+    <profileItem name="group-attribute-values"		value="octets:g1|octets:g555|octets:LAKAKKAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+
+    <profileItem name="role-attribute"			value="true"/>
+    <profileItem name="role-attribute-role-authority"	value="uri:http://www.authzdomain1.org/ACService/roles/RA1888888888888888|uri:http://www.authzdomain1.org/roles/RA22|uri:http://www.authzdomain1.org/RA/P1"/>
+    <profileItem name="role-attribute-role-name"	value="uri:http://www.authzdomain1.org/ACService/roles/r1"/>
+
+    <profileItem name="voms-attribute"			value="true"/>
+    <profileItem name="voms-attribute-policy-authority"	value="uri:http://www.authzdomain1.org/ACService/VOMSPA/P1/UUUUUY/OOOOOO/KKKLLLOPPPPPPPPPPPPPPPP/KKKK|uri:http://www.authzdomain1.org/VOMSPA/P1/UUUUUY/OOOOOO/KKK|uri:http://www.authzdomain1.org/VOMSPA/P1"/>
+    <profileItem name="voms-attribute-values"		value="octets:/g33/Role=r33|octets:/g33/Role=r35|octets:/GGGGGGGGGGGGGGG/Role=RRRRRRRRRRRRRRRR/Capability=CCCCCC"/>
+
+    <profileItem name="wlanssid-attribute"			value="true"/>
+    <!-- WLAN SSIDs are seprated by |; hex-string must have 0-9A-F and event numbers of characters -->
+    <profileItem name="wlanssid-attribute-listvalue"		value="AvayaBS1|AvayaBS2|AvayaBS3"/>
+
+
+    <!-- AC Extensions -->
+
+    <profileItem name="actarget"			value="true"/>
+    <profileItem name="actarget-crit"			value="true"/>
+    <profileItem name="actarget-targetNameList"		value="uri:http://www.authzdomain1.org/ACService/Targets/T1"/>
+
+    <profileItem name="authorityKeyIdentifier"		value="true"/>
+    <profileItem name="authorityKeyIdentifier-type-keyIdentifier" value="true"/>
+
+    <profileItem name="basicConstraints"		value="true"/>
+    <profileItem name="basicConstraints-crit"		value="true"/>
+
+    <profileItem name="noRevAvail"			value="true"/>
+    <!--
+    -->
+
+</AttrCertProfile>
+

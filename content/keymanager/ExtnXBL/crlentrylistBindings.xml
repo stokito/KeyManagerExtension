@@ -1,0 +1,574 @@
+<?xml version="1.0"?>
+
+<!-- @(#) $Id: crlentrylistBindings.xml,v 1.3 2009/04/16 13:11:53 subrata Exp $ -->
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is Avaya Labs Research, Avaya Inc. Code.
+   -
+   - The Initial Developer of the Original Code is
+   -     Subrata Mazumdar, Avaya Labs Research, Avaya Inc.
+   - Portions created by the Initial Developer are Copyright (C) 2007.
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Subrata Mazumdar (mazum@avaya.com)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+
+<!DOCTYPE bindings SYSTEM "chrome://keymanager/locale/crltool.dtd">
+
+<bindings id="crlentrylistBindings"
+    xmlns="http://www.mozilla.org/xbl"
+    xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    xmlns:xbl="http://www.mozilla.org/xbl">
+
+    <binding id="crlentrylistBinding"
+	extends="chrome://keymanager/content/ExtnXBL/certextn.xml#certextnbaseBinding"
+	>
+	<content>
+	    <xul:vbox anonid="keymgr.crltool.crlentry.list" flex="1"
+		xbl:inherits="flex,width,hidden,style"
+		xstyle="height:100px;"
+		>
+		<xul:hbox flex="10"
+		    xbl:inherits="flex,width"
+		    style="border: 2px solid yellow;"
+		    xstyle="overflow:auto; border: 2px solid yellow;"
+		    >
+		    <xul:tree anonid="keymgr.crltool.crlentry.list.tree"
+			xbl:inherits="flex,width"
+			flex="1"
+			editable="true"
+			enableColumnDrag="true"
+			onselect="getBindingParent(this).enableCRLEntryTreeCmdButtons(event); return false;"
+			>
+			<xul:treecols>
+			    <xul:treecol id="revokedCertSerialNumber"
+			    	flex="1" 
+				label="Serial Number"
+				primary="true"
+				persist="hidden width ordinal"
+				/>
+			    <xul:splitter class="tree-splitter"/>
+			    <xul:treecol id="certRevocationDate"
+			    	flex="1" 
+				label="Revocation Date"
+				primary="true"
+				persist="hidden width ordinal"
+				/>
+			    <xul:splitter class="tree-splitter"/>
+			    <xul:treecol id="certRevocationReasonCode"
+			    	flex="1" 
+				label="Reason Code"
+				persist="hidden width ordinal"
+				/>
+			    <xul:splitter class="tree-splitter"/>
+			    <xul:treecol id="certInvalidityDate"
+			    	flex="1" 
+				label="Inavlidity Date"
+				persist="hidden width ordinal"
+				/>
+			    <xul:splitter class="tree-splitter"/>
+			</xul:treecols>
+			<xul:treechildren>
+			</xul:treechildren>
+		    </xul:tree>
+		    <xul:vbox
+		    	xbl:inherits="hidden=readonly"
+			>
+			<xul:button anonid="keymgr.crltool.crlentry.list.tree.add"
+			    label="Add"
+			    oncommand="getBindingParent(this).handleAddCRLEntry(event); return false;"
+			    />
+			<xul:button anonid="keymgr.crltool.crlentry.list.tree.remove"
+			    label="Remove"
+			    oncommand="getBindingParent(this).handleRemoveCRLEntryElem(event); return false;"
+			    />
+			<xul:button anonid="keymgr.crltool.crlentry.list.tree.edit"
+			    label="Edit"
+			    collapsed="true"
+			    oncommand="getBindingParent(this).handleEditCRLEntryElem(event); return false;"
+			    />
+		    </xul:vbox>
+		</xul:hbox>
+		<xul:vbox collapsed="true">
+		    <children/>
+		</xul:vbox>
+	    </xul:vbox>
+	</content>
+
+	<implementation>
+	    <field name="mCRLEntryListTreeElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.crltool.crlentry.list.tree");
+	    </field>
+	    <field name="mCRLEntryContainerElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.crltool.crlentry.list.container");
+	    </field>
+	    <field name="mCRLEntryAddElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.crltool.crlentry.list.tree.add");
+	    </field>
+	    <field name="mCRLEntryRemoveElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.crltool.crlentry.list.tree.remove");
+	    </field>
+	    <field name="mCRLEntryEditElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.crltool.crlentry.list.tree.edit");
+	    </field>
+	    <field name="mCRLEntryEditDialogURL">
+	    </field>
+	    <field name="mCRL"/>
+	    <field name="mCRLEntryCount"/>
+	    <field name="mCRLEntryList"/>
+	    <field name="mCRLEntryTreeView"/>
+
+	    <property name="readonly"
+		onget="return this.hasAttribute('readonly');"
+		onset="if (val == true) this.setAttribute('readonly',true);
+		       else this.removeAttribute('readonly');
+		       return val;"
+		/>
+	    <property name="crlEntryListEditURL"
+		onget="return this.mCRLEntryEditDialogURL;"
+		onset="this.mCRLEntryEditDialogURL=val;
+		       return val;"
+		/>
+
+	    <property name="selectedCRLEntryIndex" readonly="true"
+		onget="return this.mCRLEntryListTreeElem.view.selection.currentIndex;"
+		/>
+	    <property name="selectedCRLEntry" readonly="true"
+		onget="return this.getCRLEntry(this.selectedCRLEntryIndex);"
+		/>
+	    <property name="crlEntryList" readonly="true"
+		onget="return this.mCRLEntryList;"
+		/>
+	    <property name="crlEntryListTreeView" readonly="true"
+		onget="return this.mCRLEntryListTreeElem.view;"
+		/>
+
+	    <constructor>
+		<![CDATA[
+		// this.mMaxLogLevel = 9;
+		this.LogTrace( "crlentrylistBinding.constructor():.........................Start.");
+
+		this.mCRLEntryTreeView = null;
+
+		// this.enableCRLEntryTreeCmdButtons();
+
+		this.LogTrace( "crlentrylistBinding.constructor():.........................End.");
+		]]>
+	    </constructor>
+
+	    <method name="initCRL">
+		<parameter name="aCRL"/>
+		<body>
+		<![CDATA[
+		this.LogTrace( "crlentrylistBinding.initCRL():.........................Start.");
+
+		this.mCRL = aCRL;
+		{
+		    var crlEntryCntObj = new Object();
+		    var crlEntryListObj = new Object();
+		    try {
+		    	aCRL.getAllRevokedCertCRLEntries(crlEntryCntObj, crlEntryListObj);
+			this.mCRLEntryCount = crlEntryCntObj.value;
+			this.mCRLEntryList = crlEntryListObj.value;
+		    } catch (ex) {
+		    	this.LogDebug( "crlentrylistBinding.initCRL(): aCRL.getAllRevokedCertCRLEntries() failed - ex: " + ex);
+		    	this.mCRLEntryCount = 0;
+			this.mCRLEntryList = null;
+		    }
+		    this.LogDebug( "crlentrylistBinding.initCRL(): this.mCRLEntryCount: " + this.mCRLEntryCount);
+		    // this.LogDebug( "crlentrylistBinding.initCRL(): this.mCRLEntryList: " + this.mCRLEntryList);
+		}
+
+		this.refresh();
+
+		this.LogTrace( "crlentrylistBinding.initCRL():.........................End.");
+		]]>
+		</body>
+	    </method>
+
+
+	    <method name="refresh">
+		<body>
+		<![CDATA[
+		this.LogTrace( "crlentrylistBinding.refresh():.........................Start.");
+
+		this.LogDebug( "crlentrylistBinding.refresh(): this.mCRLEntryTreeView: " + this.mCRLEntryTreeView);
+
+		if (this.mCRL && !this.mCRLEntryTreeView) {
+		    this.LogDebug( "crlentrylistBinding.refresh(): this.mCRL: " + this.mCRL);
+		    this.mCRLEntryTreeView = this.createCRLEntryTreeView(this.mCRL);
+		    this.mCRLEntryListTreeElem.view = this.mCRLEntryTreeView;
+		}
+
+		if (this.mCRLEntryTreeView) {
+		    this.mCRLEntryTreeView.refreshTree();
+		    this.enableCRLEntryTreeCmdButtons();
+		}
+
+		this.LogTrace( "crlentrylistBinding.refresh():.........................End.");
+		]]>
+		</body>
+	    </method>
+
+
+	    <method name="getCRLEntryCount">
+		<body>
+		<![CDATA[
+		return this.mCRLEntryCount;
+		]]>
+		</body>
+	    </method>
+
+
+	    <method name="getCRLEntry">
+		<parameter name="idx"/>
+		<body>
+		<![CDATA[
+		if ((idx < 0) && (idx >= this.mCRLEntryCount)) {
+		    return null;
+		}
+		return this.mCRLEntryList[idx];
+		]]>
+		</body>
+	    </method>
+
+	    <method name="getSelectedCRLEntryIndex">
+		<body>
+		<![CDATA[
+		return this.mCRLEntryListTreeElem.view.selection.currentIndex;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="parseCRLEntryData">
+		<parameter name="featureDataStr"/>
+		<body>
+		<![CDATA[
+		this.LogDebug( "crlentrylistBinding.parseCRLEntryData(): featureDataStr: " + featureDataStr);
+		]]>
+		</body>
+	    </method>
+
+
+	    <method name="enableCRLEntryTreeCmdButtons">
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		this.LogTrace( "crlentrylistBinding.enableCRLEntryTreeCmdButtons():.........................Start.");
+		
+		var rowCount = this.getCRLEntryCount();
+
+		this.LogDebug( "crlentrylistBinding.enableCRLEntryTreeCmdButtons(): rowCount: " + rowCount);
+
+		var slectedCRLEntryElem = null;
+
+		if (rowCount <= 0) {
+		    // this.mCRLEntryAddElem.hidden = false;
+		    this.mCRLEntryRemoveElem.hidden = true;
+		    this.mCRLEntryEditElem.hidden = true;
+		    return;
+		}
+
+		// this.mCRLEntryAddElem.hidden = false;
+		this.mCRLEntryRemoveElem.hidden = false;
+		this.mCRLEntryEditElem.hidden = false;
+
+		this.LogTrace( "crlentrylistBinding.enableCRLEntryTreeCmdButtons():.........................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="handleAddCRLEntry">
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		this.LogTrace( "crlentrylistBinding.handleAddCRLEntry():....................Start.");
+
+		ev.crlEntryCmd = "add";
+
+		this.LogTrace( "crlentrylistBinding.handleAddCRLEntry():......................End.");
+		]]>
+		</body>
+	    </method>
+
+
+	    <method name="handleRemoveCRLEntryElem">
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		this.LogTrace( "crlentrylistBinding.handleRemoveCRLEntryElem():....................Start.");
+
+		var selectedRowIndex = this.getSelectedCRLEntryIndex();
+		if (selectedRowIndex < 0) {
+		    ev.stopPropagation();
+		    return;
+		}
+
+		var crlEntryRef = this.getCRLEntry(selectedRowIndex);
+		if (!crlEntryRef) {
+		    ev.stopPropagation();
+		    return;
+		}
+
+		ev.crlEntryCmd = "remove";
+
+		this.LogTrace( "crlentrylistBinding.handleRemoveCRLEntryElem():......................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="handleEditCRLEntryElem">
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		this.LogTrace( "crlentrylistBinding.handleEditCRLEntryElem():....................Start.");
+
+		var selectedRowIndex = this.getSelectedCRLEntryIndex();
+		if (selectedRowIndex < 0) {
+		    ev.stopPropagation();
+		    return;
+		}
+		this.LogTrace( "crlentrylistBinding.handleEditCRLEntryElem():...............10.");
+
+		var crlEntryRef = this.getCRLEntry(selectedRowIndex);
+		if (!crlEntryRef) {
+		    ev.stopPropagation();
+		    return;
+		}
+
+		this.LogTrace( "crlentrylistBinding.handleEditCRLEntryElem():......................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="addNewCRLEntryElem">
+		<body>
+		<![CDATA[
+		this.LogTrace( "crlentrylistBinding.addNewCRLEntryElem():.........................Start.");
+
+		var params = Components.classes["@mozilla.org/embedcomp/dialogparam;1"].
+					createInstance(Components.interfaces.nsIDialogParamBlock);
+		var argc = 0;
+		params.SetString(argc, "Add"); argc++;
+		params.SetInt(0, argc);
+		window.openDialog(this.mCRLEntryEditDialogURL, "CRLEntryEdit",
+				'chrome,centerscreen,resizable,modal', params);
+
+
+		this.LogTrace( "crlentrylistBinding.addNewCRLEntryElem():.......................20.");
+		argc = params.GetInt(0);
+		this.LogDebug( "crlentrylistBinding.handleEditCRLEntryElem(): argc: " + argc);
+		if (argc == 0) {
+		    return null;
+		}
+
+		var crlEntryRowElemStr = params.GetString(0);
+		this.LogDebug( "crlentrylistBinding.addNewCRLEntryElem(): crlEntryRowElemStr: " + crlEntryRowElemStr);
+
+		// Create and Add the new Attribute 
+
+		var newCRLEntryElem = this.parseCRLEntryData(crlEntryRowElemStr);
+		if (!newCRLEntryElem) {
+		    return null;
+		}
+
+		var prevRowCount = this.getCRLEntryCount();
+		this.LogDebug( "crlentrylistBinding.addNewCRLEntryElem(): prevRowCount: " + prevRowCount);
+
+		var xulCRLEntryElem = this.mCRLEntryListElem.appendChild(newCRLEntryElem);
+
+		var rowCount = this.getCRLEntryCount();
+		this.mCRLEntryListTreeElem.treeBoxObject.rowCountChanged(prevRowCount, rowCount);
+		this.mCRLEntryListTreeElem.treeBoxObject.ensureRowIsVisible(rowCount-1);
+		this.LogDebug( "crlentrylistBinding.addNewCRLEntryElem(): rowCount: " + rowCount);
+
+		this.LogDebug("crlentrylistBinding.addNewCRLEntryElem(): this.mCRLEntryListElem: \n" +  this.serialize(this.mCRLEntryListElem));
+		this.LogTrace( "crlentrylistBinding.addNewCRLEntryElem():.......................End.");
+		return xulCRLEntryElem;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="refreshCRLEntryTreeView">
+		<body>
+		<![CDATA[
+		this.LogTrace( "crlentrylistBinding.refreshCRLEntryTreeView():.........................Start.");
+
+		if (this.mCRL) {
+		    this.initCRL(this.mCRL);
+		}
+
+		var rowCount = this.getCRLEntryCount();
+
+		this.mCRLEntryListTreeElem.treeBoxObject.rowCountChanged(rowCount, rowCount);
+		this.mCRLEntryListTreeElem.treeBoxObject.ensureRowIsVisible(rowCount-1);
+
+		this.LogTrace( "crlentrylistBinding.refreshCRLEntryTreeView():.........................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="createCRLEntryTreeView">
+		<parameter name="aCRL"/>
+		<body>
+		<![CDATA[
+		this.LogTrace( "crlentrylistBinding.createCRLEntryTreeView():.........................Start.");
+
+		CRLEntryTreeView.prototype = {
+		    mEditable		: false,
+		    /* alrICRL */ mCRL	: null,
+		    mCRLEntryCount	: 0,
+		    mCRLEntryList	: null,
+
+		    get rowCount () { return this.mCRLEntryCount; },
+		    setTree: function(treebox){ this.treebox = treebox; },
+		    isEditable: function(row,column){
+			return column.editable;
+		    },
+
+		    getCellText : function(row,column){
+			if (row >= this.mCRLEntryCount) {
+			    return "";
+			}
+			var /* alrICRLEntry */ alrCRLEntry = this.mCRLEntryList[row];
+			if (!alrCRLEntry) {
+			    return "";
+			}
+
+			var cellText = "";
+			try {
+			    if (column.id == "revokedCertSerialNumber") {
+			        cellText = alrCRLEntry.serialNumber;
+			    }
+			    else if (column.id == "certRevocationDate") {
+			        var revocationDateInMiliSec = alrCRLEntry.revocationDate;
+			        // dump("getCellText(" + row + ", " + column + "): revocationDateInMiliSec>" + revocationDateInMiliSec + "<\n");
+			        var revocationDateObj = new Date();
+			        revocationDateObj.setTime(revocationDateInMiliSec);
+			        cellText = revocationDateObj.toLocaleDateString();
+			        cellText = alrCRLEntry.revocationDateLocale;
+			    }
+			    else if (column.id == "certRevocationReasonCode") {
+			        cellText = alrCRLEntry.reasonCode;
+			    }
+			    else if (column.id == "certInvalidityDate") {
+			        cellText = alrCRLEntry.invalidityDateLocale;
+			    }
+			} catch (ex) {
+			}
+			if (!cellText) {
+			    cellText = "";
+			}
+			// dump("getCellText(" + row + ", " + column + "): >" + cellText + "<\n");
+			return cellText;
+		    },
+		    setCellText : function(row,column,cellText){
+			// dump("setCellText(" + row + ", " + column.id + ", " + cellText + ")........Start.");
+
+			if (row >= this.mCRLEntryCount) {
+			    return;
+			}
+			var /* alrICRLEntry */ alrCRLEntry = mCRLEntryList[row];
+			if (!alrCRLEntry) {
+			    return;
+			}
+			// dump("setCellText() : this.mCRLEntryCount: " + this.mCRLEntryCount);
+			// dump("setCellText(" + row + ", " + column.id + ", " + cellText + ")........End.");
+		    },
+
+		    isContainer: function(row){ return false; },
+		    isSeparator: function(row){ return false; },
+		    isSorted: function(){ return false; },
+		    getLevel: function(row){ return 0; },
+		    getImageSrc: function(row,column){ return null; },
+		    getRowProperties: function(row,props){},
+		    getCellProperties: function(row,column,props){},
+		    getColumnProperties : function(column,columnElement,props){},
+		    cycleHeader: function(column){ },
+		    cycleCell: function(row,column){},
+
+		    refreshTree: function ()
+		    {
+		        var crlEntryCntObj = new Object();
+		        var crlEntryListObj = new Object();
+		        try {
+		    	    this.mCRL.getAllRevokedCertCRLEntries(crlEntryCntObj, crlEntryListObj);
+			    this.mCRLEntryCount = crlEntryCntObj.value;
+			    this.mCRLEntryList = crlEntryListObj.value;
+		        } catch (ex) {
+		    	    // dump( "CRLEntryTreeView(): aCRL.getAllRevokedCertCRLEntries() failed - ex: " + ex + "\n");
+		    	    this.mCRLEntryCount = 0;
+			    this.mCRLEntryList = null;
+		        }
+		        // dump("CRLEntryTreeView(): this.mCRLEntryCount : " + this.mCRLEntryCount + "\n");
+		        // dump("CRLEntryTreeView(): this.mCRLEntryList : " + this.mCRLEntryList + "\n");
+		    }
+
+		};
+
+		function CRLEntryTreeView(aCRL) {
+		    this.mCRL = aCRL;
+		    this.refreshTree();
+		};
+
+		var crlEntryTreeView = new CRLEntryTreeView(aCRL);
+
+		this.LogTrace( "crlentrylistBinding.createCRLEntryTreeView():.........................End.");
+		return crlEntryTreeView;
+
+		]]>
+		</body>
+	    </method>
+
+	    <method name="addCRLEntry">
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		this.LogTrace( "crlentrylistBinding.addCRLEntry():.........................Start.");
+		this.LogTrace( "crlentrylistBinding.addCRLEntry():.........................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="removeCRLEntry">
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		this.LogTrace( "crlentrylistBinding.removeCRLEntry():.........................Start.");
+		this.LogTrace( "crlentrylistBinding.removeCRLEntry():.........................End.");
+		]]>
+		</body>
+	    </method>
+
+	</implementation>
+    </binding>
+
+</bindings>
+

@@ -1,0 +1,149 @@
+<?xml version="1.0"?>
+<!-- @(#) $Id: hashalgmenu.xml,v 1.9 2010/01/04 05:53:10 subrata Exp $ -->
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is Avaya Labs Research, Avaya Inc. Code.
+   -
+   - The Initial Developer of the Original Code is
+   - Subrata Mazumdar, Avaya Labs Research, Avaya Inc.
+   - Portions created by the Initial Developer are Copyright (C) 2007.
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Subrata Mazumdar (mazum@avaya.com)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+
+
+<bindings id="hashalgmenuBindings"
+    xmlns="http://www.mozilla.org/xbl"
+    xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    xmlns:xbl="http://www.mozilla.org/xbl">
+
+    <binding id="hashalgmenuBinding">
+	<!--
+        <resources>
+	    <stylesheet src="chrome://xmldsigffext/skin/kmbindings.css"/>
+        </resources>
+	-->
+    	<!-- content, property, method and event descriptions go here -->
+    	<content>
+	    <xul:hbox>
+	            <xul:menulist anonid="hashalgmenu.hash.alg.menulist"
+		        xbl:inherits="value,hidden,disabled,tooltiptext,crop,sizetopopup,src"
+			tooltiptext="Select Hash Algorithm Name"
+        	    	oncommand="getBindingParent(this).handleHashAlgChange(this, event.target)"
+	                >
+                        <xul:menupopup>
+                            <xul:menuitem anonid="hashalgmenu.hash.alg.name.sha1"
+			      xbl:inherits="label=sha1label,disabled=sha1disabled,hidden=sha1hidden"
+			      label="SHA-1"
+			      value="SHA1"
+			      />
+                            <xul:menuitem anonid="hashalgmenu.hash.alg.name.sha256"
+			      xbl:inherits="label=sha256label,disabled=sha256disabled,hidden=sha256hidden"
+			      label="SHA-256"
+			      value="SHA256"
+			      />
+                            <xul:menuitem anonid="hashalgmenu.hash.alg.name.sha384"
+			      xbl:inherits="label=sha384label,disabled=sha384disabled,hidden=sha384hidden"
+			      label="SHA-384"
+			      value="SHA384"
+			      />
+                            <xul:menuitem anonid="hashalgmenu.hash.alg.name.sha512"
+			      xbl:inherits="label=sha512label,disabled=sha512disabled,hidden=sha512hidden"
+			      label="SHA-512"
+			      value="SHA512"
+			      />
+                            <xul:menuitem anonid="hashalgmenu.hash.alg.name.md5"
+			      xbl:inherits="label=md5label,disabled=md5disabled,hidden=md5hidden"
+			      label="MD5"
+			      value="MD5"
+			      />
+                            <xul:menuitem anonid="hashalgmenu.hash.alg.name.md2"
+			      xbl:inherits="label=md2label,disabled=md2disabled,hidden=md2hidden"
+			      label="MD2"
+			      value="MD2"
+			      />
+                        </xul:menupopup>
+                    </xul:menulist>
+	    </xul:hbox>
+    	</content>
+	<implementation>
+	    <field name="hashAlgMenuListElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "hashalgmenu.hash.alg.menulist");
+	    </field>
+	    <property name="disabled"
+	        onget="return this.hashAlgMenuListElem.disabled;"
+	        onset="return this.hashAlgMenuListElem.disabled=val;"
+		/>
+	    <property name="value">
+	        <getter>
+		<![CDATA[
+		    return this.hashAlgMenuListElem.value;
+		]]>
+	        </getter>
+	        <setter>
+		<![CDATA[
+		    this.setAttribute('value',val);
+		    this.hashAlgMenuListElem.value = val;
+		    this.handleHashAlgChange(this.hashAlgMenuListElem, this.hashAlgMenuListElem.selectedItem);
+		    return val;
+		]]>
+	        </setter>
+	    </property>
+
+	    <constructor>
+		<![CDATA[
+		    this.handleHashAlgChange(this.hashAlgMenuListElem, this.hashAlgMenuListElem.selectedItem);
+		]]>
+	    </constructor>
+
+	    <!--
+	    <method name="reset">
+	        <body>
+		<![CDATA[
+		this.value = "SHA1";
+		]]>
+	        </body>
+	    </method>
+	    -->
+
+	    <method name="handleHashAlgChange">
+		<parameter name="menuListElem"/>
+		<parameter name="selectedItemElem"/>
+	        <body>
+		<![CDATA[
+		]]>
+	        </body>
+	    </method>
+
+	</implementation>
+    </binding>
+
+</bindings>

@@ -1,0 +1,184 @@
+<!-- @(#) $Id: osslkeyconf.dtd,v 1.78 2012/12/05 19:02:40 subrata Exp $ -->
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is Avaya Labs Research, Avaya Inc. Code.
+   -
+   - The Initial Developer of the Original Code is
+   - Subrata Mazumdar, Avaya Labs Research, Avaya Inc.
+   - Portions created by the Initial Developer are Copyright (C) 2007.
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Subrata Mazumdar (mazum@avaya.com)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+<!ENTITY keymgr.ossl.keyconf.title			"OpenSSL App Key Configurator">
+<!ENTITY keymgr.ossl.keyconf.version			"0.1.110.20120403">
+<!ENTITY keymgr.ossl.keyconf.options.title		"OpenSSL App Key Configurator">
+<!ENTITY keymgr.ossl.keyconf.overlay.title		"OpenSSL App Key Configurator">
+
+<!ENTITY keymgr.ossl.keyconf.file.browse.label		"Browse">
+<!ENTITY keymgr.ossl.keyconf.file.browse.tooltip	"Click this button to select the file">
+<!ENTITY keymgr.ossl.keyconf.file.create.label		"Create/Modify">
+<!ENTITY keymgr.ossl.keyconf.file.create.tooltip	"Click this button to create the password file or modify the password file if it exists">
+<!ENTITY keymgr.ossl.keyconf.file.export.label		"Export">
+
+<!ENTITY keymgr.ossl.keyconf.key.password.file.label	"Password File">
+
+<!ENTITY keymgr.ossl.keyconf.source.info.label			"Key/Cert Configuration Information">
+<!ENTITY keymgr.ossl.keyconf.source.options.new.label		"New">
+<!ENTITY keymgr.ossl.keyconf.source.options.new.tooltip	"Select this option if you want create new configuration file">
+<!ENTITY keymgr.ossl.keyconf.source.options.file.label		"Load from File">
+<!ENTITY keymgr.ossl.keyconf.source.options.file.tooltip	"Select this option if you want load the keys and certs from a configuration file">
+<!ENTITY keymgr.ossl.keyconf.source.options.browser.label	"Export from Browser Cert DB">
+<!ENTITY keymgr.ossl.keyconf.source.options.browser.tooltip	"Select this option if you want export the keys and certs from the browser's Cert-DB">
+<!ENTITY keymgr.ossl.keyconf.source.file.path.tooltip		"Enter the path to key configuration file">
+<!ENTITY keymgr.ossl.keyconf.source.file.browse.tooltip	"Click this button to select the path to the key configuration file">
+<!ENTITY keymgr.ossl.keyconf.source.file.load.label		"Load">
+<!ENTITY keymgr.ossl.keyconf.source.file.load.tooltip		"Click this button to load the selected configuration file">
+<!ENTITY keymgr.ossl.keyconf.source.browser.nickname.menulist.tooltip	"Select one of the key alias">
+<!ENTITY keymgr.ossl.keyconf.source.browser.export.tooltip	"Export Key from selected cert">
+
+<!ENTITY keymgr.ossl.keyconf.password.file.browse.tooltip	"Click this button to select the password file">
+<!ENTITY keymgr.ossl.keyconf.password.file.path.tooltip		"Enter the path to the password file for the key">
+<!ENTITY keymgr.ossl.keyconf.password.file.create.tooltip	"Click this button to create the password file or modify the password file if it exists">
+
+<!ENTITY keymgr.ossl.keyconf.app.profile.label			"OpenSSL Application Profile">
+
+<!ENTITY keymgr.ossl.keyconf.app.type.label			"Target Application Type">
+<!ENTITY keymgr.ossl.keyconf.app.type.menuList.tooltip		"Select one of the target application type from the list">
+<!ENTITY keymgr.ossl.keyconf.app.type.custom.label		"Custom">
+<!ENTITY keymgr.ossl.keyconf.app.type.custom.tooltip		"Custom: Select this item if you want to generate the config file with entires in NVP form sepatared with =">
+<!ENTITY keymgr.ossl.keyconf.app.type.globus.label		"Globus">
+<!ENTITY keymgr.ossl.keyconf.app.type.globus.tooltip		"Globus Toolkit: Select this item if you want to generated the  keys and certifcates to directroies compatible with Globus Tookit security requirements">
+<!ENTITY keymgr.ossl.keyconf.app.type.openssl.label		"OpenSSL">
+<!ENTITY keymgr.ossl.keyconf.app.type.openssl.tooltip		"OpenSSL: Select this item if you want to generated the config file compatale with OpenSSL config file">
+<!ENTITY keymgr.ossl.keyconf.app.type.curl.label		"cURL">
+<!ENTITY keymgr.ossl.keyconf.app.type.curl.tooltip		"cURL: Select this item if you want to generated the config file compatale with  config file for cURL">
+<!ENTITY keymgr.ossl.keyconf.app.target.dir.path.label		"App Keystore Base Dir: ">
+<!ENTITY keymgr.ossl.keyconf.app.target.dir.path.tooltip	"Enter the path to target base directry for the applications">
+<!ENTITY keymgr.ossl.keyconf.app.target.dir.path.browse.tooltip	"Use this button to select the path to target base directry for the applications">
+
+<!ENTITY keymgr.ossl.keyconf.app.keystore.type.label			"App Key Store Type">
+<!ENTITY keymgr.ossl.keyconf.app.keystore.type.menuList.tooltip		"Select one of the key store type from the list as the active key format">
+<!ENTITY keymgr.ossl.keyconf.app.keystore.type.embedded.label		"EMBEDDED">
+<!ENTITY keymgr.ossl.keyconf.app.keystore.type.privateKey.label		"PRIVATE_KEY">
+<!ENTITY keymgr.ossl.keyconf.app.keystore.type.privateKey.tooltip	"PRIVATE_KEY: Select this option if you want use OpenSSL encrypted private key file as key-store.">
+<!ENTITY keymgr.ossl.keyconf.app.keystore.type.pkcs8.label		"PKCS8">
+<!ENTITY keymgr.ossl.keyconf.app.keystore.type.pkcs8.tooltip	"PKCS8: Select this option if you want use PKCS#8 formatted encrypted file as key-store.">
+<!ENTITY keymgr.ossl.keyconf.app.keystore.type.pkcs12.label		"PKCS12">
+<!ENTITY keymgr.ossl.keyconf.app.keystore.type.pkcs12.tooltip		"PKCS12: Select this option if you want use PKCS#12 file as key-store.">
+<!ENTITY keymgr.ossl.keyconf.app.keystore.type.engine.label		"ENGINE">
+<!ENTITY keymgr.ossl.keyconf.app.keystore.type.engine.tooltip		"ENGINE: Select this option if you want use Smart Card as key-store">
+
+
+<!ENTITY keymgr.ossl.keyconf.ca.certs.label				"CA Certificate File and Directory">
+<!ENTITY keymgr.ossl.keyconf.ca.certs.file.label			"CA Certificate File">
+<!ENTITY keymgr.ossl.keyconf.ca.certs.file.path.tooltip			"Enter the path to file that contains concatenated X.509 certificates (in PEM format) from CAs">
+<!ENTITY keymgr.ossl.keyconf.ca.certs.file.browse.tooltip		"Click this button to select the file that contains X.509 certificates (in PEM format) from CAs">
+<!ENTITY keymgr.ossl.keyconf.ca.certs.dir.label				"CA Certificate Directory">
+<!ENTITY keymgr.ossl.keyconf.ca.certs.dir.path.tooltip			"Enter the path to directory that contains X.509 certificates from CAs">
+<!ENTITY keymgr.ossl.keyconf.ca.certs.dir.browse.tooltip		"Click this button to select the directory that contains X.509 certificates from CAs">
+
+<!ENTITY keymgr.ossl.keyconf.keystore.label				"Key Stores">
+<!ENTITY keymgr.ossl.keyconf.keystore.profileId.usenickname.label	"Use cert nick name">
+<!ENTITY keymgr.ossl.keyconf.keystore.profileId.usenickname.tooltip	"Use selected cert's nick name as profile id.">
+<!ENTITY keymgr.ossl.keyconf.keystore.profileId.label			"Key Profile ID">
+<!ENTITY keymgr.ossl.keyconf.keystore.profileId.tooltip			"Enter the profile-id for key store">
+<!ENTITY keymgr.ossl.keyconf.keystore.globus.credtype.menuList.label	"Credential Type: ">
+<!ENTITY keymgr.ossl.keyconf.keystore.globus.credtype.menuList.tooltip	"Select one of the crdential type from the list ">
+<!ENTITY keymgr.ossl.keyconf.keystore.globus.credtype.user.label	"User">
+<!ENTITY keymgr.ossl.keyconf.keystore.globus.credtype.user.tooltip	"Will create key and cert files with 'user' prefix">
+<!ENTITY keymgr.ossl.keyconf.keystore.globus.credtype.proxy.label	"Proxy">
+<!ENTITY keymgr.ossl.keyconf.keystore.globus.credtype.proxy.tooltip	"Will create key and cert files with 'poxy' prefix">
+<!ENTITY keymgr.ossl.keyconf.keystore.globus.credtype.host.label	"Host">
+<!ENTITY keymgr.ossl.keyconf.keystore.globus.credtype.host.tooltip	"Will create key and cert files with 'host' prefix">
+<!ENTITY keymgr.ossl.keyconf.keystore.globus.credtype.service.label	"Service">
+<!ENTITY keymgr.ossl.keyconf.keystore.globus.credtype.service.tooltip	"Will create key and cert files with 'service' prefix">
+<!ENTITY keymgr.ossl.keyconf.keystore.dir.path.tooltip			"Enter the path to directory for key-store that contains keys and X.509 certificates ">
+<!ENTITY keymgr.ossl.keyconf.keystore.dir.browse.tooltip		"Click this button to select the directory for key-store that contains keys and X.509 certificates">
+<!ENTITY keymgr.ossl.keyconf.keystore.embedded.label			"Embedded Key">
+
+<!ENTITY keymgr.ossl.keyconf.keystore.privatekey.label			"Encrypted Private Key">
+<!ENTITY keymgr.ossl.keyconf.key.privateKey.include.certchain.label 	"Include cert-chain?">
+<!ENTITY keymgr.ossl.keyconf.key.privateKey.include.certchain.tooltip 	"Select this box if you want to export the cert-chain for the private key in Baase64 format in the following order: cert, key, cert-issuer-chain">
+<!ENTITY keymgr.ossl.keyconf.key.privateKey.file.label 			"OpenSSL EPK File">
+<!ENTITY keymgr.ossl.keyconf.key.privateKey.file.path.tooltip		"Enter the path to OpenSSL Encrypted Private key file">
+<!ENTITY keymgr.ossl.keyconf.key.privateKey.file.browse.tooltip		"Click this button to select the OpenSSL Encrypted Private key file">
+<!ENTITY keymgr.ossl.keyconf.key.privateKey.cert.file.label 		"Public Key X.509 Cert">
+<!ENTITY keymgr.ossl.keyconf.key.privateKey.cert.file.path.tooltip	"Enter the path to X.509 Cert file for the associated private key">
+<!ENTITY keymgr.ossl.keyconf.key.privateKey.cert.file.browse.tooltip	"Click this button to select the X.509 Cert file for the private key">
+
+<!ENTITY keymgr.ossl.keyconf.keystore.pkcs8.label			"PKCS#8 Encrypted Private Key">
+<!ENTITY keymgr.ossl.keyconf.key.pkcs8.file.label 			"PKCS#8 EPK File">
+<!ENTITY keymgr.ossl.keyconf.key.pkcs8.file.path.tooltip		"Enter the path to PKCS#8 Private key file">
+<!ENTITY keymgr.ossl.keyconf.key.pkcs8.file.browse.tooltip		"Click this button to select the PKCS#8 Private key file">
+<!ENTITY keymgr.ossl.keyconf.key.pkcs8.cert.file.label 			"X.509 Cert File">
+<!ENTITY keymgr.ossl.keyconf.key.pkcs8.cert.file.path.tooltip		"Enter the path to X.509 Cert file for the PKCS#8 Private key file">
+<!ENTITY keymgr.ossl.keyconf.key.pkcs8.cert.file.browse.tooltip		"Click this button to select the X.509 Cert file for the associated private key">
+
+<!ENTITY keymgr.ossl.keyconf.keystore.pkcs12.label			"PKCS#12">
+<!ENTITY keymgr.ossl.keyconf.key.pkcs12.source.label			"PKCS#12 Source">
+<!ENTITY keymgr.ossl.keyconf.key.pkcs12.source.choice.keystore.label	"Key Store">
+<!ENTITY keymgr.ossl.keyconf.key.pkcs12.source.choice.keystore.tooltip "Select this option if you want to export key to PKCS#12 file">
+<!ENTITY keymgr.ossl.keyconf.key.pkcs12.source.choice.file.label	"PKCS#12 file">
+<!ENTITY keymgr.ossl.keyconf.key.pkcs12.source.choice.file.tooltip	"Select this option if you want use the PKCS#12 file ">
+<!ENTITY keymgr.ossl.keyconf.key.pkcs12.file.label			"PKCS#12 File">
+<!ENTITY keymgr.ossl.keyconf.key.pkcs12.file.path.tooltip		"Enter the path to PKCS#12 file">
+<!ENTITY keymgr.ossl.keyconf.key.pkcs12.file.browse.tooltip		"Click this button to select the PKCS#12 file">
+<!ENTITY keymgr.ossl.keyconf.key.pkcs12.nickname.menulist.tooltip	"Select one of the Extractable Keys">
+<!ENTITY keymgr.ossl.keyconf.key.cert.view.label 			"View Selected Cert">
+<!ENTITY keymgr.ossl.keyconf.key.cert.view.tooltip			"View Selected Cert">
+
+<!ENTITY keymgr.ossl.keyconf.keystore.engine.label			"PKCS#11 Engine">
+<!ENTITY keymgr.ossl.keyconf.key.engine.engineid.label 		"Engine ID">
+<!ENTITY keymgr.ossl.keyconf.key.engine.engineid.tooltip 		"Enter the engine id that application will use load the engine.">
+<!ENTITY keymgr.ossl.keyconf.key.engine.so.module.file.label		"OpenSC SO Module Library">
+<!ENTITY keymgr.ossl.keyconf.key.engine.so.module.file.path.tooltip	"Enter the path to OpenSC SO module Shared Libarary/DLL (Optional for non-OpenSC PKCS#11 moudules)">
+<!ENTITY keymgr.ossl.keyconf.key.engine.so.module.file.browse.tooltip	"Click this button to select the path to OpenSC SO module Shared Library/DLL">
+<!ENTITY keymgr.ossl.keyconf.key.engine.pkcs11.module.file.label	"PKCS#11 Shared Library">
+<!ENTITY keymgr.ossl.keyconf.key.engine.pkcs11.module.file.path.tooltip	"Enter the path to the OpenSSL PKCS#11 Engine Module Shared Library/DLL">
+<!ENTITY keymgr.ossl.keyconf.key.engine.pkcs11.module.file.browse.tooltip	"Click this button to select the path to the OpenSSL PKCS#11 Engine Module Shared Libraray/DLL">
+<!ENTITY keymgr.ossl.keyconf.key.engine.source.label			"PKCS#11 Token Source">
+<!ENTITY keymgr.ossl.keyconf.key.engine.source.choice.keystore.label	"Key Store">
+<!ENTITY keymgr.ossl.keyconf.key.engine.source.choice.keystore.tooltip "Select this option if you want to export certs to X509 or PKCS#7 file">
+<!ENTITY keymgr.ossl.keyconf.key.engine.source.choice.keyid.label	"Key ID">
+<!ENTITY keymgr.ossl.keyconf.key.engine.source.choice.keyid.tooltip	"Select this option if you want use the KeyID">
+<!ENTITY keymgr.ossl.keyconf.key.engine.keyid.label			"Key ID">
+<!ENTITY keymgr.ossl.keyconf.key.engine.keyid.tooltip			"Enter the ID of the private key in the Smart card (You must  know what you are doing, otherwise let the tool  decide it for you)">
+<!ENTITY keymgr.ossl.keyconf.key.engine.nickname.menulist.tooltip	"Select one of the Keys">
+<!ENTITY keymgr.ossl.keyconf.key.engine.cert.file.label		"Off-card Public Key Cert File">
+<!ENTITY keymgr.ossl.keyconf.key.engine.cert.file.path.tooltip		"OpenSSL does not read certificate from Smart Card, so enter the path to off-card X.509 cert file">
+<!ENTITY keymgr.ossl.keyconf.key.engine.cert.file.browse.tooltip	"Click this button to select the off-card X.509 cert file">
+
+<!ENTITY keymgr.ossl.keyconf.command.save.label				"Save">
+<!ENTITY keymgr.ossl.keyconf.command.saveas.label			"Save As">
+<!ENTITY keymgr.ossl.keyconf.command.reset.label			"Reset">
+<!ENTITY keymgr.ossl.keyconf.command.cancel.label			"Cancel">
+<!ENTITY keymgr.ossl.keyconf.command.close.label			"Close">
+

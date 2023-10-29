@@ -1,0 +1,287 @@
+<?xml version="1.0"?>
+<!-- @(#) $Id: CRLCreateBasicForm.xul,v 1.9 2008/12/23 22:04:45 subrata Exp $ -->
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is Avaya Labs Research, Avaya Inc. Code.
+   -
+   - The Initial Developer of the Original Code is
+   - Subrata Mazumdar, Avaya Labs Research, Avaya Inc.
+   - Portions created by the Initial Developer are Copyright (C) 2007.
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Subrata Mazumdar (mazum@avaya.com)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+
+<?xml-stylesheet href="chrome://keymanager/skin/kmbindings.css" type="text/css"?>
+
+<!DOCTYPE overlay
+	[
+	<!ENTITY % keyManager.dtd SYSTEM "chrome://keymanager/locale/keyManager.dtd">
+	%keyManager.dtd;
+	<!ENTITY % crltool.dtd SYSTEM "chrome://keymanager/locale/crltool.dtd">
+	%crltool.dtd;
+	]>
+
+<?xul-overlay href="chrome://keymanager/content/tools/crltool/CRLEntryCreateForm.xul"?>
+
+<overlay id="crltool.create.crl.basic.win" 
+    xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    >
+
+    <vbox id="keymgr.crltool.create.crl.basic.vbox"
+    	class="box-padded"
+	flex="1"
+	xstyle="overflow:auto; height:380px;"
+	zstyle="overflow:auto;"
+    	>
+	<groupbox>
+	    <caption label="CRL Information"/>
+	    <grid id="keymgr.crltool.create.crl.basic.grid" 
+		flex="1"
+	        > 
+		<columns>
+		    <column/>
+		    <column flex="1"/>
+		</columns>
+		<rows>
+		    <row align="center">
+			<label class="header" value="&keymgr.crltool.create.crl.ca.cert.label;"/>
+			<hbox flex="1">
+			    <certpicker id="keymgr.crltool.create.crl.ca.certpicker"
+  		  	            menutooltiptext="&keymgr.crltool.create.crl.ca.certpicker.tooltip;"
+				    tokentypehidden="true"
+				    certtype="user"
+				    certtypehidden="true"
+				    xusertypedisabled="true"
+				    xcatypedisabled="true"
+				    certtypetooltiptext="Select the certificate type from the list"
+		    	    	    xcertusage="AnyCA"
+		    	    	    certusage="VerifyCA"
+				    usagecaonly="true"
+		  	    	    certusagehidden="false"
+		  	    	    certusagedisabled="true"
+				    viewhidden="false"
+				    viewlabel="&keymgr.crltool.create.crl.cert.view.label;"
+  		  	            viewtooltiptext="&keymgr.crltool.create.crl.cert.view.tooltip;"
+				    includeTokenInfo="true"
+				    certPropName="signerNickName"
+	       	  	            oncommand="CRLCreateBasicForm.handleCACertPickerChange(this, event);"
+				    />
+			    <certitem id="keymgr.crltool.create.crl.ca.certitem"
+				    hidden="true"
+				    />
+			</hbox>
+		    </row>
+
+		    <row>
+		      <separator class="thin"/>
+		      <spacer/>
+		    </row>
+
+		    <row align="center">
+			<label class="header"
+			    control="keymgr.crltool.create.crl.versionGroup"
+			    value="&keymgr.crltool.create.crl.version.label;"
+			    /> 
+			<radiogroup id="keymgr.crltool.create.crl.versionGroup" flex="1"
+			      tooltiptext="&keymgr.crltool.create.crl.version.tooltip;"
+			      certPropName="version"
+  		              xonclick="handleversionChange(this, event.target)"
+			      >
+  	                    <hbox pack="start">
+				<radio id="keymgr.crltool.create.crl.version2"
+				    label="&keymgr.crltool.create.crl.version2.label;"
+				    tooltiptext="&keymgr.crltool.create.crl.version2.tooltip;"
+  		                    selected="true"
+				    disabled="true"
+  		                    value="2"
+			      	    certPropName="version2"
+  		                    group="keymgr.crltool.create.crl.versionGroup"
+				    />
+  	                    </hbox>
+			</radiogroup>
+		    </row>
+
+		    <row align="center">
+			<label class="header"
+			    control="keymgr.crltool.create.crl.token"
+			    value="&keymgr.crltool.create.crl.token.label;"
+			    />
+			<hbox pack="start" >
+                	    <tokenmenulist id="keymgr.crltool.create.crl.token"
+				tooltiptext="&keymgr.crltool.create.crl.token.tooltip;"
+			      	certPropName="crlToken"
+                    	    	xoncommand="CRLCreateBasicForm.onTokenMenuChange(this, event)"
+	        	    	/>
+			</hbox>
+		    </row>
+
+		    <row align="center">
+			<label class="header"
+			    control="keymgr.crltool.create.crl.sigAlgName"
+			    value="&keymgr.crltool.create.crl.sigAlgName.label;"
+			    />
+			<hbox pack="start" >
+			    <hashalgmenu id="keymgr.crltool.create.crl.sigAlgName"
+				value="SHA1"
+				perists="value"
+				tooltiptext="&keymgr.crltool.create.crl.sigAlgName.tooltip;"
+				certPropName="sigAlgorithm"
+	       	      	        xoncommand="CRLCreateBasicForm.handleSigAlgorithmChange(this, event);"
+				/>
+			</hbox>
+		    </row>
+
+		    <row align="center">
+			<label class="header"
+			    control="keymgr.crltool.create.crl.lastUpdateDate"
+			    value="&keymgr.crltool.create.crl.lastUpdateDate.label;"
+			    /> 
+  	                <hbox pack="start">
+		    	    <certdatetimepicker id="keymgr.crltool.create.crl.lastUpdateDate"
+				type="popup"
+				format="generalizedtime"
+				xformat="utctime"
+				valuehidden="true"
+				tooltiptext="&keymgr.crltool.create.crl.lastUpdateDate.tooltip;"
+				certPropName="lastUpdateDate"
+                    	    	oncommand="CRLCreateBasicForm.handleLastUpdateDateChange(this, event)"
+			    	/>
+  	                </hbox>
+		    </row>
+
+		    <row align="center">
+			<label class="header"
+			    control="keymgr.crltool.create.crl.nextUpdateDate"
+			    value="&keymgr.crltool.create.crl.nextUpdateDate.label;"
+			    /> 
+  	                <hbox pack="start">
+		    	    <certdatetimepicker id="keymgr.crltool.create.crl.nextUpdateDate"
+				type="popup"
+				format="generalizedtime"
+				xformat="utctime"
+				tooltiptext="&keymgr.crltool.create.crl.nextUpdateDate.tooltip;"
+				certPropName="nextUpdateDate"
+			    	/>
+  	                </hbox>
+		    </row>
+
+		    <row align="center">
+			<label class="header"
+			    control="keymgr.crltool.create.crl.crlNumber.hbox"
+			    value="&keymgr.crltool.create.crl.crlNumber.label;"/> 
+			<hbox id="keymgr.crltool.create.crl.crlNumber.hbox"
+			    pack="start"
+			    align="center"
+			    >
+			    <radiogroup id="keymgr.crltool.create.crl.crlNumber.group"
+				certPropName="crlNumber"
+  	                        xonclick="handleSerialnumberChange(this)"
+				>
+				<hbox id="keymgr.crltool.create.crl.crlNumber.group.hbox"
+				    pack="start"
+				    >
+				    <radio id="keymgr.crltool.create.crl.crlNumber.none"
+					label="&keymgr.crltool.create.crl.crlNumber.none.label;"
+					tooltiptext="&keymgr.crltool.create.crl.crlNumber.none.tooltip;"
+  		                        selected="true"
+  		                        value=""
+  		                        group="keymgr.crltool.create.crl.crlNumber.group"
+					/>
+				    <radio id="keymgr.crltool.create.crl.crlNumber.autogen"
+					label="&keymgr.crltool.create.crl.crlNumber.autogen.label;"
+					tooltiptext="&keymgr.crltool.create.crl.crlNumber.autogen.tooltip;"
+  		                        value="auto"
+					certPropName="crlNumber-auto"
+  		                        group="keymgr.crltool.create.crl.crlNumber.group"
+					/>
+				    <radio id="keymgr.crltool.create.crl.crlNumber.input"
+					label="&keymgr.crltool.create.crl.crlNumber.input.label;"
+					tooltiptext="&keymgr.crltool.create.crl.crlNumber.input.tooltip;"
+  		                        value="input"
+					certPropName="crlNumber-input"
+  		                        group="keymgr.crltool.create.crl.crlNumber.group"
+					/>
+				</hbox>
+			    </radiogroup>
+			    <textbox id="keymgr.crltool.create.crl.crlNumber.value"
+				    size="12" maxlength="20"
+				    tooltiptext="&keymgr.crltool.create.crl.crlNumber.value.tooltip;"
+				    certPropName="crlNumber-value"
+				    />
+			</hbox>
+		    </row>
+
+		    <row id="keymgr.crltool.create.crl.authKeyId.row"
+		    	align="center"
+			>
+			<label class="header"
+			    control="keymgr.crltool.create.crl.authKeyId"
+			    value="&keymgr.crltool.create.crl.authKeyId.label;"
+			    />
+			<hbox pack="start" >
+                	    <checkbox id="keymgr.crltool.create.crl.authKeyId"
+				tooltiptext="&keymgr.crltool.create.crl.authKeyId.tooltip;"
+			      	certPropName="authorityKeyIdentifier"
+                    	    	xoncommand="CRLCreateBasicForm.handleAuthKeyIdChange(this, event)"
+	        	    	/>
+			</hbox>
+		    </row>
+		    <row>
+			<separator class="thin"/>
+			<spacer/>
+		    </row>
+		</rows>
+	    </grid>
+
+	</groupbox>
+
+	<groupbox>
+	    <caption label="Revoked Certificates"/>
+	    <grid id="keymgr.crltool.create.crlentry.grid" 
+		flex="1"
+		oncommand="CRLCreateBasicForm.handleNewCRLEntryChange(this, event)"
+	        /> 
+	    <crlentrylist id="keymgr.crltool.create.crl.entrylist" 
+	    	hidden="true"
+		style="overflow:auto;height:100px;"
+		oncommand="CRLCreateBasicForm.handleAddRemoveCRLEntry(this, event)"
+	    	/>
+	</groupbox>
+	<textbox id="keymgr.crltool.create.crl.modify.status"
+	    multiline="true"
+	    hidden="true"
+	    readonly="true"
+	    value="&keymgr.crltool.create.crl.modify.status.text;"
+	    />
+	
+    </vbox>
+</overlay>
+

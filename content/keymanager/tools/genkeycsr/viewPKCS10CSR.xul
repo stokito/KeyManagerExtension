@@ -1,0 +1,277 @@
+<?xml version="1.0"?>
+<!-- @(#) $Id: viewPKCS10CSR.xul,v 1.25 2009/03/17 12:51:11 subrata Exp $ -->
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is Avaya Labs Research, Avaya Inc. Code.
+   -
+   - The Initial Developer of the Original Code is
+   - Subrata Mazumdar, Avaya Labs Research, Avaya Inc.
+   - Portions created by the Initial Developer are Copyright (C) 2007.
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Subrata Mazumdar (mazum@avaya.com)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+
+
+
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://keymanager/skin/kmbindings.css" type="text/css"?>
+
+<!DOCTYPE window SYSTEM "chrome://keymanager/locale/keyManager.dtd">
+
+
+<window id="uploadCSRAndGetSignedCert" 
+  title="&keymgr.cert.csr.msg.pkcs10.view.title;"
+  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+  onload="initViewPKCS10CSRWin();">
+
+  <script type="application/x-javascript" src="chrome://global/content/strres.js"/>
+  <script type="application/x-javascript" src="chrome://pippki/content/pippki.js"/>
+
+  <script type="application/x-javascript" src="chrome://keymanager/content/BrowserPrefUtil.js"/>
+  <script type="application/x-javascript" src="chrome://keymanager/content/tools/genkeycsr/viewPKCS10CSR.js"/>
+
+<keyset id="keys">
+  <key id="esc-key"    keycode="VK_ESCAPE" oncommand="window.close()"/>
+</keyset>
+
+  <vbox flex="1">
+    <hbox flex="1">
+      <groupbox>
+        <caption id="keymgr.cert.csr.msg.pkcs10.view.pkcs10CSRData.caption"
+	    class="header"
+	    label="&keymgr.cert.csr.msg.pkcs10.view.pkcs10CSRData.caption;"
+	    />
+	<hbox
+	      oncommand="loadCSRInFile(event.target, event.originalTarget);"
+	      >
+            <fileselector id="keymgr.cert.csr.msg.pkcs10.view.infile.path" flex="1"
+		ascii="true"
+		hidden="true"
+		fileMode="open"
+		fileDialogMsg="Choose PKCS#10 CSR File for User Key"
+		fileTypeMsg="PKCS#10 CSR File"
+		fileTypeFilters="*.csr; *.p10"
+		/>
+	  </hbox>
+          <textbox id="keymgr.cert.csr.msg.pkcs10.view.pkcs10CSRData" flex="1"
+	        rows="10" cols="60" multiline="true"
+		style="font-size: 8pt; font-family: Courier"
+		/>
+          <fileselector id="keymgr.cert.csr.msg.pkcs10.view.file.path"
+		ascii="true"
+		hidden="true"
+		fileMode="save"
+		fileDialogMsg="Choose PKCS#10 CSR File for User Key"
+		fileTypeMsg="PKCS#10 CSR File"
+		fileTypeFilters="*.csr; *.p10"
+		/>
+      </groupbox>
+      <groupbox flex="3">
+        <caption id="keymgr.cert.csr.msg.pkcs10.view.caResponse.caption"
+	    class="header"
+	    label="&keymgr.cert.csr.msg.pkcs10.view.caResponse.caption;"
+	    />
+        <browser flex="1"
+            id="UploadCSRAndSignCertResultIFrame"
+            name="UploadCSRAndSignCertResultIFrame"
+    	    style="overflow:auto; border:none"
+    	    width="400px" height="100px"
+      	    xtype="content-primary"
+    	    src="about:blank"
+    	    >
+        </browser>
+      </groupbox>
+    </hbox>
+    
+    <groupbox>
+      <caption class="header" label="&certmgr.generateCSR.caserver_tab.info.label;"/>
+      <grid flex="1">
+        <columns>
+          <column/>
+          <column flex="1"/>
+        </columns>
+        <rows>
+          <row>
+    	    <label control="keymgr.cert.csr.msg.pkcs10.view.ca.server.type"
+	      value="&keymgr.cert.csr.msg.pkcs10.view.ca.server.type.label;"/>
+            <radiogroup id="keymgr.cert.csr.msg.pkcs10.view.ca.server.type" flex="1"
+		oncommand="handleCertIssuerTypeChange(event.target, this)">
+  	      <hbox flex="1">
+                    <radio id="keymgr.cert.csr.msg.pkcs10.view.ca.server.type.pkcs10CA"
+		      label="&keymgr.cert.csr.msg.pkcs10.view.ca.server.type.pkcs10CA;"
+  		      selected="true"
+  		      value="pkcs10CA"
+  		      group="keymgr.cert.csr.msg.pkcs10.view.ca.server.type"/>
+                    <radio id="keymgr.cert.csr.msg.pkcs10.view.ca.server.type.msCertService"
+		      label="&keymgr.cert.csr.msg.pkcs10.view.ca.server.type.msCertService;"
+  		      value="msCertService"
+  		      group="keymgr.cert.csr.msg.pkcs10.view.ca.server.type"/>
+                    <radio id="keymgr.cert.csr.msg.pkcs10.view.ca.server.type.scep"
+		      label="&keymgr.cert.csr.msg.pkcs10.view.ca.server.type.scep;"
+  		      value="scep"
+  		      group="keymgr.cert.csr.msg.pkcs10.view.ca.server.type"/>
+                    <radio id="keymgr.cert.csr.msg.pkcs10.view.ca.server.type.openCA"
+		      label="&keymgr.cert.csr.msg.pkcs10.view.ca.server.type.openCA;"
+  		      value="openCA"
+		      disabled="true"
+  		      group="keymgr.cert.csr.msg.pkcs10.view.ca.server.type"/>
+                    <radio id="keymgr.cert.csr.msg.pkcs10.view.ca.server.type.ejbCA"
+		      label="&keymgr.cert.csr.msg.pkcs10.view.ca.server.type.ejbCA;"
+  		      value="ejbCA"
+		      disabled="true"
+  		      group="keymgr.cert.csr.msg.pkcs10.view.ca.server.type"/>
+            	  <spring flex="1"/>
+  	      </hbox>
+            </radiogroup>
+          </row>
+          <row id="keymgr.cert.csr.msg.pkcs10.view.ca.server.info">
+    	    <label control="keymgr.cert.csr.msg.pkcs10.view.ca.server.url"
+	      value="&keymgr.cert.csr.msg.pkcs10.view.ca.server.url.label;"/>
+    	    <hbox flex="1">
+  	      <textbox id="keymgr.cert.csr.msg.pkcs10.view.ca.server.url" flex="1"
+  		tooltiptext="&keymgr.cert.csr.msg.pkcs10.view.ca.server.url.tooltip;"
+  	  	type="autocomplete" 
+  	  	autocompletesearch="form-history" 
+  	  	completeselectedindex="true"
+  	  	autocompletesearchparam="keymgr.cert.csr.msg.pkcs10.view.ca.server.url"
+  	  	onkeyup="if (event.keyCode == 13)
+  	  		{caServerFieldAutoCompleteAction(event.target)};"
+    		onchange="handleCAServerFieldChange(this)"
+    		zonselect="handleCAServerFieldChange(this)"
+  		/>
+  		<!--
+      		 Auto-completion implementation hint: 
+  		 Use the textbox 'id' as the key for the form-history entry 
+  		 in the certFormFieldAutoCompleteAction() function and 
+  		 as well as the "autocompletesearchparam".
+  		-->
+              <button id="keymgr.cert.csr.msg.pkcs10.view.ca.server.login"
+    	        label="&keymgr.cert.csr.msg.pkcs10.view.ca.server.login.label;"
+                oncommand="loginToCAServer();"/> 
+              <button id="keymgr.cert.csr.msg.pkcs10.view.ca.server.getCACertChain"
+    	        label="&keymgr.cert.csr.msg.pkcs10.view.ca.server.getCACertChain.label;"
+                oncommand="getCACertChain();"/> 
+    	    </hbox>
+          </row>
+          <row>
+            <label control="keymgr.cert.csr.msg.pkcs10.view.issuer.subjdn"
+	    	value="&keymgr.cert.csr.msg.pkcs10.view.issuer.subjdn.label;"/> 
+  	    <textbox id="keymgr.cert.csr.msg.pkcs10.view.issuer.subjdn"
+  		tooltiptext="&keymgr.cert.csr.msg.pkcs10.view.issuer.subjdn.tooltip;"
+  	  	type="autocomplete" 
+	    	value=""
+  	  	autocompletesearch="form-history" 
+  	  	completeselectedindex="true"
+  	  	autocompletesearchparam="keymgr.cert.csr.msg.pkcs10.view.issuer.subjdn"
+  	  	onkeyup="if (event.keyCode == 13)
+  	  		{caServerFieldAutoCompleteAction(event.target)};"
+    		onchange="handleCAServerFieldChange(this)"
+    		zonselect="handleCAServerFieldChange(this)"
+  		/>
+          </row>
+          <row>
+            <label control="keymgr.cert.csr.msg.pkcs10.view.issuer.alias"
+	    	value="&keymgr.cert.csr.msg.pkcs10.view.issuer.alias.label;"/> 
+  	    <textbox id="keymgr.cert.csr.msg.pkcs10.view.issuer.alias"
+  		tooltiptext="&keymgr.cert.csr.msg.pkcs10.view.issuer.alias.tooltip;"
+  	  	type="autocomplete" 
+	    	value=""
+  	  	autocompletesearch="form-history" 
+  	  	completeselectedindex="true"
+  	  	autocompletesearchparam="keymgr.cert.csr.msg.pkcs10.view.issuer.alias"
+  	  	onkeyup="if (event.keyCode == 13)
+  	  		{caServerFieldAutoCompleteAction(event.target)};"
+    		onchange="handleCAServerFieldChange(this)"
+    		zonselect="handleCAServerFieldChange(this)"
+  		/>
+          </row>
+          <row flex="1">
+            <vbox id="UploadCSRAndSignCertFormBox" collapsed="true">
+              <html:form
+                      xmlns:html="http://www.w3.org/1999/xhtml"
+                      id="UploadCSRAndSignCertForm"
+                      name="UploadCSRAndSignCertForm"
+                      enctype="multipart/form-data"
+                      action="/dummy.jsp"
+                      method="post">
+                 <html:input type="hidden" id="issuerSubjectDN" name="issuerSubjectDN" value=""/>
+                 <html:input type="hidden" id="issuerAlias" name="issuerAlias" value=""/>
+                 <html:input type="file"   id="Pkcs10CSRFile" name="Pkcs10CSRFile"/>
+              </html:form>
+              <html:form
+                      xmlns:html="http://www.w3.org/1999/xhtml"
+                      id="MSCryptoUploadCSRAndSignCertForm"
+                      name="MSCryptoUploadCSRAndSignCertForm"
+                      enctype="application/x-www-form-urlencoded"
+                      action="certfnsh.asp"
+                      method="post">
+                 <html:input type="hidden" id="Mode" name="Mode" value=""/>		  	<!-- used in request ('newreq'|'chkpnd') -->
+                 <html:input type="hidden" id="CertRequest" name="CertRequest" value=""/>	<!-- used in request -->
+                 <html:input type="hidden" id="CertAttrib" name="CertAttrib" value=""/>		<!-- used in request -->
+                 <html:input type="hidden" id="FriendlyType" name="FriendlyType" value=""/>	<!-- used in pending -->
+                 <html:input type="hidden" id="ThumbPrint" name="ThumbPrint" value=""/>		<!-- used in pending -->
+                 <html:input type="hidden" id="TargetStoreFlags" name="TargetStoreFlags" value=""/> <!-- used on install ('0'|CSSLM)-->
+                 <html:input type="hidden" id="SaveCert" name="SaveCert" value=""/>		<!-- used on install ('no'|'yes')-->
+               </html:form>
+              <html:form
+                      xmlns:html="http://www.w3.org/1999/xhtml"
+                      id="UploadScepCSRAndSignCertForm"
+                      name="UploadScepCSRAndSignCertForm"
+                      enctype="multipart/form-data"
+                      action="/dummy.jsp"
+                      method="post">
+                 <html:input type="hidden" id="PKIOperation" name="PKIOperation" value=""/>
+              </html:form>
+    	     </vbox>
+          </row>
+        </rows>
+      </grid>
+    </groupbox>
+
+    <hbox pack="center" align="center">
+          <button id="SaveButton"
+	          label="&certmgr.save.label;"
+                  oncommand="doSavePKCS10CSR();"/> 
+          <button id="SendPKCS10ToCAButton"
+	          label="&keymgr.cert.csr.msg.pkcs10.view.sendToCA.label;"
+                  oncommand="doSendPKCS10CSRToCA();"/> 
+          <button id="CancelButton"
+	          label="&certmgr.cancel.label;"
+                  accesskey="&certmgr.closeWindowAccessKey;"
+                  oncommand="onCancel();"/>
+          <button id="HelpButton"
+                  label="&certmgr.help.label;" 
+                  accesskey="&certmgr.helpButtonAccessKey;"
+                  oncommand="openHelp('cert_details');"/>
+    </hbox>
+
+  </vbox>
+</window>

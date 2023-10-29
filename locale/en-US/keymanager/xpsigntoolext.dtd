@@ -1,0 +1,243 @@
+<!-- @(#) $Id: xpsigntoolext.dtd,v 1.63 2012/12/05 19:02:40 subrata Exp $ -->
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is Avaya Labs Research, Avaya Inc. Code.
+   -
+   - The Initial Developer of the Original Code is
+   - Subrata Mazumdar, Avaya Labs Research, Avaya Inc.
+   - Portions created by the Initial Developer are Copyright (C) 2007.
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Subrata Mazumdar (mazum@avaya.com)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+<!ENTITY xpsigntoolext.win.title		"Archive File (XPI) Signing Tool">
+<!ENTITY xpsigntoolext.form.win.title		"Archive File (XPI) Signing Tool">
+<!ENTITY xpsigntoolext.wizard.win.title		"Archive File (XPI) Signing Tool">
+<!ENTITY xpsigntoolext.version			"0.1.110.20120309">
+<!ENTITY xpsigntoolext.options.win.title	"Archive File (XPI) Signing Tool Preferences">
+<!ENTITY xpsigntoolext.form.overlay.title	"Archive File (XPI) Signing Tool (Form-based)">
+<!ENTITY xpsigntoolext.wizard.overlay.title	"Archive File (XPI) Signing Tool (Wizard-based)">
+
+<!ENTITY xpsigntoolext.form.tab.sign.label	"Sign Archive">
+<!ENTITY xpsigntoolext.form.tab.verify.label	"Verify Signed Archive">
+<!ENTITY xpsigntoolext.form.tab.sign.update.label	"Sign Update RDF">
+
+<!ENTITY xpsigntoolext.form.tab.attribute.label		"Attributes">
+<!ENTITY xpsigntoolext.form.tab.extension.label		"Extensions">
+<!ENTITY xpsigntoolext.form.tab.cmd.basic.label		"Basic">
+<!ENTITY xpsigntoolext.form.tab.cmd.advanced.label	"Advanced">
+
+<!ENTITY xpsigntoolext.cmd.verify.label			"Verify">
+<!ENTITY xpsigntoolext.cmd.sign.label			"Sign">
+<!ENTITY xpsigntoolext.cmd.close.label			"Close">
+<!ENTITY xpsigntoolext.cmd.help.label			"Help">
+<!ENTITY xpsigntoolext.cmd.cancel.label			"Cancel">
+
+
+<!ENTITY xpsigntoolext.form.file.format.base64	"Base64">
+<!ENTITY xpsigntoolext.form.file.browser.label	"Browse">
+<!ENTITY xpsigntoolext.form.file.load.label	"Load">
+<!ENTITY xpsigntoolext.form.file.load.tooltip	"Use this button to load the file.">
+<!ENTITY xpsigntoolext.form.file.extract.label	"Extract">
+<!ENTITY xpsigntoolext.form.file.extract.tooltip	"Use this button to extract the file.">
+
+<!ENTITY xpsigntoolext.form.sign.file.format.base64	"Base64">
+<!ENTITY xpsigntoolext.form.sign.file.browser.label	"Browse">
+<!ENTITY xpsigntoolext.form.sign.file.load.label	"Load">
+<!ENTITY xpsigntoolext.form.sign.file.load.tooltip	"Use this button to load the file.">
+<!ENTITY xpsigntoolext.form.sign.file.extract.label	"Extract">
+<!ENTITY xpsigntoolext.form.sign.file.extract.tooltip	"Use this button to extract the file.">
+
+<!ENTITY xpsigntoolext.form.cert.nickName.menulist.tooltip "Select the certificate from the list.">
+<!ENTITY xpsigntoolext.form.cert.view.label		"View Cert">
+<!ENTITY xpsigntoolext.form.cert.view.tooltip		"Click this button to show the selected cert.">
+
+<!ENTITY xpsigntoolext.form.sign.cert.view.label	"View Cert">
+<!ENTITY xpsigntoolext.form.sign.cert.view.tooltip	"Click this button to show the selected cert.">
+<!ENTITY xpsigntoolext.form.sign.nickName.menulist.tooltip "Select the certificate from the list.">
+
+
+<!ENTITY xpsigntoolext.form.sign.file.archive.in.label	"Input Archive File">
+<!ENTITY xpsigntoolext.form.sign.file.archive.in.option.file.label	"File">
+<!ENTITY xpsigntoolext.form.sign.file.archive.in.option.file.tooltip "Select this option to sign an archived fle.">
+<!ENTITY xpsigntoolext.form.sign.file.archive.in.file.path.tooltip "Enter the path to the Archive file.">
+<!ENTITY xpsigntoolext.form.sign.file.archive.in.file.browser.tooltip "Use this button to select the Archive file.">
+<!ENTITY xpsigntoolext.form.sign.file.archive.in.extract.tooltip	"Use this button to extract the Archive file.">
+
+<!ENTITY xpsigntoolext.form.sign.file.archive.in.option.dir.label	"Dir">
+<!ENTITY xpsigntoolext.form.sign.file.archive.in.option.dir.tooltip "Select this option to create and sign archive file using a directory.">
+<!ENTITY xpsigntoolext.form.sign.file.archive.in.dir.path.tooltip "Enter the path to the Archive directory to be signed.">
+<!ENTITY xpsigntoolext.form.sign.file.archive.in.dir.browser.tooltip "Use this button to select the Archive directory to be signed.">
+
+<!ENTITY xpsigntoolext.form.sign.file.archive.type.label	"Archive Type">
+<!ENTITY xpsigntoolext.form.sign.file.archive.type.xpi.label	"XPI">
+<!ENTITY xpsigntoolext.form.sign.file.archive.type.xpi.tooltip	"Select this option if the archive file is to be in XPI format. You must choose this option if you want to sign an add-on for Mozilla applications.">
+<!ENTITY xpsigntoolext.form.sign.file.archive.type.htmlwithjs.label	"HTML with JavaScript">
+<!ENTITY xpsigntoolext.form.sign.file.archive.type.htmlwithjs.tooltip	"Select this option if you want to sign a directory of HTML files containing JavaScript and the tool creates as many archive files as are specified in the HTML tags">
+<!ENTITY xpsigntoolext.form.sign.file.archive.type.javascript.label	"JavaScript">
+<!ENTITY xpsigntoolext.form.sign.file.archive.type.javascript.tooltip	"Select this option if you want to sign a directory of HTML files containing JavaScript and the tool creates as many archive files as are specified in the HTML tags">
+<!ENTITY xpsigntoolext.form.sign.file.archive.type.generic.label	"Standard (jar, zip, war, etc.)">
+<!ENTITY xpsigntoolext.form.sign.file.archive.type.generic.tooltip	"Select this option if the archive file is standard format, such as, jar, zip, war etc.">
+
+<!ENTITY xpsigntoolext.form.sign.file.archive.options.common.label	"Common Parameters">
+<!ENTITY xpsigntoolext.form.sign.file.archive.sign.time.label	"Add Signing Time">
+<!ENTITY xpsigntoolext.form.sign.file.archive.sign.time.tooltip	"Select this option if you want add signing time to the archive">
+<!ENTITY xpsigntoolext.form.sign.file.archive.recursive.label	"Recursive">
+<!ENTITY xpsigntoolext.form.sign.file.archive.recursive.tooltip	"Select this option if you want sign all files under this directory">
+<!ENTITY xpsigntoolext.form.sign.file.archive.javascript.label	"Sign Javascript">
+<!ENTITY xpsigntoolext.form.sign.file.archive.javascript.tooltip	"Select this option if you want sign Javascript files in the choosen subtree directory containing HTML files. Javascript will be extracted and signed.
+">
+
+<!ENTITY xpsigntoolext.form.sign.file.archive.optimize.label	"Optimize">
+<!ENTITY xpsigntoolext.form.sign.file.archive.optimize.tooltip	"Select this option if you want to optimize - omit optional headers">
+
+<!ENTITY xpsigntoolext.form.sign.file.archive.compression.label	"Compression Level">
+<!ENTITY xpsigntoolext.form.sign.file.archive.compression.tooltip	"Enter the compression level (0 - 9) in integer format - 0=none, -1 for default ">
+
+<!ENTITY xpsigntoolext.form.sign.signer.cert.label	"Signer Certificate">
+<!ENTITY xpsigntoolext.form.sign.signer.alias.label	"Signer Alias">
+<!ENTITY xpsigntoolext.form.sign.signer.certpicker.tooltip "Select the desired 'object signing' cert from list - only those 'object-signing'cert that has associated private key in the cert-DB will be listed.">
+<!ENTITY xpsigntoolext.form.sign.signer.cert.info.text "You must have an 'object-signing' certificate obtained from a third party or an in-house CA along with its private key. The 'object-signing' cert has 'ObjectSigning' bit of the 'keyUsage' extension is set to true. Also, also all the certificates in cert-chain of the issuer (CA) of your 'object-signing' certificate must be in the Cert-DB and make sure that all the certs in issuer cert-chain is enabled for 'This certificate can identify software maker'. Only the CA-signed 'object signing' certificates that has its private key will be listed in the above menu for certificates. For more info on code-signing and object-signing cert, see the discussion here: https://bugzilla.mozilla.org/show_bug.cgi?id=321156. ">
+<!ENTITY xpsigntoolext.form.sign.file.archive.base.name.label	"Base name for Signature File">
+<!ENTITY xpsigntoolext.form.sign.file.archive.base.name.tooltip "Enter the base name of .rsa, .sf (Signature) files. By default, it is derived from the signer cert nick-name.">
+<!ENTITY xpsigntoolext.form.sign.file.archive.useNickName.label	"Use Signer cert's nick name">
+<!ENTITY xpsigntoolext.form.sign.file.archive.useNickName.tooltip	"Select this option if you want to use nick name as base name for signature file.">
+
+<!ENTITY xpsigntoolext.form.sign.file.archive.tmp.label	"Temp Archive Dir">
+<!ENTITY xpsigntoolext.form.sign.file.archive.tmp.path.tooltip "Enter the path to the temp archive dir.">
+<!ENTITY xpsigntoolext.form.sign.file.archive.tmp.browser.tooltip "Use this button to select the temp archive dir.">
+
+<!ENTITY xpsigntoolext.form.sign.file.archive.scriptdir.label	"Script Dir">
+<!ENTITY xpsigntoolext.form.sign.file.archive.scriptdir.path.tooltip "Enter the path to the script dir.">
+<!ENTITY xpsigntoolext.form.sign.file.archive.scriptdir.browser.tooltip "Use this button to select the script dir.">
+
+<!ENTITY xpsigntoolext.form.sign.file.archive.installscript.label	"Install Script">
+<!ENTITY xpsigntoolext.form.sign.file.archive.installscript.path.tooltip "Assign installer javascript to signed archive - Enter the path to the install script file.">
+<!ENTITY xpsigntoolext.form.sign.file.archive.installscript.browser.tooltip "Use this button to select the install script file.">
+
+<!ENTITY xpsigntoolext.form.sign.file.archive.metafile.label	"Manifest File">
+<!ENTITY xpsigntoolext.form.sign.file.archive.metafile.path.tooltip "Include custom meta-information - enter the path to the manifest file.">
+<!ENTITY xpsigntoolext.form.sign.file.archive.metafile.browser.tooltip "Use this button to select the custom manifest file.">
+
+<!ENTITY xpsigntoolext.form.sign.file.archive.out.label			"Signed Output Archive File">
+<!ENTITY xpsigntoolext.form.sign.file.archive.out.path.tooltip		"Enter the path to the signed archive fileto be created - if you do not specify a path, the tool will automatically choose a file path.">
+<!ENTITY xpsigntoolext.form.sign.file.archive.out.browser.tooltip	"Use this button to select the signed archive file to be created.">
+
+<!ENTITY xpsigntoolext.form.verify.file.archive.in.label		"Signed Archive File">
+<!ENTITY xpsigntoolext.form.verify.file.archive.in.file.path.tooltip 	"Enter the path to the signed archive file.">
+<!ENTITY xpsigntoolext.form.verify.file.archive.in.file.browser.tooltip "Use this button to select the signed archive file.">
+<!ENTITY xpsigntoolext.form.verify.file.archive.in.extract.tooltip	"Use this button to extract the signed archive file.">
+<!ENTITY xpsigntoolext.form.verify.file.archive.tmp.label		"Temp Archive Dir">
+<!ENTITY xpsigntoolext.form.verify.file.archive.tmp.path.tooltip 	"Enter the path to the temp archive directory for extracting the signed archive file.">
+<!ENTITY xpsigntoolext.form.verify.file.archive.tmp.browser.tooltip 	"Use this button to select the temp archive directory for extracting the signed archive file.">
+
+
+<!ENTITY xpsigntoolext.form.verify.file.archive.result.label		"Verify Result">
+<!ENTITY xpsigntoolext.form.verify.file.archive.result.tooltip 		"Verification result is presented here.">
+
+<!ENTITY xpsigntoolext.form.sign.file.archive.js.savearc.label	"Save Archive">
+<!ENTITY xpsigntoolext.form.sign.file.archive.js.savearc.tooltip "do not delete .arc directories created by javscript directory option">
+
+<!ENTITY xpsigntoolext.form.verify.signer.cert.label			"Signer Certificate">
+<!ENTITY xpsigntoolext.form.verify.signer.cert.view.tooltip		"The X.509 cert of the signer that is embedded in the signed archive (XPI) file. The cert is returned if the verification is failed. You can view the cert to debug the crypto verification failures by inspecting the signer cert and its issuer cert chain.">
+
+
+<!ENTITY xpsigntoolext.form.install.rdf.tab.addUpdateKey.label		"Add/Modify Update Key">
+<!ENTITY xpsigntoolext.form.update.signer.tab.signUpdateRdf.label	"Sign Update RDF">
+<!ENTITY xpsigntoolext.form.install.rdf.label				"Insatll RDF File">
+
+<!ENTITY xpsigntoolext.form.install.rdf.file.option.label	"File">
+<!ENTITY xpsigntoolext.form.install.rdf.file.option.tooltip	"Select this option to specify the path for install.rdf file">
+<!ENTITY xpsigntoolext.form.install.rdf.file.path.tooltip	"Enter path to the install.rdf file">
+<!ENTITY xpsigntoolext.form.install.rdf.file.browser.tooltip	"Click this button to select the install.rdf file">
+<!ENTITY xpsigntoolext.form.install.rdf.xpi.option.label	"XPI">
+<!ENTITY xpsigntoolext.form.install.rdf.xpi.option.tooltip	"Select this option to specify the path for XPI file that contains the install.rdf file">
+<!ENTITY xpsigntoolext.form.install.rdf.xpi.path.tooltip	"Enter path to the XPI file that contains the install.rdf file">
+<!ENTITY xpsigntoolext.form.install.rdf.xpi.browser.tooltip	"Click this button to select the XPI file for install.rdf file">
+<!ENTITY xpsigntoolext.form.install.rdf.dir.option.label	"Dir">
+<!ENTITY xpsigntoolext.form.install.rdf.dir.option.tooltip	"Select this option to specify the path to the directory for install.rdf file">
+<!ENTITY xpsigntoolext.form.install.rdf.dir.path.tooltip	"Enter path to the directory for the install.rdf file">
+<!ENTITY xpsigntoolext.form.install.rdf.dir.browser.tooltip	"Click this button to select the directory for the install.rdf file">
+
+<!ENTITY xpsigntoolext.form.install.rdf.signer.cert.label		"Signing Certificate">
+<!ENTITY xpsigntoolext.form.install.rdf.signer.cert.none.label		"Update key in install.rdf file has no related public key cert and private key in browser's Cert/key DB. If you want to sign the update.rdf file, you must change the update key or import the private key and related public key certificate (as PKCS#12 file) using browser's certificate manager.">
+<!ENTITY xpsigntoolext.form.install.rdf.signer.cert.noprivkey.label		"Update key in install.rdf file has no related private key in browser's key DB. If you want to sign the update.rdf file, you must change the update key or import the private key and related public key certificate (as PKCS#12 file) using browser's certificate manager.">
+<!ENTITY xpsigntoolext.form.install.rdf.signer.cert.item.tooltip	"X.509 cert associated with update key in key DB.">
+<!ENTITY xpsigntoolext.form.install.rdf.signer.certpicker.tooltip	"Select the Update.rdf file signing cert from list.">
+<!ENTITY xpsigntoolext.form.install.rdf.signer.cert.view.label	"View">
+<!ENTITY xpsigntoolext.form.install.rdf.signer.cert.view.tooltip	"Click this button to select the Update.rdf file signing cert from list.">
+<!ENTITY xpsigntoolext.form.install.rdf.signer.cert.modify.label	"Modify">
+<!ENTITY xpsigntoolext.form.install.rdf.signer.cert.modify.tooltip	"Check this option to add/modify the update key element of the install.rdf file.">
+<!ENTITY xpsigntoolext.form.install.rdf.infile.backup.label		"Backup">
+<!ENTITY xpsigntoolext.form.install.rdf.infile.backup.tooltip		"Check this box to enable backup of inout install.rdf/XPI file before modifying the updateKey element. If you modify updateKey, then install.rdf will be reformatted before overwriting the install.rdf file. Please make a backup of install.rdf/input-XPI file before modifying the updateKey.">
+<!ENTITY xpsigntoolext.form.install.rdf.signer.updateKey.info		"Note: If you modify updateKey, then install.rdf will be reformatted before overwriting the install.rdf file. Please make a backup of install.rdf/input-XPI file before modifying the updateKey.">
+<!ENTITY xpsigntoolext.form.install.rdf.signer.updateKey.label		"UpdateKey">
+<!ENTITY xpsigntoolext.form.install.rdf.signer.updateKey.tooltip	"updateKey in install.rdf file to be used for signing the update.rdf file.">
+<!ENTITY xpsigntoolext.form.install.rdf.signer.cmd.addUpdateKey.label	"Add Update Key">
+<!ENTITY xpsigntoolext.form.install.rdf.signer.cmd.addUpdateKey.tooltip	"Click this button to add the value (public key in base-64) of the update key element from the selected cert to the install.rdf file">
+<!ENTITY xpsigntoolext.form.install.rdf.signer.cmd.modifyUpdateKey.label	"Modify Update Key">
+<!ENTITY xpsigntoolext.form.install.rdf.signer.cmd.modifyUpdateKey.tooltip	"Click this button to modify the value (public key) of the update key element in the install.rdf file using the selected cert.">
+<!ENTITY xpsigntoolext.form.install.rdf.updateURL.label			"Update URL">
+<!ENTITY xpsigntoolext.form.install.rdf.updateURL.tooltip		"Update URL to be used to download the XPI file for the add-on.">
+
+<!ENTITY xpsigntoolext.form.update.rdf.file.label			"Update RDF File">
+<!ENTITY xpsigntoolext.form.update.rdf.file.tooltip			"Enter the update.rdf file path">
+<!ENTITY xpsigntoolext.form.update.rdf.file.backup.label		"Backup">
+<!ENTITY xpsigntoolext.form.update.rdf.file.backup.tooltip		"Updating the update.rdf with signature reformats the input file - make a backup of the update.rdf file in case you do not like the reformatted file.">
+<!ENTITY xpsigntoolext.form.updaterdf.targetapp.list.tooltip		"List of target apps of the Update RDF file.">
+<!ENTITY xpsigntoolext.form.update.rdf.target.apps.label		"Target Apps">
+<!ENTITY xpsigntoolext.form.updaterdf.targetapp.id.label		"Application Id">
+<!ENTITY xpsigntoolext.form.updaterdf.targetapp.id.tooltip		"Target application Id">
+<!ENTITY xpsigntoolext.form.updaterdf.targetapp.minversion.tooltip	"Minimum application vesrion">
+<!ENTITY xpsigntoolext.form.updaterdf.targetapp.maxversion.tooltip	"Maximum application vesrion">
+<!ENTITY xpsigntoolext.form.updaterdf.targetapp.updateLink.label	"Update Link URL">
+<!ENTITY xpsigntoolext.form.updaterdf.targetapp.updateLink.https.label	"HTTPS?">
+<!ENTITY xpsigntoolext.form.updaterdf.targetapp.updateLink.url.tooltip	"The URL for the the update link.">
+<!ENTITY xpsigntoolext.form.updaterdf.targetapp.xpi.file.label		"Updated XPI File">
+<!ENTITY xpsigntoolext.form.updaterdf.targetapp.xpi.file.path.tooltip	"Local file path for update URL">
+<!ENTITY xpsigntoolext.form.updaterdf.targetapp.xpi.file.browser.tooltip "Click this button to select the local file path for update URL">
+<!ENTITY xpsigntoolext.form.updaterdf.targetapp.updateHash.label	"Update Hash">
+<!ENTITY xpsigntoolext.form.updaterdf.targetapp.updateHash.tooltip	"Update Hash of the selected XPI file.">
+<!ENTITY xpsigntoolext.form.updaterdf.targetapp.updateHash.compute.label "Compute Hash">
+<!ENTITY xpsigntoolext.form.updaterdf.targetapp.updateHash.compute.tooltip "Click this button to compute Hash">
+
+<!ENTITY xpsigntoolext.form.update.rdf.signer.cert.label 	"Signing Cert">
+<!ENTITY xpsigntoolext.form.update.rdf.signer.cert.tooltip 	"Signing Cert">
+<!ENTITY xpsigntoolext.form.update.rdf.signer.cert.view.tooltip 	"Signing Cert">
+
+<!ENTITY xpsigntoolext.form.update.rdf.signature.label 		"Signature">
+<!ENTITY xpsigntoolext.form.update.rdf.signature.tooltip	"Signature of update RDF file">
+
+<!ENTITY xpsigntoolext.form.update.rdf.cmd.sign.label 		"Sign">
+<!ENTITY xpsigntoolext.form.update.rdf.cmd.sign.tooltip		"Click this button to sign the update RDF file.">
+<!ENTITY xpsigntoolext.form.update.rdf.cmd.verify.label 	"Verify">
+<!ENTITY xpsigntoolext.form.update.rdf.cmd.verify.tooltip	"Click this button to verify the signature in update RDF file.">
+
+

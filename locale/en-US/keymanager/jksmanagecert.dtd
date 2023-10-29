@@ -1,0 +1,99 @@
+<!ENTITY keymgr.jksmanagecert.wizard.title			"Java Key Store Certificate Management">
+
+<!ENTITY keymgr.jksmanagecert.file.format.base64.label		"Base64">
+<!ENTITY keymgr.jksmanagecert.file.format.base64.tooltip	"File is in Base64 format">
+<!ENTITY keymgr.jksmanagecert.file.browse.label			"Browse">
+<!ENTITY keymgr.jksmanagecert.file.browse.tooltip		"Click this button to select the file">
+<!ENTITY keymgr.jksmanagecert.cert.view.label 			"View Cert">
+<!ENTITY keymgr.jksmanagecert.cert.view.tooltip			"View selected X.509 certificate.">
+
+<!ENTITY keymgr.jksmanagecert.selectks.wizardpage.label		"Select Java Key Store">
+<!ENTITY keymgr.jksmanagecert.selectks.keystore.label		"Key Store">
+<!ENTITY keymgr.jksmanagecert.selectks.new.label		"New">
+<!ENTITY keymgr.jksmanagecert.selectks.new.tooltip		"Check this box, if you want to create a new key store file.">
+<!ENTITY keymgr.jksmanagecert.selectks.keystore.tooltip		"File path to Java Key Store">
+<!ENTITY keymgr.jksmanagecert.selectks.keystore.browse.tooltip	"Click this button to select the Java key store file">
+
+<!ENTITY keymgr.jksmanagecert.selectks.storetype.label		"Key Store Type">
+<!ENTITY keymgr.jksmanagecert.selectks.storetype.tooltip	"Key Store Type  - use the same name as you would use in Java Keytool command line tool. For non-Java key stores (smart cards, NSS soft tokens etc.) use the KeyManager tool.">
+<!ENTITY keymgr.jksmanagecert.selectks.storetype.jks.label	"JKS">
+<!ENTITY keymgr.jksmanagecert.selectks.storetype.jcejks.label	"JCE-KS">
+<!ENTITY keymgr.jksmanagecert.selectks.storepass.label		"Key Store Password">
+<!ENTITY keymgr.jksmanagecert.selectks.storepass.tooltip	"Enter key store password">
+<!ENTITY keymgr.jksmanagecert.selectks.tasktype.label		"Key Store Task">
+<!ENTITY keymgr.jksmanagecert.selectks.tasktype.alias.label	"Sign Cert - Use existing key">
+<!ENTITY keymgr.jksmanagecert.selectks.tasktype.alias.tooltip	"Sign Cert - Use existing key/cert to generate PKCS#10 CSR.">
+<!ENTITY keymgr.jksmanagecert.selectks.tasktype.new.label	"Sign Cert - Create new keys">
+<!ENTITY keymgr.jksmanagecert.selectks.tasktype.new.tooltip	"Sign Cert - Create new key/self-signed cert and use it to generate the PKCS#10 CSR. ">
+<!ENTITY keymgr.jksmanagecert.selectks.tasktype.import.label	"Import Cert">
+<!ENTITY keymgr.jksmanagecert.selectks.tasktype.import.tooltip	"Import Certificate either from browser or from a file (X.509 or PKCS#7)">
+
+<!ENTITY keymgr.jksmanagecert.createcert.wizardpage.label	"Create New Key-pair and Self-signed Certificate">
+<!ENTITY keymgr.jksmanagecert.createcert.alias.label		"Alias: ">
+<!ENTITY keymgr.jksmanagecert.createcert.alias.tooltip		"Certificate alias for the newly generate key and self-signed cert - must be unique">
+<!ENTITY keymgr.jksmanagecert.createcert.subjectdn.label	"Cert Subject DN">
+<!ENTITY keymgr.jksmanagecert.createcert.subjectdn.format.label	"Format Subject DN">
+<!ENTITY keymgr.jksmanagecert.createcert.subjectdn.format.tooltip	"Use a dialog window to format the subject DN.">
+<!ENTITY keymgr.jksmanagecert.createcert.subjectdn.tooltip	"Distingusihed name of the certificate to be created - example: 'cn=xxx[,ou=orgu1,o=org1,c=us]'">
+<!ENTITY keymgr.jksmanagecert.createcert.keytype.label		"Key Type">
+<!ENTITY keymgr.jksmanagecert.createcert.keytype.tooltip	"Key Type">
+<!ENTITY keymgr.jksmanagecert.createcert.keysize.label		"Key Size">
+<!ENTITY keymgr.jksmanagecert.createcert.keysize.tooltip	"Key Size">
+<!ENTITY keymgr.jksmanagecert.createcert.sigalg.label		"Signature Algorithm">
+<!ENTITY keymgr.jksmanagecert.createcert.sigalg.tooltip		"Signature Algorithm.">
+<!ENTITY keymgr.jksmanagecert.createcert.validitydays.label	"Validity in Days">
+<!ENTITY keymgr.jksmanagecert.createcert.validitydays.tooltip	"Validity in Days.">
+<!ENTITY keymgr.jksmanagecert.createcert.expireson.label	"Expires On">
+<!ENTITY keymgr.jksmanagecert.createcert.expireson.tooltip	"Expires On.">
+
+<!ENTITY keymgr.jksmanagecert.createcsr.wizardpage.label	"Select Key Alias and Generate PKCS#10 CSR">
+
+<!ENTITY keymgr.jksmanagecert.createcsr.aliaslist.label		"Cert Alias">
+<!ENTITY keymgr.jksmanagecert.createcsr.aliaslist.tooltip	"Select the cert alias to generate CSR.">
+<!ENTITY keymgr.jksmanagecert.createcsr.certreq.label		"PKCS#10 CSR file">
+<!ENTITY keymgr.jksmanagecert.createcsr.certreq.tooltip		"Enter path to the PKCS#10 CSR file to be generated.">
+<!ENTITY keymgr.jksmanagecert.createcsr.certreq.browse.tooltip	"Click this button to select the PKCS#10 CSR file to be generated.">
+
+
+<!ENTITY keymgr.jksmanagecert.signcert.wizardpage.label		"Select Signer's (CA) Cert">
+<!ENTITY keymgr.jksmanagecert.signcert.certreq.label		"PKCS#10 CSR file">
+<!ENTITY keymgr.jksmanagecert.signcert.certpicker.label		"Signer X.509 Cert">
+<!ENTITY keymgr.jksmanagecert.signcert.certpicker.tooltip	"Select the signer's X.509 Cert from the list">
+<!ENTITY keymgr.jksmanagecert.signcert.certout.label		"Signed X.509 Cert">
+<!ENTITY keymgr.jksmanagecert.signcert.certout.tooltip		"Enter the path to the signed X.509 certificate to be generated.">
+<!ENTITY keymgr.jksmanagecert.signcert.certout.browse.tooltip	"Click this button to select the the path to the signed X.509 certificate to be generated.">
+
+<!ENTITY keymgr.jksmanagecert.importcertparam.wizardpage.label	"Import Signed Cert into Key Store">
+<!ENTITY keymgr.jksmanagecert.importcertparam.sourcetype.label	"Cert Source Type">
+<!ENTITY keymgr.jksmanagecert.importcertparam.sourcetype.certpicker.label	"Certificate DB">
+<!ENTITY keymgr.jksmanagecert.importcertparam.sourcetype.certpicker.tooltip	"Select this option if you want import cert from browser's Cert DB.">
+<!ENTITY keymgr.jksmanagecert.importcertparam.sourcetype.file.label	"File">
+<!ENTITY keymgr.jksmanagecert.importcertparam.sourcetype.file.tooltip	"Select this option if you want import cert from a file.">
+<!ENTITY keymgr.jksmanagecert.importcertparam.certpicker.tooltip	"Select the cert that you want to import from browser's Cert DB.">
+<!ENTITY keymgr.jksmanagecert.importcertparam.filepicker.tooltip	"Enter the path to the file that contains the cert that you want to import.">
+<!ENTITY keymgr.jksmanagecert.importcertparam.filepicker.browse.tooltip	"Click this button to select the file that contains the cert that you want to import.">
+
+<!ENTITY keymgr.jksmanagecert.importcert.wizardpage.label	"Import Signed Cert into Key Store">
+<!ENTITY keymgr.jksmanagecert.importcert.cert.label		"Signed X.509 Cert">
+<!ENTITY keymgr.jksmanagecert.importcert.alias.label		"Alias">
+<!ENTITY keymgr.jksmanagecert.importcert.alias.tooltip		"Alias">
+
+<!ENTITY keymgr.jksmanagecert.final.wizardpage.label		"Result of Cert Import">
+<!ENTITY keymgr.jksmanagecert.error.wizardpage.label		"Cert Management Error">
+
+
+<!ENTITY keymgr.jksmanagecert.enabled.label		"Enable JKS Manage Cert">
+<!ENTITY keymgr.jksmanagecert.enabled.tooltip		"Select this option to enable JKS Manage Cert tool - You must use one of the following shell command tools for Linux/MacOSX : perl, bash, ksh. For Windows, you can only use 'perl'.">
+<!ENTITY keymgr.jksmanagecert.shellcmdpath.label	"SHELL Command Path">
+<!ENTITY keymgr.jksmanagecert.shellcmdpath.tooltip	"Specify the SHELL command path to be used for executing the Java keytool command. For Windows, you can only use PERL. For Linux/MacOSX, if the SHELL environment variable is specified then it is used. Otherwise 'bash' is used if it exists.">
+<!ENTITY keymgr.jksmanagecert.javahome.label		"JDK HOME">
+<!ENTITY keymgr.jksmanagecert.javahome.tooltip		"Path to the JDK_HOME directory - not JRE directory. The 'keytool' executable should be under the $JDK_HOME/bin directory.">
+<!ENTITY keymgr.jksmanagecert.javaversion.label		"Java Version">
+<!ENTITY keymgr.jksmanagecert.javaversion.label		"Select the Java version - version 1.6 and up or version 1.5 and less.">
+<!ENTITY keymgr.jksmanagecert.genkeyoption.label	"Generate Key Option">
+<!ENTITY keymgr.jksmanagecert.genkeyoption.tooltip	"Enter the Generate Key Option of keytool for the selected java version.">
+
+<!ENTITY keymgr.jksmanagecert.subject.dialog.title	"Format Subject DN">
+<!ENTITY keymgr.jksmanagecert.subject.label		"Subject DN">
+
+

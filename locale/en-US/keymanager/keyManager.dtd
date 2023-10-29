@@ -1,0 +1,1223 @@
+<!-- @(#) $Id: keyManager.dtd,v 1.82 2013/05/23 22:42:59 subrata Exp $ -->
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is Avaya Labs Research, Avaya Inc. Code.
+   -
+   - The Initial Developer of the Original Code is
+   - Subrata Mazumdar, Avaya Labs Research, Avaya Inc.
+   - Portions created by the Initial Developer are Copyright (C) 2007.
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Subrata Mazumdar (mazum@avaya.com)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+<!-- Re-declaration from chrome://pippki/locale/certManager.dtd -->
+<!ENTITY certmgr.help.label "Help">
+<!ENTITY certmgr.ok.label "OK">
+<!ENTITY certmgr.close.label "Close">
+<!ENTITY certmgr.cancel.label "Cancel">
+<!ENTITY certmgr.helpButtonAccessKey "h">
+<!ENTITY certmgr.closeWindowAccessKey "c">
+<!ENTITY certmgr.save.label "Save">
+
+<!ENTITY keymanager.title "Key Manager">
+<!ENTITY keymanager.version "0.1.240.20130821">
+
+<!ENTITY keymgr.certmgr.tab.others "People">
+<!ENTITY keymgr.certmgr.tab.websites "Servers">
+<!ENTITY keymgr.certmgr.tab.orphan "Others">
+<!ENTITY keymgr.certmgr.ocsp_info "OCSP">
+<!ENTITY keymgr.certmgr.view.label "View">
+<!ENTITY keymgr.certmgr.view.accesskey "V">
+<!ENTITY keymgr.certmgr.view2.label                  "View…">
+<!ENTITY keymgr.certmgr.view2.accesskey              "V">
+<!ENTITY keymgr.certmgr.edit.label "Edit">
+<!ENTITY keymgr.certmgr.edit.accesskey "E">
+<!ENTITY keymgr.certmgr.edit2.label                  "Edit…">
+<!ENTITY keymgr.certmgr.edit2.accesskey              "E">
+<!ENTITY keymgr.certmgr.add.label "Add">
+<!ENTITY keymgr.certmgr.add.accesskey "A">
+<!ENTITY keymgr.certmgr.export.label "Export">
+<!ENTITY keymgr.certmgr.export.accesskey "x">
+<!ENTITY keymgr.certmgr.delete.label "Delete">
+<!ENTITY keymgr.certmgr.delete.accesskey "D">
+<!ENTITY keymgr.certmgr.backup.label "Backup">
+<!ENTITY keymgr.certmgr.backupall.label "Backup All">
+<!ENTITY keymgr.certmgr.restore.label "Restore">
+<!ENTITY keymgr.certmgr.delete2.label                "Delete…">
+<!ENTITY keymgr.certmgr.delete2.accesskey            "D">
+<!ENTITY keymgr.certmgr.backup2.label                "Backup…">
+<!ENTITY keymgr.certmgr.backup2.accesskey            "B">
+<!ENTITY keymgr.certmgr.backupall2.label             "Backup All…">
+<!ENTITY keymgr.certmgr.backupall2.accesskey         "k">
+<!ENTITY keymgr.certmgr.restore2.label               "Import…">
+<!ENTITY keymgr.certmgr.restore2.accesskey           "m">
+
+<!ENTITY keymgr.certmgr.mine           "You have certificates from these organizations that identify you:">
+<!ENTITY keymgr.certmgr.mine.description "You have certificates from these organizations that identify you:">
+<!ENTITY keymgr.certmgr.mine.search    "Search:">
+<!ENTITY keymgr.certmgr.myproxy.search    "Search:">
+
+
+<!ENTITY keymgr.options.title					"Key Manager Toolbox Preferences">
+<!ENTITY keymgr.options.tab.tool.label				"Key Manager Tool">
+<!ENTITY keymgr.options.tab.genkeycsr.label			"Key/Cert Generation">
+<!ENTITY keymgr.options.tab.signcert.label			"Sign (Proxy) Cert">
+<!ENTITY keymgr.options.tab.scepclient.label			"SCEP Client">
+<!ENTITY keymgr.options.tab.attrcertext.label			"Attribute Cert Tool">
+<!ENTITY keymgr.options.tab.xpsigntoolext.label			"Archive Signing Tool">
+<!ENTITY keymgr.options.tab.sshclient.label			"OpenSSH Client">
+<!ENTITY keymgr.options.tab.jksmanagecert.label			"JKS Manage Cert Tool">
+
+<!ENTITY keymgr.options.tab.tool.eximcerts.overlay.show.buttons.label "Enable Editing/Importing in Cert Viewer">
+<!ENTITY keymgr.options.tab.tool.eximcerts.overlay.show.buttons.tooltip "Enable Editing/Importing in Certificate Viewer dialog window">
+<!ENTITY keymgr.options.tab.tool.certenroll.enabled.label	"Enable Cert-Enrollment Wizard">
+<!ENTITY keymgr.options.tab.tool.certenroll.enabled.tooltip	"Check this box to enable Certificate Enrollment Wizard">
+<!ENTITY keymgr.options.tab.tool.crltool.enabled.label		"Enable CRL Signing in CRL Manager">
+<!ENTITY keymgr.options.tab.tool.crltool.enabled.tooltip	"Check this box to enable CRL Signing add-on for the browsr's CRL Manager">
+<!ENTITY keymgr.options.tab.tool.jksmanagecert.enabled.label	"Enable Java Key Store Cert Mgmt">
+<!ENTITY keymgr.options.tab.tool.jksmanagecert.enabled.tooltip	"Enable managemnt of certificates in Java Key Store. It is really a demo tool and only supported on Linux and MacOSX. We use keytool of JDK to manage certs in Java key store and ketool is invoked uisng command-line shell tool.">
+<!ENTITY keymgr.options.tab.tool.fips.compatible.details.label	"Show incremental FIPS password validation">
+<!ENTITY keymgr.options.tab.tool.softtokendbmgr.enabled.label	"Enable External NSS Soft-Token Manager">
+<!ENTITY keymgr.options.tab.tool.softtokendbmgr.enabled.tooltip	"Check this box to enable mounting of external NSS Soft-Token Manager as well backup/synchronization of Keys/Certs file of OpenSSL based application ">
+<!ENTITY keymgr.options.tab.tool.softtokendbmgr.dbinfolist.label "External NSS Soft-token DB List">
+<!ENTITY keymgr.options.tab.tool.softtokendbmgr.dbinfolist.tooltip "Use the following format to add a new DB: DBDirPath,Token-name,cert-prefix,readonly:true|false,disabled:true|false[|another-db-info-item]">
+
+<!ENTITY keymgr.options.tab.tool.eximcerts.overlay.show.export.label "Display Export Button in View Cert">
+<!ENTITY keymgr.options.tab.tool.genkeycsr.useOldVersion.label	"Use Old Key-Gen/CSR Form">
+<!ENTITY keymgr.options.tab.signcerttool.useOldVersion.label	"Use Old Sign Cert Form">
+
+<!ENTITY keymgr.help.label "Help">
+<!ENTITY keymgr.helpButtonAccessKey "h">
+<!ENTITY keymgr.ok.label "OK">
+<!ENTITY keymgr.close.label "Close">
+<!ENTITY keymgr.closeWindowAccessKey "c">
+<!ENTITY keymgr.cancel.label "Cancel">
+<!ENTITY keymgr.save.label "Save">
+
+<!ENTITY keymgr.cmd.help.label "Help">
+<!ENTITY keymgr.cmd.helpButtonAccessKey "h">
+<!ENTITY keymgr.cmd.ok.label "OK">
+<!ENTITY keymgr.cmd.close.label "Close">
+<!ENTITY keymgr.cmd.closeWindowAccessKey "c">
+<!ENTITY keymgr.cmd.cancel.label "Cancel">
+<!ENTITY keymgr.cmd.save.label "Save">
+
+<!ENTITY keymgr.certdetail.cn                "Common Name (CN)">
+<!ENTITY keymgr.certdetail.cn.tooltip        "Enter the full name you want to give your certificate.">
+<!ENTITY keymgr.certdetail.ou                "Organizational Unit (OU)">
+<!ENTITY keymgr.certdetail.ou.tooltip        "Enter the name of your organization unit.  For example, this could be the name of your department.">
+<!ENTITY keymgr.certdetail.o                 "Organization (O)">
+<!ENTITY keymgr.certdetail.o.tooltip         "Enter the name of your organization. For example, this could be the name of your company.">
+<!ENTITY keymgr.certdetail.serialnumber      "Serial Number">
+<!ENTITY keymgr.subjectinfo.label            "Issued To">
+<!ENTITY keymgr.issuerinfo.label             "Issued By">
+<!ENTITY keymgr.validity.label               "Validity" >
+<!ENTITY keymgr.expires                      "Expires On">
+<!ENTITY keymgr.email                        "E-Mail Address">
+<!ENTITY keymgr.serial                       "Serial Number">
+
+<!ENTITY keymanager.file.browse.label		"Browse">
+<!ENTITY keymanager.file.browse.tooltip		"Click this button to select the file">
+<!ENTITY keymanager.file.path.browse.label	"Browse">
+<!ENTITY keymanager.file.path.browse.tooltip	"Click this button to select the file">
+
+<!ENTITY keymgr.myproxy.descr		"Your proxy certificates issued to others">
+<!ENTITY keymgr.otherproxy.descr	"Other's proxy certificates issued to you">
+
+
+
+<!ENTITY keymgr.tab.mine.key.label "Your Keys">
+<!ENTITY keymgr.tab.my.proxy.label "Your Proxy to Others">
+<!ENTITY keymgr.tab.other.proxy.label "Others Proxy to You">
+<!ENTITY keymgr.tab.me2other.proxy.label "Your Proxy to Others">
+<!ENTITY keymgr.tab.other2me.proxy.label "Others Proxy to You">
+
+<!ENTITY keymgr.proxy.issuer.name	"Proxy Issuer">
+<!ENTITY keymgr.proxy.delegate.name	"Delegated To">
+
+<!ENTITY keymgr.tab.mine.key.cmd.generateCSR.label		"Generate CSR">
+<!ENTITY keymgr.tab.mine.key.cmd.generateCSR.tooltip		"Use this button to generate PKCS#10 based CSR and enroll cert with a CA or save to a file.">
+<!ENTITY keymgr.tab.mine.key.cmd.generateSelfSignCert.label	"Generate Self-Signed Cert">
+<!ENTITY keymgr.tab.mine.key.cmd.generateSelfSignCert.tooltip	"Use this button to generate or renew Self-signed certificate">
+<!ENTITY keymgr.tab.mine.key.cmd.refresh.label			"Refresh">
+<!ENTITY keymgr.tab.mine.key.cmd.refresh.tooltip		"Use this button to reload the certificate tree of this tab.">
+<!ENTITY keymgr.tab.mine.key.cmd.tokenLogin.label		"Login">
+<!ENTITY keymgr.tab.mine.key.cmd.tokenLogin.tooltip		"Use this button to login to the token associated with selected cert.">
+<!ENTITY keymgr.tab.mine.key.cmd.export.label			"Export">
+<!ENTITY keymgr.tab.mine.key.cmd.export.tooltip			"Use this button to export the keys in PKCS#8 or PKCS#12 format and certificate in X.509 or PKCS#7 format to a file (either DER or Base 64)">
+<!ENTITY keymgr.tab.mine.key.cmd.export.keycert.tooltip		"Use this button to export the keys in PKCS#8 or PKCS#12 format and certificate in X.509 or PKCS#7 format to a file (either DER or Base 64)">
+<!ENTITY keymgr.tab.mine.key.cmd.export.cert.tooltip		"Use this button to export certificate in X.509 or PKCS#7 format to a file (either DER or Base 64)">
+<!ENTITY keymgr.tab.mine.key.cmd.import.cert.label		"Import Cert">
+<!ENTITY keymgr.tab.mine.key.cmd.import.cert.tooltip		"Use this button to import certificate(s) in X.509 or PKCS#7 format (either DER or Base 64) for private key already in the DB">
+<!ENTITY keymgr.tab.mine.key.cmd.scepClientButton.label		"SCEP Client">
+<!ENTITY keymgr.tab.mine.key.cmd.scepClientButton.tooltip	"Use this button to start the Wizard for SCEP client  ">
+<!ENTITY keymgr.tab.mine.key.cmd.signProxyCert.label		"Sign (Proxy) Cert">
+<!ENTITY keymgr.tab.mine.key.cmd.signProxyCert.tooltip		"Use this button to start the Wizard for signing (proxy) certificate">
+<!ENTITY keymgr.tab.mine.key.cmd.managedevices.label		"Security Devices">
+<!ENTITY keymgr.tab.mine.key.cmd.managedevices.tooltip		"Use this button to open the wizard for managing (installing/uninstalling) Security Devices (e.g., softoken, smart-card, etc.)">
+<!ENTITY keymgr.tab.mine.key.cmd.crlmanager.label		"CRL Manager">
+<!ENTITY keymgr.tab.mine.key.cmd.crlmanager.tooltip		"Use this button to open the CRL manager dialog window.">
+
+<!ENTITY certmgr.generateCSR.accesskey "G">
+<!ENTITY certmgr.generateSelfSignCert.accesskey "S">
+<!ENTITY certmgr.createKeyPairAndGetSignedCertXP.accesskey "P">
+
+<!ENTITY keymgr.key.export.format.win.title		"Certificate Export Format">
+<!ENTITY keymgr.key.export.format.label			"Choose Export Format">
+<!ENTITY keymgr.key.export.format.type.label		"Data Format:">
+<!ENTITY keymgr.key.export.format.type.osslepk.label	"OpenSSL EPK">
+<!ENTITY keymgr.key.export.format.type.osslepk.tooltip	"Export the private key associated with the selected cert in OpenSSL private key format (PEM only)">
+<!ENTITY keymgr.key.export.format.type.pkcs8.label	"PKCS#8">
+<!ENTITY keymgr.key.export.format.type.pkcs8.tooltip	"Export the private key associated with the selected cert in PKCS#8 format">
+<!ENTITY keymgr.key.export.format.type.openssh2.label	"OpenSSH-2">
+<!ENTITY keymgr.key.export.format.type.openssh2.tooltip	"Export both the private/public key of the selected cert to files in OpenSSH-2 private key (PEM only) and public key format. The private and public keys will be saved as id_alias and id_alias.pub respectively in the selected directory.">
+<!ENTITY keymgr.key.export.format.type.openssh2pubk.label	"OpenSSH PubKey">
+<!ENTITY keymgr.key.export.format.type.openssh2pubk.tooltip	"Export the public key of the selected cert to string in OpenSSH-2 public key format.">
+<!ENTITY keymgr.key.export.format.type.puttyssh2.label	"Putty">
+<!ENTITY keymgr.key.export.format.type.puttyssh2.tooltip	"Export the private/public key of the selected cert in Putty private key and SSH2 public key format (PEM only)">
+<!ENTITY keymgr.key.export.format.type.pkcs12.label	"PKCS#12">
+<!ENTITY keymgr.key.export.format.type.pkcs12.tooltip	"Export the selected cert, associated private key, the Issuer Cert chain in PKCS#12 format">
+<!ENTITY keymgr.key.export.format.type.pkcs10.label	"PKCS#10 CSR">
+<!ENTITY keymgr.key.export.format.type.pkcs10.tooltip	"Export the certificate signing request (CSR) for the selected cert in PKCS#10 format">
+<!ENTITY keymgr.key.export.format.type.x509.label	"X.509 Cert">
+<!ENTITY keymgr.key.export.format.type.x509.tooltip	"Export the selected cert in X509 format">
+<!ENTITY keymgr.key.export.format.type.x509crl.label	"X.509 CRL">
+<!ENTITY keymgr.key.export.format.type.x509crl.tooltip	"Export the selected CRL in X509 format">
+<!ENTITY keymgr.key.export.format.type.pkcs7.label	"PKCS#7">
+<!ENTITY keymgr.key.export.format.type.pkcs7.tooltip	"Export the selected cert/CRL, and the Issuer Cert chain in PKCS#7 format">
+<!ENTITY keymgr.key.export.format.encoding.label	"Encoding Type:">
+<!ENTITY keymgr.key.export.format.encoding.tooltip	"Select one of the encoding options">
+<!ENTITY keymgr.key.export.format.encoding.base64.label	"Base 64">
+<!ENTITY keymgr.key.export.format.encoding.base64.tooltip	"Save in Base 64 encoding of the DER format">
+<!ENTITY keymgr.key.export.format.encoding.der.label	"DER">
+<!ENTITY keymgr.key.export.format.encoding.der.tooltip	"Save in binary format using ASN.1 DER encoding">
+<!ENTITY keymgr.key.export.cert.include.certchain.label	"Include (Issuer) Cert Chain?">
+<!ENTITY keymgr.key.export.cert.include.certchain.tooltip	"Select this option if you want to  include the issuer cert chain in the saved file?">
+<!ENTITY keymgr.key.export.cert.enc.param.label		"Enc Parameters">
+<!ENTITY keymgr.key.export.cert.enc.iteration.label	"Iteration Count:">
+<!ENTITY keymgr.key.export.cert.enc.iteration.tooltip	"Enter the iteration count for the encrypting the private key - use following default values: 1 for exporting for NSS and 2048 for OpenSSL">
+<!ENTITY keymgr.key.export.cert.enc.algname.label	"Algorithm:">
+<!ENTITY keymgr.key.export.cert.enc.algname.tooltip	"Enter the algorithm name for encrypting the private key">
+<!ENTITY keymgr.key.export.cert.enc.algname.osslepk.menuList.tooltip	"Select the algorithm name for encrypting the private key">
+<!ENTITY keymgr.key.export.cert.enc.algname.pkcs8.menuList.tooltip	"Select the algorithm name for encrypting the private key">
+
+
+<!ENTITY keymgr.key.export.file.view.label	"Display Saved File?">
+<!ENTITY keymgr.key.export.file.view.tooltip	"Select this option if you want to view the saved file (Base64 file only)">
+
+<!-- Defintion specific to our KeyManager (CertManager extension) -->
+<!ENTITY keymgr.cert.csr.form.tabpanel.basic.subject.info.label "Basic Certificate Profile">
+<!ENTITY keymgr.cert.csr.form.tabpanel.basic.email.label	"E-Mail Address (mail)">
+
+<!ENTITY keymgr.cert.csr.form.tabpanel.general.subject.info.label "Subject DN Info">
+
+<!ENTITY certmgr.certdetail.subjectDNInfo			"Subject DN Info">
+<!ENTITY certmgr.certdetail.firstName.label			"First Name (fn)">
+<!ENTITY certmgr.certdetail.firstName.tooltip			"Enter First Name or FQDN for hosts/servers">
+<!ENTITY certmgr.certdetail.lastName.label			"Last Name (sn)">
+<!ENTITY certmgr.certdetail.lastName.tooltip			"Enter the last name of the user">
+<!ENTITY certmgr.certdetail.commonName.label			"Common Name (cn)">
+<!ENTITY certmgr.certdetail.commonName.tooltip			"Enter the full name or FQDN for hosts/servers">
+<!ENTITY certmgr.certdetail.email.label				"E-Mail Address (mail/e)">
+<!ENTITY certmgr.certdetail.email.tooltip			"Enter the email-address (Optional)">
+<!ENTITY certmgr.certdetail.email.subjaltname.label		"Subject Alt Name">
+<!ENTITY certmgr.certdetail.email.subjaltname.tooltip		"Check this box if you want e-mail to be part of Subject lternate name too.">
+<!ENTITY certmgr.certdetail.email.type.rfc1274.label		"MAIL=">
+<!ENTITY certmgr.certdetail.email.type.rfc1274.tooltip		"Select this option for email address of RFC1274 type (RDN ==> mail={email-addr})">
+<!ENTITY certmgr.certdetail.email.type.pkcs9.label		"E=">
+<!ENTITY certmgr.certdetail.email.type.pkcs9.tooltip		"Select this option for email address of PKCS9 type (RDN ==> E={email-addr}) ">
+<!ENTITY certmgr.certdetail.uid.label				"UID (uid)">
+<!ENTITY certmgr.certdetail.uid.tooltip				"Enter the user-id (Optional)">
+<!ENTITY certmgr.certdetail.orgUnit.label			"Organizational Unit (ou)">
+<!ENTITY certmgr.certdetail.orgUnit.tooltip			"Enter Organizational unit name (Optional); For example, this could be the name of your department. Use preferences to modify the default value.">
+<!ENTITY certmgr.certdetail.org.label				"Organization (o)">
+<!ENTITY certmgr.certdetail.org.tooltip				"Enter Organization name (Optional); For example, this could be the name of your company. Use preferences to modify the default value.">
+<!ENTITY certmgr.certdetail.locality.label			"Locality (l)">
+<!ENTITY certmgr.certdetail.locality.tooltip			"Enter Locality/City name (Optional); Use preferences to modify the default value.">
+<!ENTITY certmgr.certdetail.state.label				"State (st)">
+<!ENTITY certmgr.certdetail.state.tooltip			"Enter State or province (Optional); Use preferences to modify the default value.">
+<!ENTITY certmgr.certdetail.country.label			"Country (c)">
+<!ENTITY certmgr.certdetail.country.tooltip			"Enter country name (Optional); Enter the 2-character abbreviation for the name of your country. Country must be exactly 2 characters. Use preferences to modify the default value.">
+<!ENTITY certmgr.certdetail.dc.label				"DC (dc)">
+<!ENTITY certmgr.certdetail.dc.tooltip			"Enter DC (Optional);">
+<!ENTITY certmgr.certdetail.subjdnsuffix.label			"Subject DN Suffix">
+<!ENTITY certmgr.certdetail.subjdnsuffix.tooltip		"Format for this value (DNSuffix) is sequence of RDNs. This value is appended the subject-DN computed based on the above fields in the following format: [RDN1, RDN2, ..., RDNn, DNSuffix]. This filed allows you to provide any arbitrary subject DN. Be careful if you use this field - validation of the subject DN is ignored for this field.">
+<!ENTITY certmgr.certdetail.subject.label			"Subject (dn)">
+<!ENTITY certmgr.certdetail.subject.tooltip			"Automatically formatted from the above fields (Read only field)">
+<!ENTITY certmgr.certdetail.key.userInfo.label			"Key Info">
+<!ENTITY certmgr.certdetail.key.spki.label			"Subject Public Key Info">
+<!ENTITY certmgr.certdetail.keyType.label			"Key Type">
+<!ENTITY certmgr.certdetail.keyType.rsa.label			"RSA">
+<!ENTITY certmgr.certdetail.keyType.rsa.tooltip			"Select this option if you want to generate RSA key-pair">
+<!ENTITY certmgr.certdetail.keyType.dsa.label			"DSA">
+<!ENTITY certmgr.certdetail.keyType.dsa.tooltip			"Select this option if you want to generate DSA key-pair">
+<!ENTITY certmgr.certdetail.keyType.ec.label			"ECC">
+<!ENTITY certmgr.certdetail.keyType.ec.tooltip			"(NOT SUPPORTED) Select this option if you want to generate elliptic-curve key-pair. Although generation of EC key-pair is supported by Mozilla-NSS library, it expliclitly disables signing of any data using EC key in order to comply with some patent claims. For more info, see : https://bugzilla.mozilla.org/show_bug.cgi?id=367577.">
+<!ENTITY certmgr.certdetail.keyType.ec.curve.label		"Elliptic Curve ">
+<!ENTITY certmgr.certdetail.keyType.ec.curve.menulist.tooltip	"Select the Elliptic curve name">
+<!ENTITY certmgr.certdetail.key.ec.curve.sect163k1.label	"sect163k1">
+<!ENTITY certmgr.certdetail.sigAlgName.label			"Sig Algorithm: ">
+<!ENTITY certmgr.certdetail.sigAlgName.tooltip			"Select the cert signature algorithm">
+<!ENTITY certmgr.certdetail.keySize.label			"Key Size">
+<!ENTITY certmgr.certdetail.keySize.value.tooltip		"Enter key size (in bits) in multiples of 256">
+<!ENTITY certmgr.certdetail.keySize.tooltip			"Select one of the key size (in bits) from the list">
+<!ENTITY certmgr.certdetail.keySize.512.label			"512 (Low Grade)">
+<!ENTITY certmgr.certdetail.keySize.768.label			"768 (Medium Grade)">
+<!ENTITY certmgr.certdetail.keySize.1024.label			"1024 (High Grade)">
+<!ENTITY certmgr.certdetail.keySize.2048.label			"2048 (Very High Grade)">
+<!ENTITY certmgr.certdetail.keySize.other.label			"Other">
+<!ENTITY certmgr.certdetail.keyType.dsa.pqg.file.label		"PQG File:">
+<!ENTITY certmgr.certdetail.keyType.dsa.pqg.file.path.tooltip	"Enter the path for DSA PQG file">
+<!ENTITY certmgr.certdetail.keyType.dsa.pqg.file.browse.tooltip	"Select the path for DSA PQG file using file picker">
+<!ENTITY certmgr.certdetail.key.escrow.label			"Escrow Key?">
+<!ENTITY certmgr.certdetail.key.escrow.tooltip			"Select this option if you want to put the generated key in Escrow?">
+<!ENTITY certmgr.certdetail.cert.info.label		"Certificate Info">
+<!ENTITY certmgr.certdetail.alias.label			"Alias">
+<!ENTITY certmgr.certdetail.alias.tooltip		"Enter the alias (nickname) for the certificate">
+<!ENTITY certmgr.certdetail.nickName			"Nickname">
+<!ENTITY certmgr.certdetail.x509Version.label		"X509 Version">
+<!ENTITY certmgr.certdetail.x509Version1.label		"Version1">
+<!ENTITY certmgr.certdetail.x509Version1.tooltip	"Select this option for base X509 cert without any extension">
+<!ENTITY certmgr.certdetail.x509Version3.label		"Version3">
+<!ENTITY certmgr.certdetail.x509Version3.tooltip	"Select this option if you want to add extension to the certificate">
+<!ENTITY certmgr.certdetail.serialNumber.label			"Serial Number">
+<!ENTITY certmgr.certdetail.autoGenerateSerialNo.label		"Auto Generate">
+<!ENTITY certmgr.certdetail.autoGenerateSerialNo.tooltip	"Select this option if yow want to automatically generate serial number of the certificate">
+<!ENTITY certmgr.certdetail.inputSerialNo.label			"Use this hex value:">
+<!ENTITY certmgr.certdetail.inputSerialNo.tooltip		"Select this option if yow want to specify the serial number of the certificate">
+<!ENTITY certmgr.certdetail.serialnumber.tooltip		"Enter the serial number of the certificate">
+<!ENTITY certmgr.certdetail.validity.label			"Validity">
+<!ENTITY certmgr.certdetail.validityAutoGen.label		"Generate Automatically">
+<!ENTITY certmgr.certdetail.validityAutoGen.tooltip		"Select this option if yow want to automatically generate validity (Starting from now)">
+<!ENTITY certmgr.certdetail.validity.duration.label		"From now: ">
+<!ENTITY certmgr.certdetail.validity.duration.tooltip		"Enter the certificate validity duration (starting from now) in the selected months/days/hours">
+<!ENTITY certmgr.certdetail.validityInMonths.label		"Months ">
+<!ENTITY certmgr.certdetail.validityInMonths.tooltip		"Select this option if yow want to specify valaidity of the certificate by months">
+<!ENTITY certmgr.certdetail.validityInMonths.duration.tooltip	"Select this option if yow want to specify valaidity of the certificate in months">
+<!ENTITY certmgr.certdetail.validityInDays.label		"Days">
+<!ENTITY certmgr.certdetail.validityInDays.tooltip		"Select this option if yow want to specify valaidity of the certificate in days">
+<!ENTITY certmgr.certdetail.validityInHours.label		"Hours">
+<!ENTITY certmgr.certdetail.validityInHours.tooltip		"Select this option if yow want to specify valaidity of the certificate in hours">
+<!ENTITY certmgr.certdetail.validityInput.label			"Use specific dates:">
+<!ENTITY certmgr.certdetail.validityInput.tooltip		"Select this option if yow want to specify the starting and ending time of valaidity of the certificate">
+<!ENTITY certmgr.certdetail.validityNotBefore.label		"Not Before">
+<!ENTITY certmgr.certdetail.validityNotAfter.label		"Not After">
+<!ENTITY certmgr.certdetail.validityDateFormat.legend.label	"Format:">
+<!ENTITY certmgr.certdetail.validityDateFormat.value.label	"YYMMDDhhmm[ss]{Z|+hhmm|-hhmm}">
+
+<!ENTITY keymgr.cert.csr.form.win.title			"Certificate Signing Request Form">
+<!ENTITY keymgr.cert.csr.form.tab.basic.title		"Cert Basic Profile">
+<!ENTITY keymgr.cert.csr.form.tab.general.title		"X.509v1 Cert Attributes">
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.title	"X.509v3 Std. Extensions">
+<!ENTITY keymgr.cert.csr.form.tab.proxyx509ext.title	"Proxy Cert Extensions">
+<!ENTITY keymgr.cert.csr.form.tab.nsx509ext.title	"X.509v3 NS Extensions">
+<!ENTITY keymgr.cert.csr.form.tab.caserver.title	"Select Signing CA and Issuer DN">
+<!ENTITY keymgr.cert.csr.form.tab.keyext.title		"Key Extension">
+<!ENTITY keymgr.cert.csr.form.tab.cmd.basic.title	"Basic">
+<!ENTITY keymgr.cert.csr.form.tab.cmd.advanced.title	"Advanced">
+
+<!ENTITY keymgr.cert.csr.form.tab.basic.xxx		"XXXX">
+<!ENTITY keymgr.cert.csr.form.tabpanel.basic.keyUsage.tooltip		"Select one of the the key usage criteria from the list - use the Advanced tab control for further customization.">
+<!ENTITY keymgr.cert.csr.form.tabpanel.basic.extnProfile.label		"Default Certificate Profile">
+
+<!ENTITY keymgr.cert.csr.form.tabpanel.basic.keyUsage.digitalsig.label "Digital Signature">
+<!ENTITY keymgr.cert.csr.form.tabpanel.basic.keyUsage.digitalsig.tooltip "Select this option if you want the key just for digital signature">
+<!ENTITY keymgr.cert.csr.form.tabpanel.basic.keyUsage.dataencipherment.label "Data Encipherment">
+<!ENTITY keymgr.cert.csr.form.tabpanel.basic.keyUsage.dataencipherment.tooltip "Select this option if you want the key just for data encipherment">
+<!ENTITY keymgr.cert.csr.form.tabpanel.basic.keyUsage.sig_dataencipherment.label "Digital Signature and Data Encipherment">
+<!ENTITY keymgr.cert.csr.form.tabpanel.basic.keyUsage.sig_dataencipherment.tooltip "Select this option if you want the key for both digital signature and data encipherment">
+
+<!ENTITY keymgr.cert.csr.form.tabpanel.basic.keyUsage.pkilite.label	"HE PKI-Lite Cert Profile">
+<!ENTITY keymgr.cert.csr.form.tabpanel.basic.keyUsage.pkilite.tooltip	"Select this option to select HE PKI-Lite Certificate profile (http://middleware.internet2.edu/hepki-tag/pki-lite/hepki-tag-pkilite-profile-current.html).">
+<!ENTITY keymgr.cert.csr.form.tabpanel.basic.keyUsage.custom.label	"Custom Key Usage Profile">
+<!ENTITY keymgr.cert.csr.form.tabpanel.basic.keyUsage.custom.tooltip	"Select this option to load key usage profile from a file - after loading, use the Advanced tab control for further customization.">
+
+<!ENTITY keymgr.cert.csr.form.tabpanel.basic.keyUsage.custom.profile.path.tooltip "Enter the path to the XML file for key usage profile">
+<!ENTITY keymgr.cert.csr.form.tabpanel.basic.keyUsage.custom.profile.path.browse.tooltip "Click this button to select the XML file for key usage profile">
+<!ENTITY keymgr.cert.csr.form.tabpanel.basic.keyUsage.custom.profile.load.label "Apply">
+<!ENTITY keymgr.cert.csr.form.tabpanel.basic.keyUsage.custom.profile.load.tooltip "Click this button to Apply key usage profile">
+<!ENTITY keymgr.cert.csr.form.tabpanel.basic.keyUsage.custom.template.show.label "Show Template">
+<!ENTITY keymgr.cert.csr.form.tabpanel.basic.keyUsage.custom.template.show.tooltip "Click this button to show key usage template">
+
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.activeext.label "Active">
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.activeext.tooltip "Check this box if you want to activate this extension.">
+
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.critical.label "Critical">
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.critical.tooltip "Check this box if you want to mark this extension critical.">
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.mandatory.label "Mandatory">
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.mandatory.tooltip "Check this box if you want to mark this extension mandotory.">
+
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.basiconstraint.label "Basic Constraints">
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.basiconstraint.tooltp "Select Basic Constraints extension">
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.basiconstraint_ca.label "Is CA?">
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.basiconstraint_ca.tooltip "Check this box if want to mark this certificate as CA for sigining other certificates.">
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.basiconstraint_includepathlen.label "Constrain path length?">
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.basiconstraint_includepathlen.tooltip "Check this box if you want to constrain the downstream CA path length.">
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.basiconstraint_pathlen.tooltip "Enter path length here - an integer equal to or greater than 0 and less than the number on the right, if present.">
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.basiconstraint_pathlen_max.tooltip "The path length must be less than or equal to (&lt;=) this number.">
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.keyusage.label		"Key Usage">
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.digitalsig.label		"Digital Signature">
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.nonrepudiation.label	"Non Repudiation">
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.keyencipherment.label	"Key Encipherment">
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.dataencipherment.label	"Data Encipherment">
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.keyagreement.label		"Key Agreement">
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.keycertsigning.label	"Key Certificate Signing">
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.crlsigning.label		"CRL Signing">
+
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.extkeyusage.label		"Extended Key Usage">
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.serverauth.label		"Server Auth">
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.clientauth.label		"Client Auth">
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.codesigning.label		"Code Signing">
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.emailprotection.label	"Email Protection">
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.timestamp.label		"Timestamp">
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.ocspresponder.label	"OCSP Responder">
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.nsGovtApproved.label	"NS Govt Approved">
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.nsGovtApproved.tooltip	"This option is alspo known as Netscape Server Gated Crypto (NS SGC)">
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.nssgc.label		"NS SG-Crypto">
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.ipsec.endsystem.label	"IPSec End System">
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.ipsec.tunnel.label		"IPSec Tunnel">
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.ipsec.user.label		"IPSec User">
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.pivcontentsigning.label	"PIV Content Signing">
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.pivcardauth.label		"PIV Card Auth">
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.eapoverppp.label		"EAP Over PPP">
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.eapoverlan.label		"EAP Over LAN">
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.mssclogon.label		"MS SmartCard Logon">
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.mskeyrecovery.label	"MS Key Recovery">
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.mstrustlistsigning.label	"MS Trust List Signing">
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.mstimestampsigning.label	"MS Time Stamping">
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.msdocsigning.label		"MS Doc Signing">
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.msencryptingfs.label	"MS Encrypting FS">
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.mssmimeencpref.label	"MS SMIME Enc Pref">
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.mssgc.label		"MS SGC">
+
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.authkeyid.label		"Authority Key Identifier">
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.authkeyid_keyid.label	"Key Identifier">
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.authkeyid_nameserialno.label "Issuer Name and Serial number">
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.subjkeyid.label		"Subject Key Identifier">
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.subjkeyid_ascii.label	"ascii text value">
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.subjkeyid_hex.label	"hex value">
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.privatekeyusageperiod.label "Private Key Usage Period">
+<!ENTITY certextn.stdx509ext.privatekeyusageperiodextn.type.notBefore.label "Not Before">
+<!ENTITY certextn.stdx509ext.privatekeyusageperiodextn.type.notAfter.label "Not After">
+<!ENTITY certextn.stdx509ext.privatekeyusageperiodextn.notBefore.type.auto.label "Auto">
+<!ENTITY certextn.stdx509ext.privatekeyusageperiodextn.notBefore.type.manual.label "Manual">
+<!ENTITY certextn.stdx509ext.privatekeyusageperiodextn.type.both.label "Both">
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.generalnames.add.label "Add">
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.generalnames.remove.label "Remove">
+
+<!ENTITY keymgr.stdx509ext.crldistrpoint.win.title			"CRL Distribution Points">
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.crldistrpoints.list.tooltip "List of CRL Distribution Points - use the buttons on the right to add/remove items to the list.">
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.crldistrpoints.add.label	"Add">
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.crldistrpoints.add.tooltip "Click this buttin to add a new CRL distribution point item to the list.">
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.crldistrpoints.edit.label "Edit">
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.crldistrpoints.edit.tooltip "Edit">
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.crldistrpoints.remove.label "Remove">
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.crldistrpoints.remove.tooltip "Click this button to remove the selected CRL distribution point item from the list.">
+<!ENTITY keymgr.stdx509ext.crldistrpoints.crlissuer.label		"CRL Issuer">
+<!ENTITY keymgr.stdx509ext.crldistrpoints.crlissuer.tooltip		"CRL Issuer">
+<!ENTITY keymgr.stdx509ext.crldistrpoints.distrpoint.label		"Distribution Point Name">
+<!ENTITY keymgr.stdx509ext.crldistrpoints.distrpoint.tooltip		"Distribution Point Name">
+<!ENTITY keymgr.stdx509ext.crldistrpoints.reason.label			"Reason">
+<!ENTITY keymgr.stdx509ext.crldistrpoints.reason.tooltip		"Reason">
+
+<!ENTITY keymgr.stdx509ext.aia.accessdesc.win.title			"Information Access Description">
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.authinfoaccesssyntax.add.label "Add">
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.authinfoaccesssyntax.add.tooltip "Add">
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.authinfoaccesssyntax.edit.label "Edit">
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.authinfoaccesssyntax.remove.label "Remove">
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.authinfoaccesssyntax.remove.tooltip "Remove">
+<!ENTITY keymgr.stdx509ext.aia.accessdesc.method.label			"Method">
+<!ENTITY keymgr.stdx509ext.aia.accessdesc.location.label		"Location">
+
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.subjaltname.label "Subject Alternative Name">
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.issueraltname.label "Issuer Alternative Name">
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.issueraltname.options.auto.label "auto">
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.issueraltname.options.auto.tooltip "Select this option to let the tool to add a issuer alternative name using the default option.">
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.issueraltname.options.manual.label "manual">
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.issueraltname.options.manual.tooltip "Select this option to manually enter the issuer alternative name.">
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.nameconstraint.label "Name Constraints">
+
+<!ENTITY keymgr.stdx509extn.inhibitanypolicy.label			"Inhibit Any-Policy">
+<!ENTITY keymgr.stdx509extn.inhibitanypolicy.skipcert.label		"Skip Cert :">
+<!ENTITY keymgr.stdx509extn.inhibitanypolicy.skipcert.tooltip		"Enter the number (&gt;= 0) of certs in the path permitted to use anyPolicy, with OID: { 2 5 29 32 0 }. The value indicates the number of additional certificates that may appear in the path before 'anyPolicy' is no longer permitted.">
+
+<!ENTITY keymgr.stdx509extn.policyconstraints.label				"Policy Constraints">
+<!ENTITY keymgr.stdx509extn.policyconstraints.explicitPolicySkipCerts.label	"Explicit Policy">
+<!ENTITY keymgr.stdx509extn.policyconstraints.explicitPolicySkipCerts.tooltip	"(OPTIONAL) the value (&gt;= 0) of requireExplicitPolicy indicates the number of additional certificates that may appear in the path before an explicit policy is required for the entire path.">
+<!ENTITY keymgr.stdx509extn.policyconstraints.inhibitMappingSkipCerts.label	"Inhibit Policy Mapping">
+<!ENTITY keymgr.stdx509extn.policyconstraints.inhibitMappingSkipCerts.tooltip	"(OPTIONAL) the value (&gt;= 0) indicates the number of additional certificates that may appear in the path before policy mapping is no longer permitted.">
+
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.proxycertinfo.label "Proxy Certificate Info">
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.proxycertinfo_includepathlen.label "Constrain path length?">
+
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.proxycertinfo_includepathlen.tooltip "Check this box if you want to constrain the proxy signer path length.">
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.proxycertinfo_pathlen.tooltip "Enter path length here - an integer equal to or greater than 0 and less than the number on the right, if present.">
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.proxycertinfo_pathlen_max.tooltip "The path length must be less than equal to (&lt;=) this number.">
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.proxycertinfo_policyLanguage.label "Policy Language">
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.proxycertinfo_policyLanguage.tooltip "Select Proxy Policy Language ID">
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.proxycertinfo_policyLanguage.inheritAll "Inherit All">
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.proxycertinfo_policyLanguage.independent "Independent">
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.proxycertinfo_policyLanguage.anyLanguage "AnyLanguage">
+<!ENTITY keymgr.cert.csr.form.tab.stdx509ext.proxycertinfo_policyLanguage.policy.tooltip "Enter the policy value here.">
+
+<!ENTITY keymgr.cert.csr.form.tab.nsx509ext.activeext.label "Active">
+<!ENTITY keymgr.cert.csr.form.tab.nsx509ext.critical.label "Critical">
+<!ENTITY keymgr.cert.csr.form.tab.nsx509ext.mandatory.label "Mandatory">
+
+<!ENTITY keymgr.cert.csr.form.tab.nsx509ext.nscerttype.label "Netscape Certificate Type">
+<!ENTITY keymgr.cert.csr.form.tab.nsx509ext.sslclient.label "SSL Client">
+<!ENTITY keymgr.cert.csr.form.tab.nsx509ext.sslserver.label "SSL Server">
+<!ENTITY keymgr.cert.csr.form.tab.nsx509ext.smime.label " S/MIME">
+<!ENTITY keymgr.cert.csr.form.tab.nsx509ext.objsigning.label "Object Signing">
+<!ENTITY keymgr.cert.csr.form.tab.nsx509ext.reserved.label "Reserved">
+<!ENTITY keymgr.cert.csr.form.tab.nsx509ext.sslca.label "SSL CA">
+<!ENTITY keymgr.cert.csr.form.tab.nsx509ext.smimeca.label "S/MIME CA">
+<!ENTITY keymgr.cert.csr.form.tab.nsx509ext.objsigningca.label "Object Signing CA">
+
+<!ENTITY keymgr.cert.csr.form.tab.nsx509ext.nsbaseurl.label "Netscape Base URL">
+<!ENTITY keymgr.cert.csr.form.tab.nsx509ext.nsrevocationurl.label "Netscape Revocation URL">
+<!ENTITY keymgr.cert.csr.form.tab.nsx509ext.nscarevocationurl.label "Netscape CA Revocation URL">
+<!ENTITY keymgr.cert.csr.form.tab.nsx509ext.nscertrenewalurl.label "Netscape Certificate Renewal URL">
+<!ENTITY keymgr.cert.csr.form.tab.nsx509ext.nscapolicyurl.label "Netscape CA Policy URL">
+<!ENTITY keymgr.cert.csr.form.tab.nsx509ext.nssslservername.label "Netscape SSL Server Name">
+<!ENTITY keymgr.cert.csr.form.tab.nsx509ext.nscomment.label "Netscape Comment">
+
+<!ENTITY certmgr.generateCSR.caserver_tab.info.label "Cert Issuer Info">
+<!ENTITY certmgr.generateCSR.caserver_tab.url.label "CA Server URL">
+<!ENTITY certmgr.generateCSR.caserver_tab.url.login.label "Login">
+<!ENTITY certmgr.generateCSR.caserver_tab.issuer.subjdn.label "Issuer Subject DN">
+<!ENTITY certmgr.generateCSR.caserver_tab.issuer.subjdnbrowser.label "Browse">
+<!ENTITY certmgr.generateCSR.caserver_tab.issuer.alias.label "Issuer Subject Alias">
+<!ENTITY certmgr.generateCSR.caserver_tab.issuer.saveinfo.label "Save CA Info">
+<!ENTITY certmgr.generateCSR.caserver.login.title "CA Server Login">
+
+
+<!ENTITY keymgr.cert.csr.upload.param.title "Upload CSR to CA and Get Signed Cert">
+
+<!ENTITY keymgr.cert.csr.form.cmd.scepClient.label "SCEP Client">
+<!ENTITY keymgr.cert.csr.form.cmd.selfsigncert.label "Generate Self-Signed Cert">
+<!ENTITY keymgr.cert.csr.form.cmd.pkcs10.label "Generate PKCS#10">
+<!ENTITY keymgr.cert.csr.form.cmd.crmf.label "Generate CRMF">
+<!ENTITY keymgr.cert.csr.form.cmd.spkac.label "Generate SPKAC">
+<!ENTITY keymgr.cert.csr.form.cmd.spkac.tooltip "Generate key-pair and signed SubjectPublicKeyAndChallenge using KEYGEN element">
+
+<!ENTITY keymgr.cert.csr.msg.pkcs10.view.title "PKCS#10 CSR Detail">
+<!ENTITY keymgr.cert.csr.msg.pkcs10.view.pkcs10CSRData.caption "CSR Data">
+<!ENTITY keymgr.cert.csr.msg.pkcs10.view.caResponse.caption "CA Server Response">
+<!ENTITY keymgr.cert.csr.msg.pkcs10.view.ca.server.type.label "CA Server Type">
+<!ENTITY keymgr.cert.csr.msg.pkcs10.view.ca.server.type.pkcs10CA "PKCS10 CA">
+<!ENTITY keymgr.cert.csr.msg.pkcs10.view.ca.server.type.msCertService "MS Cert Service">
+<!ENTITY keymgr.cert.csr.msg.pkcs10.view.ca.server.type.scep "SCEP Server">
+<!ENTITY keymgr.cert.csr.msg.pkcs10.view.ca.server.type.openCA "Open CA">
+<!ENTITY keymgr.cert.csr.msg.pkcs10.view.ca.server.type.ejbCA "EJB CA">
+<!ENTITY keymgr.cert.csr.msg.pkcs10.view.ca.server.url.label "CA Server URL">
+<!ENTITY keymgr.cert.csr.msg.pkcs10.view.ca.server.url.tooltip "Enter the URL of the Srver hosting the CA">
+<!ENTITY keymgr.cert.csr.msg.pkcs10.view.ca.server.login.label "Login">
+<!ENTITY keymgr.cert.csr.msg.pkcs10.view.ca.server.getCACertChain.label "Download CA Certs">
+<!ENTITY keymgr.cert.csr.msg.pkcs10.view.issuer.subjdn.label "Issuer Subject DN">
+<!ENTITY keymgr.cert.csr.msg.pkcs10.view.issuer.subjdn.tooltip "Enter Subject DN of the Issuer (CA) - Optional">
+<!ENTITY keymgr.cert.csr.msg.pkcs10.view.issuer.alias.label "Issuer Alias">
+<!ENTITY keymgr.cert.csr.msg.pkcs10.view.issuer.alias.tooltip "Enter alias of the Issuer (CA) - Optional">
+<!ENTITY keymgr.cert.csr.msg.pkcs10.view.sendToCA.label "Send PKCS#10 CSR to CA">
+
+<!ENTITY keymgr.cert.csr.msg.crmf.view.title "CRMF CSR Detail">
+<!ENTITY keymgr.cert.csr.msg.crmf.view.ca.server.info.label "CA Server Info">
+<!ENTITY keymgr.cert.csr.msg.crmf.view.ca.server.url.label "CA Server URL">
+<!ENTITY keymgr.cert.csr.msg.crmf.view.ca.server.url.tooltip "Enter the URL of the Srver hosting the CA">
+<!ENTITY keymgr.cert.csr.msg.crmf.view.ca.server.login.label "Login">
+<!ENTITY keymgr.cert.csr.msg.crmf.view.issuer.param.label "Additional Params">
+<!ENTITY keymgr.cert.csr.msg.crmf.view.issuer.param.tooltip "Enter Additional Parameter for CSR - Optional">
+<!ENTITY keymgr.cert.csr.msg.crmf.view.sendToCA.label "Send CRMF CSR to CA">
+
+<!ENTITY keymgr.cert.csr.msg.spkac.view.title 				"Signed SPKAC Detail">
+<!ENTITY keymgr.cert.csr.msg.spkac.view.ca.server.info.label		"CA Server Info">
+<!ENTITY keymgr.cert.csr.msg.spkac.view.ca.server.url.label		"CA Server URL">
+<!ENTITY keymgr.cert.csr.msg.spkac.view.ca.server.url.tooltip		"Enter the URL of the Srver hosting the CA">
+<!ENTITY keymgr.cert.csr.msg.spkac.view.ca.server.login.label		"Login">
+<!ENTITY keymgr.cert.csr.msg.spkac.view.issuer.param.label		"Additional Params">
+<!ENTITY keymgr.cert.csr.msg.spkac.view.issuer.param.tooltip		"Enter Additional Parameter for CSR - Optional">
+<!ENTITY keymgr.cert.csr.msg.spkac.view.sendToCA.label			"Send Signed-SPKAC to CA">
+
+
+<!ENTITY keymgr.signProxyCert.CSRInfo "Certicate Signing Request">
+
+<!ENTITY keymgr.signProxyCert.tool.win.title "(Proxy) Certificate Signing Tool">
+<!ENTITY keymgr.signProxyCert.form.win.proxy.title "Proxy Certificate Signing Request Form">
+<!ENTITY keymgr.signProxyCert.form.tab.signer.user.title "Proxy Issuer">
+<!ENTITY keymgr.signProxyCert.signer.user.cert.info.label "Proxy Certificate Signer Info">
+<!ENTITY keymgr.signProxyCert.signer.user.cert.label "Proxy Certificate Signer Info">
+<!ENTITY keymgr.signProxyCert.cmd.sign.label "Sign Proxy Cert">
+<!ENTITY keymgr.signProxyCert.cmd.load.label "Load">
+
+
+<!ENTITY keymgr.signCert.form.win.ca.title "Certificate Signing Request Form">
+<!ENTITY keymgr.signCert.form.tab.signer.ca.title "Certificate Signer">
+<!ENTITY keymgr.signCert.signer.ca.cert.info.label "Certificate Signer Info">
+<!ENTITY keymgr.signCert.signer.ca.cert.label "Certificate Signer Info">
+<!ENTITY keymgr.signCert.cmd.sign.label "Sign Cert">
+<!ENTITY keymgr.signCert.csr.user.label "Requester CSR Info">
+
+<!ENTITY keymgr.signProxyCert.accesskey "P">
+<!ENTITY keymgr.signProxyCert.cert.view.label "View Cert">
+<!ENTITY keymgr.signProxyCert.cert.view.tooltip "Click this button to show the selected cert.">
+<!ENTITY keymgr.signProxyCert.cmd.form.basic.label "Basic">
+<!ENTITY keymgr.signProxyCert.cmd.form.advanced.label "Advanced">
+<!ENTITY keymgr.signProxyCert.cmd.close.label "Close">
+
+<!ENTITY keymgr.signProxyCert.signer.alias.label		"Signer Alias">
+<!ENTITY keymgr.signProxyCert.signer.nickName.menulist.tooltip	"Select the signing cert from list.">
+<!ENTITY keymgr.signProxyCert.signer.subjdn.label		"Signer Subject">
+<!ENTITY keymgr.signProxyCert.signer.cert.view.label		"View Cert">
+<!ENTITY keymgr.signProxyCert.signer.cert.view.tooltip		"Click this button to show the selected cert.">
+<!ENTITY keymgr.signProxyCert.signer.browser.label		"Select Key">
+<!ENTITY keymgr.signProxyCert.csr.proxy.label			"Proxy CSR Info">
+<!ENTITY keymgr.signProxyCert.csr.source			"CSR Source">
+<!ENTITY keymgr.signProxyCert.csr.dataInfo			"CSR Source">
+<!ENTITY keymgr.signProxyCert.csr.file.select.label		"File:">
+<!ENTITY keymgr.signProxyCert.csr.file.select.tooltip		"Select this option if you want load the CSR data from a local file.">
+<!ENTITY keymgr.signProxyCert.csr.file.format			"Base64">
+<!ENTITY keymgr.signProxyCert.csr.cert.select.label		"Cert:">
+<!ENTITY keymgr.signProxyCert.csr.cert.select.tooltip		"Select this option if you want load the CSR data from an existing cert in the DB.">
+<!ENTITY keymgr.signProxyCert.csr.cert.nickname.menulist.tooltip "Select the requester cert from list.">
+<!ENTITY keymgr.signProxyCert.csr.base64.select.label		"Base64:">
+<!ENTITY keymgr.signProxyCert.csr.base64.select.tooltip		"Select this option if you want load the CSR data from a Base-64 PKCS#10 CSR data.">
+<!ENTITY keymgr.signProxyCert.csr.base64.data.tooltip		"Enter/Paste the PKCS#10 CSR data in Base64 format.">
+<!ENTITY keymgr.signProxyCert.csr.base64.data.load.tooltip	"Click this button to load the Base64 PKCS#10 CSR data.">
+<!ENTITY keymgr.signProxyCert.csr.pkcs10object.select.label	"Object:">
+<!ENTITY keymgr.signProxyCert.csr.pkcs10object.select.tooltip	"Select this option if want to load the CSR using an XPCOM object reference for PKCS10CSR.">
+<!ENTITY keymgr.signProxyCert.csr.url.select.label		"URL:">
+<!ENTITY keymgr.signProxyCert.csr.url.select.tooltip		"Select this option if you want load the Base-64 CSR data using an URL.">
+<!ENTITY keymgr.signProxyCert.csr.url.tooltip			"Enter the URL for the Base-64 PKCS#10 CSR data.">
+<!ENTITY keymgr.signProxyCert.csrFileName			"Input CSR File">
+<!ENTITY keymgr.signProxyCert.csrData				"Input CSR Data">
+
+<!ENTITY keymgr.signProxyCert.csr.proxy.commonName		"Common Name">
+<!ENTITY keymgr.signProxyCert.csr.proxy.nickName		"Nick Name">
+<!ENTITY keymgr.signProxyCert.csr.proxy.extnProfile.label	"Extension Profile">
+
+<!ENTITY keymgr.signCert.signed.cert.label 			"Signed Certificate Info">
+<!ENTITY keymgr.signProxyCert.csr.proxy.importSignedCert	"Import Signed Cert in Issuer Cert DB">
+<!ENTITY keymgr.signProxyCert.csr.proxy.signedDbCert.label	"Signed Cert: ">
+<!ENTITY keymgr.signProxyCert.csr.proxy.savecert		"Save Signed Cert in File">
+<!ENTITY keymgr.signProxyCert.csr.proxy.includeIssuerChain	"Include Isssuer Cert">
+<!ENTITY keymgr.signProxyCert.CertInfo				"Certificate Info">
+<!ENTITY keymgr.signProxyCert.certFileName			"Signed Cert File">
+<!ENTITY keymgr.signProxyCert.certOut.fileName			"Signed Cert File">
+<!ENTITY keymgr.signProxyCert.certOut.file.format		"Base64">
+<!ENTITY keymgr.signProxyCert.file.browser.label		"Browse">
+
+<!ENTITY keymgr.user.cert.form.win.title			"Create User Certificate">
+<!ENTITY keymgr.user.cert.form.issuer.info.label		"CA Server Info">
+
+<!ENTITY keymgr.create.generalName.item.win.title		"Create GeneralName Item">
+<!ENTITY keymgr.create.generalName.item.nameType.label		"Name Type">
+<!ENTITY keymgr.create.generalName.item.nameType.tooltip	"Select one of the following Name Type">
+<!ENTITY keymgr.create.generalName.item.nameType.otherName	"Other Name">
+<!ENTITY keymgr.create.generalName.item.nameType.otherName.tooltip	"Other Name - you muest enter OID">
+<!ENTITY keymgr.create.generalName.item.nameType.rfc822Name	"RFC 822 Name">
+<!ENTITY keymgr.create.generalName.item.nameType.rfc822Name.tooltip	"Select this if you want to specify e-mail address">
+<!ENTITY keymgr.create.generalName.item.nameType.dnsName	"DNS Name">
+<!ENTITY keymgr.create.generalName.item.nameType.dnsName.tooltip	"DNS Name - FQDN, including simple  host name">
+<!ENTITY keymgr.create.generalName.item.nameType.x400 		"X400 Address">
+<!ENTITY keymgr.create.generalName.item.nameType.x400.tooltip	"X400 Address">
+<!ENTITY keymgr.create.generalName.item.nameType.directoryName	"Directory Name">
+<!ENTITY keymgr.create.generalName.item.nameType.directoryName.tooltip	"Directory Name - must be in DN format (e.g. cn=subrata,o=avaya,c=us)">
+<!ENTITY keymgr.create.generalName.item.nameType.ediPartyName	"EDI Party Name">
+<!ENTITY keymgr.create.generalName.item.nameType.ediPartyName.tooltip	"EDI Party Name">
+<!ENTITY keymgr.create.generalName.item.nameType.URI		"URI">
+<!ENTITY keymgr.create.generalName.item.nameType.URI.tooltip	"Uniform Resource Identifier">
+<!ENTITY keymgr.create.generalName.item.nameType.ipAddress	"IP Address">
+<!ENTITY keymgr.create.generalName.item.nameType.ipAddress.tooltip	"IP Address - dotted number format">
+<!ENTITY keymgr.create.generalName.item.nameType.regID		"Registered ID">
+<!ENTITY keymgr.create.generalName.item.nameType.regID.tooltip	"Registered ID">
+<!ENTITY keymgr.create.generalName.item.nameType.nscpNickname	"NS Cert Nickname">
+<!ENTITY keymgr.create.generalName.item.nameType.nscpNickname.tooltip	"Netscape Cert Nickname">
+<!ENTITY keymgr.create.generalName.item.oid.label		"OID">
+<!ENTITY keymgr.create.generalName.item.oid.tooltip		"Enter the OID of the name (in the dotted decimal format)">
+<!ENTITY keymgr.create.generalName.item.name.label		"Name Value">
+<!ENTITY keymgr.create.generalName.item.name.tooltip		"Enter the value of the name">
+<!ENTITY keymgr.create.generalName.item.name.binary.label	"Binary">
+<!ENTITY keymgr.create.generalName.item.name.binary.tooltip	"Check this box if the name value is binary encoded (in Base-64 format)">
+
+<!ENTITY keymgr.scepclient.gui.win.title			"SCEP Client">
+<!ENTITY keymgr.scepclient.gui.tab.form.label			"SCEP Client Form Tab">
+
+<!ENTITY keymgr.scepclient.form.cert.serialnumber		"User Certificate">
+
+<!ENTITY keymgr.scepclient.form.scep.req.msgType.label		"Message Type">
+<!ENTITY keymgr.scepclient.form.scep.req.msgType.tooltip	"SCEP Message Type">
+<!ENTITY keymgr.scepclient.form.scep.req.msgType.menuList.tooltip "Select the SCEP Message Type from the list">
+<!ENTITY keymgr.scepclient.form.scep.req.msgType.GetCACert.label	"Get CA Cert">
+<!ENTITY keymgr.scepclient.form.scep.req.msgType.PKCSReq.label	"PKCS#10 based SCEP Certificate Request">
+<!ENTITY keymgr.scepclient.form.scep.req.msgType.GetCertInitial.label		"Get Initial (Pending) Cert">
+<!ENTITY keymgr.scepclient.form.scep.req.msgType.GetCert.label	"Get Cert">
+<!ENTITY keymgr.scepclient.form.scep.req.msgType.GetCRL.label	"Get CRL">
+<!ENTITY keymgr.scepclient.form.scep.req.msgType.GetCRL.tooltip "Use browser's OCSP capability">
+<!ENTITY keymgr.scepclient.form.scep.req.msgType.CertRep.label	"Certificate Response">
+
+<!ENTITY keymgr.scepclient.form.req.msg.generator.label	"SCEP Message Generator">
+<!ENTITY keymgr.scepclient.form.cert.nickName.menulist.tooltip		"Select the certificate from the list">
+<!ENTITY keymgr.scepclient.form.cert.view.label			"View Cert">
+<!ENTITY keymgr.scepclient.form.cert.view.tooltip		"Click this button to view the selected certificate">
+<!ENTITY keymgr.scepclient.form.cert.delete.label		"Delete">
+<!ENTITY keymgr.scepclient.form.cert.delete.tooltip		"Click this button to delete the selected certificate">
+<!ENTITY keymgr.scepclient.form.recipient.cert.label		"Recipient RA/CA Certificate">
+
+<!ENTITY keymgr.scepclient.form.file.format.base64.label	"Base64">
+<!ENTITY keymgr.scepclient.form.file.format.base64.tooltip	"Check this box if the file is in Base64 format. Otherwse, it is in binary (DER) format.">
+<!ENTITY keymgr.scepclient.form.file.browse.label		"Browse">
+<!ENTITY keymgr.scepclient.form.file.browse.tooltip		"Click this button to select the output file">
+
+<!ENTITY keymgr.scepclient.wizard.cert.view.label		"View Cert">
+<!ENTITY keymgr.scepclient.wizard.cert.view.tooltip		"Click this button to view the selected certificate">
+<!ENTITY keymgr.scepclient.wizard.file.format.base64.label	"Base64">
+<!ENTITY keymgr.scepclient.wizard.file.format.base64.tooltip	"Check this box if the file is in Base64 format. Otherwse, it is in binary (DER) format.">
+<!ENTITY keymgr.scepclient.wizard.file.browse.label		"Browse">
+<!ENTITY keymgr.scepclient.wizard.file.browse.tooltip		"Click this button to select the output file">
+<!ENTITY keymgr.scepclient.wizard.scep.server.url.label		"CA's SCEP URL">
+<!ENTITY keymgr.scepclient.wizard.scep.server.url.tooltip	"Enter SCEP URL of the Certificate Authority">
+<!ENTITY keymgr.scepclient.wizard.scep.server.getcaps.label	"Show CA Caps">
+<!ENTITY keymgr.scepclient.wizard.scep.server.getcaps.tooltip	"Show CA Capabilities in a dialog window.">
+<!ENTITY keymgr.scepclient.wizard.scephttpmethod.label		"HTTP Method">
+<!ENTITY keymgr.scepclient.wizard.scephttpmethod.tooltip	"Select the HTTP method from the list">
+<!ENTITY keymgr.scepclient.wizard.scephttpmethod.get.label	"Get">
+<!ENTITY keymgr.scepclient.wizard.scephttpmethod.get.tooltip	"Append PKCS#7 SCEP Request data as URL parameter using the HTTP GET method.">
+<!ENTITY keymgr.scepclient.wizard.scephttpmethod.post.label	"Post">
+<!ENTITY keymgr.scepclient.wizard.scephttpmethod.post.tooltip	"Send the PKCS#7 SCEP Request data (message parameter) as application/binary content type using the HTTP POST method.">
+<!ENTITY keymgr.scepclient.wizard.scephttpmethod.postform.label	"Post-Form">
+<!ENTITY keymgr.scepclient.wizard.scephttpmethod.postform.tooltip	"Send the PKCS#7 SCEP Request data (message parameter) as application/x-www-form-urlencoded content type using the HTTP POST method. Non-standard - not part of SCEP IETF spec.">
+
+<!ENTITY keymgr.scepclient.msgtype.wizardpage.label		"SCEP Request Message Type">
+<!ENTITY keymgr.scepclient.msgtype.label		"Message Type">
+<!ENTITY keymgr.scepclient.msgtype.tooltip	"SCEP Message Type">
+<!ENTITY keymgr.scepclient.msgtype.menuList.tooltip "Select the SCEP Message Type from the list">
+<!ENTITY keymgr.scepclient.msgtype.GetCACert.label	"Get CA Cert">
+<!ENTITY keymgr.scepclient.msgtype.PKCSReq.label	"PKCS#10 based SCEP Certificate Request">
+<!ENTITY keymgr.scepclient.msgtype.GetCertInitial.label		"Get Initial (Pending) Cert">
+<!ENTITY keymgr.scepclient.msgtype.GetCert.label	"Get Cert">
+<!ENTITY keymgr.scepclient.msgtype.GetCRL.label	"Get CRL">
+<!ENTITY keymgr.scepclient.msgtype.GetCRL.tooltip "Use browser's OCSP capability">
+<!ENTITY keymgr.scepclient.msgtype.CertRep.label	"Certificate Response">
+<!ENTITY keymgr.scepclient.msgtype.wizardpage.next.GetCACert.label		"Start GetCA Cert Request">
+<!ENTITY keymgr.scepclient.msgtype.wizardpage.next.PKCSReq.label		"Start New SCEP Cert Request">
+<!ENTITY keymgr.scepclient.msgtype.wizardpage.next.GetCertInitial.label 	"Start GetCertIntial SCEP Request">
+<!ENTITY keymgr.scepclient.msgtype.wizardpage.next.GetCert.label		"Start GetCert SCEP Request">
+<!ENTITY keymgr.scepclient.msgtype.wizardpage.next.GetCRL.label		"Start GetCRL SCEP Request">
+
+<!ENTITY keymgr.scepclient.pkcsreq.user.wizardpage.label	"User X509 Certificate">
+<!ENTITY keymgr.scepclient.pkcsreq.user.wizardpage.next.label	"Generate PKCS#10 CSR">
+<!ENTITY keymgr.scepclient.pkcsreq.user.inputparams.label	"User Certificate">
+<!ENTITY keymgr.scepclient.pkcsreq.user.cert.renew.label	"Renew CA-Signed Certificate">
+<!ENTITY keymgr.scepclient.pkcsreq.user.cert.renew.tooltip	"Check this if you would like to renew an existing signed certificate">
+<!ENTITY keymgr.scepclient.pkcsreq.user.cert.label		"User Certificate ">
+<!ENTITY keymgr.scepclient.pkcsreq.user.cert.tooltip		"Select the certificate from the list. The selected certificate must be enabled for following key-usages : EmailRecipient, EmailSigner. You can verify usage info in the certificate viewer. Click 'View Cert' to open the certificate viewer.">
+<!ENTITY keymgr.scepclient.pkcsreq.user.cert.menulist.tooltip		"Select the certificate from the list">
+<!ENTITY keymgr.scepclient.pkcsreq.user.cert.view.label			"View Cert">
+<!ENTITY keymgr.scepclient.pkcsreq.user.cert.view.tooltip		"Click this button to view the selected user certificate">
+<!ENTITY keymgr.scepclient.pkcsreq.user.cert.subjdn.label		"Subject DN">
+<!ENTITY keymgr.scepclient.pkcsreq.user.cert.create.label		"Create New Cert">
+<!ENTITY keymgr.scepclient.pkcsreq.user.cert.create.simple.label	"Create Cert Simple">
+<!ENTITY keymgr.scepclient.pkcsreq.user.cert.create.advanced.label 	"Create Cert Advanced">
+<!ENTITY keymgr.scepclient.pkcsreq.user.certreq.challengepw.label	"Challenge Password">
+<!ENTITY keymgr.scepclient.pkcsreq.user.certreq.challengepw.tooltip	"Challenge password attribute for PKCS#10 that can be used for out-of-band authentication for enrollment request.">
+<!ENTITY keymgr.scepclient.pkcsreq.user.certreq.avdevprofiles.tooltip	"(OPTIONAL)Avaya TrustManager-specific option for specifying device profile for unregistered user/devices. The value of this option is prepened to the challenge passpword if it is specified. By default, this device profile is not displayed. Use the 'keymgr.scepclient.avdevprofile.enabled' preference to enable it.">
+<!ENTITY keymgr.scepclient.pkcsreq.user.certreq.avdevprofile.none.label	"None">
+<!ENTITY keymgr.scepclient.pkcsreq.user.certreq.avdevprofile.inouttls.label	"INBOUND_OUTBOUND_TLS">
+<!ENTITY keymgr.scepclient.pkcsreq.user.certreq.avdevprofile.intls.label	"INBOUND_TLS">
+<!ENTITY keymgr.scepclient.pkcsreq.user.certreq.avdevprofile.outtls.label	"OUTBOUND_TLS">
+
+<!ENTITY keymgr.scepclient.pkcsreq.user.challengepw.retrieve.label	"Retrieve Challenge Password">
+<!ENTITY keymgr.scepclient.pkcsreq.user.challengepw.retrieve.tooltip	"Click this button to retrieve Challenge Password from the encrollment server - need user-id/password for login to server.">
+<!ENTITY keymgr.scepclient.pkcsreq.user.certreq.label			"CSR File">
+<!ENTITY keymgr.scepclient.pkcsreq.user.certreq.file.label		"CSR File Path">
+<!ENTITY keymgr.scepclient.pkcsreq.user.csr.file.browse.label	"Browse">
+<!ENTITY keymgr.scepclient.pkcsreq.user.csr.file.generate.label	"Generate CSR">
+
+<!ENTITY keymgr.scepclient.pkcsreq.csr.wizardpage.label		"Certificate Sigining Request (PKCS#10)">
+<!ENTITY keymgr.scepclient.pkcsreq.csr.wizardpage.next.label		"Select CA Certificate">
+<!ENTITY keymgr.scepclient.pkcsreq.csr.label			"CSR File">
+<!ENTITY keymgr.scepclient.pkcsreq.csr.file.label		"CSR File Name">
+
+
+<!ENTITY keymgr.scepclient.pkcsreq.issuer.wizardpage.label	"Cetificate Sigining Authority">
+<!ENTITY keymgr.scepclient.pkcsreq.issuer.cert.label		"CA Certificate">
+<!ENTITY keymgr.scepclient.pkcsreq.issuer.inputparams.label	"SCEP Recipient Certificate">
+<!ENTITY keymgr.scepclient.pkcsreq.issuer.cert.label		"CA Certificate">
+<!ENTITY keymgr.scepclient.pkcsreq.issuer.cert.tooltip		"Select the CA cert from the list">
+<!ENTITY keymgr.scepclient.pkcsreq.issuer.cert.subjdn.label	"Subject DN">
+<!ENTITY keymgr.scepclient.pkcsreq.issuer.recipient.cert.label	"SCEP Recipient Cert">
+<!ENTITY keymgr.scepclient.pkcsreq.issuer.recipient.cert.tooltip "Select the SCEP recipient cert from the list">
+<!ENTITY keymgr.scepclient.pkcsreq.issuer.recipient.isra.label	"Send request to RA">
+<!ENTITY keymgr.scepclient.pkcsreq.issuer.recipient.isra.tooltip	"Check this box if you want send the SCEP cert enrollment request to the RA insead of CA">
+<!ENTITY keymgr.scepclient.pkcsreq.issuer.server.url.label	"CA's SCEP URL">
+<!ENTITY keymgr.scepclient.pkcsreq.issuer.server.url.tooltip	"Enter SCEP URL of the Certificate Authority">
+<!ENTITY keymgr.scepclient.pkcsreq.issuer.server.getcaps.label	"Show CA Caps">
+<!ENTITY keymgr.scepclient.pkcsreq.issuer.server.getcaps.tooltip	"Show CA Capabilities in a dialog window.">
+<!ENTITY keymgr.scepclient.pkcsreq.issuer.wizardpage.next.label	"Select CA Certificate">
+
+<!ENTITY keymgr.scepclient.pkcsreq.scepcsrparams.wizardpage.label		"Input parameters for SCEP PKCS Request Message">
+<!ENTITY keymgr.scepclient.pkcsreq.scepcsrparams.param.label		"SCEP Request Parameters">
+<!ENTITY keymgr.scepclient.pkcsreq.scepcsrparams.cert.label		"User Certificate ">
+<!ENTITY keymgr.scepclient.pkcsreq.scepcsrparams.user.cert.label	"User Certificate ">
+<!ENTITY keymgr.scepclient.pkcsreq.scepcsrparams.recipient.cert.label	"SCEP Recipient Cert">
+<!ENTITY keymgr.scepclient.pkcsreq.scepcsrparams.recipient.isra.label	"Is RA?">
+<!ENTITY keymgr.scepclient.pkcsreq.scepcsrparams.recipient.isra.tooltip	"SCEP request message recipient type: RA or CA.">
+<!ENTITY keymgr.scepclient.pkcsreq.scepcsrparams.pkcs10.file.label	"CSR File Name">
+<!ENTITY keymgr.scepclient.pkcsreq.scepcsrparams.file.label		"SCEP Request PKCS#7 File Name">
+<!ENTITY keymgr.scepclient.pkcsreq.scepcsrparams.file.format.label	"Base64">
+<!ENTITY keymgr.scepclient.pkcsreq.scepcsrparams.file.browse.label	"Browse">
+<!ENTITY keymgr.scepclient.pkcsreq.scepcsrparams.file.generate.label	"Generate SCEP Request">
+<!ENTITY keymgr.scepclient.pkcsreq.scepcsrparams.hashAlgName.label	"Hash Algorithm">
+<!ENTITY keymgr.scepclient.pkcsreq.scepcsrparams.wizardpage.next.label	"Generate SCEP Request Message">
+<!ENTITY keymgr.scepclient.pkcsreq.scepcsrparams.reqmsg.label		"SCEP Request Message">
+
+
+<!ENTITY keymgr.scepclient.form.scep.csr.param.label		"SCEP Request Parameters">
+<!ENTITY keymgr.scepclient.form.scep.csr.cert.label		"User Certificate ">
+<!ENTITY keymgr.scepclient.form.scep.csr.user.cert.label	"User Certificate ">
+<!ENTITY keymgr.scepclient.form.scep.csr.recipient.cert.label	"SCEP Recipient Cert">
+<!ENTITY keymgr.scepclient.form.scep.recipient.cert.label	"SCEP Recipient Cert">
+<!ENTITY keymgr.scepclient.form.scep.csr.recipient.isra.label	"Is RA?">
+<!ENTITY keymgr.scepclient.form.scep.csr.recipient.isra.tooltip	"SCEP request message recipient type: RA or CA.">
+<!ENTITY keymgr.scepclient.form.scep.csr.pkcs10.file.label	"CSR File Name">
+<!ENTITY keymgr.scepclient.form.scep.csr.file.label		"SCEP Request PKCS#7 File Name">
+<!ENTITY keymgr.scepclient.form.scep.csr.file.format.label	"Base64">
+<!ENTITY keymgr.scepclient.form.scep.csr.file.browse.label	"Browse">
+<!ENTITY keymgr.scepclient.form.scep.csr.file.generate.label	"Generate SCEP Request">
+
+<!ENTITY keymgr.scepclient.form.scep.req.label			"SCEP Request Message">
+<!ENTITY keymgr.scepclient.scepreqmsg.label		"SCEP Request Message">
+<!ENTITY keymgr.scepclient.scepreqmsg.type.label		"Message Type">
+<!ENTITY keymgr.scepclient.scepreqmsg.type.tooltip	"SCEP Message Type">
+<!ENTITY keymgr.scepclient.scepreqmsg.recipient.cert.label	"SCEP Recipient Cert">
+<!ENTITY keymgr.scepclient.scepreqmsg.file.label		"SCEP Req PKCS#7 File">
+<!ENTITY keymgr.scepclient.scepreqmsg.file.format.label	"Base64">
+<!ENTITY keymgr.scepclient.scepreqmsg.file.browse.label	"Browse">
+<!ENTITY keymgr.scepclient.scepreqmsg.transactionId.label	"Transacton ID">
+<!ENTITY keymgr.scepclient.scepreqmsg.hashAlgName.label	"Hash Algorithm">
+<!ENTITY keymgr.scepclient.scepreqmsg.file.generate.label	"Generate SCEP Request">
+<!ENTITY keymgr.scepclient.scepreqmsg.resp.label		"SCEP Response Message">
+<!ENTITY keymgr.scepclient.scepreqmsg.resp.file.label	"SCEP Response(PKCS7)">
+
+<!ENTITY keymgr.scepclient.form.scep.req.file.label		"SCEP Req PKCS#7 File">
+<!ENTITY keymgr.scepclient.form.scep.req.file.format.label	"Base64">
+<!ENTITY keymgr.scepclient.form.scep.req.file.browse.label	"Browse">
+<!ENTITY keymgr.scepclient.form.scep.req.transactionId.label	"Transacton ID">
+<!ENTITY keymgr.scepclient.form.scep.req.hashAlgName.label	"Hash Algorithm">
+<!ENTITY keymgr.scepclient.form.scep.req.hashAlgName.menulist.tooltip	"Select Hash Algorithm of PKCS#7 Signed Data">
+<!ENTITY keymgr.scepclient.form.scep.req.hashAlgName.md2.label	"MD2">
+<!ENTITY keymgr.scepclient.form.scep.req.hashAlgName.md5.label	"MD5">
+<!ENTITY keymgr.scepclient.form.scep.req.hashAlgName.sha1.label "SHA1">
+<!ENTITY keymgr.scepclient.form.scep.req.hashAlgName.sha256.label	"SHA256">
+<!ENTITY keymgr.scepclient.form.scep.req.hashAlgName.sha384.label	"SHA384">
+<!ENTITY keymgr.scepclient.form.scep.req.hashAlgName.sha512.label	"SHA512">
+<!ENTITY keymgr.scepclient.form.scep.req.file.generate.label	"Generate SCEP Request">
+
+<!ENTITY keymgr.scepclient.form.scep.server.http.method.label	"HTTP Method">
+<!ENTITY keymgr.scepclient.form.scep.server.http.method.tooltip "Select the HTTP method from the list">
+<!ENTITY keymgr.scepclient.form.scep.server.url.label		"CA's SCEP URL">
+<!ENTITY keymgr.scepclient.form.scep.server.url.tooltip	"Enter SCEP URL of the Certificate Authority">
+<!ENTITY keymgr.scepclient.form.scep.server.getcaps.label	"Show CA Caps">
+<!ENTITY keymgr.scepclient.form.scep.server.getcaps.tooltip	"Show CA Capabilities in a dialog window.">
+<!ENTITY keymgr.scepclient.form.scep.server.login.label	"Login">
+<!ENTITY keymgr.scepclient.form.scep.server.http.method.get.label	"Get">
+<!ENTITY keymgr.scepclient.form.scep.server.http.method.get.tooltip	"Append PKCS#7 SCEP Request data as URL parameter and PKCS#7 SCEP Request using the HTTP GET method.">
+<!ENTITY keymgr.scepclient.form.scep.server.http.method.post.label	"Post">
+<!ENTITY keymgr.scepclient.form.scep.server.http.method.post.tooltip	"Send the PKCS#7 SCEP Request data (message parameter) as 'application/binary' content type using the HTTP POST method.">
+<!ENTITY keymgr.scepclient.form.scep.server.http.method.postform.label	"Post-Form">
+<!ENTITY keymgr.scepclient.form.scep.server.http.method.postform.tooltip "Send the PKCS#7 SCEP Request data (message parameter) as application/x-www-form-urlencoded content type using the HTTP POST method. Non-standard - not part of SCEP IETF spec.">
+<!ENTITY keymgr.scepclient.form.scep.server.send.label		"Send SCEP Resquest">
+
+<!ENTITY keymgr.scepclient.form.resp.msg.generator.label	"SCEP Response Handler">
+<!ENTITY keymgr.scepclient.form.scep.resp.label		"SCEP Response Message">
+<!ENTITY keymgr.scepclient.form.scep.resp.file.label		"SCEP Response(PKCS7)">
+<!ENTITY keymgr.scepclient.form.scep.resp.file.format.label	"Base64">
+<!ENTITY keymgr.scepclient.form.scep.resp.file.browse.label	"Browse">
+<!ENTITY keymgr.scepclient.form.scep.resp.cert.label		"Signed Certificate">
+<!ENTITY keymgr.scepclient.form.scep.resp.cert.file.label		"Signed Certs (PKCS7)">
+<!ENTITY keymgr.scepclient.form.scep.resp.cert.file.format.label	"Base64">
+<!ENTITY keymgr.scepclient.form.scep.resp.cert.file.browse.label	"Browse">
+<!ENTITY keymgr.scepclient.form.scep.resp.cert.file.import.label	"Import SCEP Response">
+
+<!ENTITY keymgr.scepclient.wizard.title			"SCEP Client Wizard">
+<!ENTITY keymgr.scepclient.wizard.page.msg.type.label		"SCEP Request Message Type">
+<!ENTITY keymgr.scepclient.wizard.page.msg.type.next.GetCACert.label	"Start GetCA Cert Request">
+<!ENTITY keymgr.scepclient.wizard.page.msg.type.next.PKCSReq.label	"Start New SCEP Cert Request">
+<!ENTITY keymgr.scepclient.wizard.page.msg.type.next.GetCertInitial.label "Start GetCertIntial SCEP Request">
+<!ENTITY keymgr.scepclient.wizard.page.msg.type.next.GetCert.label	"Start GetCert SCEP Request">
+<!ENTITY keymgr.scepclient.wizard.page.msg.type.next.GetCRL.label	"Start GetCRL SCEP Request">
+<!ENTITY keymgr.scepclient.wizard.page.user.label		"User X509 Certificate">
+<!ENTITY keymgr.scepclient.wizard.page.user.next.label		"Generate PKCS#10 CSR">
+<!ENTITY keymgr.scepclient.wizard.page.csr.label		"Certificate Sigining Request (PKCS#10)">
+<!ENTITY keymgr.scepclient.wizard.page.csr.next.label		"Select CA Certificate">
+<!ENTITY keymgr.scepclient.wizard.page.issuer.label		"Cetificate Sigining Authority">
+<!ENTITY keymgr.scepclient.wizard.page.issuer.server.login.label "Login">
+<!ENTITY keymgr.scepclient.wizard.page.issuer.getCACertChain.label	"Get CA Cert Chain">
+<!ENTITY keymgr.scepclient.wizard.page.issuer.next.label	"Select CA Certificate">
+
+<!ENTITY keymgr.scepclient.pkcsreq.scepreqmsg.wizardpage.label		"PKCS#7 SCEP Request Message">
+<!ENTITY keymgr.scepclient.pkcsreq.scepreqmsg.wizardpage.next.label	"Send SCEP Request Message">
+
+<!ENTITY keymgr.scepclient.pkcsreq.sceprespmsg.wizardpage.label		"SCEP Response Message (PKCS#7)">
+<!ENTITY keymgr.scepclient.pkcsreq.sceprespmsg.label		"SCEP Response Message">
+<!ENTITY keymgr.scepclient.pkcsreq.sceprespmsg.file.label		"SCEP Response(PKCS7)">
+<!ENTITY keymgr.scepclient.pkcsreq.sceprespmsg.file.format.label	"Base64">
+<!ENTITY keymgr.scepclient.pkcsreq.sceprespmsg.file.browse.label	"Browse">
+<!ENTITY keymgr.scepclient.pkcsreq.sceprespmsg.cert.label		"Signed Certificate">
+<!ENTITY keymgr.scepclient.pkcsreq.sceprespmsg.cert.file.label		"Signed Certs (PKCS7)">
+<!ENTITY keymgr.scepclient.pkcsreq.sceprespmsg.cert.file.format.label	"Base64">
+<!ENTITY keymgr.scepclient.pkcsreq.sceprespmsg.cert.file.browse.label	"Browse">
+<!ENTITY keymgr.scepclient.pkcsreq.sceprespmsg.cert.file.import.label	"Import SCEP Response">
+<!ENTITY keymgr.scepclient.pkcsreq.sceprespmsg.wizardpage.next.label		"Extract Signed Certs (PKCS#7)">
+
+<!ENTITY keymgr.scepclient.pkcsreq.importcert.wizardpage.label	"Import Signed Certificates">
+<!ENTITY keymgr.scepclient.pkcsreq.importcert.wizardpage.next.label	"Import Signed Certificates">
+<!ENTITY keymgr.scepclient.pkcsreq.importcert.label		"Signed Certificate">
+<!ENTITY keymgr.scepclient.pkcsreq.importcert.file.label		"Signed Certs (PKCS7)">
+<!ENTITY keymgr.scepclient.pkcsreq.importcert.file.format.label	"Base64">
+<!ENTITY keymgr.scepclient.pkcsreq.importcert.file.browse.label	"Browse">
+<!ENTITY keymgr.scepclient.pkcsreq.importcert.file.import.label	"Import SCEP Response">
+
+
+<!ENTITY keymgr.scepclient.wizard.page.csr.send.label		"PKCS#7 SCEP Request Message">
+<!ENTITY keymgr.scepclient.wizard.page.csr.send.next.label	"Send SCEP Request Message">
+<!ENTITY keymgr.scepclient.wizard.page.resp.label		"SCEP Response Message (PKCS#7)">
+<!ENTITY keymgr.scepclient.wizard.page.resp.next.label		"Extract Signed Certs (PKCS#7)">
+
+<!ENTITY keymgr.scepclient.wizard.page.resp.import.label	"Import Signed Certificates">
+<!ENTITY keymgr.scepclient.wizard.page.resp.import.next.label	"Import Signed Certificates">
+
+<!ENTITY keymgr.scepclient.wizard.page.final.label		"Result of SCEP Request">
+<!ENTITY keymgr.scepclient.pkcsreq.final.label			"Imported X.509 Certs">
+<!ENTITY keymgr.scepclient.pkcsreq.final.cert.label		"Imported Cert">
+
+<!ENTITY keymgr.scepclient.getcacert.wizardpage.label		"Get RA/CA Certificates">
+<!ENTITY keymgr.scepclient.getcacert.inputparams.label		"Get RA/CA Certificates">
+<!ENTITY keymgr.scepclient.getcacert.msgtype.label		"SCEP Message Format">
+<!ENTITY keymgr.scepclient.getcacert.msgtype.ca.label		"CA Cert (X509)">
+<!ENTITY keymgr.scepclient.getcacert.msgtype.ca.tooltip 	"Select this option if you want to get CA cert in X.509 format as application/x-x509-ca-cert mime type">
+<!ENTITY keymgr.scepclient.getcacert.msgtype.cara.label 	"CA/RA Cert (PKCS#7)">
+<!ENTITY keymgr.scepclient.getcacert.msgtype.cara.tooltip 	"Select this option if you want to get CA-RA cert in PKCS#7 format as application/x-x509-ca-ra-cert mime type">
+<!ENTITY keymgr.scepclient.getcacert.msgtype.carachain.label 	"CA/RA Cert Chain (PKCS#7)">
+<!ENTITY keymgr.scepclient.getcacert.msgtype.carachain.tooltip 	"Select this option if you want to get CA or CA-RA cert chain in PKCS#7 format">
+<!ENTITY keymgr.scepclient.getcacert.msgtype.next.label 	"Next CA Cert">
+<!ENTITY keymgr.scepclient.getcacert.msgtype.next.tooltip 	"Select this option if you want to get the next CA or CA-RA cert in PKCS#7 fomat - all CA server many not support this option. If supported, CA capabilities will show it.">
+<!ENTITY keymgr.scepclient.getcacert.msgtype.caps.label 	"CA Capabilites">
+<!ENTITY keymgr.scepclient.getcacert.msgtype.caps.tooltip 	"Select this option if you wanted to get the capabilities of the SCEP server of the CA">
+<!ENTITY keymgr.scepclient.getcacert.caid.label 		"CA Identity">
+<!ENTITY keymgr.scepclient.getcacert.caid.tooltip 		"(OPTIONAL) CA Identity is string which is understood by the CA. If a certificate authority has multiple CA certificates this field can be used to distinguish which is required.">
+<!ENTITY keymgr.scepclient.getcacert.israfirstcert.label 	"RA's cert first in the PKCS#7 response, when it is present.">
+<!ENTITY keymgr.scepclient.getcacert.israfirstcert.tooltip	"(OPTIONAL) This is just a hint to Mozilla PSM that which type cert is being imported: server for RA or CA for CA certs. Mozilla PSM requires that we know the type of cert (user, email, server and ca) that is being imported. For response with application/x-ca-ra-cert mime type, t may contain either CA, RA or both. We expect that if the PKCS7# response contains bot then RA certifcate is going to be the first one.">
+<!ENTITY keymgr.scepclient.getcacert.param.label	"HTTP Message Param">
+<!ENTITY keymgr.scepclient.getcacert.param.tooltip	"HTTP Message Param that is going to be sent to SCEP server to request for RA/CA cert.">
+<!ENTITY keymgr.scepclient.getcacert.cmd.label		"Send Request to CA/RA">
+<!ENTITY keymgr.scepclient.getcacert.cmd.tooltip	"Use this button to send the HTTP Message for obtaining the certs from SCEP servevr. Next button will be enabled after you send atleast one message.">
+<!ENTITY keymgr.scepclient.getcacert.edittrustinfo.text		"Do not forget to edit the trust of the CA/RA cert before requesting for cert enrollment. You can edit the trust by selecting it in the certificate manager window. You can select certs for RAs by selecting the 'server' tab and certs for CAs by selecting the 'Authorities' tab.">
+
+<!ENTITY keymgr.scepclient.getcertinitial.wizardpage.label	"Select Pending Request">
+<!ENTITY keymgr.scepclient.getcertinitial.label		"Select Pending Request">
+<!ENTITY keymgr.scepclient.getcertinitial.reqid.label	"Pending Request ID">
+<!ENTITY keymgr.scepclient.getcertinitial.reqid.menulist.tooltip	"Select the one of the pending SCEP request (sent previously) from the list">
+<!ENTITY keymgr.scepclient.getcertinitial.reqid.cmd.delete.label	"Delete">
+<!ENTITY keymgr.scepclient.getcertinitial.reqid.cmd.delete.tooltip	"Click this button to delete the selected certificate request">
+<!ENTITY keymgr.scepclient.getcertinitial.params.label			"Pending Request Parameters">
+<!ENTITY keymgr.scepclient.getcertinitial.user.cert.label		"User Certificate">
+<!ENTITY keymgr.scepclient.getcertinitial.user.subject.label		"User Subject">
+<!ENTITY keymgr.scepclient.getcertinitial.receipient.cert.label		"SCEP Recipient Cert">
+<!ENTITY keymgr.scepclient.getcertinitial.receipient.subject.label	"Recipient Subject">
+<!ENTITY keymgr.scepclient.getcertinitial.transactionId.label		"Transaction ID">
+<!ENTITY keymgr.scepclient.getcertinitial.server.url.label		"SCEP Server URL">
+<!ENTITY keymgr.scepclient.getcertinitial.hashAlgName.label		"Hash Algorithm">
+<!ENTITY keymgr.scepclient.getcertinitial.hashAlgName.menu.tooltip	"Select Hash Algorithm of PKCS#7 Signed Data">
+<!ENTITY keymgr.scepclient.getcertinitial.scepreqmsg.label		"SCEP Request Message">
+<!ENTITY keymgr.scepclient.getcertinitial.scepreqmsg.file.label		"SCEP Req PKCS#7 File">
+<!ENTITY keymgr.scepclient.getcertinitial.wizardpage.next.label		"Poll SCEP Server">
+<!ENTITY keymgr.scepclient.getcertinitial.wizardpage.send.label		"Poll SCEP Server">
+<!ENTITY keymgr.scepclient.getcertinitial.wizardpage.send.next.label	"Send SCEP Request Message">
+
+<!ENTITY keymgr.scepclient.getcert.wizardpage.label			"Select Desired Certficate Parameters">
+<!ENTITY keymgr.scepclient.getcert.inputparams.label			"Get Certficate Parameters">
+<!ENTITY keymgr.scepclient.getcert.issuer.certpicker.label		"CA Certificate">
+<!ENTITY keymgr.scepclient.getcert.issuer.certpicker.tooltip		"Select the CA cert from the list">
+<!ENTITY keymgr.scepclient.getcert.recipient.isra.label			"Send request to RA">
+<!ENTITY keymgr.scepclient.getcert.recipient.isra.tooltip		"Check this box if you want send the SCEP cert enrollment request to the RA insead of CA">
+<!ENTITY keymgr.scepclient.getcert.recipient.certpicker.label		"SCEP Recipient Cert">
+<!ENTITY keymgr.scepclient.getcert.recipient.certpicker.tooltip		"Select the SCEP recipient cert from the list">
+<!ENTITY keymgr.scepclient.getcert.server.url.label			"SCEP Server URL">
+<!ENTITY keymgr.scepclient.getcert.server.url.tooltip			"Enter SCEP URL of the Certificate Authority">
+<!ENTITY keymgr.scepclient.getcert.self.label				"Your Cert">
+<!ENTITY keymgr.scepclient.getcert.self.tooltip				"Check this box if you want to get your previously issued certficate; If you do not choose this option,\nthen you will be restricted to use only certificates issued by the selected CA for signing.">
+<!ENTITY keymgr.scepclient.getcert.serialNo.label			"Certficate Serial Number">
+<!ENTITY keymgr.scepclient.getcert.serialNo.tooltip			"Enter the serial number of the desired certificate (your or others) issued by the selected CA; Add '0x' in the front if the number is in hexadecimal format.">
+<!ENTITY keymgr.scepclient.getcert.user.certpicker.label		"Signing Cert (user)">
+<!ENTITY keymgr.scepclient.getcert.user.certpicker.tooltip		"Select the SCEP message signing certificate from the list">
+<!ENTITY keymgr.scepclient.getcert.hashAlgName.label			"Hash Algorithm">
+<!ENTITY keymgr.scepclient.getcert.scepreqmsg.label			"SCEP Request Message">
+<!ENTITY keymgr.scepclient.getcert.scepreqmsg.file.label		"SCEP Req PKCS#7 File">
+<!ENTITY keymgr.scepclient.getcert.wizardpage.next.label		"Generate SCEP Request Message">
+<!ENTITY keymgr.scepclient.getcert.wizardpage.send.label		"Send Request">
+
+<!ENTITY keymgr.scepclient.wizard.page.getCRL.label			"Select CA for CRL">
+<!ENTITY keymgr.scepclient.wizard.page.getCRL.send.label		"Poll CRL Request">
+<!ENTITY keymgr.scepclient.wizard.page.error.label			"SCEP Messaging Error">
+
+<!ENTITY keymgr.scepclient.signedcert.exists.dialog.title	"Signed User Cert Exists Notification">
+<!ENTITY keymgr.scepclient.param.win.title			"SCEP Client - Parameters">
+
+<!ENTITY keymgr.scepclient.basic.win.title			"SCEP Client - Basic Tool">
+<!ENTITY keymgr.scepclient.basic.tab.pkcsreq.label		"PKCSReq">
+<!ENTITY keymgr.scepclient.basic.cmd.enroll.label		"Enroll Cert">
+<!ENTITY keymgr.scepclient.basic.cmd.help.label			"Help">
+<!ENTITY keymgr.scepclient.basic.cmd.close.label		"Close">
+<!ENTITY keymgr.scepclient.basic.cmd.cancel.label		"Cancel">
+<!ENTITY keymgr.scepclient.basic.scepserver.dest.label		"SCEP Recipient">
+<!ENTITY keymgr.scepclient.basic.scepserver.url.label		"SCEP URL">
+<!ENTITY keymgr.scepclient.basic.scepserver.dest.ca.label	"CA">
+<!ENTITY keymgr.scepclient.basic.scepserver.dest.ca.tooltip	"Send request to CA">
+<!ENTITY keymgr.scepclient.basic.scepserver.dest.ra.label	"RA">
+<!ENTITY keymgr.scepclient.basic.scepserver.dest.ra.tooltip	"Send request to RA">
+<!ENTITY keymgr.scepclient.basic.scepserver.url.tooltip		"Enter the SCEP URL for CA or RA">
+<!ENTITY keymgr.scepclient.basic.scepserver.caid.label 		"CA Identity">
+<!ENTITY keymgr.scepclient.basic.scepserver.caid.tooltip 	"(OPTIONAL) CA Identity is string which is understood by the CA. If a certificate authority has multiple CA certificates this field can be used to distinguish which is required.">
+<!ENTITY keymgr.scepclient.basic.scepserver.downloadcert.label	"Download CA Cert">
+<!ENTITY keymgr.scepclient.basic.scepserver.downloadcert.tooltip	"Download CA Cert">
+<!ENTITY keymgr.scepclient.basic.scepserver.getcaps.label	"Get CA Capabilities">
+<!ENTITY keymgr.scepclient.basic.scepserver.getcaps.tooltip	"Get CA Capabilities">
+
+<!ENTITY keymgr.scepclient.basic.scepserver.ca.cert.label	"CA Certificate">
+<!ENTITY keymgr.scepclient.basic.scepserver.ca.cert.tooltip	"X.509 certificate of CA. If this certifcate is inteneded recipient of SCEP message then certificate must be enabled for following key-usages : EmailRecipient also.">
+<!ENTITY keymgr.scepclient.basic.scepserver.isra.label		"Send request to RA">
+<!ENTITY keymgr.scepclient.basic.scepserver.isra.tooltip	"Check this box if you want send the SCEP cert enrollment request to the RA insead of CA">
+<!ENTITY keymgr.scepclient.basic.scepserver.recipient.cert.label		"SCEP Recipient Cert">
+<!ENTITY keymgr.scepclient.basic.scepserver.recipient.cert.tooltip		"Certificate of RA for SCEP based enrollment. The certificate must be signed by the CA cert selected above. Certifcate must be enabled for following key-usages :  EmailRecipient, i.e., the certificate can be used for encryption.">
+<!ENTITY keymgr.scepclient.basic.scepserver.recipient.filterwithca.label	"List CA-Signed Certs Only">
+<!ENTITY keymgr.scepclient.basic.scepserver.recipient.filterwithca.tooltip	"Only list server (recipient RA) certs signed by the selected CA">
+<!ENTITY keymgr.scepclient.basic.hashAlgName.label		"Hash Algorithm">
+<!ENTITY keymgr.scepclient.basic.scephttpmethod.label		"HTTP Method">
+<!ENTITY keymgr.scepclient.basic.user.cert.label		"User Certificate ">
+<!ENTITY keymgr.scepclient.basic.user.cert.tooltip		"Select the certificate from the list. The selected certificate must be enabled for following key-usages : EmailRecipient, EmailSigner. You can verify usage info in the certificate viewer. Click 'View Cert' to open the certificate viewer.">
+<!ENTITY keymgr.scepclient.basic.user.cert.menulist.tooltip	"Select the certificate from the list">
+<!ENTITY keymgr.scepclient.basic.user.cert.view.label		"View Cert">
+<!ENTITY keymgr.scepclient.basic.user.cert.view.tooltip		"Click this button to view the selected user certificate">
+<!ENTITY keymgr.scepclient.basic.user.cert.create.label		"Create New Cert">
+<!ENTITY keymgr.scepclient.basic.user.cert.create.simple.label	"Create Cert Simple">
+<!ENTITY keymgr.scepclient.basic.user.cert.create.advanced.label "Create Cert Advanced">
+<!ENTITY keymgr.scepclient.basic.user.challengepw.label		"Challenge Password">
+<!ENTITY keymgr.scepclient.basic.user.challengepw.tooltip	"Challenge password attribute for PKCS#10 that can be used for out-of-band authentication for enrollment request.">
+<!ENTITY keymgr.scepclient.basic.user.challengepw.retrieve.label	"Retrieve Challenge Password">
+<!ENTITY keymgr.scepclient.basic.user.challengepw.retrieve.tooltip	"Retrieve Challenge Password">
+<!ENTITY keymgr.scepclient.basic.user.signedcert.certitem.label	"CA-signed Cert">
+<!ENTITY keymgr.scepclient.basic.user.signedcert.certitem.view.tooltip	"Click this button to view the enrolled CA-signed certificate">
+
+<!ENTITY keymgr.scepclient.createcert.subject.dialog.title	"Subject Dialog">
+<!ENTITY keymgr.scepclient.createcert.simple.dialog.title	"Create Cert Simple - Dialog">
+<!ENTITY keymgr.scepclient.createcert.subject.label		"Subject">
+<!ENTITY keymgr.scepclient.createcert.alias.label		"Alias: ">
+<!ENTITY keymgr.scepclient.createcert.alias.tooltip		"Certificate alias for the newly generate key and self-signed cert - must be unique">
+<!ENTITY keymgr.scepclient.createcert.subjectdn.label		"Cert Subject DN">
+<!ENTITY keymgr.scepclient.createcert.subjectdn.format.label	"Create">
+<!ENTITY keymgr.scepclient.createcert.subjectdn.format.tooltip	"Use a dialog window to format the subject DN.">
+<!ENTITY keymgr.scepclient.createcert.subjectdn.tooltip		"Distingusihed name of the certificate to be created - example: 'cn=xxx[,ou=orgu1,o=org1,c=us]'">
+<!ENTITY keymgr.scepclient.createcert.keytype.label		"Key Type">
+<!ENTITY keymgr.scepclient.createcert.keytype.tooltip		"Key Type">
+<!ENTITY keymgr.scepclient.createcert.keysize.label		"Key Size">
+<!ENTITY keymgr.scepclient.createcert.keysize.tooltip		"Key Size">
+<!ENTITY keymgr.scepclient.createcert.sigalg.label		"Signature Algorithm">
+<!ENTITY keymgr.scepclient.createcert.sigalg.tooltip		"Signature Algorithm.">
+<!ENTITY keymgr.scepclient.createcert.validitydays.label	"Validity in Days">
+<!ENTITY keymgr.scepclient.createcert.validitydays.tooltip	"Validity in Days.">
+<!ENTITY keymgr.scepclient.createcert.expireson.label		"Expires On">
+<!ENTITY keymgr.scepclient.createcert.expireson.tooltip		"Expires On.">
+
+<!ENTITY keymgr.scepclient.challengepw.dialog.title		"Get Challenge Password - Dialog">
+<!ENTITY keymgr.scepclient.challengepw.url.label		"SCEP Challenge PW URL">
+<!ENTITY keymgr.scepclient.challengepw.url.tooltip		"SCEP Challenge PW URL">
+<!ENTITY keymgr.scepclient.challengepw.authtype.label		"Authentication Type">
+<!ENTITY keymgr.scepclient.challengepw.authtype.tooltip		"Authentication Type">
+<!ENTITY keymgr.scepclient.challengepw.authtype.none.label	"None">
+<!ENTITY keymgr.scepclient.challengepw.authtype.basic.label	"Basic">
+<!ENTITY keymgr.scepclient.challengepw.authtype.form.label	"Form">
+<!ENTITY keymgr.scepclient.challengepw.username.label		"User Name">
+<!ENTITY keymgr.scepclient.challengepw.username.tooltip		"User Name">
+<!ENTITY keymgr.scepclient.challengepw.userpassword.label	"User Password">
+<!ENTITY keymgr.scepclient.challengepw.userpassword.tooltip	"User Password">
+<!ENTITY keymgr.scepclient.challengepw.userpassword.save.label	"Save Password">
+<!ENTITY keymgr.scepclient.challengepw.userpassword.save.tooltip "Save Password for URl/User-Name combination">
+<!ENTITY keymgr.scepclient.challengepw.value.label		"Challenge PW">
+<!ENTITY keymgr.scepclient.challengepw.value.tooltip		"Challenge PW">
+<!ENTITY keymgr.scepclient.challengepw.cmd.login.label		"Get Challenge Password">
+
+<!ENTITY keymgr.changepw.fips.compatible.password.tooltip		"Enter FIPS compatible password. The password must be at least seven characters long. The password must consist of characters from three or more character classes: digits (0-9), ASCII lowercase letters, ASCII uppercase letters, ASCII non-alphanumeric (such as space and punctuation marks), and non-ASCII characters. For more info: http://csrc.nist.gov/groups/STM/cmvp/documents/140-1/140sp/140sp814.pdf.">
+<!ENTITY keymgr.changepw.fips.compatible.validate.label			"Is Password FIPS Compatible?">
+<!ENTITY keymgr.changepw.fips.compatible.validate.password.label	"Yes">
+<!ENTITY keymgr.changepw.fips.compatible.validate.password.tooltip	"If checked, it imples that passowrd is FIPS compatible i.e., the password is at least seven characters long and contains characters from three or more character classes: digits (0-9), ASCII lowercase letters, ASCII uppercase letters, ASCII non-alphanumeric (such as space and punctuation marks), and non-ASCII characters.">
+<!ENTITY keymgr.changepw.fips.compatible.length.label		"Length &gt;= 7">
+<!ENTITY keymgr.changepw.fips.compatible.length.tooltip		"If checked, it imples that password length class requirement for FIPS compatible password is met. FIPS compatible password must be at least seven characters long.">
+<!ENTITY keymgr.changepw.fips.compatible.lowercase.label	"Lowercase">
+<!ENTITY keymgr.changepw.fips.compatible.lowercase.tooltip	"If checked, it imples that lowercase class requirement for FIPS compatible password is met.">
+<!ENTITY keymgr.changepw.fips.compatible.uppercase.label	"Uppercase">
+<!ENTITY keymgr.changepw.fips.compatible.uppercase.tooltip	"If checked, it imples that uppeercase class requirement for FIPS compatible password is met. If an ASCII uppercase letter is the first character of the password, the uppercase letter is not counted toward its character class.">
+<!ENTITY keymgr.changepw.fips.compatible.number.label		"Digit">
+<!ENTITY keymgr.changepw.fips.compatible.number.tooltip		"If checked, it imples that digit class requirement for FIPS compatible password is met. If a digit is the last character of the password, the digit is
+not counted toward its character class.">
+<!ENTITY keymgr.changepw.fips.compatible.symbol.label		"Symbol">
+<!ENTITY keymgr.changepw.fips.compatible.symbol.tooltip		"If checked, it imples that non-alphanumeric requirement for FIPS compatible password is met.">
+<!ENTITY keymgr.changepw.fips.compatible.nonascii.label		"Non-ASCII">
+<!ENTITY keymgr.changepw.fips.compatible.nonascii.tooltip	"If checked, it imples that non-ASCII requirement for FIPS compatible password is met (Not yet implemented)">
+
+<!ENTITY keymgr.certpicker.dialog.win.title			"Certificate Selector Dialog">
+<!ENTITY keymgr.certpicker.menu.tooltip				"Select the certificate from the list">
+<!ENTITY keymgr.certpicker.cert.view.label			"View Cert">
+<!ENTITY keymgr.certpicker.cert.view.tooltip			"Click this button to view the selected certificate">
+
+
+<!ENTITY keymgr.genkeycsr.format.subject.dialog.title		"Subject Dialog">
+<!ENTITY keymgr.genkeycsr.format.subject.label			"Subject">
+
+<!ENTITY keymgr.genkeycsr.createcert.simple.dialog.title	"Create Cert Simple - Dialog">
+<!ENTITY keymgr.genkeycsr.createcert.simple.alias.label		"Alias: ">
+<!ENTITY keymgr.genkeycsr.createcert.simple.alias.tooltip		"Certificate alias for the newly generate key and self-signed cert - must be unique">
+<!ENTITY keymgr.genkeycsr.createcert.simple.subjectdn.label		"Cert Subject DN">
+<!ENTITY keymgr.genkeycsr.createcert.simple.subjectdn.format.label	"Format Subject">
+<!ENTITY keymgr.genkeycsr.createcert.simple.subjectdn.format.tooltip	"Use a dialog window to format the subject DN.">
+<!ENTITY keymgr.genkeycsr.createcert.simple.subjectdn.tooltip		"Distingusihed name of the certificate to be created - example: 'cn=xxx[,ou=orgu1,o=org1,c=us]'">
+<!ENTITY keymgr.genkeycsr.createcert.simple.keytype.label		"Key Type">
+<!ENTITY keymgr.genkeycsr.createcert.simple.keytype.tooltip		"Key Type">
+<!ENTITY keymgr.genkeycsr.createcert.simple.keysize.label		"Key Size">
+<!ENTITY keymgr.genkeycsr.createcert.simple.keysize.tooltip		"Key Size">
+<!ENTITY keymgr.genkeycsr.createcert.simple.sigalg.label		"Signature Algorithm">
+<!ENTITY keymgr.genkeycsr.createcert.simple.sigalg.tooltip		"Signature Algorithm.">
+<!ENTITY keymgr.genkeycsr.createcert.simple.validitydays.label		"Validity in Days">
+<!ENTITY keymgr.genkeycsr.createcert.simple.validitydays.tooltip	"Validity in Days.">
+<!ENTITY keymgr.genkeycsr.createcert.simple.expireson.label		"Expires On">
+<!ENTITY keymgr.genkeycsr.createcert.simple.expireson.tooltip		"Expires On.">
+
+<!ENTITY keymgr.signtext.wizard.title					"Sign Text as PKCS#7 doc (Demo)">
+<!ENTITY keymgr.signtext.file.browser.label				"Browse">
+<!ENTITY keymgr.signtext.doc.file.browser.label				"Browse">
+<!ENTITY keymgr.signtext.doc.workflow.page.label               		"Start">
+<!ENTITY keymgr.signtext.doc.workflow.label               		"Start">
+<!ENTITY keymgr.signtext.doc.finish.label               		"Sucessfully completed task">
+<!ENTITY keymgr.signtext.doc.error.label                		"Error Page">
+
+<!ENTITY keymgr.signtext.doc.input.file.label		"Input  File">
+<!ENTITY keymgr.signtext.doc.input.file.path.tooltip	"Enter the path to the output  File">
+<!ENTITY keymgr.signtext.doc.input.file.browser.tooltip	"Use this button to select the path to the input  File.">
+<!ENTITY keymgr.signtext.doc.output.file.label		"Input  File">
+<!ENTITY keymgr.signtext.doc.output.file.path.tooltip	"Enter the path to the output  File">
+<!ENTITY keymgr.signtext.doc.output.file.browser.tooltip	"Use this button to select the path to the output  File.">
+
+<!ENTITY keymgr.signtext.doc.sign.label			"Sign  Doc">
+<!ENTITY keymgr.signtext.doc.unsigned.file.label	" File">
+<!ENTITY keymgr.signtext.doc.unsigned.file.path.tooltip	"Enter the path to the Unsigned  File">
+<!ENTITY keymgr.signtext.doc.unsigned.file.browser.tooltip	"Use this button to select the path to the Unsigned  File.">
+<!ENTITY keymgr.signtext.doc.signed.file.label		"Signed  File">
+<!ENTITY keymgr.signtext.doc.signed.file.path.tooltip	"Enter the path to the Signed  File">
+<!ENTITY keymgr.signtext.doc.signed.file.browser.tooltip	"Use this button to select the path to the Signed  File.">
+<!ENTITY keymgr.signtext.doc.sign.next.label		"Sign  Doc">
+
+<!ENTITY keymgr.signtext.doc.verify.label		"Verify Signed  Doc">
+<!ENTITY keymgr.signtext.doc.verify.next.label		"Verify Signed  Doc">
+
+<!ENTITY keymgr.signtext.doc.encrypt.label		"Encrypt  Doc">
+<!ENTITY keymgr.signtext.doc.encrypt.in.file.label	" File">
+<!ENTITY keymgr.signtext.doc.encrypt.in.file.path.tooltip	"Enter the path to the plain  File">
+<!ENTITY keymgr.signtext.doc.encrypt.in.file.browser.tooltip	"Use this button to select the path to the plain  File.">
+<!ENTITY keymgr.signtext.doc.encrypt.out.file.label	"Encrypted  File">
+<!ENTITY keymgr.signtext.doc.encrypt.out.file.path.tooltip	"Enter the path to the Unencrypted  File">
+<!ENTITY keymgr.signtext.doc.encrypt.out.file.browser.tooltip	"Use this button to select the path to the Unencrypted  Doc File.">
+
+<!ENTITY keymgr.signtext.doc.encrypt.file.label		"Encrypted  File">
+<!ENTITY keymgr.signtext.doc.encrypt.file.path.tooltip	"Enter the path to the Unencrypted  File">
+<!ENTITY keymgr.signtext.doc.encrypt.file.browser.tooltip	"Use this button to select the path to the Unencrypted  Doc File.">
+
+<!ENTITY keymgr.signtext.doc.encrypt.symenc.method.label	"Doc Encryption Method">
+<!ENTITY keymgr.signtext.doc.encrypt.kek.cert.label	"KEK Encryption Cert">
+<!ENTITY keymgr.signtext.doc.encrypt.kek.cert.nickName.menulist.tooltip	"Select the KEK encryption cert from the list">
+<!ENTITY keymgr.signtext.doc.encrypt.kek.method.label	"KEK Encryption Method ">
+<!ENTITY keymgr.signtext.doc.encrypt.kek.data.label	"KEK Cypher Value">
+<!ENTITY keymgr.signtext.doc.encrypt.next.label			"Encrypt  Doc">
+
+<!ENTITY keymgr.signtext.doc.decrypt.label		"Decrypt  Doc">
+<!ENTITY keymgr.signtext.doc.decrypt.file.path.tooltip	"Enter the path to the decrypted  File">
+<!ENTITY keymgr.signtext.doc.decrypt.file.browser.tooltip	"Use this button to select the path to the decrypted  Doc File.">
+<!ENTITY keymgr.signtext.doc.decrypt.file.label		"Decrypted  File">
+<!ENTITY keymgr.signtext.doc.decrypt.next.label		"Decrypt  Doc">
+<!ENTITY keymgr.signtext.doc.finish.label		"Sucessfully completed task">
+<!ENTITY keymgr.signtext.doc.error.label		"Error Page">
+<!ENTITY keymgr.signtext.doc.file.label		" File">
+<!ENTITY keymgr.signtext.doc.file.path.tooltip	"Enter the path to the  File">
+<!ENTITY keymgr.signtext.doc.file.browser.tooltip	"Use this button to select the path to the  File.">
+
+<!ENTITY keymgr.genkeycsr.wizard.title					"Generate PKCS#10 CSR Wizard">
+<!ENTITY keymgr.genkeycsr.wizard.file.browser.label			"Browse">
+<!ENTITY keymgr.genkeycsr.wizard.cert.view.label		"View Cert">
+<!ENTITY keymgr.genkeycsr.wizard.cert.view.tooltip		"Click this button to view the selected certificate">
+<!ENTITY keymgr.genkeycsr.wizard.page.finish.label             		"Sucessfully completed task">
+<!ENTITY keymgr.genkeycsr.wizard.finish.csr.data.label    		"PKCS#10 CSR">
+<!ENTITY keymgr.genkeycsr.wizard.finish.csr.save.label    		"Save PKCS#10 CSR">
+<!ENTITY keymgr.genkeycsr.wizard.finish.csr.save.tooltip    		"Save PKCS#10 CSR data to a file.">
+<!ENTITY keymgr.genkeycsr.wizard.page.error.label              		"Error Page">
+
+<!ENTITY keymgr.genkeycsr.wizard.page.keysource.label              	"Select Key Source - New or Existing Key">
+<!ENTITY keymgr.genkeycsr.wizard.page.keysource.next.label              "Select Key Source">
+<!ENTITY keymgr.genkeycsr.wizard.keysource.label              		"Key Source">
+<!ENTITY keymgr.genkeycsr.wizard.keysource.newkey.label              	"New Key/Cert">
+<!ENTITY keymgr.genkeycsr.wizard.keysource.newkey.tooltip              	"New Key/Cert">
+<!ENTITY keymgr.genkeycsr.wizard.keysource.existingkey.label		"Existining Key">
+<!ENTITY keymgr.genkeycsr.wizard.keysource.existingkey.tooltip		"Existining Key">
+
+<!ENTITY keymgr.genkeycsr.wizard.page.newkey.label              	"Generate New Key/Certs">
+<!ENTITY keymgr.genkeycsr.wizard.page.newkey.createcert.label		"Create New Cert">
+<!ENTITY keymgr.genkeycsr.wizard.page.newkey.simple.label              	"Generate New Key/Certs - Simple Dialog">
+<!ENTITY keymgr.genkeycsr.wizard.page.newkey.advanced.label             "Generate New Key/Certs - Advanced">
+<!ENTITY keymgr.genkeycsr.wizard.page.existingkey.label              	"Generate PKCS#10 CSR Using existing keys/certs">
+<!ENTITY keymgr.genkeycsr.wizard.existingkey.label              	"Key Source">
+<!ENTITY keymgr.genkeycsr.wizard.existingkey.browser.label              "Browser Cert DB">
+<!ENTITY keymgr.genkeycsr.wizard.existingkey.browser.tooltip             "Browser Cert DB">
+<!ENTITY keymgr.genkeycsr.wizard.existingkey.external.label		"External Soft-Token">
+<!ENTITY keymgr.genkeycsr.wizard.existingkey.external.tooltip		"File-based external soft-token">
+<!ENTITY keymgr.genkeycsr.wizard.page.existingkey.browser.label         "Select Key from Browser DB">
+<!ENTITY keymgr.genkeycsr.wizard.existingkey.browser.certpicker.tooltip	"Select the certificate from the list. Click 'View Cert' to open the certificate viewer.">
+<!ENTITY keymgr.genkeycsr.wizard.page.existingkey.external.label        "Select Key from External Token">
+<!ENTITY keymgr.genkeycsr.wizard.existingkey.external.softtoken.label   "External Soft-Token">
+<!ENTITY keymgr.genkeycsr.wizard.existingkey.external.softtoken.info.text   "In order to mount the external keys/certs as soft-token, you may be prompted for password more than once. If the input file is directory for exitsing NSS soft-token, then you will be prompted 'once' for the password of the chosen soft-token device. If the input private key type is PKCS#8 or OSSL-EPK, you will be prompted 'once' for the password of the chosen encrypted private key (labeled as 'certificate backup').  For PKCS#12 file, you would be prompted for passowrd for following steps: creating a new soft-token to load the keys/certs from  PKCS#12 file, password for the newly created soft-token, password for the input PKCS#12 file. Please pay attention to the information dipalyed in the password prompts. 'Certificate backup' in the 'Password Entry Dialog' window refres to the password for the chosen encrypted private key files for all cases.">
+<!ENTITY keymgr.genkeycsr.wizard.page.existingkey.external.softtoken.label        "Select Key from External Soft Token">
+<!ENTITY keymgr.genkeycsr.wizard.page.existingkey.external.file.label        "Select Key from File based External Keystore">
+<!ENTITY keymgr.genkeycsr.wizard.page.selectedkey.label              	"Selected Key for PKCS#10 CSR">
+<!ENTITY keymgr.genkeycsr.wizard.selectedkey.cert.label           	"Selected Cert">
+<!ENTITY keymgr.genkeycsr.wizard.selectedkey.cert.tooltip           	"Selected Cert">
+<!ENTITY keymgr.genkeycsr.wizard.selectedkey.challengepw.label		"Challenge Password">
+<!ENTITY keymgr.genkeycsr.wizard.selectedkey.challengepw.tooltip	"Challenge password attribute for PKCS#10 that can be used for out-of-band authentication for enrollment request.">
+<!ENTITY keymgr.genkeycsr.wizard.selectedkey.challengepw.retrieve.label	"Retrieve Challenge Password">
+<!ENTITY keymgr.genkeycsr.wizard.selectedkey.challengepw.retrieve.tooltip	"Click this button to retrieve Challenge Password from the encrollment server - need user-id/password for login to server.">
+<!ENTITY keymgr.genkeycsr.wizard.page.yyyy.label              	"xxxx">
+<!ENTITY keymgr.genkeycsr.wizard.page.yyyy.next.label           "xxxx">
+

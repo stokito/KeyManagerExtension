@@ -1,0 +1,402 @@
+<?xml version="1.0"?>
+<!-- @(#) $Id: sshclientOptionsOverlay.xul,v 1.11 2012/10/07 17:21:11 subrata Exp $ -->
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is Avaya Labs Research, Avaya Inc. Code.
+   -
+   - The Initial Developer of the Original Code is
+   - Subrata Mazumdar, Avaya Labs Research, Avaya Inc.
+   - Portions created by the Initial Developer are Copyright (C) 2007.
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Subrata Mazumdar (mazum@avaya.com)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+
+
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://keymanager/skin/kmbindings.css" type="text/css"?>
+
+<!DOCTYPE overlay SYSTEM "chrome://keymanager/locale/sshclient.dtd">
+
+<overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+	id="keymgr.options.win.overlay.sshclient"
+	>
+
+<script type="application/x-javascript">
+<![CDATA[
+
+var SSHClientOptions = {
+
+    init : function () 
+    {
+	KeyManagerOptions.log("SSHClientOptions.init():................Start.");
+
+	var sshClientEnabledElem = document.getElementById("keymgr.sshclient.enabled.defval");
+	this.handleSSHClientEnableChange(sshClientEnabledElem);
+
+	/*
+    	var isLinux = (navigator.userAgent.indexOf("Linux") != -1);
+    	var isMac = (navigator.userAgent.indexOf("Mac") != -1);
+	*/
+    	var isWin = (navigator.userAgent.indexOf("Win") != -1);
+	KeyManagerOptions.log("SSHClientOptions.init(): isWin: " + isWin + "");
+	if (isWin) {
+	    /*
+	    SSH-Client support is not implemented for Windows OS. 
+	    Most probably it will not possible becuase OpenSSH has no 
+	    support for Windows. Unless Putty support Mozilla-NSS DB
+	    we cannot use Putty.
+	    */
+	    sshClientEnabledElem.disabled = true;
+	    return;
+	}
+
+	var sshClientUseTokenElem = document.getElementById("keymgr.sshclient.usetoken.defval");
+	this.handleUseTokenFlagChange(sshClientUseTokenElem);
+
+	KeyManagerOptions.log("SSHClientOptions.init():................End.");
+    },
+
+    handleUseTokenFlagChange : function (aUseTokenFlagElem, ev) 
+    {
+	KeyManagerOptions.log("SSHClientOptions.handleUseTokenFlagChange():................Start.");
+
+	var pk11TokenMenuElem = document.getElementById("keymgr.sshclient.pk11token.defval");
+
+	pk11TokenMenuElem.hidden = !aUseTokenFlagElem.checked;
+	if (aUseTokenFlagElem.checked) {
+	    pk11TokenMenuElem.refresh();
+	}
+
+	KeyManagerOptions.log("SSHClientOptions.handleUseTokenFlagChange():................End.");
+    },
+
+    handleSSHClientEnableChange : function (aSSHClientEnableElem, ev) 
+    {
+	KeyManagerOptions.log("SSHClientOptions.handleSSHClientEnableChange():................Start.");
+
+	var sshClientOptionsGridElem = document.getElementById("keymgr.sshclient.pref.defval.grid");
+	sshClientOptionsGridElem.hidden = !aSSHClientEnableElem.checked;
+
+	KeyManagerOptions.log("SSHClientOptions.handleSSHClientEnableChange():................End.");
+    },
+
+    handleOption1Change : function (aOption1Elem, ev) 
+    {
+	KeyManagerOptions.log("SSHClientOptions.handleOption1Change():................Start.");
+
+	KeyManagerOptions.log("SSHClientOptions.handleOption1Change():................End.");
+    },
+
+    lastMethod : function () 
+    {
+    }
+}
+
+
+]]>
+
+</script>
+
+
+    <prefpane id="keymgr.options.tabpanel.overlay.sshclient"
+    	label="SSH Client Default Values"
+	onpaneload="SSHClientOptions.init();"
+    	>
+	<preferences>
+	    <preference
+		id="keymgr.sshclient.enabled.pref"
+		name="extensions.avpki.sshclient.enabled"
+		type="bool"
+		/>
+
+	    <preference
+		id="keymgr.sshclient.shellcmdpath.pref"
+		name="extensions.avpki.sshclient.shellcmdpath"
+		type="string"
+		/>
+	    <preference
+		id="keymgr.sshclient.terminal.pref"
+		name="extensions.avpki.sshclient.terminal"
+		type="string"
+		/>
+	    <preference
+		id="keymgr.sshclient.termargs.pref"
+		name="extensions.avpki.sshclient.termargs"
+		type="string"
+		/>
+	    <preference
+		id="keymgr.sshclient.sshcommand.pref"
+		name="extensions.avpki.sshclient.sshcommand"
+		type="string"
+		/>
+	    <preference
+		id="keymgr.sshclient.sshargs.pref"
+		name="extensions.avpki.sshclient.sshargs"
+		type="string"
+		/>
+	    <preference
+		id="keymgr.sshclient.usetoken.pref"
+		name="extensions.avpki.sshclient.usetoken"
+		type="bool"
+		/>
+	    <preference
+		id="keymgr.sshclient.pk11token.pref"
+		name="extensions.avpki.sshclient.pk11token"
+		type="string"
+		/>
+	    <preference
+		id="keymgr.sshclient.certNickName.pref"
+		name="extensions.avpki.sshclient.certNickName"
+		type="string"
+		/>
+	    <preference
+		id="keymgr.sshclient.remoteHost.pref"
+		name="extensions.avpki.sshclient.remoteHost"
+		type="string"
+		/>
+	    <preference
+		id="keymgr.sshclient.remotePort.pref"
+		name="extensions.avpki.sshclient.remotePort"
+		type="string"
+		/>
+	    <preference
+		id="keymgr.sshclient.remoteUser.pref"
+		name="extensions.avpki.sshclient.remoteUser"
+		type="string"
+		/>
+	    <preference
+		id="keymgr.sshclient.sshargs.pref"
+		name="extensions.avpki.sshclient.sshargs"
+		type="string"
+		/>
+
+	    <preference
+		id="keymgr.sshclient.xxxx.pref"
+		name="extensions.avpki.sshclient.xxxx"
+		type="string"
+		/>
+
+	</preferences>
+	<groupbox>
+	    <caption>
+		    <hbox pack="start">
+  			<checkbox id="keymgr.sshclient.enabled.defval"
+			    label="&keymgr.sshclient.enabled.label;"
+			    preference="keymgr.sshclient.enabled.pref"
+			    tooltiptext="&keymgr.sshclient.enabled.tooltip;"
+			    oncommand="SSHClientOptions.handleSSHClientEnableChange(this, event);"
+			    />
+		    </hbox>
+	    </caption>
+	<grid id="keymgr.sshclient.pref.defval.grid"> 
+	    <columns>
+		<column/>
+		<column flex="1"/>
+	    </columns>
+	    <rows>
+		<row
+		    align="center"
+		    >
+		    <spacer/>
+		</row>
+
+		<row
+		    align="center"
+		    >
+		    <label control="keymgr.sshclient.shellcmdpath.defval"  value="&keymgr.sshclient.shellcmdpath.label;"/>
+		    <hbox 
+			pack="start"
+			>
+			<textbox id="keymgr.sshclient.shellcmdpath.defval"
+			    preference="keymgr.sshclient.shellcmdpath.pref"
+			    />
+		    </hbox>
+		</row>
+
+		<row
+		    align="center"
+		    >
+		    <label control="keymgr.sshclient.terminal.defval"  value="&keymgr.sshclient.terminal.label;"/>
+  		        <fileselector id="keymgr.sshclient.terminal.defval"
+			    preference="keymgr.sshclient.terminal.pref"
+			    preference-editable="true"
+			    formathidden="true"
+			    fileMode="open"
+			    filetooltiptext="&keymgr.sshclient.terminal.tooltip;"
+			    />
+		    <!--
+		    <hbox 
+			pack="start"
+			>
+		    </hbox>
+		    -->
+		</row>
+
+		<row
+		    align="center"
+		    >
+		    <label control="keymgr.sshclient.termargs.defval"  value="&keymgr.sshclient.termargs.label;"/>
+		    <textbox id="keymgr.sshclient.termargs.defval"
+			    preference="keymgr.sshclient.termargs.pref"
+			    tooltiptext="&keymgr.sshclient.termargs.tooltip;"
+			    />
+		</row>
+
+		<row
+		    align="center"
+		    >
+		    <label control="keymgr.sshclient.sshcommand.defval"  value="&keymgr.sshclient.sshcommand.label;"/>
+  		        <fileselector id="keymgr.sshclient.sshcommand.defval"
+			    preference="keymgr.sshclient.sshcommand.pref"
+			    preference-editable="true"
+			    formathidden="true"
+			    fileMode="open"
+			    filetooltiptext="&keymgr.sshclient.sshcommand.tooltip;"
+			    />
+		    <!--
+		    <hbox 
+			pack="start"
+			>
+		    </hbox>
+		    -->
+		</row>
+
+		<row
+		    align="center"
+		    >
+		    <label control="keymgr.sshclient.sshargs.defval"  value="&keymgr.sshclient.sshargs.label;"/>
+		    <textbox id="keymgr.sshclient.sshargs.defval"
+			    preference="keymgr.sshclient.sshargs.pref"
+			    tooltiptext="&keymgr.sshclient.sshargs.tooltip;"
+			    />
+		</row>
+
+		<row
+		    align="center"
+		    >
+		    <label control="keymgr.sshclient.pk11token.defval"  value="&keymgr.sshclient.pk11token.label;"/>
+		    <hbox 
+			pack="start"
+			>
+  			<checkbox id="keymgr.sshclient.usetoken.defval"
+			    label="&keymgr.sshclient.usetoken.label;"
+			    tooltiptext="&keymgr.sshclient.usetoken.tooltip;"
+			    preference="keymgr.sshclient.usetoken.pref"
+			    oncommand="SSHClientOptions.handleUseTokenFlagChange(this, event)"
+			    />
+			<tokenmenulist id="keymgr.sshclient.pk11token.defval"
+			    tooltiptext="&keymgr.sshclient.pk11token.tooltip;"
+			    preference="keymgr.sshclient.pk11token.pref"
+			    preference-editable="true"
+			    xoncommand="SSHClientOptions.handlePK11TokenMenuChange(this, event)"
+			    />
+		    </hbox>
+		</row>
+
+		<row
+		    align="center"
+		    hidden="true"
+		    >
+		    <label control="keymgr.sshclient.certNickName.defval"  value="&keymgr.sshclient.certNickName.label;"/>
+		    <hbox 
+			pack="start"
+			>
+  			<certpicker id="keymgr.sshclient.certNickName.defval"
+			    preference="keymgr.sshclient.certNickName.pref"
+			    preference-editable="true"
+			    tokentypehidden="true"
+			    certtype="user"
+			    certtypehidden="true"
+			    />
+		    </hbox>
+		</row>
+
+		<row
+		    align="center"
+		    >
+		    <label control="keymgr.sshclient.remoteHost.defval"  value="&keymgr.sshclient.remoteHost.label;"/>
+		    <hbox 
+			pack="start"
+			>
+			<textbox id="keymgr.sshclient.remoteHost.defval"
+			    preference="keymgr.sshclient.remoteHost.pref"
+			    />
+		    </hbox>
+		</row>
+
+		<row
+		    align="center"
+		    >
+		    <label control="keymgr.sshclient.remotePort.defval"  value="&keymgr.sshclient.remotePort.label;"/>
+		    <hbox 
+			pack="start"
+			>
+			<textbox id="keymgr.sshclient.remotePort.defval"
+			    preference="keymgr.sshclient.remotePort.pref"
+			    />
+		    </hbox>
+		</row>
+
+		<row
+		    align="center"
+		    >
+		    <label control="keymgr.sshclient.remoteUser.defval"  value="&keymgr.sshclient.remoteUser.label;"/>
+		    <hbox 
+			pack="start"
+			>
+			<textbox id="keymgr.sshclient.remoteUser.defval"
+			    preference="keymgr.sshclient.remoteUser.pref"
+			    />
+		    </hbox>
+		</row>
+
+		<!--
+
+		<row
+		    align="center"
+		    >
+		    <label control="keymgr.sshclient.xxxx.defval"  value="&keymgr.sshclient.xxxx.label;"/>
+		    <hbox 
+			pack="start"
+			>
+			<textbox id="keymgr.sshclient.xxxx.defval"
+			    preference="keymgr.sshclient.xxxx.pref"
+			    />
+		    </hbox>
+		</row>
+		-->
+	    </rows>
+	</grid>
+	</groupbox>
+
+    </prefpane>
+</overlay>
+

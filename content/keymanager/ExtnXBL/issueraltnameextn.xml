@@ -1,0 +1,251 @@
+<?xml version="1.0"?>
+<!-- @(#) $Id: issueraltnameextn.xml,v 1.14 2009/09/13 13:41:00 subrata Exp $ -->
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is Avaya Labs Research, Avaya Inc. Code.
+   -
+   - The Initial Developer of the Original Code is
+   - Subrata Mazumdar, Avaya Labs Research, Avaya Inc.
+   - Portions created by the Initial Developer are Copyright (C) 2007.
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Subrata Mazumdar (mazum@avaya.com)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+
+<!DOCTYPE bindings SYSTEM "chrome://keymanager/locale/keyManager.dtd">
+
+<bindings id="issueraltnameextnBindings"
+    xmlns="http://www.mozilla.org/xbl"
+    xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    xmlns:xbl="http://www.mozilla.org/xbl">
+
+    <binding id="issueraltnameextnBinding"
+	extends="chrome://keymanager/content/ExtnXBL/certextn.xml#certextnbaseBinding"
+        >
+        <!--
+        <resources>
+    	    <script type="application/x-javascript" src="chrome://keymanager/content/ExtnXBL/certextn2props.js"/>
+	    <stylesheet src="chrome://keymanager/skin/kmbindings.css"/>
+        </resources>
+        -->
+    	<!-- content, property, method and event descriptions go here -->
+    	<content>
+	    <xul:certextn anonid="certextn.stdx509extn.issueraltname"
+	        xbl:inherits="flex,captionlabel,active,activelabel,activetoolip,activePropName,mandatory,critical,criticallabel,criticaltoolip,criticalPropName,listlabel,listtooltip,rows,addlabel,addtooltip,deletelabel,deletetooltip,disabled,readonly"
+	        captionlabel="&keymgr.cert.csr.form.tab.stdx509ext.issueraltname.label;"
+		activePropName="IssuerAltName"
+		criticalPropName="IssuerAltName-crit"
+		mandatoryPropName="IssuerAltName-mandatory"
+	        >
+	        <xul:vbox flex="1">
+                    <xul:radiogroup anonid="certextn.stdx509extn.issueraltname.types"
+			certPropName="IssuerAltNameSourceRadio"
+			orient="horizontal"
+		    	onclick="getBindingParent(this).handleIssuerAltNameRadioChange(this, event);"
+		        >
+                          <xul:radio anonid="certextn.stdx509extn.issueraltname.auto"
+			      xbl:inherits="selected=auto,label=autolabel,certPropName=autoCertPropName"
+			      label="&keymgr.cert.csr.form.tab.stdx509ext.issueraltname.options.auto.label;"
+			      tooltiptext="&keymgr.cert.csr.form.tab.stdx509ext.issueraltname.options.auto.tooltip;"
+		              value="auto"
+			      certPropName="IssuerAltNameSourceRadio-auto"
+		              group="certextn.stdx509extn.issueraltname.types"/>
+                          <xul:radio anonid="certextn.stdx509extn.issueraltname.manual"
+			      xbl:inherits="selected=manual,label=manuallabel,certPropName=manualCertPropName"
+			      label="&keymgr.cert.csr.form.tab.stdx509ext.issueraltname.options.manual.label;"
+			      tooltiptext="&keymgr.cert.csr.form.tab.stdx509ext.issueraltname.options.manual.tooltip;"
+		              value="man"
+			      certPropName="IssuerAltNameSourceRadio-man"
+		              group="certextn.stdx509extn.issueraltname.types"/>
+                      </xul:radiogroup>
+			<!--
+			<xul:hbox>
+			</xul:hbox>
+			-->
+		 <xul:generalnames anonid="certextn.stdx509extn.issueraltname.list"
+		    xbl:inherits="listlabel,listtooltip,rows,addlabel,addtooltip,removelabel,removetooltip,altNameText,altNameDisplayText,numTextCertPropName,dispTextCertPropName"
+		    listtooltip="List of Issuer alternative name in string form. Use the buttons on the right to add a new item to the list or remove the selected item from the list."
+		    addtooltip="Click this button to add a new issuer alternative name to the list."
+		    removetooltip="Click this button to remove the selected issuer alternative name from the list."
+		    numTextCertPropName="IssuerAltName-text"
+		    dispTextCertPropName="IssuerAltName-display-text"
+		    debug="false"
+		    />
+	        </xul:vbox>
+	    </xul:certextn>
+    	</content>
+	<implementation>
+
+	    <field name="mBaseExtnElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certextn.stdx509extn.issueraltname");
+	    </field>
+	    <field name="mAltNameTypeGroupElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certextn.stdx509extn.issueraltname.types");
+	    </field>
+	    <field name="mAltNameTypeAutoElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certextn.stdx509extn.issueraltname.auto");
+	    </field>
+	    <field name="mAltNameTypeManualElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certextn.stdx509extn.issueraltname.manual");
+	    </field>
+	    <field name="mAltNameListElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certextn.stdx509extn.issueraltname.list");
+	    </field>
+
+	    <property name="active"
+	        onget="return this.mBaseExtnElem.active;"
+	    	onset="this.mBaseExtnElem.active = val;return val;"
+		/>
+	    <property name="critical"
+	        onget="return this.mBaseExtnElem.critical;"
+	    	onset="this.mBaseExtnElem.critical = val;return val;"
+		/>
+	    <property name="mandatory"
+	        onget="return this.mBaseExtnElem.mandatory;"
+	    	onset="this.mBaseExtnElem.mandatory = val;return val;"
+		/>
+	    <property name="readonly"
+	        onget="return this.mBaseExtnElem.readonly;"
+	    	onset="this.mBaseExtnElem.readonly = val;
+		       this.setReadonly(this.mBaseExtnElem, val);
+		       this.mAltNameListElem.readonly = val;
+		       if(!val) {this.refresh();}
+		       return val;"
+		/>
+	    <property name="disabled"
+	        onget="return this.mBaseExtnElem.disabled;"
+	    	onset="this.mBaseExtnElem.disabled = val;return val;"
+		/>
+
+
+	    <constructor>
+		<![CDATA[
+		// this.LogTrace("issueraltnameextnBinding.constructor():......................Start.\n");
+		// this.mAltNameTypeGroupElem.selectedItem = this.mAltNameTypeAutoElem;
+		this.refresh();
+		// this.LogTrace("issueraltnameextnBinding.constructor():......................End.\n");
+		]]>
+	    </constructor>
+
+	    <method name="refresh">
+	        <body>
+		<![CDATA[
+		this.handleIssuerAltNameRadioChange(this.mAltNameTypeGroupElem);
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="handleIssuerAltNameRadioChange">
+		<parameter name="issuerTypeGroupElem"/>
+		<parameter name="ev"/>
+	        <body>
+		<![CDATA[
+		if (ev) {
+		    ev.stopPropagation();
+		}
+		// this.LogDebug("handleIssuerAltNameRadioChange():issuerType: " + issuerTypeGroupElem.selectedItem.value + "\n");
+		if (issuerTypeGroupElem.selectedItem) {
+                    if (issuerTypeGroupElem.selectedItem.value == "auto") {
+    	                this.mAltNameListElem.hidden = true;
+                    }
+                    else {
+    	                this.mAltNameListElem.removeAttribute("hidden");
+                    }
+		}
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="reset">
+	        <body>
+		<![CDATA[
+		this.resetCertExtn(this.mBaseExtnElem);
+		this.mBaseExtnElem.reset();
+		this.mAltNameListElem.reset();
+
+		this.handleIssuerAltNameRadioChange(this.mAltNameTypeGroupElem);
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="toCertProps">
+		<parameter name="aCertProps"/>
+	        <body>
+		<![CDATA[
+
+		if (!this.active) {
+		    return;
+		}
+
+		this.certExtnToProps(this.mBaseExtnElem, aCertProps);
+		if (this.mAltNameTypeManualElem.selected) {
+		    this.mAltNameListElem.toCertProps(aCertProps);
+		}
+		// this.dumpProperties(aCertProps);
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="updateCertProps">
+		<parameter name="aCertProps"/>
+	        <body>
+		<![CDATA[
+		if (! this.containsAnyProperty(this.mBaseExtnElem, aCertProps)) {
+		    return;
+		}
+
+		this.reset();
+		this.updateCertExtnProps(this.mBaseExtnElem, aCertProps);
+		/*
+		if (mAltNameTypeManualElem.selected) {
+		}
+		*/
+		this.mAltNameListElem.updateCertProps(aCertProps);
+		this.refresh();
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="mergeCertProps">
+		<parameter name="aCertProps"/>
+	        <body>
+		<![CDATA[
+		this.updateCertExtnProps(this.mBaseExtnElem, aCertProps, true);
+		this.mAltNameListElem.mergeCertProps(aCertProps);
+		this.refresh();
+		]]>
+	        </body>
+	    </method>
+
+	</implementation>
+    </binding>
+
+</bindings>
+

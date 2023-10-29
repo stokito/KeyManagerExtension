@@ -1,0 +1,3304 @@
+<html xmlns:v="urn:schemas-microsoft-com:vml"
+xmlns:o="urn:schemas-microsoft-com:office:office"
+xmlns:w="urn:schemas-microsoft-com:office:word"
+xmlns:st1="urn:schemas-microsoft-com:office:smarttags"
+xmlns="http://www.w3.org/TR/REC-html40">
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<link rel=File-List href="HOWTO_SETUP_PersonalCA_files/filelist.xml">
+<link rel=Edit-Time-Data href="HOWTO_SETUP_PersonalCA_files/editdata.mso">
+<!--[if !mso]>
+<style>
+v\:* {behavior:url(#default#VML);}
+o\:* {behavior:url(#default#VML);}
+w\:* {behavior:url(#default#VML);}
+.shape {behavior:url(#default#VML);}
+</style>
+<![endif]-->
+<title>How To Configure Firefox Profile for Personal CA</title>
+<o:SmartTagType namespaceuri="urn:schemas-microsoft-com:office:smarttags"
+ name="place"/>
+<o:SmartTagType namespaceuri="urn:schemas-microsoft-com:office:smarttags"
+ name="State"/>
+<o:SmartTagType namespaceuri="urn:schemas-microsoft-com:office:smarttags"
+ name="City"/>
+<o:SmartTagType namespaceuri="urn:schemas-microsoft-com:office:smarttags"
+ name="PersonName"/>
+<!--[if gte mso 9]><xml>
+ <o:DocumentProperties>
+  <o:Author>Subrata Mazumdar</o:Author>
+  <o:Template>Normal</o:Template>
+  <o:LastAuthor>Subarata Mazumdar</o:LastAuthor>
+  <o:Revision>11</o:Revision>
+  <o:TotalTime>112</o:TotalTime>
+  <o:LastPrinted>2009-02-11T17:57:00Z</o:LastPrinted>
+  <o:Created>2009-02-12T14:17:00Z</o:Created>
+  <o:LastSaved>2009-08-18T18:27:00Z</o:LastSaved>
+  <o:Pages>1</o:Pages>
+  <o:Words>2801</o:Words>
+  <o:Characters>15972</o:Characters>
+  <o:Company>Avaya Inc.</o:Company>
+  <o:Lines>133</o:Lines>
+  <o:Paragraphs>37</o:Paragraphs>
+  <o:CharactersWithSpaces>18736</o:CharactersWithSpaces>
+  <o:Version>11.9999</o:Version>
+ </o:DocumentProperties>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:WordDocument>
+  <w:SpellingState>Clean</w:SpellingState>
+  <w:GrammarState>Clean</w:GrammarState>
+  <w:PunctuationKerning/>
+  <w:DrawingGridHorizontalSpacing>6 pt</w:DrawingGridHorizontalSpacing>
+  <w:DrawingGridVerticalSpacing>6 pt</w:DrawingGridVerticalSpacing>
+  <w:DisplayHorizontalDrawingGridEvery>0</w:DisplayHorizontalDrawingGridEvery>
+  <w:DisplayVerticalDrawingGridEvery>3</w:DisplayVerticalDrawingGridEvery>
+  <w:UseMarginsForDrawingGridOrigin/>
+  <w:ValidateAgainstSchemas>false</w:ValidateAgainstSchemas>
+  <w:SaveIfXMLInvalid>false</w:SaveIfXMLInvalid>
+  <w:IgnoreMixedContent>false</w:IgnoreMixedContent>
+  <w:AlwaysShowPlaceholderText>false</w:AlwaysShowPlaceholderText>
+  <w:DoNotUnderlineInvalidXML/>
+  <w:DoNotShadeFormData/>
+  <w:Compatibility>
+   <w:SpaceForUL/>
+   <w:BalanceSingleByteDoubleByteWidth/>
+   <w:DoNotLeaveBackslashAlone/>
+   <w:ULTrailSpace/>
+   <w:DoNotExpandShiftReturn/>
+   <w:FootnoteLayoutLikeWW8/>
+   <w:ShapeLayoutLikeWW8/>
+   <w:AlignTablesRowByRow/>
+   <w:ForgetLastTabAlignment/>
+   <w:AdjustLineHeightInTable/>
+   <w:LayoutRawTableWidth/>
+   <w:LayoutTableRowsApart/>
+   <w:UseWord97LineBreakingRules/>
+   <w:SelectEntireFieldWithStartOrEnd/>
+   <w:UseWord2002TableStyleRules/>
+  </w:Compatibility>
+  <w:BrowserLevel>MicrosoftInternetExplorer4</w:BrowserLevel>
+ </w:WordDocument>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:LatentStyles DefLockedState="false" LatentStyleCount="156">
+ </w:LatentStyles>
+</xml><![endif]--><!--[if !mso]><object
+ classid="clsid:38481807-CA0E-42D2-BF39-B33AF135CC4D" id=ieooui></object>
+<style>
+st1\:*{behavior:url(#ieooui) }
+</style>
+<![endif]-->
+<style>
+<!--
+ /* Font Definitions */
+ @font-face
+	{font-family:Wingdings;
+	panose-1:5 0 0 0 0 0 0 0 0 0;
+	mso-font-charset:2;
+	mso-generic-font-family:auto;
+	mso-font-pitch:variable;
+	mso-font-signature:0 268435456 0 0 -2147483648 0;}
+@font-face
+	{font-family:Batang;
+	panose-1:2 3 6 0 0 1 1 1 1 1;
+	mso-font-alt:\BC14\D0D5;
+	mso-font-charset:129;
+	mso-generic-font-family:auto;
+	mso-font-format:other;
+	mso-font-pitch:fixed;
+	mso-font-signature:1 151388160 16 0 524288 0;}
+@font-face
+	{font-family:"\@Batang";
+	panose-1:0 0 0 0 0 0 0 0 0 0;
+	mso-font-charset:129;
+	mso-generic-font-family:auto;
+	mso-font-format:other;
+	mso-font-pitch:fixed;
+	mso-font-signature:1 151388160 16 0 524288 0;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{mso-style-parent:"";
+	margin:0in;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";}
+h1
+	{mso-style-next:Normal;
+	margin-top:12.0pt;
+	margin-right:0in;
+	margin-bottom:3.0pt;
+	margin-left:0in;
+	mso-pagination:widow-orphan;
+	page-break-after:avoid;
+	mso-outline-level:1;
+	font-size:16.0pt;
+	font-family:Arial;
+	mso-font-kerning:16.0pt;
+	font-weight:bold;}
+h2
+	{mso-style-next:Normal;
+	margin-top:12.0pt;
+	margin-right:0in;
+	margin-bottom:3.0pt;
+	margin-left:0in;
+	mso-pagination:widow-orphan;
+	page-break-after:avoid;
+	mso-outline-level:2;
+	font-size:14.0pt;
+	font-family:Arial;
+	font-weight:bold;
+	font-style:italic;}
+h3
+	{mso-style-next:Normal;
+	margin-top:12.0pt;
+	margin-right:0in;
+	margin-bottom:3.0pt;
+	margin-left:0in;
+	mso-pagination:widow-orphan;
+	page-break-after:avoid;
+	mso-outline-level:3;
+	font-size:13.0pt;
+	font-family:Arial;
+	font-weight:bold;}
+p.MsoHeader, li.MsoHeader, div.MsoHeader
+	{margin:0in;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	tab-stops:center 3.0in right 6.0in;
+	font-size:12.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";}
+p.MsoFooter, li.MsoFooter, div.MsoFooter
+	{margin:0in;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	tab-stops:center 3.0in right 6.0in;
+	font-size:12.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";}
+span.MsoPageNumber
+	{font-family:"Times New Roman";
+	mso-ascii-font-family:"Times New Roman";
+	mso-hansi-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";}
+a:link, span.MsoHyperlink
+	{font-family:"Times New Roman";
+	mso-ascii-font-family:"Times New Roman";
+	mso-hansi-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:blue;
+	text-decoration:underline;
+	text-underline:single;}
+a:visited, span.MsoHyperlinkFollowed
+	{color:purple;
+	text-decoration:underline;
+	text-underline:single;}
+p
+	{mso-margin-top-alt:auto;
+	margin-right:0in;
+	mso-margin-bottom-alt:auto;
+	margin-left:0in;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";}
+p.StyleLeft0Firstline0, li.StyleLeft0Firstline0, div.StyleLeft0Firstline0
+	{mso-style-name:"Style Left\:  0\0022 First line\:  0\0022";
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:.75in;
+	margin-bottom:.0001pt;
+	text-indent:-.25in;
+	mso-pagination:widow-orphan;
+	mso-list:l25 level1 lfo2;
+	tab-stops:list .75in;
+	font-size:12.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";}
+span.SpellE
+	{mso-style-name:"";
+	mso-spl-e:yes;}
+span.GramE
+	{mso-style-name:"";
+	mso-gram-e:yes;}
+ /* Page Definitions */
+ @page
+	{mso-page-border-surround-header:no;
+	mso-page-border-surround-footer:no;}
+@page Section1
+	{size:8.5in 11.0in;
+	margin:1.0in 1.0in 1.0in 1.0in;
+	mso-header-margin:.5in;
+	mso-footer-margin:.5in;
+	mso-paper-source:0;}
+div.Section1
+	{page:Section1;}
+ /* List Definitions */
+ @list l0
+	{mso-list-id:-2;
+	mso-list-type:simple;
+	mso-list-template-ids:1534478856;}
+@list l0:level1
+	{mso-level-start-at:0;
+	mso-level-number-format:bullet;
+	mso-level-text:*;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:0in;
+	text-indent:0in;}
+@list l1
+	{mso-list-id:73817808;
+	mso-list-type:hybrid;
+	mso-list-template-ids:1418214528 67698703 67698689 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l1:level1
+	{mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l1:level2
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	font-family:Symbol;}
+@list l2
+	{mso-list-id:132799402;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-1227194256 67698703 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l2:level1
+	{mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l2:level2
+	{mso-level-number-format:alpha-lower;
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l3
+	{mso-list-id:153037444;
+	mso-list-type:hybrid;
+	mso-list-template-ids:1897799746 67698689 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l3:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	font-family:Symbol;}
+@list l4
+	{mso-list-id:189030299;
+	mso-list-type:hybrid;
+	mso-list-template-ids:178790428 67698689 67698691 67698693 67698689 67698691 67698693 67698689 67698691 67698693;}
+@list l4:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	font-family:Symbol;}
+@list l5
+	{mso-list-id:310837399;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-1958158656 67698689 67698691 67698693 67698689 67698691 67698693 67698689 67698691 67698693;}
+@list l5:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	font-family:Symbol;}
+@list l6
+	{mso-list-id:331493689;
+	mso-list-type:hybrid;
+	mso-list-template-ids:658525324 67698703 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l6:level1
+	{mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l6:level2
+	{mso-level-number-format:alpha-lower;
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l7
+	{mso-list-id:351030404;
+	mso-list-type:hybrid;
+	mso-list-template-ids:1840132192 -2039959454 67698691 67698693 67698689 67698691 67698693 67698689 67698691 67698693;}
+@list l7:level1
+	{mso-level-start-at:0;
+	mso-level-number-format:bullet;
+	mso-level-text:-;
+	mso-level-tab-stop:1.25in;
+	mso-level-number-position:left;
+	margin-left:1.25in;
+	text-indent:-.25in;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";}
+@list l8
+	{mso-list-id:464469370;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-2123599366 -2039959454 67698689 67698703 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l8:level1
+	{mso-level-start-at:0;
+	mso-level-number-format:bullet;
+	mso-level-text:-;
+	mso-level-tab-stop:.25in;
+	mso-level-number-position:left;
+	margin-left:.25in;
+	text-indent:-.25in;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";}
+@list l8:level2
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:.75in;
+	mso-level-number-position:left;
+	margin-left:.75in;
+	text-indent:-.25in;
+	font-family:Symbol;}
+@list l8:level3
+	{mso-level-tab-stop:99.0pt;
+	mso-level-number-position:left;
+	margin-left:99.0pt;
+	text-indent:-.25in;}
+@list l9
+	{mso-list-id:467944155;
+	mso-list-type:hybrid;
+	mso-list-template-ids:909521308 67698689 67698689 67698689 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l9:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	font-family:Symbol;}
+@list l9:level2
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	margin-left:.5in;
+	text-indent:-.25in;
+	font-family:Symbol;}
+@list l9:level3
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:117.0pt;
+	mso-level-number-position:left;
+	margin-left:117.0pt;
+	text-indent:-.25in;
+	font-family:Symbol;}
+@list l10
+	{mso-list-id:643658020;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-1500088702 -2039959454 67698689 67698703 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l10:level1
+	{mso-level-start-at:0;
+	mso-level-number-format:bullet;
+	mso-level-text:-;
+	mso-level-tab-stop:.25in;
+	mso-level-number-position:left;
+	margin-left:.25in;
+	text-indent:-.25in;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";}
+@list l10:level2
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:.75in;
+	mso-level-number-position:left;
+	margin-left:.75in;
+	text-indent:-.25in;
+	font-family:Symbol;}
+@list l10:level3
+	{mso-level-tab-stop:99.0pt;
+	mso-level-number-position:left;
+	margin-left:99.0pt;
+	text-indent:-.25in;}
+@list l11
+	{mso-list-id:650524667;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-1120220884 67698689 67698691 67698693 67698689 67698691 67698693 67698689 67698691 67698693;}
+@list l11:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	font-family:Symbol;}
+@list l11:level2
+	{mso-level-number-format:bullet;
+	mso-level-text:o;
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	font-family:"Courier New";}
+@list l12
+	{mso-list-id:671375846;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-460555546 -2039959454 67698691 67698693 67698689 67698691 67698693 67698689 67698691 67698693;}
+@list l12:level1
+	{mso-level-start-at:0;
+	mso-level-number-format:bullet;
+	mso-level-text:-;
+	mso-level-tab-stop:1.25in;
+	mso-level-number-position:left;
+	margin-left:1.25in;
+	text-indent:-.25in;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";}
+@list l13
+	{mso-list-id:681787712;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-429638050 -2039959454 67698691 67698693 67698689 67698691 67698693 67698689 67698691 67698693;}
+@list l13:level1
+	{mso-level-start-at:0;
+	mso-level-number-format:bullet;
+	mso-level-text:-;
+	mso-level-tab-stop:.75in;
+	mso-level-number-position:left;
+	margin-left:.75in;
+	text-indent:-.25in;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";}
+@list l14
+	{mso-list-id:737093665;
+	mso-list-template-ids:1509346486;}
+@list l14:level1
+	{mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l15
+	{mso-list-id:903030147;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-1577801072 67698703 67698691 67698693 67698689 67698691 67698693 67698689 67698691 67698693;}
+@list l15:level1
+	{mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l15:level2
+	{mso-level-number-format:bullet;
+	mso-level-text:o;
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	font-family:"Courier New";}
+@list l16
+	{mso-list-id:955989268;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-1617364244 67698689 67698691 67698693 67698689 67698691 67698693 67698689 67698691 67698693;}
+@list l16:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:.75in;
+	mso-level-number-position:left;
+	margin-left:.75in;
+	text-indent:-.25in;
+	font-family:Symbol;}
+@list l17
+	{mso-list-id:1063217269;
+	mso-list-type:hybrid;
+	mso-list-template-ids:1450213934 67698689 67698689 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l17:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	font-family:Symbol;}
+@list l17:level2
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	font-family:Symbol;}
+@list l18
+	{mso-list-id:1116098654;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-1154435134 67698703 67698689 67698689 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l18:level1
+	{mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l18:level2
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	margin-left:.5in;
+	text-indent:-.25in;
+	font-family:Symbol;}
+@list l18:level3
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:117.0pt;
+	mso-level-number-position:left;
+	margin-left:117.0pt;
+	text-indent:-.25in;
+	font-family:Symbol;}
+@list l19
+	{mso-list-id:1213535996;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-576036892 67698689 67698691 67698693 67698689 67698691 67698693 67698689 67698691 67698693;}
+@list l19:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	font-family:Symbol;}
+@list l20
+	{mso-list-id:1222138673;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-2028843326 67698689 67698691 67698693 67698689 67698691 67698693 67698689 67698691 67698693;}
+@list l20:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	font-family:Symbol;}
+@list l21
+	{mso-list-id:1286887794;
+	mso-list-template-ids:1932552106;}
+@list l21:level1
+	{mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l22
+	{mso-list-id:1295791262;
+	mso-list-type:hybrid;
+	mso-list-template-ids:432026012 67698703 67698689 67698703 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l22:level1
+	{mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l22:level2
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	font-family:Symbol;}
+@list l22:level3
+	{mso-level-tab-stop:117.0pt;
+	mso-level-number-position:left;
+	margin-left:117.0pt;
+	text-indent:-.25in;}
+@list l23
+	{mso-list-id:1500846466;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-1494467424 67698689 67698689 67698703 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l23:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	font-family:Symbol;}
+@list l23:level2
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	font-family:Symbol;}
+@list l23:level3
+	{mso-level-tab-stop:117.0pt;
+	mso-level-number-position:left;
+	margin-left:117.0pt;
+	text-indent:-.25in;}
+@list l24
+	{mso-list-id:1556771738;
+	mso-list-template-ids:-429638050;}
+@list l24:level1
+	{mso-level-start-at:0;
+	mso-level-number-format:bullet;
+	mso-level-text:-;
+	mso-level-tab-stop:.75in;
+	mso-level-number-position:left;
+	margin-left:.75in;
+	text-indent:-.25in;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";}
+@list l24:level2
+	{mso-level-number-format:bullet;
+	mso-level-text:o;
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	margin-left:.5in;
+	text-indent:-.25in;
+	font-family:"Courier New";}
+@list l24:level3
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0A7;
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	margin-left:1.0in;
+	text-indent:-.25in;
+	font-family:Wingdings;}
+@list l24:level4
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:1.5in;
+	mso-level-number-position:left;
+	margin-left:1.5in;
+	text-indent:-.25in;
+	font-family:Symbol;}
+@list l24:level5
+	{mso-level-number-format:bullet;
+	mso-level-text:o;
+	mso-level-tab-stop:2.0in;
+	mso-level-number-position:left;
+	margin-left:2.0in;
+	text-indent:-.25in;
+	font-family:"Courier New";}
+@list l24:level6
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0A7;
+	mso-level-tab-stop:2.5in;
+	mso-level-number-position:left;
+	margin-left:2.5in;
+	text-indent:-.25in;
+	font-family:Wingdings;}
+@list l24:level7
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:3.0in;
+	mso-level-number-position:left;
+	margin-left:3.0in;
+	text-indent:-.25in;
+	font-family:Symbol;}
+@list l24:level8
+	{mso-level-number-format:bullet;
+	mso-level-text:o;
+	mso-level-tab-stop:3.5in;
+	mso-level-number-position:left;
+	margin-left:3.5in;
+	text-indent:-.25in;
+	font-family:"Courier New";}
+@list l24:level9
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0A7;
+	mso-level-tab-stop:4.0in;
+	mso-level-number-position:left;
+	margin-left:4.0in;
+	text-indent:-.25in;
+	font-family:Wingdings;}
+@list l25
+	{mso-list-id:1595474489;
+	mso-list-type:hybrid;
+	mso-list-template-ids:498245220 -1477672000 67698703 67698693 67698689 67698691 67698693 67698689 67698691 67698693;}
+@list l25:level1
+	{mso-level-number-format:bullet;
+	mso-level-style-link:"Style Left\:  0\0022 First line\:  0\0022";
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:.75in;
+	mso-level-number-position:left;
+	margin-left:.75in;
+	text-indent:-.25in;
+	font-family:Symbol;}
+@list l25:level2
+	{mso-level-tab-stop:1.25in;
+	mso-level-number-position:left;
+	margin-left:1.25in;
+	text-indent:-.25in;}
+@list l25:level3
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0A7;
+	mso-level-tab-stop:1.75in;
+	mso-level-number-position:left;
+	margin-left:1.75in;
+	text-indent:-.25in;
+	font-family:Wingdings;}
+@list l25:level4
+	{mso-level-tab-stop:2.0in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l25:level5
+	{mso-level-tab-stop:2.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l25:level6
+	{mso-level-tab-stop:3.0in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l25:level7
+	{mso-level-tab-stop:3.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l25:level8
+	{mso-level-tab-stop:4.0in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l25:level9
+	{mso-level-tab-stop:4.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l26
+	{mso-list-id:1677070781;
+	mso-list-type:hybrid;
+	mso-list-template-ids:1758253658 67698689 67698691 67698693 67698689 67698691 67698693 67698689 67698691 67698693;}
+@list l26:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	font-family:Symbol;}
+@list l26:level2
+	{mso-level-number-format:bullet;
+	mso-level-text:o;
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	font-family:"Courier New";}
+@list l27
+	{mso-list-id:1698382703;
+	mso-list-type:hybrid;
+	mso-list-template-ids:1886828588 67698689 67698691 67698693 67698689 67698691 67698693 67698689 67698691 67698693;}
+@list l27:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	font-family:Symbol;}
+@list l27:level2
+	{mso-level-number-format:bullet;
+	mso-level-text:o;
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	font-family:"Courier New";}
+@list l28
+	{mso-list-id:1867208944;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-2129378426 67698703 67698691 67698693 67698689 67698691 67698693 67698689 67698691 67698693;}
+@list l28:level1
+	{mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l28:level2
+	{mso-level-number-format:bullet;
+	mso-level-text:o;
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	font-family:"Courier New";}
+@list l29
+	{mso-list-id:1916666086;
+	mso-list-type:hybrid;
+	mso-list-template-ids:1327262236 -2039959454 67698689 67698703 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l29:level1
+	{mso-level-start-at:0;
+	mso-level-number-format:bullet;
+	mso-level-text:-;
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";}
+@list l29:level2
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	font-family:Symbol;}
+@list l29:level3
+	{mso-level-tab-stop:117.0pt;
+	mso-level-number-position:left;
+	margin-left:117.0pt;
+	text-indent:-.25in;}
+@list l30
+	{mso-list-id:1955282655;
+	mso-list-type:hybrid;
+	mso-list-template-ids:1763354428 67698703 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l30:level1
+	{mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l30:level2
+	{mso-level-number-format:alpha-lower;
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l31
+	{mso-list-id:1965960343;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-1911368174 67698703 67698691 67698693 67698689 67698691 67698693 67698689 67698691 67698693;}
+@list l31:level1
+	{mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l31:level2
+	{mso-level-number-format:bullet;
+	mso-level-text:o;
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	font-family:"Courier New";}
+@list l32
+	{mso-list-id:2005163533;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-1552899104 67698703 67698689 67698689 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l32:level1
+	{mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l32:level2
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	margin-left:.5in;
+	text-indent:-.25in;
+	font-family:Symbol;}
+@list l32:level3
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:117.0pt;
+	mso-level-number-position:left;
+	margin-left:117.0pt;
+	text-indent:-.25in;
+	font-family:Symbol;}
+@list l33
+	{mso-list-id:2023315097;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-185587214 67698689 67698691 67698693 67698689 67698691 67698693 67698689 67698691 67698693;}
+@list l33:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	font-family:Symbol;}
+@list l34
+	{mso-list-id:2103641441;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-1667994778 67698689 -2039959454 67698703 67698689 67698691 67698693 67698689 67698691 67698693;}
+@list l34:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:.75in;
+	mso-level-number-position:left;
+	margin-left:.75in;
+	text-indent:-.25in;
+	font-family:Symbol;}
+@list l34:level2
+	{mso-level-start-at:0;
+	mso-level-number-format:bullet;
+	mso-level-text:-;
+	mso-level-tab-stop:1.25in;
+	mso-level-number-position:left;
+	margin-left:1.25in;
+	text-indent:-.25in;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";}
+@list l34:level3
+	{mso-level-tab-stop:1.75in;
+	mso-level-number-position:left;
+	margin-left:1.75in;
+	text-indent:-.25in;}
+@list l35
+	{mso-list-id:2132430583;
+	mso-list-type:hybrid;
+	mso-list-template-ids:959857060 67698689 67698689 67698689 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l35:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	font-family:Symbol;}
+@list l35:level2
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	margin-left:.5in;
+	text-indent:-.25in;
+	font-family:Symbol;}
+@list l35:level3
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:117.0pt;
+	mso-level-number-position:left;
+	margin-left:117.0pt;
+	text-indent:-.25in;
+	font-family:Symbol;}
+@list l36
+	{mso-list-id:2143383222;
+	mso-list-type:hybrid;
+	mso-list-template-ids:672549876 -2039959454 67698689 67698703 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l36:level1
+	{mso-level-start-at:0;
+	mso-level-number-format:bullet;
+	mso-level-text:-;
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";}
+@list l36:level2
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	font-family:Symbol;}
+@list l36:level3
+	{mso-level-tab-stop:117.0pt;
+	mso-level-number-position:left;
+	margin-left:117.0pt;
+	text-indent:-.25in;}
+@list l0:level1 lfo4
+	{mso-level-numbering:continue;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	mso-level-legacy:yes;
+	mso-level-legacy-indent:0in;
+	mso-level-legacy-space:0in;
+	margin-left:0in;
+	text-indent:0in;
+	font-family:Symbol;}
+ol
+	{margin-bottom:0in;}
+ul
+	{margin-bottom:0in;}
+-->
+</style>
+<!--[if gte mso 10]>
+<style>
+ /* Style Definitions */
+ table.MsoNormalTable
+	{mso-style-name:"Table Normal";
+	mso-tstyle-rowband-size:0;
+	mso-tstyle-colband-size:0;
+	mso-style-noshow:yes;
+	mso-style-parent:"";
+	mso-padding-alt:0in 5.4pt 0in 5.4pt;
+	mso-para-margin:0in;
+	mso-para-margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman";
+	mso-ansi-language:#0400;
+	mso-fareast-language:#0400;
+	mso-bidi-language:#0400;}
+</style>
+<![endif]--><!--[if gte mso 9]><xml>
+ <o:shapedefaults v:ext="edit" spidmax="6146"/>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <o:shapelayout v:ext="edit">
+  <o:idmap v:ext="edit" data="1"/>
+ </o:shapelayout></xml><![endif]-->
+</head>
+
+<body lang=EN-US link=blue vlink=purple style='tab-interval:.5in;text-justify-trim:
+punctuation'>
+
+<div class=Section1>
+
+<h1>&nbsp;</h1>
+
+<h1>How to Use KeyManager as Tool for Setting up Personal CA<span
+style='mso-spacerun:yes'>  </span></h1>
+
+<p class=MsoNormal style='mso-pagination:none;mso-layout-grid-align:none;
+text-autospace:none'><st1:PersonName w:st="on"><span style='font-family:Arial;
+ mso-bidi-font-weight:bold'>Subrata Mazumdar</span></st1:PersonName><span
+style='font-family:Arial;mso-bidi-font-weight:bold'> (mazum@avaya.com), Avaya
+Labs Research<o:p></o:p></span></p>
+
+<p class=MsoNormal style='mso-pagination:none;mso-layout-grid-align:none;
+text-autospace:none'><b><span style='font-size:10.0pt;font-family:Arial'><o:p>&nbsp;</o:p></span></b></p>
+
+<p class=MsoNormal style='mso-pagination:none;mso-layout-grid-align:none;
+text-autospace:none'><b><span style='font-size:10.0pt;font-family:Arial'><o:p>&nbsp;</o:p></span></b></p>
+
+<p>
+<b>Acknowledgement:</b>
+Thanks to Scott Rea for suggesting the 'Personal CA' idea and encouraging me to do this tool.
+</p>
+
+<p class=MsoNormal style='mso-pagination:none;mso-layout-grid-align:none;
+text-autospace:none'><b><span style='font-size:10.0pt;font-family:Arial'><o:p>&nbsp;</o:p></span></b></p>
+
+<h2>Setup Firefox Profile for <span class=SpellE>CAs</span>: </h2>
+
+<p class=MsoNormal style='mso-pagination:none;mso-layout-grid-align:none;
+text-autospace:none'><span style='font-size:10.0pt;font-family:Arial'><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoNormal style='margin-left:27.0pt;text-indent:-9.0pt;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span></span><![endif]><span
+style='font-size:10.0pt;font-family:Arial'>set MOZ_NO_REMOTE=1<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:27.0pt;text-indent:-9.0pt;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span></span><![endif]><span
+style='font-size:10.0pt;font-family:Arial'>firefox -P <o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:.5in;text-indent:-.25in;mso-pagination:
+none;mso-layout-grid-align:none;text-autospace:none'><span style='font-size:
+10.0pt;font-family:Arial'>When profile manager comes up, click the &quot;</span><span
+style='font-size:10.0pt;font-family:"Courier New"'>Create Profile</span><span
+style='font-size:10.0pt;font-family:Arial'>&quot; to create<span
+style='mso-spacerun:yes'>  </span>a new profile with name: </span><span
+class=SpellE><span style='font-size:10.0pt;font-family:"Courier New"'>AvLabsCAProfile</span></span><span
+style='font-size:10.0pt;font-family:"Courier New"'> </span><span
+style='font-size:10.0pt;font-family:Arial'><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:.5in;text-indent:-.25in;mso-pagination:
+none;mso-layout-grid-align:none;text-autospace:none'><span style='font-size:
+10.0pt;font-family:Arial'>Select the new profile name </span><span
+style='font-size:10.0pt;font-family:"Courier New"'>'<span class=SpellE>AvLabsCAProfile</span>'
+</span><span style='font-size:10.0pt;font-family:Arial'>and then click '</span><span
+style='font-size:10.0pt;font-family:"Courier New"'>Start Firefox'</span><span
+style='font-size:10.0pt;font-family:Arial'><o:p></o:p></span></p>
+
+<p class=MsoNormal style='mso-pagination:none;mso-layout-grid-align:none;
+text-autospace:none'><span style='font-size:10.0pt;font-family:Arial'><o:p>&nbsp;</o:p></span></p>
+
+<h3>Install KeyManager Add-on : </h3>
+
+<p class=MsoNormal style='mso-pagination:none;mso-layout-grid-align:none;
+text-autospace:none'><span style='font-size:10.0pt;font-family:Arial'>Go <span
+class=GramE>to :</span> </span><a
+href="https://addons.mozilla.org/en-US/firefox/addon/4471">https://addons.mozilla.org/en-US/firefox/addon/4471</a>,
+download and install the KeyManager add-on.<span style='mso-spacerun:yes'> 
+</span><span style='font-size:10.0pt;font-family:Arial'><span
+style='mso-spacerun:yes'> </span><o:p></o:p></span></p>
+
+<p class=MsoNormal style='mso-pagination:none;mso-layout-grid-align:none;
+text-autospace:none'><span style='font-size:10.0pt;font-family:"Courier New"'>Restart
+</span><span style='font-size:10.0pt;font-family:Arial'>the Firefox browser. <o:p></o:p></span></p>
+
+<p class=MsoNormal style='mso-pagination:none;mso-layout-grid-align:none;
+text-autospace:none'><span style='font-size:10.0pt;font-family:Arial'><o:p>&nbsp;</o:p></span></p>
+
+<h3>Use Case:</h3>
+
+<p class=MsoNormal style='margin-left:.5in;text-indent:-.25in;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-size:10.0pt;font-family:Arial'>Create
+Self-Signed Cert for <st1:place w:st="on"><st1:City w:st="on"><st1:City w:st="on">Root</st1:City>
+  <st1:State w:st="on">CA</st1:State></st1:City></st1:place> <o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:.5in;text-indent:-.25in;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-size:10.0pt;font-family:Arial'>Create
+Self-Signed Cert for Signing CA (Intermediate CA)<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:.5in;text-indent:-.25in;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-size:10.0pt;font-family:Arial'>Sign
+Intermediate (Signing) CA's cert by <st1:place w:st="on"><st1:City w:st="on">Root</st1:City>
+ <st1:State w:st="on">CA</st1:State></st1:place>'s cert <o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:.5in;text-indent:-.25in;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-size:10.0pt;font-family:Arial'>Sign
+Server's cert using <st1:place w:st="on"><st1:City w:st="on">Singing</st1:City>
+ <st1:State w:st="on">CA</st1:State></st1:place>'s cert <o:p></o:p></span></p>
+
+<p class=MsoNormal style='mso-pagination:none;mso-layout-grid-align:none;
+text-autospace:none'><span style='font-size:10.0pt;font-family:Arial'><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoNormal style='mso-pagination:none;mso-layout-grid-align:none;
+text-autospace:none'><span style='font-size:10.0pt;font-family:Arial'><o:p>&nbsp;</o:p></span></p>
+
+<h3><a name="CAProfile_CreateSelfSignedRootCA">Create Self-Signed Cert for </a><st1:place
+w:st="on"><st1:City w:st="on"><st1:City w:st="on"><span style='mso-bookmark:
+   CAProfile_CreateSelfSignedRootCA'>Root</span></st1:City><span
+  style='mso-bookmark:CAProfile_CreateSelfSignedRootCA'> <st1:State w:st="on">CA</st1:State></span></st1:City></st1:place>
+:</h3>
+
+<p class=MsoNormal style='mso-pagination:none;mso-layout-grid-align:none;
+text-autospace:none'><span style='font-size:10.0pt;font-family:Arial'><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoNormal style='margin-left:.25in;text-indent:-.25in;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-size:10.0pt;font-family:Arial'>Open
+Key Manager Dialog Window (</span><span style='font-size:10.0pt;font-family:
+"Courier New"'>Tools --&gt; Key Manager Tool Box --&gt; KeyManager</span><span
+style='font-size:10.0pt;font-family:Arial'>)<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:.25in;text-indent:-.25in;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-size:10.0pt;font-family:Arial'>Select
+the &quot;</span><span style='font-size:10.0pt;font-family:"Courier New"'>Your
+Key&quot; </span><span style='font-size:10.0pt;font-family:Arial'>tab<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:.25in;text-indent:-.25in;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-size:10.0pt;font-family:Arial'>Click
+on the &quot;</span><span style='font-size:10.0pt;font-family:"Courier New"'>Generate
+Self-Signed Cert</span><span style='font-size:10.0pt;font-family:Arial'>&quot; button
+to open dialog window for creating self-signed certificate<span
+style='mso-spacerun:yes'>  </span><o:p></o:p></span></p>
+
+<p class=MsoNormal style='mso-pagination:none;mso-layout-grid-align:none;
+text-autospace:none'><span style='font-size:10.0pt;font-family:Arial'><span
+style='mso-spacerun:yes'>       </span>The dialog window has four tabs and
+click </span><span style='font-size:10.0pt;font-family:"Courier New"'>'Advance'
+</span><span style='font-size:10.0pt;font-family:Arial'>at the top of the
+window to display all the tabs: <o:p></o:p></span></p>
+
+<p class=MsoNormal style='mso-pagination:none;mso-layout-grid-align:none;
+text-autospace:none'><span style='font-size:10.0pt;font-family:Arial'><span
+style='mso-spacerun:yes'>       </span><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:27.0pt;mso-pagination:none;mso-layout-grid-align:
+none;text-autospace:none'><span style='font-size:10.0pt;font-family:Arial'>For
+&quot;</span><span style='font-size:10.0pt;font-family:"Courier New"'>Basic
+certificate profile</span><span style='font-size:10.0pt;font-family:Arial'>&quot;
+tab:<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:45.0pt;text-indent:-9.0pt;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span></span><![endif]><span
+style='font-size:10.0pt;font-family:Arial'>Select &quot;</span><span
+style='font-size:10.0pt;font-family:"Courier New"'>Generic CA Cert Profile</span><span
+style='font-size:10.0pt;font-family:Arial'>&quot; from the &quot;</span><span
+style='font-size:10.0pt;font-family:"Courier New"'>Default Certificate Profile</span><span
+style='font-size:10.0pt;font-family:Arial'>&quot; menu list. <o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:45.0pt;text-indent:-9.0pt;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span></span><![endif]><span
+style='font-size:10.0pt;font-family:Arial'>Enter the </span><span
+style='font-size:10.0pt;font-family:"Courier New"'>common name </span><span
+style='font-size:10.0pt;font-family:Arial'>for <st1:place w:st="on"><st1:City
+ w:st="on">Root</st1:City> <st1:State w:st="on">CA</st1:State></st1:place> (<span
+class=SpellE>AvLabsRootCA</span>)<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:45.0pt;text-indent:-9.0pt;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span></span><![endif]><span
+style='font-size:10.0pt;font-family:Arial'>Enter </span><span style='font-size:
+10.0pt;font-family:"Courier New"'>org unit </span><span style='font-size:10.0pt;
+font-family:Arial'>: Avaya Labs Research CA<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:45.0pt;text-indent:-9.0pt;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span></span><![endif]><span
+style='font-size:10.0pt;font-family:Arial'>Enter </span><span style='font-size:
+10.0pt;font-family:"Courier New"'>org</span><span style='font-size:10.0pt;
+font-family:Arial'>: Avaya<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:45.0pt;text-indent:-9.0pt;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span></span><![endif]><span
+style='font-size:10.0pt;font-family:Arial'>Enter </span><span style='font-size:
+10.0pt;font-family:"Courier New"'>Locality</span><span style='font-size:10.0pt;
+font-family:Arial'>: Baskin Ridge<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:45.0pt;text-indent:-9.0pt;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span></span><![endif]><span
+style='font-size:10.0pt;font-family:Arial'>Enter </span><span style='font-size:
+10.0pt;font-family:"Courier New"'>State</span><span style='font-size:10.0pt;
+font-family:Arial'>: NJ<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:45.0pt;text-indent:-9.0pt;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span></span><![endif]><span
+style='font-size:10.0pt;font-family:Arial'>Enter </span><span style='font-size:
+10.0pt;font-family:"Courier New"'>country </span><span style='font-size:10.0pt;
+font-family:Arial'>: US<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:45.0pt;text-indent:-9.0pt;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span></span><![endif]><span
+style='font-size:10.0pt;font-family:Arial'>Use the default value for </span><span
+style='font-size:10.0pt;font-family:"Courier New"'>key type, key size and
+signing algorithm </span><span style='font-size:10.0pt;font-family:Arial'><o:p></o:p></span></p>
+
+<p class=MsoNormal style='mso-pagination:none;mso-layout-grid-align:none;
+text-autospace:none'><span style='font-size:10.0pt;font-family:Arial'><span
+style='mso-spacerun:yes'>       </span><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:27.0pt;mso-pagination:none;mso-layout-grid-align:
+none;text-autospace:none'><span style='font-size:10.0pt;font-family:Arial'>For
+&quot;</span><span style='font-size:10.0pt;font-family:"Courier New"'>X.509 v1
+Attributes</span><span style='font-size:10.0pt;font-family:Arial'>&quot;
+tab:<span style='mso-spacerun:yes'>  </span><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:45.0pt;text-indent:-9.0pt;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span></span><![endif]><span
+style='font-size:10.0pt;font-family:Arial'>Select the </span><span
+style='font-size:10.0pt;font-family:"Courier New"'>validity </span><span
+style='font-size:10.0pt;font-family:Arial'>as follows:<span
+style='mso-spacerun:yes'>  </span>use the </span><span style='font-size:10.0pt;
+font-family:"Courier New"'>default value</span><span style='font-size:10.0pt;
+font-family:Arial'><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:45.0pt;text-indent:-9.0pt;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span></span><![endif]><span
+style='font-size:10.0pt;font-family:Arial'>For serial number: use the default
+value : </span><span style='font-size:10.0pt;font-family:"Courier New"'>'auto
+generate' </span><span style='font-size:10.0pt;font-family:Arial'><o:p></o:p></span></p>
+
+<p class=MsoNormal style='mso-pagination:none;mso-layout-grid-align:none;
+text-autospace:none'><span style='font-size:10.0pt;font-family:Arial'><span
+style='mso-spacerun:yes'>   </span><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:27.0pt;mso-pagination:none;mso-layout-grid-align:
+none;text-autospace:none'><span style='font-size:10.0pt;font-family:Arial'>For
+&quot;</span><span style='font-size:10.0pt;font-family:"Courier New"'>X.509 v3
+Standard Extensions</span><span style='font-size:10.0pt;font-family:Arial'>&quot;
+tab:<span style='mso-spacerun:yes'>  </span><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:45.0pt;text-indent:-9.0pt;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span></span><![endif]><span
+style='font-size:10.0pt;font-family:Arial'><span
+style='mso-spacerun:yes'> </span>use the default values<o:p></o:p></span></p>
+
+<p class=MsoNormal style='mso-pagination:none;mso-layout-grid-align:none;
+text-autospace:none'><span style='font-size:10.0pt;font-family:Arial'><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoNormal style='margin-left:27.0pt;mso-pagination:none;mso-layout-grid-align:
+none;text-autospace:none'><span style='font-size:10.0pt;font-family:Arial'>For
+&quot;</span><span style='font-size:10.0pt;font-family:"Courier New"'>X.509 v3
+Netscape Extensions</span><span style='font-size:10.0pt;font-family:Arial'>&quot;
+tab:<span style='mso-spacerun:yes'>  </span><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:45.0pt;text-indent:-9.0pt;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span></span><![endif]><span
+style='font-size:10.0pt;font-family:Arial'>use the default values<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:27.0pt;mso-pagination:none;mso-layout-grid-align:
+none;text-autospace:none'><span style='font-size:10.0pt;font-family:Arial'><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoNormal style='margin-left:27.0pt;mso-pagination:none;mso-layout-grid-align:
+none;text-autospace:none'><span style='font-size:10.0pt;font-family:Arial'>Finally,
+click the '</span><span style='font-size:10.0pt;font-family:"Courier New"'>Generate
+Self-Signed Cert'</span><span style='font-size:10.0pt;font-family:Arial'>
+button - the dialog window will automatically close after successful generation
+of the cert. It takes while - at least 30 sec to complete the key-generation
+task. The new cert will be displayed in the '</span><span style='font-size:
+10.0pt;font-family:"Courier New"'>Your Keys</span><span style='font-size:10.0pt;
+font-family:Arial'>&quot; and &quot;</span><span style='font-size:10.0pt;
+font-family:"Courier New"'>Your Certificates</span><span style='font-size:10.0pt;
+font-family:Arial'>&quot; tab. <o:p></o:p></span></p>
+
+<p class=MsoNormal style='mso-pagination:none;mso-layout-grid-align:none;
+text-autospace:none'><span style='font-size:10.0pt;font-family:Arial'><o:p>&nbsp;</o:p></span></p>
+
+<h3><a name="CAProfile_CreateSelfSignedServerCA">Create Self-Signed Cert for
+Signing CA (Intermediate CA)</a>:</h3>
+
+<p class=MsoNormal style='mso-pagination:none;mso-layout-grid-align:none;
+text-autospace:none'><span style='font-size:10.0pt;font-family:Arial'><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoNormal style='margin-left:.25in;text-indent:-.25in;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-size:10.0pt;font-family:Arial'>Open
+Key Manager Dialog Window (</span><span style='font-size:10.0pt;font-family:
+"Courier New"'>Tools --&gt; Key Manager Tool Box --&gt; KeyManager</span><span
+style='font-size:10.0pt;font-family:Arial'>)<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:.25in;text-indent:-.25in;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-size:10.0pt;font-family:Arial'>Select
+the &quot;</span><span style='font-size:10.0pt;font-family:"Courier New"'>Your
+Key&quot; </span><span style='font-size:10.0pt;font-family:Arial'>tab<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:.25in;text-indent:-.25in;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-size:10.0pt;font-family:Arial'>Click
+on the &quot;</span><span style='font-size:10.0pt;font-family:"Courier New"'>Generate
+Self-Signed Cert</span><span style='font-size:10.0pt;font-family:Arial'>&quot;
+button to open dialog window for creating self-signed certificate<span
+style='mso-spacerun:yes'>  </span><o:p></o:p></span></p>
+
+<p class=MsoNormal style='mso-pagination:none;mso-layout-grid-align:none;
+text-autospace:none'><span style='font-size:10.0pt;font-family:Arial'><span
+style='mso-spacerun:yes'>       </span>The dialog window has four tabs and
+click </span><span style='font-size:10.0pt;font-family:"Courier New"'>'Advance'
+</span><span style='font-size:10.0pt;font-family:Arial'>at the top of the
+window to display all the tabs: <o:p></o:p></span></p>
+
+<p class=MsoNormal style='mso-pagination:none;mso-layout-grid-align:none;
+text-autospace:none'><span style='font-size:10.0pt;font-family:Arial'><span
+style='mso-spacerun:yes'>    </span><span style='mso-spacerun:yes'>   </span><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:27.0pt;mso-pagination:none;mso-layout-grid-align:
+none;text-autospace:none'><span style='font-size:10.0pt;font-family:Arial'>For
+&quot;</span><span style='font-size:10.0pt;font-family:"Courier New"'>Basic
+certificate profile</span><span style='font-size:10.0pt;font-family:Arial'>&quot;
+tab:<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:45.0pt;text-indent:-9.0pt;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span></span><![endif]><span
+style='font-size:10.0pt;font-family:Arial'>Select &quot;</span><span
+style='font-size:10.0pt;font-family:"Courier New"'>Generic CA Cert Profile</span><span
+style='font-size:10.0pt;font-family:Arial'>&quot; from the &quot;</span><span
+style='font-size:10.0pt;font-family:"Courier New"'>Default Certificate Profile</span><span
+style='font-size:10.0pt;font-family:Arial'>&quot; menu list. <o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:45.0pt;text-indent:-9.0pt;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span></span><![endif]><span
+style='font-size:10.0pt;font-family:Arial'>Enter the common name for <st1:place
+w:st="on"><st1:City w:st="on">Signing</st1:City> <st1:State w:st="on">CA</st1:State></st1:place>
+for server cert (<span class=SpellE>AvLabsServerCA</span>)<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:45.0pt;text-indent:-9.0pt;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span></span><![endif]><span
+style='font-size:10.0pt;font-family:Arial'>Enter </span><span style='font-size:
+10.0pt;font-family:"Courier New"'>org unit </span><span style='font-size:10.0pt;
+font-family:Arial'>: Avaya Labs Research CA<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:45.0pt;text-indent:-9.0pt;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span></span><![endif]><span
+style='font-size:10.0pt;font-family:Arial'>Enter </span><span style='font-size:
+10.0pt;font-family:"Courier New"'>org</span><span style='font-size:10.0pt;
+font-family:Arial'>: Avaya<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:45.0pt;text-indent:-9.0pt;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span></span><![endif]><span
+style='font-size:10.0pt;font-family:Arial'>Enter </span><span style='font-size:
+10.0pt;font-family:"Courier New"'>Locality</span><span style='font-size:10.0pt;
+font-family:Arial'>: Baskin Ridge<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:45.0pt;text-indent:-9.0pt;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span></span><![endif]><span
+style='font-size:10.0pt;font-family:Arial'>Enter </span><span style='font-size:
+10.0pt;font-family:"Courier New"'>State</span><span style='font-size:10.0pt;
+font-family:Arial'>: NJ<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:45.0pt;text-indent:-9.0pt;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span></span><![endif]><span
+style='font-size:10.0pt;font-family:Arial'>Enter </span><span style='font-size:
+10.0pt;font-family:"Courier New"'>country </span><span style='font-size:10.0pt;
+font-family:Arial'>: US</span><span style='font-size:10.0pt;font-family:"Courier New"'><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:45.0pt;text-indent:-9.0pt;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span></span><![endif]><span
+style='font-size:10.0pt;font-family:Arial'>Use the default value for </span><span
+style='font-size:10.0pt;font-family:"Courier New"'>key type, key size and
+signing algorithm <o:p></o:p></span></p>
+
+<p class=MsoNormal style='mso-pagination:none;mso-layout-grid-align:none;
+text-autospace:none'><span style='font-size:10.0pt;font-family:Arial'><span
+style='mso-spacerun:yes'>      </span><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:27.0pt;mso-pagination:none;mso-layout-grid-align:
+none;text-autospace:none'><span style='font-size:10.0pt;font-family:Arial'>For
+&quot;</span><span style='font-size:10.0pt;font-family:"Courier New"'>X.509 v1
+Attributes</span><span style='font-size:10.0pt;font-family:Arial'>&quot;
+tab:<span style='mso-spacerun:yes'>  </span><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:45.0pt;text-indent:-9.0pt;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span></span><![endif]><span
+style='font-size:10.0pt;font-family:Arial'>Select the </span><span
+style='font-size:10.0pt;font-family:"Courier New"'>validity </span><span
+style='font-size:10.0pt;font-family:Arial'>as follows:<span
+style='mso-spacerun:yes'>  </span>use the </span><span style='font-size:10.0pt;
+font-family:"Courier New"'>default value</span><span style='font-size:10.0pt;
+font-family:Arial'><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:45.0pt;text-indent:-9.0pt;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span></span><![endif]><span
+style='font-size:10.0pt;font-family:Arial'>For serial number: use the default
+value : </span><span style='font-size:10.0pt;font-family:"Courier New"'>'auto
+generate' </span><span style='font-size:10.0pt;font-family:Arial'><o:p></o:p></span></p>
+
+<p class=MsoNormal style='mso-pagination:none;mso-layout-grid-align:none;
+text-autospace:none'><span style='font-size:10.0pt;font-family:Arial'><span
+style='mso-spacerun:yes'>   </span><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:27.0pt;mso-pagination:none;mso-layout-grid-align:
+none;text-autospace:none'><span style='font-size:10.0pt;font-family:Arial'>For
+&quot;</span><span style='font-size:10.0pt;font-family:"Courier New"'>X.509 v3
+Standard Extensions</span><span style='font-size:10.0pt;font-family:Arial'>&quot;
+tab:<span style='mso-spacerun:yes'>  </span><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:45.0pt;text-indent:-9.0pt;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span></span><![endif]><span
+style='font-size:10.0pt;font-family:Arial'><span
+style='mso-spacerun:yes'> </span>use the default values<o:p></o:p></span></p>
+
+<p class=MsoNormal style='mso-pagination:none;mso-layout-grid-align:none;
+text-autospace:none'><span style='font-size:10.0pt;font-family:Arial'><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoNormal style='margin-left:27.0pt;mso-pagination:none;mso-layout-grid-align:
+none;text-autospace:none'><span style='font-size:10.0pt;font-family:Arial'>For
+&quot;</span><span style='font-size:10.0pt;font-family:"Courier New"'>X.509 v3
+Netscape Extensions</span><span style='font-size:10.0pt;font-family:Arial'>&quot;
+tab:<span style='mso-spacerun:yes'>  </span><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:45.0pt;text-indent:-9.0pt;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span></span><![endif]><span
+style='font-size:10.0pt;font-family:Arial'>use the default values<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:27.0pt;mso-pagination:none;mso-layout-grid-align:
+none;text-autospace:none'><span style='font-size:10.0pt;font-family:Arial'><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoNormal style='margin-left:27.0pt;mso-pagination:none;mso-layout-grid-align:
+none;text-autospace:none'><span style='font-size:10.0pt;font-family:Arial'>Finally,
+click the '</span><span style='font-size:10.0pt;font-family:"Courier New"'>Generate
+Self-Signed Cert'</span><span style='font-size:10.0pt;font-family:Arial'>
+button - the dialog window will automatically close after successful generation
+of the cert. It takes while - at least 30 sec to complete the key-generation
+task. The new cert will be displayed in the '</span><span style='font-size:
+10.0pt;font-family:"Courier New"'>Your Keys</span><span style='font-size:10.0pt;
+font-family:Arial'>&quot; and &quot;</span><span style='font-size:10.0pt;
+font-family:"Courier New"'>Your Certificates</span><span style='font-size:10.0pt;
+font-family:Arial'>&quot; tab. <o:p></o:p></span></p>
+
+<p class=MsoNormal style='mso-pagination:none;mso-layout-grid-align:none;
+text-autospace:none'><span style='font-size:10.0pt;font-family:Arial'><o:p>&nbsp;</o:p></span></p>
+
+<h3><a name="CAProfile_SignServerCAcert">Sign Intermediate (Signing) CA's cert
+by </a><st1:place w:st="on"><st1:City w:st="on"><st1:City w:st="on"><span
+   style='mso-bookmark:CAProfile_SignServerCAcert'>Root</span></st1:City><span
+  style='mso-bookmark:CAProfile_SignServerCAcert'> <st1:State w:st="on">CA</st1:State></span></st1:City></st1:place><span
+style='mso-bookmark:CAProfile_SignServerCAcert'>'s cert</span>: </h3>
+
+<p class=MsoNormal style='margin-left:.25in;text-indent:-.25in;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-size:10.0pt;font-family:Arial'>Open
+Key Manager Dialog Window (</span><span style='font-size:10.0pt;font-family:
+"Courier New"'>Tools --&gt; Key Manager Tool Box --&gt; KeyManager</span><span
+style='font-size:10.0pt;font-family:Arial'>)<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:.25in;text-indent:-.25in;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-size:10.0pt;font-family:Arial'>Select
+the &quot;</span><span style='font-size:10.0pt;font-family:"Courier New"'>Your
+Key&quot; </span><span style='font-size:10.0pt;font-family:Arial'>tab<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:.25in;text-indent:-.25in;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-size:10.0pt;font-family:Arial'>Select
+the Cert for <st1:place w:st="on"><st1:City w:st="on">Root</st1:City> <st1:State
+ w:st="on">CA</st1:State></st1:place> and then click '</span><span
+style='font-size:10.0pt;font-family:"Courier New"'>Sign (Proxy) cert' </span><span
+style='font-size:10.0pt;font-family:Arial'>button <o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:27.0pt;text-indent:-9.0pt;mso-pagination:
+none;mso-layout-grid-align:none;text-autospace:none'><span style='font-size:
+10.0pt;font-family:Arial'>Click </span><span style='font-size:10.0pt;
+font-family:"Courier New"'>'Ok' </span><span style='font-size:10.0pt;
+font-family:Arial'>for the prompt - Certificate signing dialog window will be
+opened and the cert for signer will be automatically set.<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:27.0pt;text-indent:-9.0pt;mso-pagination:
+none;mso-layout-grid-align:none;text-autospace:none'><span style='font-size:
+10.0pt;font-family:Arial'>Select the Signing CA's cert as follows: <o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:45.0pt;text-indent:-.25in;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-size:10.0pt;font-family:Arial'>Click
+the &quot;</span><span style='font-size:10.0pt;font-family:"Courier New"'>Cert</span><span
+style='font-size:10.0pt;font-family:Arial'>&quot; radio button for '</span><span
+style='font-size:10.0pt;font-family:"Courier New"'>CSR Source</span><span
+style='font-size:10.0pt;font-family:Arial'>&quot; - a certificate picker widget
+will be displayed <o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:45.0pt;text-indent:-.25in;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-size:10.0pt;font-family:Arial'>Select
+'</span><span style='font-size:10.0pt;font-family:"Courier New"'>Self-signed
+User Cert' </span><span style='font-size:10.0pt;font-family:Arial'>in the
+certificate type menu list <o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:45.0pt;text-indent:-.25in;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-size:10.0pt;font-family:Arial'>Select
+the Singing CA's cert from the menu list <o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:45.0pt;text-indent:-.25in;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-size:10.0pt;font-family:Arial'>Click
+the '</span><span style='font-size:10.0pt;font-family:"Courier New"'>Sign Cert'
+</span><span style='font-size:10.0pt;font-family:Arial'>button at the bottom of
+the dialog window<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:45.0pt;text-indent:-.25in;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-size:10.0pt;font-family:Arial'>Then
+click the </span><span style='font-size:10.0pt;font-family:"Courier New"'>'Close'
+</span><span style='font-size:10.0pt;font-family:Arial'>button - dialog window
+will close. <o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:27.0pt;text-indent:-9.0pt;mso-pagination:
+none;mso-layout-grid-align:none;text-autospace:none'><span style='font-size:
+10.0pt;font-family:Arial'>The newly created signed cert will be displayed in
+the '</span><span style='font-size:10.0pt;font-family:"Courier New"'>Your Keys</span><span
+style='font-size:10.0pt;font-family:Arial'>&quot; and &quot;</span><span
+style='font-size:10.0pt;font-family:"Courier New"'>Your Certificates</span><span
+style='font-size:10.0pt;font-family:Arial'>&quot; tabs. You can delete the
+Self-signed cert for the Signing CA now. <o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:27.0pt;text-indent:-9.0pt;mso-pagination:
+none;mso-layout-grid-align:none;text-autospace:none'><span style='font-size:
+10.0pt;font-family:Arial'><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoNormal style='margin-left:27.0pt;text-indent:-9.0pt;mso-pagination:
+none;mso-layout-grid-align:none;text-autospace:none'><span style='font-size:
+10.0pt;font-family:Arial'><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoNormal style='margin-left:27.0pt;text-indent:-9.0pt;mso-pagination:
+none;mso-layout-grid-align:none;text-autospace:none'><span style='font-size:
+10.0pt;font-family:Arial'><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoNormal style='mso-pagination:none;mso-layout-grid-align:none;
+text-autospace:none'><span style='font-size:10.0pt;font-family:Arial'><o:p>&nbsp;</o:p></span></p>
+
+<h3><a name="CAProfile_SignServerCert">Sign Server's cert using </a><st1:place
+w:st="on"><st1:City w:st="on"><st1:City w:st="on"><span style='mso-bookmark:
+   CAProfile_SignServerCert'>Singing</span></st1:City><span style='mso-bookmark:
+  CAProfile_SignServerCert'> <st1:State w:st="on">CA</st1:State></span></st1:City></st1:place><span
+style='mso-bookmark:CAProfile_SignServerCert'>'s cert</span> </h3>
+
+<p class=MsoNormal style='mso-pagination:none;mso-layout-grid-align:none;
+text-autospace:none'><span style='font-size:10.0pt;font-family:Arial'><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoNormal style='margin-left:.25in;text-indent:-.25in;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-size:10.0pt;font-family:Arial'>Open
+Key Manager Dialog Window (</span><span style='font-size:10.0pt;font-family:
+"Courier New"'>Tools --&gt; Key Manager Tool Box --&gt; KeyManager</span><span
+style='font-size:10.0pt;font-family:Arial'>)<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:.25in;text-indent:-.25in;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-size:10.0pt;font-family:Arial'>Select
+the &quot;</span><span style='font-size:10.0pt;font-family:"Courier New"'>Your
+Key&quot; </span><span style='font-size:10.0pt;font-family:Arial'>tab<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:.25in;text-indent:-.25in;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-size:10.0pt;font-family:Arial'>Select
+the Cert for <st1:place w:st="on"><st1:City w:st="on">Root</st1:City> <st1:State
+ w:st="on">CA</st1:State></st1:place> and then click '</span><span
+style='font-size:10.0pt;font-family:"Courier New"'>Sign (Proxy) cert' </span><span
+style='font-size:10.0pt;font-family:Arial'>button <o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:27.0pt;text-indent:-9.0pt;mso-pagination:
+none;mso-layout-grid-align:none;text-autospace:none'><span style='font-size:
+10.0pt;font-family:Arial'>Click </span><span style='font-size:10.0pt;
+font-family:"Courier New"'>'Ok' </span><span style='font-size:10.0pt;
+font-family:Arial'>for the prompt - Certificate signing dialog window will be
+opened and the cert for signer will be automatically set.<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:27.0pt;text-indent:-9.0pt;mso-pagination:
+none;mso-layout-grid-align:none;text-autospace:none'><span style='font-size:
+10.0pt;font-family:Arial'>Select the server's cert as follows: <o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:45.0pt;text-indent:-.25in;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-size:10.0pt;font-family:Arial'>Click
+the &quot;</span><span style='font-size:10.0pt;font-family:"Courier New"'>File</span><span
+style='font-size:10.0pt;font-family:Arial'>&quot; radio button for </span><span
+style='font-size:10.0pt;font-family:"Courier New"'>'CSR Source</span><span
+style='font-size:10.0pt;font-family:Arial'>&quot; - a file picker widget will
+be displayed <o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:45.0pt;text-indent:-.25in;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-size:10.0pt;font-family:Arial'>Select
+previously generated file for the CSR for the server<span
+style='mso-spacerun:yes'>  </span><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:45.0pt;text-indent:-.25in;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-size:10.0pt;font-family:Arial'>Click
+the '</span><span style='font-size:10.0pt;font-family:"Courier New"'>Sign Cert'
+</span><span style='font-size:10.0pt;font-family:Arial'>button at the bottom of
+the dialog window<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:45.0pt;text-indent:-.25in;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-size:10.0pt;font-family:Arial'>Then
+click the </span><span style='font-size:10.0pt;font-family:"Courier New"'>'Close'
+</span><span style='font-size:10.0pt;font-family:Arial'>button - dialog window
+will close. <o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:.25in;text-indent:-.25in;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-size:10.0pt;font-family:Arial'>The
+newly created signed cert will be displayed in the </span><span
+style='font-size:10.0pt;font-family:"Courier New"'>'Server Certificates</span><span
+style='font-size:10.0pt;font-family:Arial'>&quot; tab.<span
+style='mso-spacerun:yes'>  </span>Export the server cert in X.509 or PKCS#7
+format as follows: <o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:.5in;text-indent:-.25in;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-size:10.0pt;font-family:Arial'>Select
+the “Server” tab <o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:.5in;text-indent:-.25in;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-size:10.0pt;font-family:Arial'>Select
+the newly signed server's certificate <o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:.5in;text-indent:-.25in;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-family:Symbol;mso-fareast-font-family:Symbol;mso-bidi-font-family:
+Symbol'><span style='mso-list:Ignore'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-size:10.0pt;font-family:Arial'>Click
+the </span><span style='font-size:10.0pt;font-family:"Courier New"'>'Export' </span><span
+style='font-size:10.0pt;font-family:Arial'>button. A dialog window opens for
+choosing type of file and encoding. You can choose either X.509 or PKCS#7 for
+data type.<span style='mso-spacerun:yes'>  </span>Select the file name for
+exported certificate.&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-left:.5in;text-indent:-.25in;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-size:10.0pt;font-family:Arial'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Note: Since the PKCS#7 export does not place the server cert as the first one in
+the PKCS#7 cert-only package, choose the X.509 format. If you choose X.509
+format, make sure that you also exported Signing CA's cert chain in PKCS#7
+format or X.509 format (as described below). <o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:.25in;text-indent:-.25in;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-size:10.0pt;font-family:Arial'>Finally,
+go to Firefox window&nbsp;for server profile and <a
+href="#ServerProfile_ImportSignedCert"><span style='mso-ascii-font-family:Arial;
+mso-hansi-font-family:Arial;mso-bidi-font-family:Arial'>import the exported
+certificate file</span></a>. <o:p></o:p></span></p>
+
+<p class=MsoNormal style='mso-pagination:none;mso-layout-grid-align:none;
+text-autospace:none'><span style='font-size:10.0pt;font-family:Arial'><o:p>&nbsp;</o:p></span></p>
+
+<h3><a name="CAProfile_ExportCACerts">Exporting of Siging CA's Cert</a> Chain:</h3>
+
+<p class=MsoNormal style='mso-pagination:none;mso-layout-grid-align:none;
+text-autospace:none'><span style='font-size:10.0pt;font-family:Arial'><span
+style='mso-spacerun:yes'>   </span>The instruction for exporting of CA's cert
+in various formats can be found as follows: &quot;</span><span
+style='font-size:10.0pt;font-family:"Courier New"'>Tools --&gt; Key Manager
+Tool Box --&gt; Key Manager Usage Document</span><span style='font-size:10.0pt;
+font-family:Arial'>&quot; and a new tab will display the usage document. Click
+on the &quot;</span><span style='font-size:10.0pt;font-family:"Courier New"'>Instructions
+for PKI Related Tasks</span><span style='font-size:10.0pt;font-family:Arial'>&quot;
+and then scroll down to the &quot;</span><span style='font-size:10.0pt;
+font-family:"Courier New"'>Exporting of X.509 Certificates</span><span
+style='font-size:10.0pt;font-family:Arial'>&quot; section. <o:p></o:p></span></p>
+
+<p style='margin-top:1.5pt;margin-right:0in;margin-bottom:.75pt;margin-left:
+0in'>Here are the steps that you have to follow to export Keys/certificates:&nbsp;</p>
+
+<p style='margin-top:1.5pt;margin-right:0in;margin-bottom:.75pt;margin-left:
+.5in;text-indent:-.25in;mso-list:l21 level1 lfo5;tab-stops:list .5in'><![if !supportLists]><span
+style='mso-list:Ignore'>1.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><![endif]>Open Key Manager Dialog Window (<b><span
+style='font-family:"Courier New"'>Tools --&gt; Key Manager Tool Box --&gt;
+KeyManager</span></b>)</p>
+
+<p style='margin-top:1.5pt;margin-right:0in;margin-bottom:.75pt;margin-left:
+.5in;text-indent:-.25in;mso-list:l21 level1 lfo5;tab-stops:list .5in'><![if !supportLists]><span
+style='mso-list:Ignore'>2.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><![endif]>Select&nbsp; the &quot;<b><span style='font-family:
+"Courier New"'>Your Key</span></b>&quot; tab&nbsp;</p>
+
+<p style='margin-top:1.5pt;margin-right:0in;margin-bottom:.75pt;margin-left:
+.5in;text-indent:-.25in;mso-list:l21 level1 lfo5;tab-stops:list .5in'><![if !supportLists]><span
+style='mso-list:Ignore'>3.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><![endif]>Select the desired Signing CA's certificate in the tab</p>
+
+<p style='margin-top:1.5pt;margin-right:0in;margin-bottom:.75pt;margin-left:
+.5in;text-indent:-.25in;mso-list:l21 level1 lfo5;tab-stops:list .5in'><![if !supportLists]><span
+style='mso-list:Ignore'>4.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><![endif]>Click on the &quot;<b>Export&quot;</b> button that
+opens the dialog for choosing data and encoding format</p>
+
+<p style='margin-top:1.5pt;margin-right:0in;margin-bottom:.75pt;margin-left:
+.5in;text-indent:-.25in;mso-list:l21 level1 lfo5;tab-stops:list .5in'><![if !supportLists]><span
+style='mso-list:Ignore'>5.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><![endif]><span style='font-size:10.0pt;font-family:Arial'>Select
+one of the following </span><span style='font-size:10.0pt;font-family:"Courier New"'>data
+format: X.509 or PKCS#7&nbsp;</span></p>
+
+<p style='margin-top:1.5pt;margin-right:0in;margin-bottom:.75pt;margin-left:
+.5in;text-indent:-.25in;mso-list:l21 level1 lfo5;tab-stops:list .5in'><![if !supportLists]><span
+style='mso-list:Ignore'>6.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><![endif]>For PKCS#7, check the include cert-chain box.&nbsp;</p>
+
+<p style='margin-top:1.5pt;margin-right:0in;margin-bottom:.75pt;margin-left:
+.5in;text-indent:-.25in;mso-list:l21 level1 lfo5;tab-stops:list .5in'><![if !supportLists]><span
+style='mso-list:Ignore'>7.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><![endif]>The browser prompts you for &quot;<b>output file path</b>&quot;
+to save the exported data - select the file name and directory.</p>
+
+<p class=MsoNormal style='mso-pagination:none;mso-layout-grid-align:none;
+text-autospace:none'><span style='font-size:10.0pt;font-family:Arial'><o:p>&nbsp;</o:p></span></p>
+
+<h3 style='mso-pagination:none;mso-layout-grid-align:none;text-autospace:none'><a
+name="CAProfile_RevokeServerCert">Revoke Server's Certificate&nbsp;</a> </h3>
+
+<p style='margin-top:1.5pt;margin-right:0in;margin-bottom:.75pt;margin-left:
+0in'>Here are the steps that you have to follow to revoke a certificate:&nbsp;</p>
+
+<p style='margin-top:1.5pt;margin-right:0in;margin-bottom:.75pt;margin-left:
+.5in;text-indent:-.25in;mso-list:l14 level1 lfo6;tab-stops:list .5in'><![if !supportLists]><span
+style='mso-list:Ignore'>1.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><![endif]>Open Key Manager Dialog Window (<b><span
+style='font-family:"Courier New"'>Tools --&gt; Key Manager Tool Box --&gt;
+KeyManager</span></b>)</p>
+
+<p style='margin-top:1.5pt;margin-right:0in;margin-bottom:.75pt;margin-left:
+.5in;text-indent:-.25in;mso-list:l14 level1 lfo6;tab-stops:list .5in'><![if !supportLists]><span
+style='mso-list:Ignore'>2.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><![endif]>Select&nbsp; the &quot;<b><span style='font-family:
+"Courier New"'>Your Key</span></b>&quot; tab&nbsp;</p>
+
+<p style='margin-top:1.5pt;margin-right:0in;margin-bottom:.75pt;margin-left:
+.5in;text-indent:-.25in;mso-list:l14 level1 lfo6;tab-stops:list .5in'><![if !supportLists]><span
+style='mso-list:Ignore'>3.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><![endif]>Click on the &quot;<b>CRL Manager&quot;</b>
+button.&nbsp; </p>
+
+<p style='margin-top:1.5pt;margin-right:0in;margin-bottom:.75pt;margin-left:
+.5in'>It will open the browser's CRL manager dialog window. The CRL signing
+tool overlays a set of buttons on top of browser's existing CRL Manager. In the
+CRL manager dialog window, you will see a set of buttons within a red
+rectangular box. These buttons can be used to <b><i>create</i></b>, <b><i>view</i></b>,
+<b><i>modify</i></b>, <b><i>export</i></b> and <b><i>load</i></b>
+CRLs.&nbsp;&nbsp; </p>
+
+<p style='margin-top:1.5pt;margin-right:0in;margin-bottom:.75pt;margin-left:
+.5in'>&nbsp; </p>
+
+<div align=center>
+
+<table class=MsoNormalTable border=1 cellpadding=0 width="38%"
+ style='width:38.0%;mso-cellspacing:1.5pt;margin-left:.5in;mso-padding-alt:
+ 9.0pt 9.0pt 9.0pt 9.0pt'>
+ <tr style='mso-yfti-irow:0;mso-yfti-firstrow:yes;mso-yfti-lastrow:yes'>
+  <td width="100%" style='width:100.0%;padding:9.0pt 9.0pt 9.0pt 9.0pt'>
+  <p class=MsoNormal><img border=0 width=787 height=282 id="_x0000_i1025"
+  src="images/KeyManager_CRLSignTool_Overlay.png"></p>
+  </td>
+ </tr>
+</table>
+
+</div>
+
+<p style='margin-top:1.5pt;margin-right:0in;margin-bottom:.75pt;margin-left:
+.5in'>&nbsp;</p>
+
+<p style='margin-top:1.5pt;margin-right:0in;margin-bottom:.75pt;margin-left:
+.5in'>&nbsp;</p>
+
+<p style='margin-top:1.5pt;margin-right:0in;margin-bottom:.75pt;margin-left:
+.5in;text-indent:-.25in;mso-list:l14 level1 lfo6;tab-stops:list .5in'><![if !supportLists]><span
+style='mso-list:Ignore'>4.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><![endif]>Click the &quot;<b>Create</b>&quot; button to to create
+a new CRL. It will open up another dialog window for creating the CRL for cert
+to be revoked.&nbsp;The &quot;Create&quot; dialog will filter and present only
+those CA certificates that have private key in browser's Cert-DB. </p>
+
+<p style='margin-top:1.5pt;margin-right:0in;margin-bottom:.75pt;margin-left:
+.5in'>&nbsp; </p>
+
+<div align=center>
+
+<table class=MsoNormalTable border=1 cellpadding=0 width="38%"
+ style='width:38.0%;mso-cellspacing:1.5pt;margin-left:.5in;mso-padding-alt:
+ 9.0pt 9.0pt 9.0pt 9.0pt'>
+ <tr style='mso-yfti-irow:0;mso-yfti-firstrow:yes;mso-yfti-lastrow:yes'>
+  <td width="100%" style='width:100.0%;padding:9.0pt 9.0pt 9.0pt 9.0pt'>
+  <p class=MsoNormal><img border=0 width=686 height=706 id="_x0000_i1026"
+  src="images/KeyManager_CRLSignTool_CreateDialog.png"></p>
+  </td>
+ </tr>
+</table>
+
+</div>
+
+<p style='margin-top:1.5pt;margin-right:0in;margin-bottom:.75pt;margin-left:
+.5in'>&nbsp;</p>
+
+<p style='margin-top:1.5pt;margin-right:0in;margin-bottom:.75pt;margin-left:
+.5in'>&nbsp;</p>
+
+<p style='margin-top:1.5pt;margin-right:0in;margin-bottom:.75pt;margin-left:
+.5in;text-indent:-.25in;mso-list:l14 level1 lfo6;tab-stops:list .5in'><![if !supportLists]><span
+style='mso-list:Ignore'>5.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><![endif]>Select the Certificate Issuer of the cert to be revoked
+using the menu list&nbsp;</p>
+
+<p style='margin-top:1.5pt;margin-right:0in;margin-bottom:.75pt;margin-left:
+.5in;text-indent:-.25in;mso-list:l14 level1 lfo6;tab-stops:list .5in'><![if !supportLists]><span
+style='mso-list:Ignore'>6.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><![endif]>Enter the <b>serial number</b> of the cert to be
+revoked or choose the certificate using the browse button. You can add more
+than one serial numbers.&nbsp;</p>
+
+<p style='margin-top:1.5pt;margin-right:0in;margin-bottom:.75pt;margin-left:
+.5in;text-indent:-.25in;mso-list:l14 level1 lfo6;tab-stops:list .5in'><![if !supportLists]><span
+style='mso-list:Ignore'>7.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><![endif]>Pick a <b>revocation reason code</b> from the list</p>
+
+<p style='margin-top:1.5pt;margin-right:0in;margin-bottom:.75pt;margin-left:
+.5in;text-indent:-.25in;mso-list:l14 level1 lfo6;tab-stops:list .5in'><![if !supportLists]><span
+style='mso-list:Ignore'>8.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><![endif]>Choose the default for others&nbsp;</p>
+
+<p style='margin-top:1.5pt;margin-right:0in;margin-bottom:.75pt;margin-left:
+.5in;text-indent:-.25in;mso-list:l14 level1 lfo6;tab-stops:list .5in'><![if !supportLists]><span
+style='mso-list:Ignore'>9.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><![endif]>Click the &quot;<b>Create</b>&quot; button. A CRL will
+be added a to the certificate database and the dialog window will close. The
+newly created CRL will be displayed as a row in the CRL manager window.&nbsp;</p>
+
+<p style='margin-top:1.5pt;margin-right:0in;margin-bottom:.75pt;margin-left:
+.5in;text-indent:-.25in;mso-list:l14 level1 lfo6;tab-stops:list .5in'><![if !supportLists]><span
+style='mso-list:Ignore'>10.<span style='font:7.0pt "Times New Roman"'>&nbsp; </span></span><![endif]>You
+can now use the &quot;<b>Export</b>&quot; button to export the newly created
+CRL.&nbsp;</p>
+
+<h3 style='mso-pagination:none;mso-layout-grid-align:none;text-autospace:none'>&nbsp;
+</h3>
+
+<h2>Setup Firefox Profile for Servers: </h2>
+
+<p class=MsoNormal style='margin-left:27.0pt;text-indent:-9.0pt;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span></span><![endif]><span
+style='font-size:10.0pt;font-family:Arial'>set MOZ_NO_REMOTE=1<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:27.0pt;text-indent:-9.0pt;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span></span><![endif]><span
+style='font-size:10.0pt;font-family:Arial'>firefox -P <o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:.5in;text-indent:-.25in;mso-pagination:
+none;mso-layout-grid-align:none;text-autospace:none'><span style='font-size:
+10.0pt;font-family:Arial'>When profile manager comes up, click the &quot;</span><span
+style='font-size:10.0pt;font-family:"Courier New"'>Create Profile</span><span
+style='font-size:10.0pt;font-family:Arial'>&quot; to create a new profile with
+name: </span><span class=SpellE><span style='font-size:10.0pt;font-family:"Courier New"'>AvLabsServerProfile</span></span><span
+style='font-size:10.0pt;font-family:"Courier New"'> </span><span
+style='font-size:10.0pt;font-family:Arial'><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:.5in;text-indent:-.25in;mso-pagination:
+none;mso-layout-grid-align:none;text-autospace:none'><span style='font-size:
+10.0pt;font-family:Arial'>Select the new profile name </span><span
+class=SpellE><span style='font-size:10.0pt;font-family:"Courier New"'>AvLabsServerProfile</span></span><span
+style='font-size:10.0pt;font-family:"Courier New"'> </span><span
+style='font-size:10.0pt;font-family:Arial'>and then click '</span><span
+style='font-size:10.0pt;font-family:"Courier New"'>Start Firefox'</span><span
+style='font-size:10.0pt;font-family:Arial'><o:p></o:p></span></p>
+
+<p class=MsoNormal style='mso-pagination:none;mso-layout-grid-align:none;
+text-autospace:none'><span style='font-size:10.0pt;font-family:Arial'><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoNormal style='mso-pagination:none;mso-layout-grid-align:none;
+text-autospace:none'><span style='font-size:10.0pt;font-family:Arial'><o:p>&nbsp;</o:p></span></p>
+
+<h3>Install KeyManager Add-on: </h3>
+
+<p class=MsoNormal style='mso-pagination:none;mso-layout-grid-align:none;
+text-autospace:none'><span style='font-size:10.0pt;font-family:Arial'>Go <span
+class=GramE>to :</span> </span><a
+href="https://addons.mozilla.org/en-US/firefox/addon/4471">https://addons.mozilla.org/en-US/firefox/addon/4471</a>,
+download and install the KeyManager add-on.<span style='mso-spacerun:yes'> 
+</span><span style='font-size:10.0pt;font-family:Arial'><span
+style='mso-spacerun:yes'> </span><o:p></o:p></span></p>
+
+<p class=MsoNormal style='mso-pagination:none;mso-layout-grid-align:none;
+text-autospace:none'><span style='font-size:10.0pt;font-family:"Courier New"'>Restart
+</span><span style='font-size:10.0pt;font-family:Arial'>the Firefox browser. <o:p></o:p></span></p>
+
+<p class=MsoNormal style='mso-pagination:none;mso-layout-grid-align:none;
+text-autospace:none'><span style='font-size:10.0pt;font-family:Arial'><span
+style='mso-spacerun:yes'> </span><o:p></o:p></span></p>
+
+<h3>Use Case:</h3>
+
+<p class=MsoNormal style='margin-left:.5in;text-indent:-.25in;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-size:10.0pt;font-family:Arial'>Create
+Self-Signed Cert for Server <o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:.5in;text-indent:-.25in;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-size:10.0pt;font-family:Arial'>Generate
+PKCS#10 CSR <o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:.5in;text-indent:-.25in;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><st1:place w:st="on"><st1:City w:st="on"><span
+  style='font-size:10.0pt;font-family:Arial'>Import</span></st1:City><span
+ style='font-size:10.0pt;font-family:Arial'> <st1:State w:st="on">CA</st1:State></span></st1:place><span
+style='font-size:10.0pt;font-family:Arial'> Signed Cert <o:p></o:p></span></p>
+
+<p class=MsoNormal style='mso-pagination:none;mso-layout-grid-align:none;
+text-autospace:none'><span style='font-size:10.0pt;font-family:Arial'><o:p>&nbsp;</o:p></span></p>
+
+<h3><a name="ServerProfile_CreateSelfSignedCert">Create Self-Signed Cert for
+Server</a>:</h3>
+
+<p class=MsoNormal style='margin-left:.25in;text-indent:-.25in;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-size:10.0pt;font-family:Arial'>Open
+Key Manager Dialog Window (</span><span style='font-size:10.0pt;font-family:
+"Courier New"'>Tools --&gt; Key Manager Tool Box --&gt; KeyManager</span><span
+style='font-size:10.0pt;font-family:Arial'>)<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:.25in;text-indent:-.25in;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-size:10.0pt;font-family:Arial'>Select
+the &quot;</span><span style='font-size:10.0pt;font-family:"Courier New"'>Your
+Key&quot; </span><span style='font-size:10.0pt;font-family:Arial'>tab<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:.25in;text-indent:-.25in;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-size:10.0pt;font-family:Arial'>Click
+on the &quot;</span><span style='font-size:10.0pt;font-family:"Courier New"'>Generate
+Self-Signed Cert</span><span style='font-size:10.0pt;font-family:Arial'>&quot; button
+to open dialog window for creating self-signed certificate<span
+style='mso-spacerun:yes'>  </span><o:p></o:p></span></p>
+
+<p class=MsoNormal style='mso-pagination:none;mso-layout-grid-align:none;
+text-autospace:none'><span style='font-size:10.0pt;font-family:Arial'><span
+style='mso-spacerun:yes'>       </span>The dialog window has four tabs and
+click </span><span style='font-size:10.0pt;font-family:"Courier New"'>'Advance'
+</span><span style='font-size:10.0pt;font-family:Arial'>at the top of the
+window to display all the tabs: <o:p></o:p></span></p>
+
+<p class=MsoNormal style='mso-pagination:none;mso-layout-grid-align:none;
+text-autospace:none'><span style='font-size:10.0pt;font-family:Arial'><span
+style='mso-spacerun:yes'>       </span><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:27.0pt;mso-pagination:none;mso-layout-grid-align:
+none;text-autospace:none'><span style='font-size:10.0pt;font-family:Arial'>For
+&quot;</span><span style='font-size:10.0pt;font-family:"Courier New"'>Basic
+certificate profile</span><span style='font-size:10.0pt;font-family:Arial'>&quot;
+tab:<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:45.0pt;text-indent:-9.0pt;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span></span><![endif]><span
+style='font-size:10.0pt;font-family:Arial'>Select &quot;</span><span
+style='font-size:10.0pt;font-family:"Courier New"'>Generic Server Cert Profile</span><span
+style='font-size:10.0pt;font-family:Arial'>&quot; from the &quot;</span><span
+style='font-size:10.0pt;font-family:"Courier New"'>Default Certificate Profile</span><span
+style='font-size:10.0pt;font-family:Arial'>&quot; menu list. <o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:45.0pt;text-indent:-9.0pt;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span></span><![endif]><span
+style='font-size:10.0pt;font-family:Arial'>Enter the common name for Server
+:<span style='mso-spacerun:yes'>  </span><i>inside.research.avayalabs.com </i>(use
+<span class=SpellE>dns</span> name) <o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:45.0pt;text-indent:-9.0pt;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span></span><![endif]><span
+style='font-size:10.0pt;font-family:Arial'>Enter </span><span style='font-size:
+10.0pt;font-family:"Courier New"'>org unit </span><span style='font-size:10.0pt;
+font-family:Arial'>: Avaya Labs Research <o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:45.0pt;text-indent:-9.0pt;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span></span><![endif]><span
+style='font-size:10.0pt;font-family:Arial'>Enter </span><span style='font-size:
+10.0pt;font-family:"Courier New"'>org</span><span style='font-size:10.0pt;
+font-family:Arial'>: Avaya<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:45.0pt;text-indent:-9.0pt;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span></span><![endif]><span
+style='font-size:10.0pt;font-family:Arial'>Enter </span><span style='font-size:
+10.0pt;font-family:"Courier New"'>Locality</span><span style='font-size:10.0pt;
+font-family:Arial'>: Baskin Ridge<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:45.0pt;text-indent:-9.0pt;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span></span><![endif]><span
+style='font-size:10.0pt;font-family:Arial'>Enter </span><span style='font-size:
+10.0pt;font-family:"Courier New"'>State</span><span style='font-size:10.0pt;
+font-family:Arial'>: NJ<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:45.0pt;text-indent:-9.0pt;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span></span><![endif]><span
+style='font-size:10.0pt;font-family:Arial'>Enter </span><span style='font-size:
+10.0pt;font-family:"Courier New"'>country </span><span style='font-size:10.0pt;
+font-family:Arial'>: US</span><span style='font-size:10.0pt;font-family:"Courier New"'><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:45.0pt;text-indent:-9.0pt;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span></span><![endif]><span
+style='font-size:10.0pt;font-family:Arial'>Use the default value for </span><span
+style='font-size:10.0pt;font-family:"Courier New"'>key type, key size and
+signing algorithm </span><span style='font-size:10.0pt;font-family:Arial'><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:45.0pt;text-indent:-9.0pt;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span></span><![endif]><span
+style='font-size:10.0pt;font-family:Arial'>For 'Subject Alternative Name&quot; <o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:.75in;text-indent:-9.0pt;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span></span><![endif]><span
+style='font-size:10.0pt;font-family:Arial'>use the DNS name<span
+style='mso-spacerun:yes'>  </span>of the server - you can add more DNS or IP
+address in the &quot;X.509 Cert Standard Extension&quot; Tab<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:.75in;text-indent:-9.0pt;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span></span><![endif]><span
+style='font-size:10.0pt;font-family:Arial'>Optionally, enter the IP address </span><span
+style='font-size:10.0pt;font-family:"Courier New"'><o:p></o:p></span></p>
+
+<p class=MsoNormal style='mso-pagination:none;mso-layout-grid-align:none;
+text-autospace:none'><span style='font-size:10.0pt;font-family:Arial'><span
+style='mso-spacerun:yes'>      </span><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:27.0pt;mso-pagination:none;mso-layout-grid-align:
+none;text-autospace:none'><span style='font-size:10.0pt;font-family:Arial'>For
+&quot;</span><span style='font-size:10.0pt;font-family:"Courier New"'>X.509 v1
+Attributes</span><span style='font-size:10.0pt;font-family:Arial'>&quot;
+tab:<span style='mso-spacerun:yes'>  </span><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:45.0pt;text-indent:-9.0pt;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span></span><![endif]><span
+style='font-size:10.0pt;font-family:Arial'>Select the </span><span
+style='font-size:10.0pt;font-family:"Courier New"'>validity </span><span
+style='font-size:10.0pt;font-family:Arial'>as follows:<span
+style='mso-spacerun:yes'>  </span>use the </span><span style='font-size:10.0pt;
+font-family:"Courier New"'>default value</span><span style='font-size:10.0pt;
+font-family:Arial'><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:45.0pt;text-indent:-9.0pt;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span></span><![endif]><span
+style='font-size:10.0pt;font-family:Arial'>For serial number: use the default
+value : </span><span style='font-size:10.0pt;font-family:"Courier New"'>'auto
+generate' </span><span style='font-size:10.0pt;font-family:Arial'><o:p></o:p></span></p>
+
+<p class=MsoNormal style='mso-pagination:none;mso-layout-grid-align:none;
+text-autospace:none'><span style='font-size:10.0pt;font-family:Arial'><span
+style='mso-spacerun:yes'>   </span><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:27.0pt;mso-pagination:none;mso-layout-grid-align:
+none;text-autospace:none'><span style='font-size:10.0pt;font-family:Arial'>For
+&quot;</span><span style='font-size:10.0pt;font-family:"Courier New"'>X.509 v3
+Standard Extensions</span><span style='font-size:10.0pt;font-family:Arial'>&quot;
+tab:<span style='mso-spacerun:yes'>  </span><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:45.0pt;text-indent:-9.0pt;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span></span><![endif]><span
+style='font-size:10.0pt;font-family:Arial'><span
+style='mso-spacerun:yes'> </span>use the default values<o:p></o:p></span></p>
+
+<p class=MsoNormal style='mso-pagination:none;mso-layout-grid-align:none;
+text-autospace:none'><span style='font-size:10.0pt;font-family:Arial'><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoNormal style='margin-left:27.0pt;mso-pagination:none;mso-layout-grid-align:
+none;text-autospace:none'><span style='font-size:10.0pt;font-family:Arial'>For
+&quot;</span><span style='font-size:10.0pt;font-family:"Courier New"'>X.509 v3
+Netscape Extensions</span><span style='font-size:10.0pt;font-family:Arial'>&quot;
+tab: <span style='mso-spacerun:yes'> </span><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:45.0pt;text-indent:-9.0pt;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span></span><![endif]><span
+style='font-size:10.0pt;font-family:Arial'>use the default values<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:27.0pt;mso-pagination:none;mso-layout-grid-align:
+none;text-autospace:none'><span style='font-size:10.0pt;font-family:Arial'><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoNormal style='margin-left:27.0pt;mso-pagination:none;mso-layout-grid-align:
+none;text-autospace:none'><span style='font-size:10.0pt;font-family:Arial'>Finally,
+click the '</span><span style='font-size:10.0pt;font-family:"Courier New"'>Generate
+Self-Signed Cert'</span><span style='font-size:10.0pt;font-family:Arial'>
+button - the dialog window will automatically close after successful generation
+of the cert. It takes while - at least 30 sec to complete the key-generation
+task. The new cert will be displayed in the '</span><span style='font-size:
+10.0pt;font-family:"Courier New"'>Your Keys</span><span style='font-size:10.0pt;
+font-family:Arial'>&quot; and &quot;</span><span style='font-size:10.0pt;
+font-family:"Courier New"'>Your Certificates</span><span style='font-size:10.0pt;
+font-family:Arial'>&quot; tab. <o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:27.0pt;mso-pagination:none;mso-layout-grid-align:
+none;text-autospace:none'><span style='font-size:10.0pt;font-family:Arial'><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoNormal style='margin-left:27.0pt;mso-pagination:none;mso-layout-grid-align:
+none;text-autospace:none'><span style='font-size:10.0pt;font-family:Arial'><o:p>&nbsp;</o:p></span></p>
+
+<h3><a name="ServerProfile_ImportCACerts"></a><st1:place w:st="on"><st1:City
+ w:st="on"><span style='mso-bookmark:ServerProfile_ImportCACerts'>Import</span></st1:City><span
+ style='mso-bookmark:ServerProfile_ImportCACerts'> <st1:State w:st="on">CA</st1:State></span></st1:place><span
+style='mso-bookmark:ServerProfile_ImportCACerts'> Certificates</span>:</h3>
+
+<p class=MsoNormal style='margin-left:27.0pt;text-indent:-9.0pt;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span></span><![endif]><span
+style='font-size:10.0pt;font-family:Arial'>Open Key Manager Dialog Window (</span><span
+style='font-size:10.0pt;font-family:"Courier New"'>Tools --&gt; Key Manager
+Tool Box --&gt; KeyManager</span><span style='font-size:10.0pt;font-family:
+Arial'>)<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:27.0pt;text-indent:-9.0pt;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span></span><![endif]><span
+style='font-size:10.0pt;font-family:Arial'>Select<span
+style='mso-spacerun:yes'>  </span>the &quot;</span><span style='font-size:10.0pt;
+font-family:"Courier New"'>Authorities</span><span style='font-size:10.0pt;
+font-family:Arial'>&quot; tab<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:27.0pt;text-indent:-9.0pt;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span></span><![endif]><span
+style='font-size:10.0pt;font-family:Arial'>Click on the &quot;</span><span
+style='font-size:10.0pt;font-family:Arial;mso-bidi-font-family:"Courier New"'>Import</span><span
+style='font-size:10.0pt;font-family:Arial'>&quot;&nbsp;button. When the file selector
+dialog window is opened, select the X.509 or PKCS#7 file for cert and then
+click OK. The browser will prompt you for setting the trust for the
+certificates. Select the checkboxes and click OK. <o:p></o:p></span></p>
+
+<p class=MsoNormal style='mso-pagination:none;mso-layout-grid-align:none;
+text-autospace:none'><span style='font-size:10.0pt;font-family:Arial'><o:p>&nbsp;</o:p></span></p>
+
+<h3><a name="ServerProfile_GeneratePKCS10CSR">Generate PKCS#10 Certificate
+Signing Request (CSR)</a>:</h3>
+
+<p class=MsoNormal style='margin-left:27.0pt;text-indent:-9.0pt;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span></span><![endif]><span
+style='font-size:10.0pt;font-family:Arial'>Open Key Manager Dialog Window (</span><span
+style='font-size:10.0pt;font-family:"Courier New"'>Tools --&gt; Key Manager
+Tool Box --&gt; KeyManager</span><span style='font-size:10.0pt;font-family:
+Arial'>)<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:27.0pt;text-indent:-9.0pt;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span></span><![endif]><span
+style='font-size:10.0pt;font-family:Arial'>Select<span
+style='mso-spacerun:yes'>  </span>the &quot;</span><span style='font-size:10.0pt;
+font-family:"Courier New"'>Your Key</span><span style='font-size:10.0pt;
+font-family:Arial'>&quot; tab<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:27.0pt;text-indent:-9.0pt;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span></span><![endif]><span
+style='font-size:10.0pt;font-family:Arial'>Select the desired certificate in
+the tab<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:27.0pt;text-indent:-9.0pt;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span></span><![endif]><span
+style='font-size:10.0pt;font-family:Arial'>Click on the &quot;</span><span
+style='font-size:10.0pt;font-family:"Courier New"'>Generate CSR</span><span
+style='font-size:10.0pt;font-family:Arial'>&quot;<span
+style='mso-spacerun:yes'>  </span>button and follow the newly opened
+dialog<span style='mso-spacerun:yes'>  </span>window to generate PKCS# 10 CSR<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:27.0pt;text-indent:-9.0pt;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span></span><![endif]><span
+style='font-size:10.0pt;font-family:Arial'>Alternatively, you can click on the
+&quot;</span><span style='font-size:10.0pt;font-family:"Courier New"'>Export</span><span
+style='font-size:10.0pt;font-family:Arial'>&quot; button, then select &quot;</span><span
+style='font-size:10.0pt;font-family:"Courier New"'>PKCS#10</span><span
+style='font-size:10.0pt;font-family:Arial'>&quot; radio button in the newly
+opened dialog window, click OK, and finally select the file to save the
+generated CSR. <o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:27.0pt;text-indent:-9.0pt;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span></span><![endif]>Now,
+go to the Firefox Window for CA <span class=GramE>profile<span
+style='mso-spacerun:yes'>  </span>and</span> <a href="#CAProfile_SignServerCert">created
+a signed X.509 cert using the generated PKCS#10 CSR</a>.<span style='font-size:
+10.0pt;font-family:Arial'><o:p></o:p></span></p>
+
+<p class=MsoNormal style='mso-pagination:none;mso-layout-grid-align:none;
+text-autospace:none'><span style='font-size:10.0pt;font-family:Arial'><o:p>&nbsp;</o:p></span></p>
+
+<h3><a name="ServerProfile_ImportSignedCert">Import CA-Signed Server
+Certificates</a>: </h3>
+
+<p class=MsoNormal style='margin-left:27.0pt;text-indent:-9.0pt;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span></span><![endif]><span
+style='font-size:10.0pt;font-family:Arial'>Open Key Manager Dialog Window (</span><span
+style='font-size:10.0pt;font-family:"Courier New"'>Tools --&gt; Key Manager
+Tool Box --&gt; KeyManager</span><span style='font-size:10.0pt;font-family:
+Arial'>)<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:27.0pt;text-indent:-9.0pt;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span></span><![endif]><span
+style='font-size:10.0pt;font-family:Arial'>Select<span
+style='mso-spacerun:yes'>  </span>the &quot;</span><span style='font-size:10.0pt;
+font-family:"Courier New"'>Your Key</span><span style='font-size:10.0pt;
+font-family:Arial'>&quot; tab <o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:27.0pt;text-indent:-9.0pt;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span></span><![endif]><span
+style='font-size:10.0pt;font-family:Arial'>Click on the &quot;</span><span
+style='font-size:10.0pt;font-family:"Courier New"'>Import Cert</span><span
+style='font-size:10.0pt;font-family:Arial'>&quot;<span
+style='mso-spacerun:yes'>  </span>button. When the file selector dialog window
+is opened, select the CA-signed certificate file and then click OK. <o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:27.0pt;text-indent:-9.0pt;mso-pagination:
+none;mso-list:l0 level1 lfo4;mso-layout-grid-align:none;text-autospace:none'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span></span><![endif]><span
+style='font-size:10.0pt;font-family:Arial'>You can now delete the self-signed
+cert that is used to generate the PKCS#10 CSR. <o:p></o:p></span></p>
+
+<p class=MsoNormal style='mso-pagination:none;mso-layout-grid-align:none;
+text-autospace:none'><span style='font-size:10.0pt;font-family:Arial'><o:p>&nbsp;</o:p></span></p>
+
+<h3><a name="ServerProfile_ExportCertForOpenSSL">Export Server Private Key and
+Certificate for OpenSSL based Application</a> </h3>
+
+<p class=MsoNormal><span style='font-size:10.0pt;font-family:Arial'>Typically,
+OpenSSL based application/server uses </span><span class=SpellE><span
+style='font-size:10.0pt;font-family:"Courier New"'>server.key</span></span> <span
+style='font-size:10.0pt;font-family:Arial'>for private key and </span><span
+class=SpellE><span style='font-size:10.0pt;font-family:"Courier New"'>server.cert</span></span>
+<span style='font-size:10.0pt;font-family:Arial'>for the public key
+certificate. Sometimes, they are also named as </span><span style='font-size:
+10.0pt;font-family:"Courier New"'>hostkey.pem</span><span style='font-size:
+10.0pt;font-family:Arial'> and </span><span class=SpellE><span
+style='font-size:10.0pt;font-family:"Courier New"'>hostcert.pem</span></span> <span
+style='font-size:10.0pt;font-family:Arial'>respectively.<span
+style='mso-spacerun:yes'>  </span>The </span><span class=SpellE><span
+style='font-size:10.0pt;font-family:"Courier New"'>server.key</span></span><span
+style='font-size:10.0pt;font-family:Arial'> file could be in either <i>encrypted</i>
+or <span class=SpellE><i>unecrypted</i></span> format. <o:p></o:p></span></p>
+
+<p class=MsoNormal><span style='font-size:10.0pt;font-family:Arial;mso-fareast-font-family:
+Batang;mso-fareast-language:KO'>Mozilla NSS, which is the underlying crypto
+library for Firefox, does not support exporting of unencrypted private key.
+Also, the KeyManager generated <span class=SpellE>openssl</span> specific
+encrypted privet key file is incompatible with <span class=SpellE>OpenSSL</span>
+command line tool. BTW, both of these OpenSSL options do not follow any
+standard. Best <span class=GramE>way do</span> this to use standard compliant
+key file, such as PKCS#12 or PKCS#8 if the OpenSSL based application supports
+those format. <o:p></o:p></span></p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><span style='font-size:10.0pt;font-family:Arial;mso-fareast-font-family:
+Batang;mso-fareast-language:KO'>I would suggest that to check if the OpenSSL
+based application can use PKCS#12 file (which is encrypted) as </span><span
+class=SpellE><span style='font-size:10.0pt;font-family:"Courier New";
+mso-fareast-font-family:Batang;mso-fareast-language:KO'>server.key</span></span><span
+style='font-size:10.0pt;font-family:Arial;mso-fareast-font-family:Batang;
+mso-fareast-language:KO'>. If not, check if the </span><span class=SpellE><span
+style='font-size:10.0pt;font-family:"Courier New";mso-fareast-font-family:Batang;
+mso-fareast-language:KO'>server.key</span></span> <span style='font-size:10.0pt;
+font-family:Arial;mso-fareast-font-family:Batang;mso-fareast-language:KO'>file
+can be in PKCS#8 format. If not then, generate/export the key file either in
+the PKCS#12 or the PKCS#8 file and then use <span class=SpellE>OpenSSL</span> command
+line tool to convert it to either <span class=GramE>unencrypted</span> or
+OpenSSL specific encrypted key file as needed by the OpenSSL based application.
+<o:p></o:p></span></p>
+
+<p class=MsoNormal style='mso-layout-grid-align:none;text-autospace:none'><span
+style='font-size:10.0pt;font-family:"Courier New";mso-fareast-font-family:Batang;
+mso-fareast-language:KO'><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoNormal><span class=SpellE><span style='font-size:10.0pt;font-family:
+Arial;mso-fareast-font-family:Batang;mso-fareast-language:KO'>Server.cert</span></span><span
+style='font-size:10.0pt;font-family:Arial;mso-fareast-font-family:Batang;
+mso-fareast-language:KO'> is actually a base-64 X.509 file. You can generate it
+easily by exporting the cert as X.509 file. <o:p></o:p></span></p>
+
+<p class=MsoNormal><span style='font-size:10.0pt;font-family:Arial;mso-fareast-font-family:
+Batang;mso-fareast-language:KO'><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoNormal><b><span style='font-size:10.0pt;font-family:Arial;
+mso-fareast-font-family:Batang;mso-fareast-language:KO'>You can export the
+server's private key/cert in one of the following ways: </span></b><span
+style='font-size:10.0pt;font-family:Arial;mso-fareast-font-family:Batang;
+mso-fareast-language:KO'><o:p></o:p></span></p>
+
+<p class=MsoNormal><span style='font-size:10.0pt;font-family:Arial;mso-fareast-font-family:
+Batang;mso-fareast-language:KO'><o:p>&nbsp;</o:p></span></p>
+
+<p class=StyleLeft0Firstline0><![if !supportLists]><span style='font-size:10.0pt;
+font-family:Symbol;mso-fareast-font-family:Symbol;mso-bidi-font-family:Symbol;
+mso-fareast-language:KO'><span style='mso-list:Ignore'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-size:10.0pt;font-family:Arial;
+mso-fareast-font-family:Batang;mso-fareast-language:KO'>Option 1: Use the <b><i>Export</i></b>
+button<o:p></o:p></span></p>
+
+<p class=StyleLeft0Firstline0 style='margin-left:1.25in;tab-stops:list 1.25in'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol;mso-fareast-language:KO'><span style='mso-list:
+Ignore'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-size:10.0pt;font-family:Arial'>Open
+Key Manager Dialog Window (</span><span style='font-size:10.0pt;font-family:
+"Courier New"'>Tools --&gt; Key Manager Tool Box --&gt; KeyManager</span><span
+style='font-size:10.0pt;font-family:Arial'>)</span><span style='font-size:10.0pt;
+font-family:Arial;mso-fareast-font-family:Batang;mso-fareast-language:KO'><o:p></o:p></span></p>
+
+<p class=StyleLeft0Firstline0 style='margin-left:1.25in;tab-stops:list 1.25in'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-size:10.0pt;font-family:Arial'>Select
+the “</span><span style='font-size:10.0pt;font-family:"Courier New"'>Your Key</span><span
+style='font-size:10.0pt;font-family:Arial'>” tab <o:p></o:p></span></p>
+
+<p class=StyleLeft0Firstline0 style='margin-left:1.25in;tab-stops:list 1.25in'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-size:10.0pt;font-family:Arial'>Select
+the </span><span style='font-size:10.0pt;font-family:"Courier New"'>server's
+certificate</span><span style='font-size:10.0pt;font-family:Arial'> that you want
+to export for OpenSSL application <o:p></o:p></span></p>
+
+<p class=StyleLeft0Firstline0 style='margin-left:1.25in;tab-stops:list 1.25in'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-size:10.0pt;font-family:Arial'>Export
+the </span><span style='font-size:10.0pt;font-family:"Courier New"'>private key</span><span
+style='font-size:10.0pt;font-family:Arial'> as follows<o:p></o:p></span></p>
+
+<p class=StyleLeft0Firstline0 style='margin-left:1.75in;tab-stops:list 1.75in'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-size:10.0pt;font-family:Arial'>Click
+the </span><span style='font-size:10.0pt;font-family:"Courier New"'>'Export'</span><span
+style='font-size:10.0pt;font-family:Arial'> button. <o:p></o:p></span></p>
+
+<p class=StyleLeft0Firstline0 style='margin-left:1.75in;tab-stops:list 1.75in'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-size:10.0pt;font-family:Arial'>A
+dialog window opens for choosing </span><span style='font-size:10.0pt;
+font-family:"Courier New"'>data forma</span><span style='font-size:10.0pt;
+font-family:Arial'>t and </span><span style='font-size:10.0pt;font-family:"Courier New"'>encoding</span><span
+style='font-size:10.0pt;font-family:Arial'> </span><span style='font-size:10.0pt;
+font-family:"Courier New"'>type</span><span style='font-size:10.0pt;font-family:
+Arial'> of private key<span style='mso-spacerun:yes'>   </span><o:p></o:p></span></p>
+
+<p class=StyleLeft0Firstline0 style='margin-left:1.75in;tab-stops:list 1.75in'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-size:10.0pt;font-family:Arial'>Select
+one of the following </span><span style='font-size:10.0pt;font-family:"Courier New"'>data
+format </span><span style='font-size:10.0pt;font-family:Arial'>for key : </span><span
+style='font-size:10.0pt;font-family:"Courier New"'>PKCS#8, OpenSSL EPK, PKCS#12</span><span
+style='font-size:10.0pt;font-family:Arial'> <o:p></o:p></span></p>
+
+<p class=StyleLeft0Firstline0 style='margin-left:1.75in;tab-stops:list 1.75in'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-size:10.0pt;font-family:Arial'>Choose
+</span><span style='font-size:10.0pt;font-family:"Courier New"'>Base64</span><span
+style='font-size:10.0pt;font-family:Arial'> for PKCS#8. PKCS#12 files are
+always exported in DER format. OpenSSL EPK <span class=GramE>are</span>
+exported in Base64. <o:p></o:p></span></p>
+
+<p class=StyleLeft0Firstline0 style='margin-left:1.75in;tab-stops:list 1.75in'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-size:10.0pt;font-family:Arial'>For
+</span><span style='font-size:10.0pt;font-family:"Courier New"'>Encryption
+parameters</span><span style='font-size:10.0pt;font-family:Arial'> for PKCS#8
+or OpenSSL EPK, use the default values <o:p></o:p></span></p>
+
+<p class=StyleLeft0Firstline0 style='margin-left:1.75in;tab-stops:list 1.75in'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-size:10.0pt;font-family:Arial'>Click
+<span class=GramE>OK,</span> a file selector for the private key file will open.
+Provide a file name using the file selector, click Save.<span
+style='mso-spacerun:yes'>  </span><o:p></o:p></span></p>
+
+<p class=StyleLeft0Firstline0 style='margin-left:1.25in;tab-stops:list 1.25in'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-size:10.0pt;font-family:Arial'>Export
+the Public Key cert as follows :<o:p></o:p></span></p>
+
+<p class=StyleLeft0Firstline0 style='margin-left:1.75in;tab-stops:list 1.75in'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-size:10.0pt;font-family:Arial'>Click
+the </span><span style='font-size:10.0pt;font-family:"Courier New"'>'Export'</span><span
+style='font-size:10.0pt;font-family:Arial'> button. <o:p></o:p></span></p>
+
+<p class=StyleLeft0Firstline0 style='margin-left:1.75in;tab-stops:list 1.75in'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-size:10.0pt;font-family:Arial'>A
+dialog window opens for choosing </span><span style='font-size:10.0pt;
+font-family:"Courier New"'>data format </span><span style='font-size:10.0pt;
+font-family:Arial'>and </span><span style='font-size:10.0pt;font-family:"Courier New"'>encoding
+type </span><span style='font-size:10.0pt;font-family:Arial'>of public key<span
+style='mso-spacerun:yes'>  </span>certificate <o:p></o:p></span></p>
+
+<p class=StyleLeft0Firstline0 style='margin-left:1.75in;tab-stops:list 1.75in'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-size:10.0pt;font-family:Arial'>Select
+one of the following data format for key : </span><span style='font-size:10.0pt;
+font-family:"Courier New"'>X.509</span><span style='font-size:10.0pt;
+font-family:Arial'> or </span><span style='font-size:10.0pt;font-family:"Courier New"'>PKCS#7
+<o:p></o:p></span></p>
+
+<p class=StyleLeft0Firstline0 style='margin-left:1.75in;tab-stops:list 1.75in'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-size:10.0pt;font-family:Arial'>Choose
+</span><span style='font-size:10.0pt;font-family:"Courier New"'>Base64</span><span
+style='font-size:10.0pt;font-family:Arial'> for encoding format.<span
+style='mso-spacerun:yes'>  </span><o:p></o:p></span></p>
+
+<p class=StyleLeft0Firstline0 style='margin-left:1.75in;tab-stops:list 1.75in'><![if !supportLists]><span
+style='font-family:Symbol;mso-fareast-font-family:Symbol;mso-bidi-font-family:
+Symbol'><span style='mso-list:Ignore'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-size:10.0pt;font-family:Arial'>Click
+</span><span style='font-size:10.0pt;font-family:"Courier New"'>OK</span><span
+style='font-size:10.0pt;font-family:Arial'>, a file selector for the output
+file will open. Provide a file name using the file selector, click </span><span
+style='font-size:10.0pt;font-family:"Courier New"'>Save</span><span
+style='font-size:10.0pt;font-family:Arial'>. </span><span
+style='mso-spacerun:yes'> </span></p>
+
+<p class=MsoNormal><span style='font-size:10.0pt;font-family:Arial;mso-fareast-font-family:
+Batang;mso-fareast-language:KO'><o:p>&nbsp;</o:p></span></p>
+
+<p class=StyleLeft0Firstline0><![if !supportLists]><span style='font-size:10.0pt;
+font-family:Symbol;mso-fareast-font-family:Symbol;mso-bidi-font-family:Symbol;
+mso-fareast-language:KO'><span style='mso-list:Ignore'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-size:10.0pt;font-family:Arial;
+mso-fareast-font-family:Batang;mso-fareast-language:KO'>Option 2:<span
+style='mso-spacerun:yes'>  </span>Use <b><i>OpenSSL Key <span class=SpellE>Configurator</span>
+</i></b>tool<o:p></o:p></span></p>
+
+<p class=MsoNormal><span style='font-size:10.0pt;font-family:Arial;mso-fareast-font-family:
+Batang;mso-fareast-language:KO'><o:p>&nbsp;</o:p></span></p>
+
+<p class=StyleLeft0Firstline0 style='margin-left:1.25in;tab-stops:list 1.25in'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol;mso-fareast-language:KO'><span style='mso-list:
+Ignore'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-size:10.0pt;font-family:"Courier New";
+mso-fareast-font-family:Batang;mso-fareast-language:KO'>Tools --&gt; Key
+Manager Tool Box --&gt; OpenSSL Key <span class=SpellE>Configurator</span> <o:p></o:p></span></p>
+
+<p class=StyleLeft0Firstline0 style='margin-left:1.25in;tab-stops:list 1.25in'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol;mso-fareast-language:KO'><span style='mso-list:
+Ignore'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-size:10.0pt;font-family:Arial;
+mso-fareast-font-family:Batang;mso-fareast-language:KO'>Select the &quot;</span><span
+style='font-size:10.0pt;font-family:"Courier New";mso-fareast-font-family:Batang;
+mso-fareast-language:KO'>Export from Browser cert DB</span><span
+style='font-size:10.0pt;font-family:Arial;mso-fareast-font-family:Batang;
+mso-fareast-language:KO'>&quot; radio button <o:p></o:p></span></p>
+
+<p class=StyleLeft0Firstline0 style='margin-left:1.25in;tab-stops:list 1.25in'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol;mso-fareast-language:KO'><span style='mso-list:
+Ignore'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-size:10.0pt;font-family:Arial;
+mso-fareast-font-family:Batang;mso-fareast-language:KO'>Select the </span><span
+style='font-size:10.0pt;font-family:"Courier New";mso-fareast-font-family:Batang;
+mso-fareast-language:KO'>key/cert</span><span style='font-size:10.0pt;
+font-family:Arial;mso-fareast-font-family:Batang;mso-fareast-language:KO'> you
+want to export <o:p></o:p></span></p>
+
+<p class=StyleLeft0Firstline0 style='margin-left:1.25in;tab-stops:list 1.25in'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol;mso-fareast-language:KO'><span style='mso-list:
+Ignore'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-size:10.0pt;font-family:Arial;
+mso-fareast-font-family:Batang;mso-fareast-language:KO'>Select the </span><span
+style='font-size:10.0pt;font-family:"Courier New";mso-fareast-font-family:Batang;
+mso-fareast-language:KO'>base-directory</span><span style='font-size:10.0pt;
+font-family:Arial;mso-fareast-font-family:Batang;mso-fareast-language:KO'><span
+style='mso-spacerun:yes'>  </span>where you to export the key/cert <o:p></o:p></span></p>
+
+<p class=StyleLeft0Firstline0 style='margin-left:1.25in;tab-stops:list 1.25in'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol;mso-fareast-language:KO'><span style='mso-list:
+Ignore'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-size:10.0pt;font-family:Arial;
+mso-fareast-font-family:Batang;mso-fareast-language:KO'>Select the key type </span><span
+style='font-size:10.0pt;font-family:"Courier New";mso-fareast-font-family:Batang;
+mso-fareast-language:KO'>PKCS#12</span><span style='font-size:10.0pt;
+font-family:Arial;mso-fareast-font-family:Batang;mso-fareast-language:KO'> or
+&quot;</span><span style='font-size:10.0pt;font-family:"Courier New";
+mso-fareast-font-family:Batang;mso-fareast-language:KO'>Private key</span><span
+style='font-size:10.0pt;font-family:Arial;mso-fareast-font-family:Batang;
+mso-fareast-language:KO'>&quot; <o:p></o:p></span></p>
+
+<p class=StyleLeft0Firstline0 style='margin-left:1.25in;tab-stops:list 1.25in'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol;mso-fareast-language:KO'><span style='mso-list:
+Ignore'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-size:10.0pt;font-family:Arial;
+mso-fareast-font-family:Batang;mso-fareast-language:KO'>Ignore the CA section <o:p></o:p></span></p>
+
+<p class=StyleLeft0Firstline0 style='margin-left:1.25in;tab-stops:list 1.25in'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol;mso-fareast-language:KO'><span style='mso-list:
+Ignore'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-size:10.0pt;font-family:Arial;
+mso-fareast-font-family:Batang;mso-fareast-language:KO'>Click &quot;</span><span
+style='font-size:10.0pt;font-family:"Courier New";mso-fareast-font-family:Batang;
+mso-fareast-language:KO'>Export</span><span style='font-size:10.0pt;font-family:
+Arial;mso-fareast-font-family:Batang;mso-fareast-language:KO'>&quot; <o:p></o:p></span></p>
+
+<p class=MsoNormal><span style='font-size:10.0pt;font-family:Arial;mso-fareast-font-family:
+Batang;mso-fareast-language:KO'><o:p>&nbsp;</o:p></span></p>
+
+<p class=StyleLeft0Firstline0><![if !supportLists]><span style='font-size:10.0pt;
+font-family:Symbol;mso-fareast-font-family:Symbol;mso-bidi-font-family:Symbol;
+mso-fareast-language:KO'><span style='mso-list:Ignore'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-size:10.0pt;font-family:Arial;
+mso-fareast-font-family:Batang;mso-fareast-language:KO'>Option 3: Use the <b><i>NSS/OpenSSL
+Synchronization</i></b> Tool<o:p></o:p></span></p>
+
+<p class=StyleLeft0Firstline0 style='margin-left:1.25in;tab-stops:list 1.25in'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol;mso-fareast-language:KO'><span style='mso-list:
+Ignore'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-size:10.0pt;font-family:"Courier New";
+mso-fareast-font-family:Batang;mso-fareast-language:KO'>Tools --&gt; Key
+Manager Tool Box --&gt; OpenSSL Key/Cert Sync Tool</span><span
+style='font-size:10.0pt;font-family:Arial;mso-fareast-font-family:Batang;
+mso-fareast-language:KO'> <o:p></o:p></span></p>
+
+<p class=StyleLeft0Firstline0 style='margin-left:1.25in;tab-stops:list 1.25in'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol;mso-fareast-language:KO'><span style='mso-list:
+Ignore'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-size:10.0pt;font-family:Arial;
+mso-fareast-font-family:Batang;mso-fareast-language:KO'>Select directory for
+the exported key/cert in the &quot;</span><span style='font-size:10.0pt;
+font-family:"Courier New";mso-fareast-font-family:Batang;mso-fareast-language:
+KO'>Key Store</span><span style='font-size:10.0pt;font-family:Arial;mso-fareast-font-family:
+Batang;mso-fareast-language:KO'>&quot; dir row <o:p></o:p></span></p>
+
+<p class=StyleLeft0Firstline0 style='margin-left:1.25in;tab-stops:list 1.25in'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol;mso-fareast-language:KO'><span style='mso-list:
+Ignore'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-size:10.0pt;font-family:Arial;
+mso-fareast-font-family:Batang;mso-fareast-language:KO'>Select<span
+style='mso-spacerun:yes'>  </span>either </span><span style='font-size:10.0pt;
+font-family:"Courier New";mso-fareast-font-family:Batang;mso-fareast-language:
+KO'>PKCS#12</span><span style='font-size:10.0pt;font-family:Arial;mso-fareast-font-family:
+Batang;mso-fareast-language:KO'> or </span><span style='font-size:10.0pt;
+font-family:"Courier New";mso-fareast-font-family:Batang;mso-fareast-language:
+KO'>PKCS#8 </span><span style='font-size:10.0pt;font-family:Arial;mso-fareast-font-family:
+Batang;mso-fareast-language:KO'>in the<span style='mso-spacerun:yes'>  </span></span><span
+style='font-size:10.0pt;font-family:"Courier New";mso-fareast-font-family:Batang;
+mso-fareast-language:KO'>Soft-token</span><span style='font-size:10.0pt;
+font-family:Arial;mso-fareast-font-family:Batang;mso-fareast-language:KO'> row <o:p></o:p></span></p>
+
+<p class=StyleLeft0Firstline0 style='margin-left:1.25in;tab-stops:list 1.25in'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol;mso-fareast-language:KO'><span style='mso-list:
+Ignore'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-size:10.0pt;font-family:Arial;
+mso-fareast-font-family:Batang;mso-fareast-language:KO'>Select the </span><span
+style='font-size:10.0pt;font-family:"Courier New";mso-fareast-font-family:Batang;
+mso-fareast-language:KO'>key/cert</span><span style='font-size:10.0pt;
+font-family:Arial;mso-fareast-font-family:Batang;mso-fareast-language:KO'> you
+want to export in the &quot;</span><span style='font-size:10.0pt;font-family:
+"Courier New";mso-fareast-font-family:Batang;mso-fareast-language:KO'>NSS to
+OpenSSL Sync</span><span style='font-size:10.0pt;font-family:Arial;mso-fareast-font-family:
+Batang;mso-fareast-language:KO'>&quot; row<o:p></o:p></span></p>
+
+<p class=StyleLeft0Firstline0 style='margin-left:1.25in;tab-stops:list 1.25in'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol;mso-fareast-language:KO'><span style='mso-list:
+Ignore'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-size:10.0pt;font-family:Arial;
+mso-fareast-font-family:Batang;mso-fareast-language:KO'>Leave everything else
+as is <o:p></o:p></span></p>
+
+<p class=StyleLeft0Firstline0 style='margin-left:1.25in;tab-stops:list 1.25in'><![if !supportLists]><span
+style='font-family:Symbol;mso-fareast-font-family:Symbol;mso-bidi-font-family:
+Symbol'><span style='mso-list:Ignore'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-size:10.0pt;font-family:Arial;
+mso-fareast-font-family:Batang;mso-fareast-language:KO'>Click &quot;</span><span
+style='font-size:10.0pt;font-family:"Courier New";mso-fareast-font-family:Batang;
+mso-fareast-language:KO'>Export</span><span style='font-size:10.0pt;font-family:
+Arial;mso-fareast-font-family:Batang;mso-fareast-language:KO'>&quot; button
+next to the selected cert - a customized version of the &quot;</span><span
+class=GramE><span style='font-size:10.0pt;font-family:"Courier New";mso-fareast-font-family:
+Batang;mso-fareast-language:KO'>OpenSSL<span style='mso-spacerun:yes'> 
+</span>Key</span></span><span style='font-size:10.0pt;font-family:"Courier New";
+mso-fareast-font-family:Batang;mso-fareast-language:KO'> <span class=SpellE>Configurator</span></span><span
+style='font-size:10.0pt;font-family:Arial;mso-fareast-font-family:Batang;
+mso-fareast-language:KO'>&quot; dialog window will open, click </span><span
+style='font-size:10.0pt;font-family:"Courier New";mso-fareast-font-family:Batang;
+mso-fareast-language:KO'>Export</span><span style='font-size:10.0pt;font-family:
+Arial;mso-fareast-font-family:Batang;mso-fareast-language:KO'> button, </span><span
+style='font-size:10.0pt;font-family:"Courier New";mso-fareast-font-family:Batang;
+mso-fareast-language:KO'>close</span><span style='font-size:10.0pt;font-family:
+Arial;mso-fareast-font-family:Batang;mso-fareast-language:KO'> window.&nbsp;</span></p>
+
+<p class=StyleLeft0Firstline0 style='margin-left:1.25in;tab-stops:list 1.25in'><![if !supportLists]><span
+style='font-family:Symbol;mso-fareast-font-family:Symbol;mso-bidi-font-family:
+Symbol'><span style='mso-list:Ignore'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>&nbsp;</p>
+
+<p class=StyleLeft0Firstline0><![if !supportLists]><span style='font-size:10.0pt;
+font-family:Symbol;mso-fareast-font-family:Symbol;mso-bidi-font-family:Symbol;
+mso-fareast-language:KO'><span style='mso-list:Ignore'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-size:10.0pt;font-family:Arial;
+mso-fareast-font-family:Batang;mso-fareast-language:KO'>Option 4: Use the <b><i>Backup</i></b>
+button<o:p></o:p></span></p>
+
+<p class=StyleLeft0Firstline0 style='margin-left:1.25in;tab-stops:list 1.25in'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol;mso-fareast-language:KO'><span style='mso-list:
+Ignore'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-size:10.0pt;font-family:Arial'>Open
+Key Manager Dialog Window (</span><span style='font-size:10.0pt;font-family:
+"Courier New"'>Tools --&gt; Key Manager Tool Box --&gt; KeyManager</span><span
+style='font-size:10.0pt;font-family:Arial'>)</span><span style='font-size:10.0pt;
+font-family:Arial;mso-fareast-font-family:Batang;mso-fareast-language:KO'><o:p></o:p></span></p>
+
+<p class=StyleLeft0Firstline0 style='margin-left:1.25in;tab-stops:list 1.25in'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-size:10.0pt;font-family:Arial'>Select
+the “</span><span style='font-size:10.0pt;font-family:"Courier New"'>Your Key</span><span
+style='font-size:10.0pt;font-family:Arial'>” tab <o:p></o:p></span></p>
+
+<p class=StyleLeft0Firstline0 style='margin-left:1.25in;tab-stops:list 1.25in'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-size:10.0pt;font-family:Arial'>Select
+the </span><span style='font-size:10.0pt;font-family:"Courier New"'>server's
+certificate</span><span style='font-size:10.0pt;font-family:Arial'> that you
+want to export for OpenSSL application <o:p></o:p></span></p>
+
+<p class=StyleLeft0Firstline0 style='margin-left:1.25in;tab-stops:list 1.25in'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-size:10.0pt;font-family:Arial'>Export
+the </span><span style='font-size:10.0pt;font-family:"Courier New"'>private key</span><span
+style='font-size:10.0pt;font-family:Arial'> as follows<o:p></o:p></span></p>
+
+<p class=StyleLeft0Firstline0 style='margin-left:1.75in;tab-stops:list 1.75in'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-size:10.0pt;font-family:Arial'>Click
+the </span><span style='font-size:10.0pt;font-family:"Courier New"'>'Backup'</span><span
+style='font-size:10.0pt;font-family:Arial'> button. <o:p></o:p></span></p>
+
+<p class=StyleLeft0Firstline0 style='margin-left:1.75in;tab-stops:list 1.75in'><![if !supportLists]><span
+style='font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
+mso-bidi-font-family:Symbol'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-size:10.0pt;font-family:Arial'>A
+dialog window opens for choosing </span><span style='font-size:10.0pt;
+font-family:"Courier New"'>data </span><span style='font-size:10.0pt;
+font-family:Arial'>password for PKCS#12 file<span style='mso-spacerun:yes'>  
+</span><o:p></o:p></span></p>
+
+<p class=StyleLeft0Firstline0 style='mso-list:none;tab-stops:.5in'><span
+style='font-size:10.0pt;font-family:Arial'><o:p>&nbsp;</o:p></span></p>
+
+<p class=StyleLeft0Firstline0 style='margin-left:0in;text-indent:0in;
+mso-list:none;tab-stops:.5in'><span style='font-size:10.0pt;font-family:Arial'><o:p>&nbsp;</o:p></span></p>
+
+<h3>Sign Using <span class=SpellE>OpenSSL</span> generated Keys and
+Certificates </h3>
+
+<p class=MsoNormal>If you already have keys/certificates for <span
+class=SpellE>OpenSSL</span>, you can also sign with your <st1:place w:st="on"><st1:City
+ w:st="on"><span class=SpellE>OpenSSL</span></st1:City> <st1:State w:st="on">CA</st1:State></st1:place>
+keys as follows:</p>
+
+<ol style='margin-top:0in' start=1 type=1>
+ <li class=MsoNormal style='mso-list:l2 level1 lfo20;tab-stops:list .5in'>Mount
+     <span class=SpellE>OpenSSL</span> key/<span class=SpellE>certs</span> as
+     soft-token<o:p></o:p></li>
+</ol>
+
+<ul style='margin-top:0in' type=disc>
+ <ul style='margin-top:0in' type=circle>
+  <li class=MsoNormal style='mso-list:l27 level2 lfo21;tab-stops:list 1.0in'><b
+      style='mso-bidi-font-weight:normal'>Enable</b> mounting of external keys/<span
+      class=SpellE>certs</span> as a temporary &quot;Security device&quot;
+      (soft-token)</li>
+  <li class=MsoNormal style='mso-list:l27 level2 lfo21;tab-stops:list 1.0in'>Set
+      the preference for mounting soft-token first: &quot;Tools&quot; <span
+      style='font-family:Wingdings;mso-ascii-font-family:"Times New Roman";
+      mso-hansi-font-family:"Times New Roman";mso-char-type:symbol;mso-symbol-font-family:
+      Wingdings'><span style='mso-char-type:symbol;mso-symbol-font-family:Wingdings'>à</span></span>
+      &quot;Add-on&quot; <span style='font-family:Wingdings;mso-ascii-font-family:
+      "Times New Roman";mso-hansi-font-family:"Times New Roman";mso-char-type:
+      symbol;mso-symbol-font-family:Wingdings'><span style='mso-char-type:symbol;
+      mso-symbol-font-family:Wingdings'>à</span></span> Select Key Manager <span
+      style='font-family:Wingdings;mso-ascii-font-family:"Times New Roman";
+      mso-hansi-font-family:"Times New Roman";mso-char-type:symbol;mso-symbol-font-family:
+      Wingdings'><span style='mso-char-type:symbol;mso-symbol-font-family:Wingdings'>à</span></span>
+      select &quot;key Manager tool&quot; tab </li>
+  <li class=MsoNormal style='mso-list:l27 level2 lfo21;tab-stops:list 1.0in'>check
+      the &quot;Enable External NSS Soft-Token Manager&quot; checkbox --&gt;
+      click ok</li>
+ </ul>
+ <li class=MsoNormal style='mso-list:l27 level1 lfo21;tab-stops:list .5in'>Click
+     the &quot;<b style='mso-bidi-font-weight:normal'>Security Device</b>&quot;
+     button on the &quot;<b style='mso-bidi-font-weight:normal'>Your Key</b>&quot;
+     tab</li>
+ <li class=MsoNormal style='mso-list:l27 level1 lfo21;tab-stops:list .5in'><b
+     style='mso-bidi-font-weight:normal'>select</b> &quot;NSS Internal PKCS#11
+     Module&quot; or any node under it, the buttons for mounting soft-token
+     will be displayed on the right</li>
+ <li class=MsoNormal style='mso-list:l27 level1 lfo21;tab-stops:list .5in'>Click
+     the &quot;<b style='mso-bidi-font-weight:normal'>Mount External NSS
+     Soft-Token</b>&quot; button; a dialog window will open for specifying the
+     file path for keys/cert depending on the type of key/cert file you are
+     using. The mounted <span class=SpellE>certs</span> will be displayed on
+     the “Your Key<span class=GramE>” <span style='mso-spacerun:yes'> </span>and</span>
+     “your certificate” tabs of <span style='mso-spacerun:yes'> </span><span
+     class=SpellE>KeyManger</span>. </li>
+</ul>
+
+<ol style='margin-top:0in' start=2 type=1>
+ <li class=MsoNormal style='mso-list:l2 level1 lfo20;tab-stops:list .5in'>Use
+     the mounted CA-cert like any another cert to sign the certificate </li>
+</ol>
+
+<p class=MsoNormal><o:p>&nbsp;</o:p></p>
+
+<p class=MsoNormal style='margin-left:.25in'><o:p>&nbsp;</o:p></p>
+
+<h3>How to Generate PKCS#10 CSR for Smart Card for Signing with External CA</h3>
+
+<p class=MsoNormal>:</p>
+
+<ol style='margin-top:0in' start=1 type=1>
+ <li class=MsoNormal style='mso-list:l22 level1 lfo19;tab-stops:list .5in'>On
+     &quot;your Key&quot; tab of Key Manager do as follows to generate PKCS#10 CSR
+     file </li>
+</ol>
+
+<p class=MsoNormal style='margin-left:.75in;text-indent:-.25in;mso-list:l34 level1 lfo28;
+tab-stops:list .75in'><![if !supportLists]><span style='font-family:Symbol;
+mso-fareast-font-family:Symbol;mso-bidi-font-family:Symbol'><span
+style='mso-list:Ignore'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>&quot;Generate CSR&quot; --&gt; “Save CSR” as
+File (A self-signed cert will be automatically created)<span
+style='mso-spacerun:yes'>  </span><i style='mso-bidi-font-style:normal'>or</i> </p>
+
+<p class=MsoNormal style='margin-left:.75in;text-indent:-.25in;mso-list:l34 level1 lfo28;
+tab-stops:list .75in'><![if !supportLists]><span style='font-family:Symbol;
+mso-fareast-font-family:Symbol;mso-bidi-font-family:Symbol'><span
+style='mso-list:Ignore'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>&quot;Generate Self-signed Cert&quot; --&gt;
+Select newly create cert --&gt; click &quot;Generate CSR&quot; or &quot;Export&quot;
+button to create as PKCS#10 CSR file<o:p></o:p></p>
+
+<p class=MsoNormal style='margin-left:1.25in;text-indent:-.25in;mso-list:l34 level2 lfo28;
+tab-stops:list 1.25in'><![if !supportLists]><span style='mso-list:Ignore'>-<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><![endif]>During generation of CSR or Self-signed cert, you will
+prompted to select the token associated with the smart-card<o:p></o:p></p>
+
+<ol style='margin-top:0in' start=2 type=1>
+ <li class=MsoNormal style='mso-list:l22 level1 lfo19;tab-stops:list .5in'>Use
+     PKCS#10 CSR file to create a CA-signed cert using <span class=SpellE>OpenSSL</span></li>
+</ol>
+
+<p class=MsoNormal style='margin-left:.75in;text-indent:-.25in;mso-list:l16 level1 lfo37;
+tab-stops:list .75in'><![if !supportLists]><span style='font-family:Symbol;
+mso-fareast-font-family:Symbol;mso-bidi-font-family:Symbol'><span
+style='mso-list:Ignore'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>CA signed cert file could be X.59 cert or a
+PKCS#7 file with signed cert as well as the full CA cert-chain<o:p></o:p></p>
+
+<ol style='margin-top:0in' start=3 type=1>
+ <li class=MsoNormal style='mso-list:l22 level1 lfo19;tab-stops:list .5in'>On
+     &quot;Your Key&quot; tab do as follows: </li>
+</ol>
+
+<p class=MsoNormal style='margin-left:.75in;text-indent:-.25in;mso-list:l16 level1 lfo37;
+tab-stops:list .75in'><![if !supportLists]><span style='font-family:Symbol;
+mso-fareast-font-family:Symbol;mso-bidi-font-family:Symbol'><span
+style='mso-list:Ignore'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>Use &quot;Import User cert&quot; to import the
+CA-signed cert; do not forget to import the CA cert chain if your signed cert
+file does not contain the CA-cert chain along with the X.509 cert. </p>
+
+<p class=MsoNormal style='margin-left:.75in;text-indent:-.25in;mso-list:l16 level1 lfo37;
+tab-stops:list .75in'><![if !supportLists]><span style='font-family:Symbol;
+mso-fareast-font-family:Symbol;mso-bidi-font-family:Symbol'><span
+style='mso-list:Ignore'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>Delete the previously created self-signed cert,
+if you do not want it. <o:p></o:p></p>
+
+<p class=MsoNormal>Note: The self-signed cert is created as marker for the
+generated key for the CSR (like in Java <span class=SpellE>keytool</span> which
+requires a self-signed cert to generate CSR) otherwise the key won't be visible
+until you import a signed cert.</p>
+
+<p class=MsoNormal><o:p>&nbsp;</o:p></p>
+
+<p class=MsoNormal>If your smart card does not allow more than one cert for
+each private <span class=GramE>key ,</span> generate the keys and self-signed cert
+on the “Internal Security device” not on the “Smart Card”. Then export the CSR
+and sign it using the CA. Once the signed cert is imported in the soft-token, select
+the signed cert on the &quot;Your Key&quot; tab and do as follows:</p>
+
+<ul style='margin-top:0in' type=disc>
+ <li class=MsoNormal style='mso-list:l4 level1 lfo39;tab-stops:list .5in'>Click
+     the &quot;<b style='mso-bidi-font-weight:normal'>Backup&quot;/&quot;Export</b>&quot;
+     button to <b style='mso-bidi-font-weight:normal'>export</b> the selected CA-signed
+     cert as<span style='mso-spacerun:yes'>  </span><i style='mso-bidi-font-style:
+     normal'>PKCS#12 </i>file,</li>
+ <li class=MsoNormal style='mso-list:l4 level1 lfo39;tab-stops:list .5in'><b
+     style='mso-bidi-font-weight:normal'>Delete</b> the selected CA-signed cert
+     and also the self-signed cert (the generated key-pair will be
+     automatically deleted when all the <span class=SpellE>certs</span> associated
+     with the key-pair are deleted)</li>
+ <li class=MsoNormal style='mso-list:l4 level1 lfo39;tab-stops:list .5in'>Click
+     the &quot;<b style='mso-bidi-font-weight:normal'>Import</b>&quot; button
+     (not the &quot;Import Cert&quot;) to import the exported PKCS#12 file. <b
+     style='mso-bidi-font-weight:normal'>Select</b> the token associated with
+     smart-card when prompted for the selection of the security device</li>
+</ul>
+
+<p class=MsoNormal style='margin-left:.25in'><o:p>&nbsp;</o:p></p>
+
+<p class=MsoNormal><o:p>&nbsp;</o:p></p>
+
+<p class=MsoNormal><span style='font-size:10.0pt;font-family:Arial'><o:p>&nbsp;</o:p></span></p>
+
+<h2>Sign Certificates in Java Key Store using CA profile in Firefox&nbsp;</h2>
+<p class="MsoNormal"><span style="mso-bookmark: CAProfile_SignServerCert">This
+section describes how to use Key Manager to sign certificates in Java key
+stores. The tool will allow you to select the key/certificates in Java key store
+using the alias and do all that is necessary to sign the certificate using the
+CA's key in browser's certificate DB. It will extract a PKCS#10 CSR using, then
+sign the certificate using Key Manager's certificate signing tool and then
+import back into the Java key store.&nbsp;</span></p>
+<p class="MsoNormal"><span style="mso-bookmark: CAProfile_SignServerCert"><b><i>Note</i>:
+This feature is only supported on Linux/Mac-OSX platforms.&nbsp;</b></span></p>
+<p class="MsoNormal">&nbsp;</p>
+<p class="MsoNormal">&nbsp;</p>
+
+<p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Here are the steps
+that you have to follow to export Keys/certificates:&nbsp;</p>
+<ol>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Enable the
+    Java Keystore manger tool options :&nbsp;<p style="line-height: 100%; margin-top: 2; margin-bottom: 1"><b>Tools
+    --&gt; Add-on --&gt; Select the &quot;Key Manager&quot; add-on --&gt; Click
+    &quot;Options/Preferences&quot; -&gt; select &quot;key Manager Tool&quot;
+    tab --&gt; check &quot;Enable Java Keystore Cert&quot; Management check-box</b>
+    <ul>
+      <li>
+        <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Select the
+        &quot;<b>JKS Manage Cert Tool</b>&quot; tab and the provide the path to
+        a&nbsp; <b>shell command</b>, <b>JAVA_HOME</b>, and the Java version. If
+        the <b>SHELL</b> and <b>JAVA_HOME</b> environment variable is already
+        set, then preference will be automatically set to those values.&nbsp;</li>
+    </ul>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">&nbsp;</li>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Open Java Key
+    store Manger Wizard&nbsp;&nbsp;<p style="line-height: 100%; margin-top: 2; margin-bottom: 1"><b><font face="Courier New">Tools --&gt; Key Manager Tool Box --&gt;
+    Manage Certs in Java Key store</font></b><p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Alternatively,<p style="line-height: 100%; margin-top: 2; margin-bottom: 1"><b>Toolbar</b>
+    for KeyManager --&gt; Open the menu in &quot;<b>Security Devices</b>&quot;
+    --&gt; select the &quot;<b>Manage certs in JKS</b>&quot; menu item&nbsp;</li>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Specify&nbsp; the
+    key store parameter&nbsp; using the browse button :
+    <ul>
+      <li>
+        <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">&quot;Key
+        Store&quot; file path (use the browse button to select an existing file
+        or location of new file&quot;; if you want to create new Keystore, then
+        check the &quot;New&quot; checkbox and then select browse to select the
+        location and name of the file</li>
+      <li>
+        <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Key store
+        type&nbsp;</li>
+      <li>
+        <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Key store
+        password&nbsp;</li>
+      <li>
+        <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Type of
+        task - generate a new key-pair and then sign it, sign a certificate for
+        an existing key-pair or import X.509 certificate</li>
+      <li>
+        <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Click Next
+        (You may have select a different field or click the window after
+        specifying in order for the next button to be activated)</li>
+    </ul>
+<p style="line-height: 100%; margin-top: 2; margin-bottom: 1">&nbsp;</p>
+<div align="center">
+  <center>
+  <table border="1" cellpadding="12" width="38%">
+    <tr>
+      <td width="100%"><img border="0" src="images/KeyManager_JKS_SelectKeyStore.png" width="850" height="450"></td>
+    </tr>
+  </table>
+  </center>
+</div>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">&nbsp;</li>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Select the key
+    using the alias and provide the path to the PKCS#10 CSR.&nbsp;
+    <ul>
+      <li>
+        <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Select the
+        certificate to be signed from the &quot;Cert Alias&quot; list&nbsp;</li>
+      <li>
+        <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Enter/Select
+        the file path for PKCS#10 CSR; The tool will automatically generate a
+        path for the PKCS#10 CSR.&nbsp;</li>
+      <li>
+        <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Finally
+        click Next to generate CSR.&nbsp;</li>
+      <li>
+        <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Note: If
+        the Next button is not activate then move the cursor to different part
+        of the wizard and click the left button.</li>
+    </ul>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">&nbsp;</li>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Select the
+    Signer Cert form the browser's Certificate DB and Provide the path for the
+    Signed X.509 cert&nbsp;
+    <ul>
+      <li>
+        <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Select the
+        Signer Cert using the Menu provided in the &quot;Signer X.509 Cert&quot;
+        row</li>
+      <li>
+        <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Use the
+        &quot;Browse' button to select the path for the &quot;Signed X.509
+        cert&quot; to be generated. The tool will automatically generate file
+        path.&nbsp;</li>
+      <li>
+        <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Click
+        Next, The Certificate Signer Dialog window will be displayed&nbsp;</li>
+    </ul>
+<p style="line-height: 100%; margin-top: 2; margin-bottom: 1">&nbsp;</p>
+<div align="center">
+  <center>
+  <table border="1" cellpadding="12" width="38%">
+    <tr>
+      <td width="100%"><img border="0" src="images/KeyManager_JKS_SelectSignerX509Cert.png" width="850" height="450"></td>
+    </tr>
+  </table>
+  </center>
+</div>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">&nbsp;
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">&nbsp;
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">&nbsp;</li>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Use the
+    certificate signer dialog window to sign the certificate&nbsp;
+    <ul>
+      <li>
+        <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Click the
+        Advanced button to modify the certificate extensions in PKCS#10 CSR or
+        add new certificate extensions</li>
+      <li>
+        <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Click the
+        Sign cert&nbsp;</li>
+    </ul>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">&nbsp;<p style="line-height: 100%; margin-top: 2; margin-bottom: 1">&nbsp;</li>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Import the
+    signed cert in the Java Key store&nbsp;
+    <ul>
+      <li>
+        <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">The tool
+        will provide alias for the newly generated cert and the certificate
+        chain for importing into the Java keystore. The Javakestore does not
+        allow importing of the certificate without the signer cert-chain.&nbsp;</li>
+    </ul>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">&nbsp;</li>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">&nbsp;&nbsp;
+    Finally, the imported signed cert will be displayed as shown below.&nbsp;
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">&nbsp;</li>
+</ol>
+
+<p style="line-height: 100%; margin-top: 2; margin-bottom: 1">&nbsp;</p>
+
+
+<p class=MsoNormal><o:p>&nbsp;</o:p></p>
+
+</div>
+
+</body>
+
+</html>

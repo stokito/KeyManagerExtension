@@ -1,0 +1,582 @@
+<?xml version="1.0"?>
+<!-- @(#) $Id: basicconstraintsextn.xml,v 1.14 2009/04/16 13:11:53 subrata Exp $ -->
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is Avaya Labs Research, Avaya Inc. Code.
+   -
+   - The Initial Developer of the Original Code is
+   - Subrata Mazumdar, Avaya Labs Research, Avaya Inc.
+   - Portions created by the Initial Developer are Copyright (C) 2007.
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Subrata Mazumdar (mazum@avaya.com)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+
+<!DOCTYPE bindings SYSTEM "chrome://keymanager/locale/keyManager.dtd">
+
+<bindings id="basicconstraintsextnBindings"
+    xmlns="http://www.mozilla.org/xbl"
+    xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    xmlns:xbl="http://www.mozilla.org/xbl">
+
+
+    <binding id="basicconstraintsextnBinding"
+	extends="chrome://keymanager/content/ExtnXBL/certextn.xml#certextnbaseBinding"
+        >
+        <!--
+        <resources>
+    	    <script type="application/x-javascript" src="chrome://keymanager/content/ExtnXBL/certextn2props.js"/>
+	    <stylesheet src="chrome://keymanager/skin/kmbindings.css"/>
+        </resources>
+        -->
+    	<!-- content, property, method and event descriptions go here -->
+    	<content>
+	    <xul:certextn anonid="certextn.stdx509extn.basicconstraints"
+	        xbl:inherits="flex,captionlabel,active,activelabel,activetooltip,activePropName,critical,criticallabel,criticaltooltip,criticalPropName,mandatory,mandatorylabel,mandatorytooltip,mandatoryPropName,readonly,optionshidden"
+	        captionlabel="&keymgr.cert.csr.form.tab.stdx509ext.basiconstraint.label;"
+		activePropName="basicConstraints"
+		criticalPropName="basicConstraints-crit"
+		mandatoryPropName="basicConstraints-mandatory"
+		flex="1"
+		>
+                <xul:checkbox anonid="certextn.stdx509extn.basicconstraints.isca"
+	            xbl:inherits="label=iscalabel,hidden=iscahidden,disabled,certPropName=iscaprop,tooltiptext=iscatooltip,checked=isCA,readonly"
+		    label="&keymgr.cert.csr.form.tab.stdx509ext.basiconstraint_ca.label;"
+		    tooltiptext="&keymgr.cert.csr.form.tab.stdx509ext.basiconstraint_ca.tooltip;"
+		    certPropName="basicConstraints-cA-radio"
+		    oncommand="getBindingParent(this).isCAChanged(this, event);"
+		    />
+	        <xul:hbox anonid="certextn.stdx509extn.basicconstraints.path"
+		    xbl:inherits="hidden=pathhidden"
+		    >
+                    <xul:checkbox anonid="certextn.stdx509extn.basicconstraints.usepath"
+	            	xbl:inherits="label=usepathlabel,certPropName=usepathprop,disabled,checked=usepath,tooltiptext=usepathtooltip,readonly"
+		        label="&keymgr.cert.csr.form.tab.stdx509ext.basiconstraint_includepathlen.label;"
+			tooltiptext="&keymgr.cert.csr.form.tab.stdx509ext.basiconstraint_includepathlen.tooltip;"
+		    	certPropName="basicConstraints-pathLengthConstraint"
+		    	oncommand="getBindingParent(this).usePathChanged(this, event);"
+			/>
+                    <xul:textbox anonid="certextn.stdx509extn.basicconstraints.pathlen"
+	            	xbl:inherits="certPropName=pathlenprop,disabled,value=pathlen,tooltiptext=pathlentooltip,readonly"
+		    	size="2" maxlength="32"
+			tooltiptext="&keymgr.cert.csr.form.tab.stdx509ext.basiconstraint_pathlen.tooltip;"
+		    	certPropName="basicConstraints-pathLengthConstraint-text"
+		    	onchange="getBindingParent(this).pathLenChanged(this, event);"
+			/>
+		    <xul:label anonid="certextn.stdx509extn.basicconstraints.maxpathlen"
+	            	xbl:inherits="tooltiptext=maxpathlentooltip,maxpathlen"
+		        hidden="true"
+			tooltiptext="&keymgr.cert.csr.form.tab.stdx509ext.basiconstraint_pathlen_max.tooltip;"
+			/>
+	        </xul:hbox>
+	    </xul:certextn>
+	    <xul:certextnutil  anonid="certextn.util"/>
+    	</content>
+	<implementation>
+	    <field name="mBaseExtnElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certextn.stdx509extn.basicconstraints");
+	    </field>
+	    <field name="mIsCAElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certextn.stdx509extn.basicconstraints.isca");
+	    </field>
+	    <field name="mBCPathElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certextn.stdx509extn.basicconstraints.path");
+	    </field>
+	    <field name="mUsePathElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certextn.stdx509extn.basicconstraints.usepath");
+	    </field>
+	    <field name="mPathLenElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certextn.stdx509extn.basicconstraints.pathlen");
+	    </field>
+	    <field name="mMaxPathLenElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certextn.stdx509extn.basicconstraints.maxpathlen");
+	    </field>
+	    <field name="mMaxPathLen">
+	    	-1
+	    </field>
+	    <field name="mPrevPathLen">
+	    	-1
+	    </field>
+
+	    <property name="active"
+	        onget="return this.mBaseExtnElem.active;"
+	    	onset="this.mBaseExtnElem.active = val;return val;"
+		/>
+	    <property name="critical"
+	        onget="return this.mBaseExtnElem.critical;"
+	    	onset="this.mBaseExtnElem.critical = val;return val;"
+		/>
+	    <property name="mandatory"
+	        onget="return this.mBaseExtnElem.mandatory;"
+	    	onset="this.mBaseExtnElem.mandatory = val;return val;"
+		/>
+	    <property name="readonly"
+	        onget="return this.mBaseExtnElem.readonly;"
+	    	onset="this.mBaseExtnElem.readonly = val;
+		       this.setReadonly(this.mBaseExtnElem, val);
+		       if(!val) {this.refresh();}
+		       return val;"
+		/>
+	    <property name="disabled"
+	        onget="return this.mBaseExtnElem.disabled;"
+	    	onset="this.mBaseExtnElem.disabled = val;return val;"
+		/>
+	    <property name="iscadisabled"
+	        onget="return this.mIsCAElem.disabled;"
+	    	onset="this.mIsCAElem.disabled = val;return val;"
+		/>
+
+	    <property name="isCA">
+	        <getter>
+		<![CDATA[
+	        return this.mIsCAElem.checked;
+		]]>
+	        </getter>
+	        <setter>
+		<![CDATA[
+	    	if (val == true) this.setAttribute('isCA',true);
+                else this.removeAttribute('isCa');
+	        this.mIsCAElem.checked = val;
+		this.isCAChanged(this.mIsCAElem);
+		return val;
+		]]>
+	        </setter>
+	    </property>
+
+	    <property name="usepath">
+	        <getter>
+		<![CDATA[
+	        return this.usePathLenElem.checked;
+		]]>
+	        </getter>
+	        <setter>
+		<![CDATA[
+		// this.LogTrace("basicconstraintsextnBinding.usepath.set():......................Start.\n");
+		// this.LogDebug("basicconstraintsextnBinding.usepath.set(): val: " + val + "\n");
+
+	    	if (val) {
+		    this.setAttribute('usepath',true);
+		}
+                else  {
+		    this.removeAttribute('usepath');
+		}
+	        this.mUsePathElem.hidden = !val;
+	        this.mUsePathElem.checked = val;
+		// this.LogDebug("basicconstraintsextnBinding.usepath.set(): this.mUsePathElem.checked: " + this.mUsePathElem.checked + "\n");
+		this.usePathChanged(this.mUsePathElem);
+
+		// this.mMaxPathLenElem.hidden = !val;
+		// this.maxPathLenChanged(this.mMaxPathLenElem);
+
+		// this.LogTrace("basicconstraintsextnBinding.usepath.set():......................End.\n");
+		return val;
+		]]>
+	        </setter>
+	    </property>
+
+	    <property name="pathlen">
+	        <getter>
+		<![CDATA[
+		return this.mPathLenElem.value;
+		]]>
+	        </getter>
+	        <setter>
+		<![CDATA[
+		if (val) {
+		    this.setAttribute('pathlen',val);
+		    this.mPathLenElem.value = val;
+		}
+		else {
+		    this.mPathLenElem.value = "";
+		}
+		this.pathLenChanged(this.mPathLenElem);
+		return val;
+		]]>
+	        </setter>
+	    </property>
+
+	    <property name="maxpathlen">
+	        <getter>
+		<![CDATA[
+	        return this.mMaxPathLen;
+		]]>
+	        </getter>
+	        <setter>
+		<![CDATA[
+		if (!val || (val == "") || (val < 0)) {
+		    this.mMaxPathLen = -1;
+		    this.mMaxPathLenElem.value = "";
+		    this.removeAttribute("maxpathlen");
+		    return val;
+		}
+
+		this.mMaxPathLen = parseInt(val);
+		this.mMaxPathLenElem.value = " <= " + val;
+
+		this.setAttribute("maxpathlen", this.mMaxPathLen);
+		this.maxPathLenChanged(this.mMaxPathLenElem);
+
+		return val;
+		]]>
+	        </setter>
+	    </property>
+
+
+	    <constructor>
+		<![CDATA[
+		// this.LogTrace("basicconstraintsextnBinding.constructor():......................Start.\n");
+
+		// Max-path-len is set at the begining and fixed until next reset
+		var maxPathLenAttrValue = this.getAttribute("maxpathlen");
+		if (maxPathLenAttrValue && (maxPathLenAttrValue != "")) {
+		    maxPathLenAttrValue = parseInt(maxPathLenAttrValue);
+		    if (maxPathLenAttrValue >= 0) {
+			this.maxpathlen = maxPathLenAttrValue;
+		    }
+		}
+
+		this.refresh();
+
+		// this.LogTrace("basicconstraintsextnBinding.constructor():......................End.\n");
+		]]>
+	    </constructor>
+
+	    <method name="refresh">
+	        <body>
+		<![CDATA[
+		// this.LogTrace("basicconstraintsextnBinding.refresh():......................Start.\n");
+
+
+		// this.pathLenChanged(this.mPathLenElem);
+		// this.usePathChanged(this.mPathLenElem);
+		this.isCAChanged(this.mIsCAElem);
+
+		this.mPrevPathLen = this.mMaxPathLen;
+		/*
+		this.LogDebug("this.mMaxPathLen: " + this.mMaxPathLen + " " +
+				"this.mPrevPathLen: " + this.mPrevPathLen + "\n");
+		*/
+
+		// this.LogTrace("basicconstraintsextnBinding.refresh():......................End.\n");
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="isCAChanged">
+		<parameter name="aIsCAElem"/>
+		<parameter name="ev"/>
+	        <body>
+		<![CDATA[
+		// this.LogTrace("basicconstraintsextnBinding.isCAChanged():......................Start.\n");
+		if (ev) {
+		    ev.stopPropagation();
+		}
+
+		// this.mBaseExtnElem.activateControl(true);
+
+		if (this.isCA) {
+		    this.mUsePathElem.hidden = false;
+		    if (this.mMaxPathLen >= 0) {
+		    	this.usepath = true;
+		    	this.mUsePathElem.disabled = true;
+		    	this.mandatory = true;
+			this.mBaseExtnElem.activateControl(false);
+		    }
+		    else {
+			this.mUsePathElem.disabled = false;
+		    }
+		    // this.maxpathlen = this.mMaxPathLen;
+		    // this.mMaxPathLenElem.hidden = false;
+
+		    // this.maxPathLenChanged(this.mMaxPathLenElem);
+		}
+		else {
+		    this.mMaxPathLenElem.hidden = true;
+		    this.mUsePathElem.hidden = true;
+		    this.usepath = false;
+		    // this.usePathChanged(this.mUsePathElem);
+		}
+
+		// this.LogTrace("basicconstraintsextnBinding.isCAChanged():......................End.\n");
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="usePathChanged">
+		<parameter name="aUsePathElem"/>
+		<parameter name="ev"/>
+	        <body>
+		<![CDATA[
+		// this.LogTrace("usePathChanged():..........................Start.\n");
+		if (ev) {
+		    ev.stopPropagation();
+		}
+		// this.LogDebug("usePathChanged(): aUsePathElem.checked: " + aUsePathElem.checked + "\n");
+
+		this.mPathLenElem.hidden = !aUsePathElem.checked;
+		this.mMaxPathLenElem.hidden = !aUsePathElem.checked;
+	    	if (aUsePathElem.checked) {
+		    if (this.mMaxPathLen >= 0) {
+			if ((this.mPathLenElem.value == "") || (this.mPathLenElem.value > this.mMaxPathLen)) {
+		    	    this.mPathLenElem.value = this.mMaxPathLen;
+		    	    this.pathLenChanged(this.mPathLenElem);
+			}
+		    }
+		}
+		else {
+		    this.mPathLenElem.value = "";
+		    // this.pathLenChanged(this.mPathLenElem);
+		}
+		// this.LogTrace("usePathChanged():..........................End.\n");
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="pathLenChanged">
+		<parameter name="aPathLenElem"/>
+		<parameter name="ev"/>
+	        <body>
+		<![CDATA[
+		// this.LogTrace("pathLenChanged():..........................Start.\n");
+		if (this.mMaxPathLen < 0) {
+		    return;
+		}
+
+		var newVal = -1;
+		if (aPathLenElem.value != "") {
+		    newVal = parseInt(aPathLenElem.value);
+		}
+
+		// this.LogDebug("pathLenChanged(): newVal: " + newVal + " this.mMaxPathLen: " + this.mMaxPathLen + "\n");
+		if (this.mUsePathElem.checked && ((newVal < 0) || (newVal > this.mMaxPathLen))) {
+	    	    alert("You cannot assign path length more than MAX value: " +
+		    	this.mMaxPathLen + ".\n" + 
+	    		"Blank spaces means highest postive integer.\n" +
+			"\n");
+		    aPathLenElem.value = this.mPrevPathLen;
+		    return;
+		}
+
+		if ((this.mMaxPathLen < 0) && (aPathLenElem.value != "")) {
+		    if (!this.mUsePathElem.checked) {
+	    	        this.mUsePathElem.checked = true;
+		    }
+		}
+
+		if ((this.mMaxPathLen < 0) && (aPathLenElem.value == "")) {
+		    if (this.mUsePathElem.checked) {
+	    	        this.mUsePathElem.checked = false;
+		    }
+		}
+
+		this.setAttribute('pathlen', newVal);
+		this.mPrevPathLen = newVal;
+
+		// this.LogTrace("pathLenChanged():..........................End.\n");
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="maxPathLenChanged">
+		<parameter name="aMaxPathLenElem"/>
+		<parameter name="ev"/>
+	        <body>
+		<![CDATA[
+		// this.LogTrace("maxPathLenChanged():..........................Start.\n");
+
+		if (ev) {
+		    ev.stopPropagation();
+		}
+
+		// this.LogDebug("maxPathLenChanged(): this.mMaxPathLen: " + this.mMaxPathLen + "\n");
+		if (this.isCA && (this.mMaxPathLen >= 0)) {
+		    aMaxPathLenElem.hidden = false;
+		    this.mUsePathElem.hidden = false;
+		    this.mUsePathElem.disabled = true;
+		    this.usepath = true;
+
+		    this.mandatory = true;
+		    this.mBaseExtnElem.activateControl(false);
+		}
+		else {
+		    aMaxPathLenElem.hidden = true;
+		    this.mUsePathElem.removeAttribute("disabled");
+		    this.usePathChanged(this.mUsePathElem);
+
+		    // this.mandatory = false;
+		    this.mBaseExtnElem.activateControl(true);
+		}
+
+		// this.LogTrace("maxPathLenChanged():..........................End.\n");
+		]]>
+	        </body>
+	    </method>
+
+
+	    <method name="reset">
+	        <body>
+		<![CDATA[
+
+
+	    	this.maxpathlen = "";
+		this.resetCertExtn(this.mBaseExtnElem);
+		this.mBaseExtnElem.reset();
+		
+
+		this.pathLenChanged(this.mPathLenElem);
+	    	// this.pathlen = -1;
+
+		this.usePathChanged(this.mUsePathElem);
+	    	// this.usepath = false;
+
+		this.isCAChanged(this.mIsCAElem);
+	    	// this.isCA = false;
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="toCertProps">
+		<parameter name="aCertProps"/>
+	        <body>
+		<![CDATA[
+
+		// this.LogTrace("basicconstraintsextnBinding.toCertProps(): this.active: " + this.active + "\n");
+
+		if (!this.active) {
+		    return;
+		}
+
+		this.certExtnToProps(this.mBaseExtnElem, aCertProps);
+
+		// this.dumpProperties(aCertProps, "Basic Constraints");
+
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="updateCertProps">
+		<parameter name="aCertProps"/>
+	        <body>
+		<![CDATA[
+		this.LogTrace("basicconstraintsextnBinding.updateCertProps():..........................Start.\n");
+
+		if (! this.containsAnyProperty(this.mBaseExtnElem, aCertProps)) {
+		    this.LogDebug("basicconstraintsextnBinding.updateCertProps(): Found no properties for this extension.\n");
+		    return;
+		}
+
+		this.reset();
+
+		// this.dumpProperties(aCertProps, "basicconstraintsextnBinding.updateCertProps");
+
+		this.updateCertExtnProps(this.mBaseExtnElem, aCertProps);
+
+		var maxPathLen = null;
+		try {
+		    maxPathLen = aCertProps.getStringProperty("basicConstraints-pathLengthConstraint-maxpathlen");
+		} catch (ex) {}
+		if (!maxPathLen) {
+		    try {
+		        maxPathLen = aCertProps.getStringProperty("basicConstraints-pathLengthConstraint-text");
+		    } catch (ex) {}
+		}
+		if (maxPathLen) {
+		    this.maxpathlen = maxPathLen;
+		}
+		// this.LogDebug("basicconstraintsextnBinding.updateCertProps(): mandatory: " + this.mandatory + "\n");
+
+		var userCertOnly = "false";
+		try {
+		    userCertOnly = aCertProps.getStringProperty("basicConstraints-user-radio");
+		} catch (ex) {}
+		if (userCertOnly == "true") {
+		    this.mIsCAElem.checked = false;
+		    this.mIsCAElem.disabled = true;
+		}
+		else {
+		    this.mIsCAElem.disabled = false;
+		}
+
+		this.refresh();
+
+		// this.LogTrace("basicconstraintsextnBinding.updateCertProps():..........................End.\n");
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="mergeCertProps">
+		<parameter name="aCertProps"/>
+	        <body>
+		<![CDATA[
+		// this.LogTrace("basicconstraintsextnBinding.mergeCertProps():..........................Start.\n");
+		if (! this.containsAnyProperty(this.mBaseExtnElem, aCertProps)) {
+		    this.LogDebug("basicconstraintsextnBinding.mergeCertProps(): Found no properties for this extension.\n");
+		    return;
+		}
+
+		this.updateCertExtnProps(this.mBaseExtnElem, aCertProps, true);
+
+		var maxPathLen = null;
+		try {
+		    maxPathLen = aCertProps.getStringProperty("basicConstraints-pathLengthConstraint-maxpathlen");
+		} catch (ex) {}
+		if (!maxPathLen) {
+		    try {
+		        maxPathLen = aCertProps.getStringProperty("basicConstraints-pathLengthConstraint-text");
+		    } catch (ex) {}
+		}
+		if (maxPathLen) {
+		    this.maxpathlen = maxPathLen;
+		}
+
+		var userCertOnly = "false";
+		try {
+		    userCertOnly = aCertProps.getStringProperty("basicConstraints-user-radio");
+		} catch (ex) {}
+		if (userCertOnly == "true") {
+		    this.mIsCAElem.checked = false;
+		    this.mIsCAElem.disabled = true;
+		}
+		else {
+		    this.mIsCAElem.disabled = false;
+		}
+
+		this.refresh();
+
+		// this.LogTrace("basicconstraintsextnBinding.mergeCertProps():..........................Start.\n");
+		]]>
+	        </body>
+	    </method>
+
+	</implementation>
+    </binding>
+
+</bindings>
+

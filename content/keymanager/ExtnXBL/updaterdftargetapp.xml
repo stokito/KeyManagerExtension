@@ -1,0 +1,554 @@
+<?xml version="1.0"?>
+<!-- @(#) $Id: updaterdftargetapp.xml,v 1.3 2009/12/02 07:09:50 subrata Exp $ -->
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is Avaya Labs Research, Avaya Inc. Code.
+   -
+   - The Initial Developer of the Original Code is
+   - Subrata Mazumdar, Avaya Labs Research, Avaya Inc.
+   - Portions created by the Initial Developer are Copyright (C) 2007.
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Subrata Mazumdar (mazum@avaya.com)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+
+<!DOCTYPE bindings SYSTEM "chrome://keymanager/locale/xpsigntoolext.dtd">
+
+<bindings id="updaterdftargetappBindings"
+    xmlns="http://www.mozilla.org/xbl"
+    xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    xmlns:xbl="http://www.mozilla.org/xbl">
+
+    <binding id="updaterdftargetapplistBinding"
+	extends="chrome://keymanager/content/ExtnXBL/certextn.xml#certextnbaseBinding"
+	>
+	<content>
+            <xul:richlistbox anonid="updaterdf.targetapp.richlistbox"
+                    xbl:inherits="flex"
+                    flex="1"
+                    zstyle="overflow:auto; border: 2px solid red;"
+                    height="250"
+                    tooltiptext="&xpsigntoolext.form.updaterdf.targetapp.list.tooltip;"
+                    zonselect="getBindingParent(this).onTransformListSelect(event);"
+                    zoncommand="getBindingParent(this).handleTransformChange(event);"
+                    zonchange="getBindingParent(this).handleTransformChange(event);"
+                    >
+		<children incldues="richlistitem"/>
+            </xul:richlistbox>
+	</content>
+	<implementation>
+	</implementation>
+    </binding>
+
+    <binding id="updaterdftargetappBinding"
+	extends="chrome://keymanager/content/ExtnXBL/certextn.xml#certextnbaseBinding"
+	>
+	<resources>
+	    <stylesheet src="chrome://keymanager/skin/kmbindings.css"/>
+	</resources>
+	<!-- content, property, method and event descriptions go here -->
+	<content>
+	    <xul:groupbox
+		xbl:inherits="flex,width,hidden"
+                style="border: 2px solid brown;"
+		>
+	        <xul:grid anonid="updaterdf.targetapp.grid"
+		    xbl:inherits="flex,width,hidden"
+		    flex="1"
+		    debug="true"
+		    > 
+		    <xul:columns>
+		        <xul:column/>
+		        <xul:column flex="1"/>
+		    </xul:columns>
+		    <xul:rows>
+                        <xul:row anonid="updaterdf.targetapp.updateLink.row"
+			    align="center"
+			    >
+    	                    <xul:label class="header" value="&xpsigntoolext.form.updaterdf.targetapp.id.label;"/>
+			    <xul:groupbox
+			        pack="start"
+				orient="horizontal"
+				xstyle="border: 1px solid blue;"
+				>
+			        <xul:label anonid="updaterdf.targetapp.id"
+				    class="header"
+				    tooltiptext="&xpsigntoolext.form.updaterdf.targetapp.id.tooltip;"
+			            />
+			    	<xul:spacer flex="2"/>
+				<xul:hbox>
+			            <xul:label anonid="updaterdf.targetapp.minversion" 
+				        class="header"
+				        tooltiptext="&xpsigntoolext.form.updaterdf.targetapp.minversion.tooltip;"
+			                />
+			    	    <xul:spacer flex="1"/>
+			            <xul:label anonid="updaterdf.targetapp.maxversion"
+				        class="header"
+				        tooltiptext="&xpsigntoolext.form.updaterdf.targetapp.maxversion.tooltip;"
+			                />
+				</xul:hbox>
+			    	<xul:spacer flex="1"/>
+			    </xul:groupbox>
+                        </xul:row>
+
+                        <xul:row anonid="updaterdf.targetapp.updateLink.row"
+			    align="center"
+			    >
+    	                    <xul:label class="header" value="&xpsigntoolext.form.updaterdf.targetapp.updateLink.label;"/>
+			    <xul:groupbox
+			        pack="start"
+				orient="horizontal"
+				xstyle="border: 1px solid blue;"
+				>
+				<xul:checkbox anonid="updaterdf.targetapp.updateLink.https"
+				    disabled="true"
+				    label="&xpsigntoolext.form.updaterdf.targetapp.updateLink.https.label;"
+				    />
+			        <xul:textbox anonid="updaterdf.targetapp.updateLink.url" flex="1"
+				    xbl:inherits="value=updateLink"
+			            readonly="true"
+				    tooltiptext="&xpsigntoolext.form.updaterdf.targetapp.updateLink.https.label;"
+				    style="overflow:auto"
+	       		            onchange="getBindingParent(this).handleUpdateLinkURLChange(this, event);"
+			            />
+			    </xul:groupbox>
+                        </xul:row>
+
+                        <xul:row anonid="updaterdf.targetapp.xpi.file.row"
+			    align="center"
+			    >
+			    <xul:label class="header" value="&xpsigntoolext.form.updaterdf.targetapp.xpi.file.label;"/>
+			    <xul:fileselector anonid="updaterdf.targetapp.xpi.filepicker"
+			    	formathidden="true"
+			        fileMode="open"
+			        fileDialogMsg="Choose Archive File"
+			        fileTypeMsg="Archive File"
+			        fileTypeFilters="*.xpi; *.jar"
+  			        filetooltiptext="&xpsigntoolext.form.updaterdf.targetapp.xpi.file.path.tooltip;"
+                	        browselabel="&xpsigntoolext.form.file.browser.label;"
+                	        browsetooltiptext="&xpsigntoolext.form.updaterdf.targetapp.xpi.file.browser.tooltip;"
+				onpopuphiding="getBindingParent(this).handleTargetAppXpiFilePickerChange(this, event);"
+				onchange="getBindingParent(this).handleTargetAppXpiFilePickerChange(this, event);"
+				oncommand="getBindingParent(this).handleTargetAppXpiFilePickerChange(this, event);"
+                	        />
+		        </xul:row>
+                        <xul:row anonid="updaterdf.targetapp.updateHash.row"
+			    align="center"
+			    >
+    	                    <xul:label class="header" value="&xpsigntoolext.form.updaterdf.targetapp.updateHash.label;"/>
+			    <xul:hbox
+				pack="start"
+				align="center"
+			        >
+				<xul:hashalgmenu anonid="updaterdf.targetapp.updateHash.algmenu"
+				    md2hidden="true"
+				    md5hidden="true"
+				    value="SHA1"
+	       		            oncommand="getBindingParent(this).handleUpdateHashAlgChange(this, event);"
+				    />
+			        <xul:textbox anonid="updaterdf.targetapp.updateHash" flex="1"
+			            readonly="true"
+				    width="40"
+				    tooltiptext="&xpsigntoolext.form.updaterdf.targetapp.updateHash.tooltip;"
+				    style="overflow:auto"
+			            />
+		            	<xul:button anonid="updaterdf.targetapp.updateHash.compute"
+				    hidden="true"
+	  		            label="&xpsigntoolext.form.updaterdf.targetapp.updateHash.compute.label;"
+  		      	            tooltiptext="&xpsigntoolext.form.updaterdf.targetapp.updateHash.compute.tooltip;"
+	       		            oncommand="getBindingParent(this).computeUpdateHash(event);"
+				    />
+			    </xul:hbox>
+                        </xul:row>
+		    </xul:rows>
+	        </xul:grid>
+	    </xul:groupbox>
+	</content>
+	<implementation>
+	    <field name="mUpdateLinkGridElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "updaterdf.targetapp.grid");
+	    </field>
+	    <field name="mUpdateLinkHttpsElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "updaterdf.targetapp.updateLink.https");
+	    </field>
+	    <field name="mUpdateLinkURLElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "updaterdf.targetapp.updateLink.url");
+	    </field>
+	    <field name="mUpdateFilePickerRowElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "updaterdf.targetapp.xpi.file.row");
+	    </field>
+	    <field name="mXPIFilePickerElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "updaterdf.targetapp.xpi.filepicker");
+	    </field>
+	    <field name="mUpdateHashRowElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "updaterdf.targetapp.updateHash.row");
+	    </field>
+	    <field name="mUpdateHashAlgMenuElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "updaterdf.targetapp.updateHash.algmenu");
+	    </field>
+	    <field name="mUpdateHashElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "updaterdf.targetapp.updateHash");
+	    </field>
+	    <field name="mComputeHashElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "updaterdf.targetapp.updateHash.compute");
+	    </field>
+	    <field name="mKeyManager">
+		Components.classes["@avaya.com/pkm/keymanager;1"].
+		    	getService(Components.interfaces.alrIKeyManager);
+	    </field>
+
+	    <field name="mRDFService">
+                Components.classes["@mozilla.org/rdf/rdf-service;1"]
+		                   .getService(Components.interfaces.nsIRDFService);
+	    </field>
+	    <field name="mRdfDS"/>
+	    <field name="mTargetAppResource"/>
+
+            <property name="isUpdateLinkHttps" readonly="true"
+                onget="return this.mUpdateLinkHttpsElem.checked"
+                />
+            <property name="updateLink"
+                onget="return this.mUpdateLinkURLElem.value"
+                onset="this.mUpdateLinkURLElem.value=val; this.handleUpdateLinkURLChange(this.mUpdateLinkURLElem);
+                       return val;"
+                />
+            <property name="updateHash" readonly="true"
+                onget="if (this.mUpdateHashElem.value == '') { return ''; }
+		       var val = (this.mUpdateHashAlgMenuElem.value.toLowerCase() + ':' + this.mUpdateHashElem.value);
+		       return val;"
+                />
+            <property name="rdfDS" readonly="true"
+                onget="return this.mRdfDS;"
+                />
+            <property name="targetAppResource" readonly="true"
+                onget="return this.mTargetAppResource;"
+                />
+
+	    <constructor>
+		<![CDATA[
+		this.LogTrace("updaterdftargetappBinding.constructor():......................Start.");
+
+		this.refresh();
+
+		this.LogTrace("updaterdftargetappBinding.constructor():......................End.");
+		]]>
+	    </constructor>
+
+	    <method name="refresh">
+		<body>
+		<![CDATA[
+		var updateHash = this.getAttribute("updateHash");
+		if (updateHash) {
+		    var updateHashItems = updateHash.split(":");
+		    if (updateHashItems.length == 2) {
+		    	var hashAlg = updateHashItems[0];
+		    	var hashValue = updateHashItems[1];
+                	this.mUpdateHashAlgMenuElem.value = hashAlg.toUpperCase();;
+			this.mUpdateHashElem.value = hashValue;
+			// dump("hashAlg: " + hashAlg + " hashValue: " + hashValue);
+		    }
+		    else {
+		    	this.LogError("Badly formatted updateHash: " + updateHash);
+		    }
+		}
+
+		this.handleUpdateLinkURLChange(this.mUpdateLinkURLElem);
+		if (!this.isUpdateLinkHttps) {
+		    this.handleTargetAppXpiFilePickerChange(this.mXPIFilePickerElem);
+		}
+		]]>
+		</body>
+	    </method>
+
+	    <method name="handleTargetAppXpiFilePickerChange">
+		<parameter name="aXPIFilePickerElem"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("updaterdftargetappBinding.handleTargetAppXpiFilePickerChange():......................Start.");
+
+		this.mUpdateHashElem.value = "";
+		if (aXPIFilePickerElem.file) {
+		    this.mComputeHashElem.hidden = false;
+		    this.mUpdateHashAlgMenuElem.disabled = false;
+		    if (ev) {
+		    	this.computeUpdateHash();
+		    }
+		}
+		else {
+		    this.mComputeHashElem.hidden = true;
+		    this.mUpdateHashAlgMenuElem.disabled = true;
+		    /*
+		    var updateHash = this.getRDFTarget("updateHash");
+		    if (updateHash) {
+		        this.mUpdateHashElem.value = updateHash;
+		    }
+		    */
+		}
+		this.LogTrace("updaterdftargetappBinding.handleTargetAppXpiFilePickerChange():......................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="getRDFTarget">
+		<parameter name="aPredicateName"/>
+		<body>
+		<![CDATA[
+                this.LogTrace("updaterdftargetappBinding.getRDFTarget():....................Start.");
+		if (!this.mRdfDS || !this.mTargetAppResource) {
+		    return null;
+		}
+                var predicate = this.mRDFService.GetResource("http://www.mozilla.org/2004/em-rdf#" + aPredicateName);
+                var hasPredicate = this.mRdfDS.hasArcOut(this.mTargetAppResource, predicate);
+                this.LogDebug("updaterdftargetappBinding.getRDFTarget(): hasPredicate: " + hasPredicate + "");
+                var attributeNode = null;
+                if (hasPredicate) {
+	            attributeNode = this.mRdfDS.GetTarget(this.mTargetAppResource, predicate, true);
+                }
+
+                var attributeValue = null;
+                if (attributeNode) {
+	            if (attributeNode instanceof Components.interfaces.nsIRDFLiteral) {
+	                attributeValue = attributeNode.Value;
+	            }
+                }
+                this.LogDebug("updaterdftargetappBinding.getRDFTarget(" + aPredicateName + "): " + attributeValue + "");
+
+                this.LogTrace("updaterdftargetappBinding.getRDFTarget():....................End.");
+                return attributeValue;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="setRDFTarget">
+		<parameter name="aPredicateName"/>
+		<parameter name="aTargetValue"/>
+		<body>
+		<![CDATA[
+                this.LogTrace("updaterdftargetappBinding.setRDFTarget():....................Start.");
+		if (!this.mRdfDS || !this.mTargetAppResource) {
+		    return;
+		}
+    
+                var predicate = this.mRDFService.GetResource("http://www.mozilla.org/2004/em-rdf#" + aPredicateName);
+                var hasPredicate = this.mRdfDS.hasArcOut(this.mTargetAppResource, predicate);
+                this.LogDebug("xpsigntoolext_setRDFTarget(): hasPredicate (updateHash): " + hasPredicate + "");
+                if (hasPredicate) {
+	            var oldName = this.mRdfDS.GetTarget(this.mTargetAppResource, predicate, true);
+	            this.mRdfDS.Unassert(this.mTargetAppResource, predicate, oldName, true);
+                }
+            
+                var name = this.mRDFService.GetLiteral(aTargetValue);
+                this.mRdfDS.Assert(this.mTargetAppResource, predicate, name, true);
+            
+                // this.mRdfDS.QueryInterface(Components.interfaces.nsIRDFRemoteDataSource);
+                // this.mRdfDS.Flush();
+
+                this.LogTrace("updaterdftargetappBinding.setRDFTarget():....................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="setTargetAppResource">
+		<parameter name="aRdfDS"/>
+		<parameter name="aTargetAppResource"/>
+		<body>
+		<![CDATA[
+		// this.mMaxLogLevel = 9;
+                this.LogTrace("updaterdftargetappBinding.setTargetAppResource():....................Start.");
+                this.LogDebug("updaterdftargetappBinding.setTargetAppResource(): aTargetAppResource: " + aTargetAppResource.Value + "");
+
+		this.mRdfDS = aRdfDS;
+		this.mTargetAppResource = aTargetAppResource;
+
+		var targetAppIdElem = document.getAnonymousElementByAttribute(this, "anonid", "updaterdf.targetapp.id");
+		var targetAppMinVersionElem = document.getAnonymousElementByAttribute(this, "anonid", "updaterdf.targetapp.minversion");
+		var targetAppMaxVersionElem = document.getAnonymousElementByAttribute(this, "anonid", "updaterdf.targetapp.maxversion");
+		var appId = this.getRDFTarget("id");
+		var minVersion = this.getRDFTarget("minVersion");
+		var maxVersion = this.getRDFTarget("maxVersion");
+		if (appId) {
+		    targetAppIdElem.value = appId;
+		}
+		if (minVersion) {
+		    targetAppMinVersionElem.value = minVersion;
+		}
+		if (maxVersion) {
+		    targetAppMaxVersionElem.value = maxVersion;
+		}
+
+
+		var updateLink = this.getRDFTarget("updateLink");
+		if (updateLink) {
+		    this.updateLink = updateLink;
+		}
+
+		var updateHash = this.getRDFTarget("updateHash");
+		this.LogDebug("updaterdftargetappBinding.setTargetAppResource():\nupdateHash: " + updateHash + " updateLink: " + updateLink + "");
+		if (updateHash) {
+		    var updateHashItems = updateHash.split(":");
+		    if (updateHashItems.length == 2) {
+		    	var hashAlg = updateHashItems[0];
+		    	var hashValue = updateHashItems[1];
+                	this.mUpdateHashAlgMenuElem.value = hashAlg.toUpperCase();;
+			this.mUpdateHashElem.value = hashValue;
+			// dump("hashAlg: " + hashAlg + " hashValue: " + hashValue);
+		    }
+		    else {
+		    	this.LogError("Badly formatted updateHash: " + updateHash);
+		    }
+		}
+
+                this.LogTrace("updaterdftargetappBinding.setTargetAppResource():....................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="handleUpdateLinkURLChange">
+		<parameter name="aUpdateLinkURLElem"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		if (this.mUpdateLinkURLElem.value.indexOf("https://") == 0) {
+		    this.mUpdateLinkHttpsElem.checked = true;
+		}
+
+		if (this.mUpdateLinkHttpsElem.checked) {
+	    	    this.mUpdateHashRowElem.hidden = true;
+	    	    this.mUpdateFilePickerRowElem.hidden = true;
+		}
+		else {
+	    	    this.mUpdateHashRowElem.hidden = false;
+	    	    this.mUpdateFilePickerRowElem.hidden = false;
+		}
+		if (ev) {
+		    if (this.mRdfDS && this.mTargetAppResource) {
+		    	this.setRDFTarget("updateLink", aUpdateLinkURLElem.value);
+		    }
+		}
+		]]>
+		</body>
+	    </method>
+
+	    <method name="handleUpdateHashAlgChange">
+		<parameter name="aUpdateHashAlgMenuElem"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("updaterdftargetappBinding.handleUpdateHashAlgChange():......................Start.");
+		if (!this.mXPIFilePickerElem.file) {
+		    return;
+		}
+
+		this.computeUpdateHash();
+
+		this.LogTrace("updaterdftargetappBinding.handleUpdateHashAlgChange():......................End.");
+		]]>
+		</body>
+	    </method>
+
+
+	    <method name="computeUpdateHashBase64">
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		if (!this.mXPIFilePickerElem.file) {
+		    return;
+		}
+		
+		var xpiFileHash = this.mKeyManager.hashFileDataToBase64(
+				this.mXPIFilePickerElem.file,
+				this.mUpdateHashAlgMenuElem.value
+				);
+		this.mUpdateHashElem.value = xpiFileHash;
+
+		if (this.mRdfDS && this.mTargetAppResource) {
+		    var modifiedUpdateHash = this.updateHash;
+		    this.setAttribute("updateHash", modifiedUpdateHash);
+		    this.setRDFTarget("updateHash", modifiedUpdateHash);
+		}
+		]]>
+		</body>
+	    </method>
+
+	    <method name="computeUpdateHash">
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("updaterdftargetappBinding.computeUpdateHash():......................Start.");
+
+		if (!this.mXPIFilePickerElem.file) {
+		    return;
+		}
+
+		/*
+		// Alternate implementation for FF3.
+                const MODE_RDONLY   = 0x01;
+                const MODE_WRONLY   = 0x02;
+                const MODE_CREATE   = 0x08;
+                const MODE_APPEND   = 0x10;
+                const MODE_TRUNCATE = 0x20;
+
+                const PERMS_FILE      = 0644;
+                const PERMS_DIRECTORY = 0755;
+
+		var xpiFileStream = Components.classes["@mozilla.org/network/file-input-stream;1"]
+					.createInstance(nsIFileInputStream);
+		xpiFileStream.init(this.mXPIFilePickerElem.file, MODE_RDONLY, PERMS_FILE, 0);
+
+		var cryptoHash = Components.classes["@mozilla.org/security/hash;1"].
+		                createInstance(nsICryptoHash);
+		cryptoHash.initWithString(this.mUpdateHashAlgMenuElem.value);
+		cryptoHash.updateFromStream(xpiFileStream, -1);
+		var binDigest = cryptoHash.finish(false);
+		*/
+		
+		var xpiFileHash = this.mKeyManager.hashFileDataToHex(
+				this.mXPIFilePickerElem.file,
+				this.mUpdateHashAlgMenuElem.value
+				);
+		this.mUpdateHashElem.value = xpiFileHash;
+
+		if (this.mRdfDS && this.mTargetAppResource) {
+		    var modifiedUpdateHash = this.updateHash;
+		    this.setAttribute("updateHash", modifiedUpdateHash);
+		    this.setRDFTarget("updateHash", modifiedUpdateHash);
+		}
+
+		this.LogTrace("updaterdftargetappBinding.computeUpdateHash():......................End.");
+		]]>
+		</body>
+	    </method>
+
+	</implementation>
+    </binding>
+
+</bindings>
+

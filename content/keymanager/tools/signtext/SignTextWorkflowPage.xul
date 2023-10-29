@@ -1,0 +1,258 @@
+<?xml version="1.0"?>
+<!-- @(#) $Id: SignTextWorkflowPage.xul,v 1.2 2010/05/04 23:58:26 subrata Exp $ -->
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is Avaya Labs Research, Avaya Inc. Code.
+   -
+   - The Initial Developer of the Original Code is
+   -     Subrata Mazumdar, Avaya Labs Research, Avaya Inc.
+   - Portions created by the Initial Developer are Copyright (C) 2007.
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Subrata Mazumdar (mazum@avaya.com)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://keymanager/skin/kmbindings.css" type="text/css"?>
+
+<!--
+<!DOCTYPE overlay
+	[
+	<!ENTITY % xmldsigffext.dtd SYSTEM "chrome://xmldsigffext/locale/xmldsigffext.dtd">
+	%xmldsigffext.dtd;
+	]>
+-->
+
+<!DOCTYPE overlay SYSTEM "chrome://keymanager/locale/keyManager.dtd">
+
+<overlay id="keymgr.signtext.doc.workflow.win"
+    xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    >
+
+    <!--
+    <script type="application/x-javascript" src="chrome://xmldsigffext/content/xmldsig/XmlDSigEncWorkFlowInit.js"/>
+    -->
+    <script type="application/x-javascript" src="SignTextWorkflowPage.js"/>
+
+    <wizardpage
+    	id="keymgr.signtext.doc.workflow"
+    	pageid="keymgr.signtext.doc.workflow"
+    	description="&keymgr.signtext.doc.workflow.page.label;"
+    	flex="1"
+	onpageshow="return SignTextWorkflowPage.onPageShow(this, event);"
+	onpageadvanced="return SignTextWorkflowPage.onPageAdvanced(this, event);"
+    	next="keymgr.signtext.doc.sign"
+    	ynext="keymgr.signtext.doc.encrypt"
+    	xnext="keymgr.signtext.doc.decrypt"
+    	>
+	<vbox>
+	    <radiogroup id="keymgr.signtext.doc.workflow.group"
+	        oncommand="handleXmlDocWorkFlowSeqChange(this, event)"
+		persists="selectedIndex"
+		>
+	    <grid> 
+		<columns>
+		    <column/>
+		</columns>
+		<rows>
+		    <row id="keymgr.signtext.doc.workflow.item00.row">
+		        <radio id="keymgr.signtext.doc.workflow.item00"
+		            label="Sign"
+		            tooltiptext="Sign"
+			    value="sign"
+			    group="keymgr.signtext.doc.workflow.group"
+			    />
+		    </row>
+		    <!--
+		    -->
+		    <row id="keymgr.signtext.doc.workflow.item01.row">
+		        <radio id="keymgr.signtext.doc.workflow.item01"
+		            label="Verify"
+			    selected="true"
+		            tooltiptext="Verify Signature"
+			    value="verify"
+			    group="keymgr.signtext.doc.workflow.group"
+			    />
+		    </row>
+		    <row id="keymgr.signtext.doc.workflow.item02.row">
+		        <radio id="keymgr.signtext.doc.workflow.item02"
+		            label="Sign, Verify"
+		            tooltiptext="Sign, Verify File"
+			    value="sign,verify"
+			    group="keymgr.signtext.doc.workflow.group"
+			    />
+		    </row>
+		    <row id="keymgr.signtext.doc.workflow.item03.row">
+		        <radio id="keymgr.signtext.doc.workflow.item03"
+		            label="Sign, Verify, Encrypt"
+		            tooltiptext="Sign, Verify, Encrypt File"
+			    value="sign,verify,encrypt"
+			    group="keymgr.signtext.doc.workflow.group"
+			    />
+		    </row>
+		    <row id="keymgr.signtext.doc.workflow.item04.row">
+		        <radio id="keymgr.signtext.doc.workflow.item04"
+		            label="Encrypt File"
+		            tooltiptext="Encrypt File"
+			    value="encrypt"
+			    group="keymgr.signtext.doc.workflow.group"
+			    />
+		    </row>
+		    <row id="keymgr.signtext.doc.workflow.item05.row">
+		        <radio id="keymgr.signtext.doc.workflow.item05"
+		            label="Decrypt File"
+		            tooltiptext="Decrypt File"
+			    value="decrypt"
+			    group="keymgr.signtext.doc.workflow.group"
+			    />
+		    </row>
+		    <row id="keymgr.signtext.doc.workflow.item06.row">
+		        <radio id="keymgr.signtext.doc.workflow.item06"
+		            label="Encrypt and Decrypt"
+		            tooltiptext="Encrypt and Decrypt File"
+			    value="encrypt,decrypt"
+			    group="keymgr.signtext.doc.workflow.group"
+			    />
+		    </row>
+		    <row id="keymgr.signtext.doc.workflow.item07.row">
+		        <radio id="keymgr.signtext.doc.workflow.item07"
+		            label="Decrypt and Verify File"
+		            tooltiptext="Decrypt and Verify File"
+			    value="decrypt,verify2"
+			    group="keymgr.signtext.doc.workflow.group"
+			    />
+		    </row>
+		    <row id="keymgr.signtext.doc.workflow.item08.row">
+		        <radio id="keymgr.signtext.doc.workflow.item08"
+		            label="Sign, Verify, Encrypt, Decrypt and Verify"
+		            tooltiptext="Sign, Verify, Encrypt, Decrypt and Verify"
+			    value="sign,verify,encrypt,decrypt,verify2"
+			    group="keymgr.signtext.doc.workflow.group"
+			    />
+		    </row>
+		    <row id="keymgr.signtext.doc.workflow.custom.row">
+		        <radio id="keymgr.signtext.doc.workflow.custom"
+		            label="Custom"
+		            tooltiptext="Custom"
+			    value="custom"
+			    group="keymgr.signtext.doc.workflow.group"
+			    />
+		    </row>
+		</rows>
+	    </grid>
+	    </radiogroup>
+
+	    <grid> 
+		<columns>
+		    <column/>
+		</columns>
+		<rows>
+		    <row id="keymgr.signtext.doc.workflow.steps.row">
+			<groupbox orient="horizontal" pack="start" align="start"
+			    oncommand="handleXmlDocWorkFlowStepsChange(event)"
+			    >
+			        <checkbox id="keymgr.signtext.doc.workflow.steps.sign"
+			            label="Sign"
+				    disabled="true"
+				    cmdname="sign"
+    			    	    cmdPageId="keymgr.signtext.doc.sign"
+				    genoutfile="true"
+			            />
+			        <checkbox id="keymgr.signtext.doc.workflow.steps.verify"
+			            label="Verify"
+				    disabled="true"
+				    cmdname="verify"
+    			    	    cmdPageId="keymgr.signtext.doc.verify"
+			            />
+			        <checkbox id="keymgr.signtext.doc.workflow.steps.encrypt"
+			            label="Encrypt"
+				    disabled="true"
+				    cmdname="encrypt"
+    			    	    cmdPageId="keymgr.signtext.doc.encrypt"
+				    genoutfile="true"
+			            />
+			        <checkbox id="keymgr.signtext.doc.workflow.steps.decrypt"
+			            label="Decrypt"
+				    disabled="true"
+				    cmdname="decrypt"
+    			    	    cmdPageId="keymgr.signtext.doc.decrypt"
+				    genoutfile="true"
+			            />
+			        <checkbox id="keymgr.signtext.doc.workflow.steps.verify2"
+			            label="Verify2"
+				    disabled="true"
+				    cmdname="verify2"
+    			    	    cmdPageId="keymgr.signtext.doc.verify2"
+			            />
+			    <!--
+		            <hbox pack="start" align="start"
+			    	>
+			    </hbox>
+		            <hbox pack="start" align="start">
+			    </hbox>
+			    -->
+			</groupbox>
+		    </row>
+		    <row id="keymgr.signtext.doc.workflow.save.row">
+		        <checkbox id="keymgr.signtext.doc.workflow.save"
+			    label="Save doc in intermediate steps"
+			    xdisabled="true"
+			    checked="true"
+			    tooltiptext="Select this option if you want to save docs created in intermediate steps" 
+	        	    oncommand="handleSaveWizardPageOutputChange(this, event)"
+			    />
+		    </row>
+		    <row id="keymgr.signtext.doc.workflow.out.file.row">
+		        <hbox pack="start" align="start" flex="1">
+			<label class="header" value="Final Document"/>
+	    		<fileselector id="keymgr.signtext.doc.workflow.out.file" flex="1"
+			    formathidden="true"
+			    ascii="true"
+			    fileMode="save"
+			    fileDialogMsg="Select the Path to the final File"
+			    fileTypeMsg="Text File"
+			    fileTypeFilters="*.txt"
+			    browselabel="&keymgr.signtext.doc.file.browser.label;"
+			    filetooltiptext="Enter the final output file path - if disbaled then it is intialized either with preference or dialog paramater" 
+			    oncommand="handleFinalOutFileChange(this, event);"
+			    onchange="handleFinalOutFileChange(this, event);"
+			    />
+			</hbox>
+			<!--
+			-->
+		    </row>
+		</rows>
+	    </grid>
+	</vbox>
+    </wizardpage>
+
+
+</overlay>
+

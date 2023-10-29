@@ -1,0 +1,688 @@
+<?xml version="1.0"?>
+<!-- @(#) $Id: crlManagerCreateOverlay.xul,v 1.13 2012/10/03 14:20:36 subrata Exp $ -->
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is Avaya Labs Research, Avaya Inc. Code.
+   -
+   - The Initial Developer of the Original Code is
+   - Subrata Mazumdar, Avaya Labs Research, Avaya Inc.
+   - Portions created by the Initial Developer are Copyright (C) 2007.
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Subrata Mazumdar (mazum@avaya.com)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+
+<!DOCTYPE window SYSTEM "chrome://keymanager/locale/crltool.dtd">
+
+<!--
+Installation instructions: 
+Add the following line in the chrome.manifest file:
+    overlay chrome://pippki/content/crlManager.xul  chrome://keymanager/content/tools/crltool/crlManagerCreateOverlay.xul
+-->
+
+<overlay id="crlManagerCreate.overlay.win"
+    xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    >
+
+<script type="application/x-javascript">
+<![CDATA[
+
+window.addEventListener(
+    "load",
+    function(e){
+	avpki.keymanager.CrlManagerCreateOverlay.initOnLoad();
+    },
+    true
+);
+
+
+var avpki = {};
+avpki.keymanager = {};
+avpki.keymanager.CrlManagerCreateOverlay = {
+
+    /* alrIKeyManager	*/ mKeyManager : null,
+    mCRLManager		: null,
+
+    mCRLSigningEnabled	: false,
+
+    mMaxLogLevel		: 2,
+    log : function(level, msg)
+    {
+	if (level > avpki.keymanager.CrlManagerCreateOverlay.mMaxLogLevel) {
+	    return;
+	}
+	dump(msg + "\n");
+    },
+
+    logError : function(msg)
+    {
+	avpki.keymanager.CrlManagerCreateOverlay.log(2, msg);
+    },
+    logTrace : function(msg)
+    {
+	avpki.keymanager.CrlManagerCreateOverlay.log(4, msg);
+    },
+    logDebug : function(msg)
+    {
+	avpki.keymanager.CrlManagerCreateOverlay.log(8, msg);
+    },
+
+
+    initOnLoad : function () 
+    {
+	avpki.keymanager.CrlManagerCreateOverlay.initXPComServiceInfo();
+
+	avpki.keymanager.CrlManagerCreateOverlay.loadToolsEnableOptions();
+
+	// If CRL Siginging option is not enabled, do not show the buttons 
+	// related CRL life-cycle.
+        var crlMgrDialogButtonsElem = document.getElementById('modifyDialogButtons');
+	crlMgrDialogButtonsElem.hidden = !avpki.keymanager.CrlManagerCreateOverlay.mCRLSigningEnabled;
+	if (!avpki.keymanager.CrlManagerCreateOverlay.mCRLSigningEnabled) {
+	    // Since buttons are not displayed, we do not need to listen for tree events.
+	    return;
+	}
+
+        avpki.keymanager.CrlManagerCreateOverlay.activateButtons();
+
+	// Subscribe for selection events of CRL-tree to selectively activate buttons.
+        var crlTree = document.getElementById('crltree');
+        crlTree.addEventListener("select", avpki.keymanager.CrlManagerCreateOverlay.activateButtons, false);
+    },
+
+    initXPComServiceInfo : function ()
+    {
+	avpki.keymanager.CrlManagerCreateOverlay.logTrace("CRLCreateBasicForm.initXPComServiceInfo():................Start.");
+
+	try {
+	    avpki.keymanager.CrlManagerCreateOverlay.mKeyManager = Components.classes["@avaya.com/pkm/keymanager;1"]
+	                        .getService(Components.interfaces.alrIKeyManager);
+            avpki.keymanager.CrlManagerCreateOverlay.mCRLManager = Components.classes["@avaya.com/pkm/alrcrlmanager;1"]
+				.getService(Components.interfaces.alrICRLManager);
+	} catch (ex) {
+	    alert("avpki.keymanager.CrlManagerCreateOverlay.initXPComServiceInfo(): failed to initialize one or more XPCOM based required services- ex: " + ex + "");
+	    avpki.keymanager.CrlManagerCreateOverlay.logError("avpki.keymanager.CrlManagerCreateOverlay.initXPComServiceInfo(): failed to initialize one or more XPCOM based required services- ex: " + ex + "");
+	    throw ex;
+	}
+
+	avpki.keymanager.CrlManagerCreateOverlay.logTrace("CRLCreateBasicForm.initXPComServiceInfo():................End.");
+    },
+
+
+    loadToolsEnableOptions : function () 
+    {
+	avpki.keymanager.CrlManagerCreateOverlay.logTrace("avpki.keymanager.CrlManagerCreateOverlay.loadToolsEnableOptions():................Start.");
+
+        do {
+            try {
+    	        var Prefs = Components.classes["@mozilla.org/preferences-service;1"]
+			        .getService(Components.interfaces.nsIPrefService);
+
+	        var prefBranchPrefixId = "keymgr.";
+	        var prefsBranch = Prefs.getBranch(prefBranchPrefixId);
+	        if (!prefsBranch) {
+	    	    break;
+	        }
+
+                var prefBoolValue = prefsBranch.getBoolPref("crltool.enabled");
+	        if (prefBoolValue) {
+	    	    avpki.keymanager.CrlManagerCreateOverlay.mCRLSigningEnabled = true;
+	        }
+            } catch (ex) {
+	        avpki.keymanager.CrlManagerCreateOverlay.logError("avpki.keymanager.CrlManagerCreateOverlay.loadToolsEnableOptions():  unable to obtain preferences - ex: " + ex);
+	    }
+        } while (0);
+
+        avpki.keymanager.CrlManagerCreateOverlay.logDebug("avpki.keymanager.CrlManagerCreateOverlay.loadToolsEnableOptions():  avpki.keymanager.CrlManagerCreateOverlay.mCRLSigningEnabled: " + avpki.keymanager.CrlManagerCreateOverlay.mCRLSigningEnabled);
+
+	avpki.keymanager.CrlManagerCreateOverlay.logTrace("avpki.keymanager.CrlManagerCreateOverlay.loadToolsEnableOptions():................End.");
+	return;
+    },
+
+    getSelectedCRL : function () 
+    {
+	avpki.keymanager.CrlManagerCreateOverlay.logTrace("avpki.keymanager.CrlManagerCreateOverlay.getSelectedCRL():...........................Start.");
+
+        var crltree = document.getElementById("crltree");
+	var i = crltree.currentIndex;
+	if (i < 0) {
+	    return null;
+	}
+
+	var crlInfo = crls.queryElementAt(i, nsICRLInfo);
+
+	var /* alrICRL */ crl = null;
+	try {
+	    crl = avpki.keymanager.CrlManagerCreateOverlay.mCRLManager.findCRLByInfo(crlInfo);
+	} catch (ex) { }
+
+	avpki.keymanager.CrlManagerCreateOverlay.logDebug("avpki.keymanager.CrlManagerCreateOverlay.getSelectedCRL(): crl: " + crl);
+
+	avpki.keymanager.CrlManagerCreateOverlay.logTrace("avpki.keymanager.CrlManagerCreateOverlay.getSelectedCRL():...........................End.");
+	return crl;
+    },
+
+    activateButtons : function () 
+    {
+
+	var /* alrICRL */ selectedCRL = null;
+        var crlTree = document.getElementById('crltree');
+
+	if (crlTree.view.selection.count) {
+	    selectedCRL = avpki.keymanager.CrlManagerCreateOverlay.getSelectedCRL();
+	    if (!selectedCRL) {
+	    	dump("CrlManagerCreateOverlay.activateButtons(): failed to get alICRL for selected item.\n");
+	    }
+	}
+
+	if (selectedCRL) {
+	    document.getElementById("viewCRL").removeAttribute("disabled");
+	    document.getElementById("exportCRL").removeAttribute("disabled");
+	    var crlIssuerHasKey = false;
+	    if (selectedCRL) {
+	    	var crlIssuerCert = selectedCRL.issuer;
+		if (crlIssuerCert) {
+		    try {
+		    	crlIssuerHasKey = avpki.keymanager.CrlManagerCreateOverlay.mKeyManager.isUserCert(crlIssuerCert);
+		    } catch (ex) {
+		    	dump("CrlManagerCreateOverlay.activateButtons(): avpki.keymanager.CrlManagerCreateOverlay.mKeyManager.isUserCert() failed - ex: " + ex + "\n");
+		    }
+		}
+	    }
+	    if (crlIssuerHasKey) {
+	    	document.getElementById("editCRL").removeAttribute("disabled");
+	    }
+	    else {
+	    	document.getElementById("editCRL").setAttribute("disabled", true);
+	    }
+	}
+	else {
+	    document.getElementById("viewCRL").setAttribute("disabled", true);
+	    document.getElementById("exportCRL").setAttribute("disabled", true);
+	    document.getElementById("editCRL").setAttribute("disabled", true);
+	}
+    },
+
+
+    viewCRL : function () 
+    {
+	var /* alrICRL */ crl = avpki.keymanager.CrlManagerCreateOverlay.getSelectedCRL();
+	avpki.keymanager.CrlManagerCreateOverlay.logDebug("CrlManagerCreateOverlay.viewCRL(): crl: " + crl);
+
+	var viewCRLURL = "chrome://keymanager/content/tools/crltool/CRLCreateForm.xul";
+
+        var pkiParams = Components.classes["@mozilla.org/security/pkiparamblock;1"]
+    				.createInstance(Components.interfaces.nsIPKIParamBlock);
+        var dialogParams = pkiParams.QueryInterface(Components.interfaces.nsIDialogParamBlock);
+
+    	dialogParams.SetString(0, "view");
+    	pkiParams.setISupportAtIndex(1, crl);
+        window.openDialog(viewCRLURL,  "",
+                      		"chrome,centerscreen,resizable,modal", dialogParams
+				);
+    },
+    createCRL : function () 
+    {
+	avpki.keymanager.CrlManagerCreateOverlay.logTrace("avpki.keymanager.CrlManagerCreateOverlay.createCRL():...........................Start.");
+
+	var createCRLURL = "chrome://keymanager/content/tools/crltool/CRLCreateForm.xul";
+
+        var pkiParams = Components.classes["@mozilla.org/security/pkiparamblock;1"]
+    				.createInstance(Components.interfaces.nsIPKIParamBlock);
+        var dialogParams = pkiParams.QueryInterface(Components.interfaces.nsIDialogParamBlock);
+
+    	dialogParams.SetString(0, "create");
+    	pkiParams.setISupportAtIndex(1, null);
+        window.openDialog(createCRLURL, 
+			"",
+                      	"chrome,centerscreen,resizable,modal",
+			dialogParams
+			);
+
+        var success = dialogParams.GetInt(0);
+	if (success > 0) {
+	    avpki.keymanager.CrlManagerCreateOverlay.refreshCRL();
+	}
+
+	avpki.keymanager.CrlManagerCreateOverlay.logTrace("avpki.keymanager.CrlManagerCreateOverlay.createCRL():...........................End.");
+    },
+
+    editCRL : function () 
+    {
+	var /* alrICRL */ crl = avpki.keymanager.CrlManagerCreateOverlay.getSelectedCRL();
+
+	var editCRLURL = "chrome://keymanager/content/tools/crltool/CRLCreateForm.xul";
+
+        var pkiParams = Components.classes["@mozilla.org/security/pkiparamblock;1"]
+    				.createInstance(Components.interfaces.nsIPKIParamBlock);
+        var dialogParams = pkiParams.QueryInterface(Components.interfaces.nsIDialogParamBlock);
+
+    	dialogParams.SetString(0, "edit");
+    	pkiParams.setISupportAtIndex(1, crl);
+        window.openDialog(editCRLURL,  "",
+                      		"chrome,centerscreen,resizable,modal", dialogParams
+				);
+        var success = dialogParams.GetInt(0);
+	if (success > 0) {
+	    avpki.keymanager.CrlManagerCreateOverlay.refreshCRL();
+	}
+
+    },
+
+    exportCRL : function () 
+    {
+	avpki.keymanager.CrlManagerCreateOverlay.logTrace("avpki.keymanager.CrlManagerCreateOverlay.exportCRL():...........................Start.");
+
+	var /* alrICRL */ crl = avpki.keymanager.CrlManagerCreateOverlay.getSelectedCRL();
+	avpki.keymanager.CrlManagerCreateOverlay.logDebug("avpki.keymanager.CrlManagerCreateOverlay.viewCRL(): crl: " + crl);
+	if (!crl) {
+	    return;
+	}
+        var params = Components.classes["@mozilla.org/embedcomp/dialogparam;1"]
+			.createInstance(Components.interfaces.nsIDialogParamBlock);
+        params.SetInt(0, 1);
+        window.openDialog('chrome://keymanager/content/tools/crltool/exportFormatTypeDialog.xul', "",
+		    'chrome,centerscreen,resizable,modal', params);
+        if (params.GetInt(0) == 0) { // Selected Cancel or failed.
+	    avpki.keymanager.CrlManagerCreateOverlay.logTrace("avpki.keymanager.CrlManagerCreateOverlay.exportCRL():...........................End(0).");
+	    return;
+	}
+
+        var exportFormatType = params.GetString(0);
+        var exportEncodingType = params.GetString(1);
+        var includeCertChainStr = params.GetString(2);
+        var viewBase64FileStr = params.GetString(3);
+
+	var encodingType = exportEncodingType;
+        var base64Encoding = ((exportEncodingType == "base64") ? true : false);
+        var includeCertChain = ((includeCertChainStr == "true") ? true : false);
+        var viewBase64File = ((viewBase64FileStr == "true") ? true : false);
+
+	/*
+	var exportFormatType = "x509crl";
+        var base64Encoding = true;
+	{
+	    var base64Obj = new Object();
+	    base64Obj.value = base64Encoding;
+	    var promptService = Components.classes["@mozilla.org/embedcomp/prompt-service;1"]
+				.getService(Components.interfaces.nsIPromptService);
+    	    var dialogOk = promptService.confirmCheck(
+			window,
+		     	"Select CRL Encoding Format",
+		     	"Select CRL Encoding Format for saving to a file - Base-64 or DER.",
+			"Base-64",
+			base64Obj
+		     	);
+	    if (!dialogOk) {
+    	        return;
+	    }
+	    base64Encoding = base64Obj.value;
+	}
+    	var encodingType = (base64Encoding ? "base64" : "der");
+	*/
+
+	avpki.keymanager.CrlManagerCreateOverlay.logDebug("avpki.keymanager.CrlManagerCreateOverlay.exportCRL(): exportFormatType: " + exportFormatType + " base64Encoding: " + base64Encoding +  " encodingType: " + encodingType + " includeCertChain: " + includeCertChain);
+
+	var exportFileName = null;
+	var crlIssuerCert = crl.issuer;
+	if (crlIssuerCert) {
+    	    var exportFileNamePrefix = avpki.keymanager.CrlManagerCreateOverlay.adaptCertNickName(crlIssuerCert);
+	    var exportFileNameExtension = "crl";
+	    if (exportFormatType == "pkcs7") {
+	    	exportFileNameExtension = "pk7";
+	    }
+
+	    avpki.keymanager.CrlManagerCreateOverlay.logDebug("avpki.keymanager.CrlManagerCreateOverlay.exportCRL():  exportFileNamePrefix : " + exportFileNamePrefix);
+	    exportFileName = exportFileNamePrefix + "_crl" + 
+				(includeCertChain? "_cachain" : "") +
+				"_"+ encodingType +
+				"." + exportFileNameExtension;
+	    avpki.keymanager.CrlManagerCreateOverlay.logDebug("avpki.keymanager.CrlManagerCreateOverlay.exportCRL():  exportFileName : " + exportFileName);
+    	}
+
+
+    	var fileDialogMsg = "Choose CRL File";
+    	var fileTypeMsg = "CRL File";
+    	var fileTypeFilters = "*.crl;";
+	if (exportFormatType == "pkcs7") {
+    	    fileTypeFilters += "*.pk7;";
+	    fileDialogMsg = "Choose PKCS#7 CRL File";
+	    fileTypeMsg = "PKCS#7 CRL File";
+	}
+
+        if (base64Encoding) {
+  	    fileTypeFilters += "*.pem;*.b64;";
+        }
+        else {
+  	    fileTypeFilters += "*.der;";
+        }
+
+    	var fp = Components.classes["@mozilla.org/filepicker;1"]
+			.createInstance(Components.interfaces.nsIFilePicker);
+    	fp.init(window,
+	  	fileDialogMsg, 
+	  	Components.interfaces.nsIFilePicker.modeSave
+	  	);
+    	fp.appendFilter(fileTypeMsg, fileTypeFilters);
+    	fp.appendFilters(Components.interfaces.nsIFilePicker.filterAll);
+
+    	if (exportFileName) {
+	    fp.defaultString = exportFileName;
+    	}
+
+    	var rv = fp.show();
+    	if ((rv == Components.interfaces.nsIFilePicker.returnOK)
+		|| (rv == Components.interfaces.nsIFilePicker.returnReplace)) {
+
+	    if (exportFormatType == "x509crl") {
+	        // void alrICRL.exportToFile (in nsILocalFile aOutCRLFile, in boolean aIsBase64, in boolean aWithCover);
+	        try {
+		    // (aWithCover == true) ==> adds BEGIN/END lines as a wrapper for base64, ignored otherwise
+	    	    crl.exportToFile(fp.file, base64Encoding, true);
+	        } catch (ex) {
+	    	    avpki.keymanager.CrlManagerCreateOverlay.logError("Failed to save the selected CRL to file - ex: " + ex);
+	    	    alert("Failed to save the selected CRL to file - ex: " + ex);
+		    return;
+	        }
+	    }
+	    else {
+		/*
+		void alrICRL.exportAsPKCS7ToFile(
+		                in unsigned long chainMode, //see CMS_CHAIN_MODE constants in nsIX509Cert3.idl
+				in nsILocalFile aOutCRLFile,
+				in boolean aIsBase64,
+				in boolean aWithCover
+				);
+		*/
+	        try {
+		    var chainMode = Components.interfaces.nsIX509Cert3.CMS_CHAIN_MODE_CertOnly;
+		    if (includeCertChain) {
+		    	chainMode = Components.interfaces.nsIX509Cert3.CMS_CHAIN_MODE_CertChainWithRoot;
+		    }
+		    // (aWithCover == true) ==> adds BEGIN/END lines as a wrapper for base64, ignored otherwise
+	    	    crl.exportAsPKCS7ToFile(
+				chainMode,
+		    		fp.file,
+		    		base64Encoding,
+				true
+				);
+	        } catch (ex) {
+	    	    avpki.keymanager.CrlManagerCreateOverlay.logError("Failed to save the selected CRL to file - ex: " + ex);
+	    	    alert("Failed to save the selected CRL to file - ex: " + ex);
+		    return;
+	        }
+	    }
+	    avpki.keymanager.CrlManagerCreateOverlay.logDebug("avpki.keymanager.CrlManagerCreateOverlay.exportCRL(): selected CRL is saved in : " + fp.file.path);
+    	}
+	avpki.keymanager.CrlManagerCreateOverlay.logTrace("avpki.keymanager.CrlManagerCreateOverlay.exportCRL():...........................End.");
+    },
+
+    fileContainsAsciiPatern : function (aFile, aAsciiPattern, aMaxBytesToRead) 
+    {
+	avpki.keymanager.CrlManagerCreateOverlay.logTrace("avpki.keymanager.CrlManagerCreateOverlay.fileContainsAsciiPatern():...........................Start.");
+
+	avpki.keymanager.CrlManagerCreateOverlay.logDebug("avpki.keymanager.CrlManagerCreateOverlay.fileContainsAsciiPatern(): aFile: " + aFile + " aMaxBytesToRead: " + aMaxBytesToRead);
+
+	var containsAsciiPattern = false;
+	try {
+	    var fiStream = Components.classes["@mozilla.org/network/file-input-stream;1"]
+		        		.createInstance(Components.interfaces.nsIFileInputStream);
+            fiStream.init(aFile, 1, 0, false);
+	    avpki.keymanager.CrlManagerCreateOverlay.logTrace("avpki.keymanager.CrlManagerCreateOverlay.fileContainsAsciiPatern():...........................10.");
+
+            var siStream = Components.classes["@mozilla.org/scriptableinputstream;1"]
+		        		.createInstance(Components.interfaces.nsIScriptableInputStream);
+            siStream.init(fiStream);
+	    avpki.keymanager.CrlManagerCreateOverlay.logTrace("avpki.keymanager.CrlManagerCreateOverlay.fileContainsAsciiPatern():...........................20.");
+
+	    var readStepCnt = ((!aMaxBytesToRead || (aMaxBytesToRead < 0) || (aMaxBytesToRead > 100)) ? 100 : aMaxBytesToRead);
+	    avpki.keymanager.CrlManagerCreateOverlay.logDebug("fileselectorBinding.fileContainsAsciiPatern(): readStepCnt: " + readStepCnt);
+
+            var fileDataStr = "";
+	    var str = siStream.read(readStepCnt);
+	    while (str.length > 0) {
+	    	fileDataStr += str;
+		avpki.keymanager.CrlManagerCreateOverlay.logDebug("fileselectorBinding.fileContainsAsciiPatern(): str: " + str);
+
+		// We always check for the pattern from the beginig of the string.
+		if (fileDataStr.indexOf(aAsciiPattern) >= 0) {
+		    containsAsciiPattern = true;
+		    break;
+		}
+		totCnt = fileDataStr.length;
+		if ((aMaxBytesToRead >= 0) && (totCnt >= aMaxBytesToRead)) {
+		    break;
+		}
+	        str = siStream.read(readStepCnt);
+	    }
+	    siStream.close();
+	    fiStream.close();
+	} catch (ex) {
+	    avpki.keymanager.CrlManagerCreateOverlay.logError("avpki.keymanager.CrlManagerCreateOverlay.fileContainsAsciiPatern(): reading of file failed - ex: " + ex);
+	    throw ex;
+	}
+	avpki.keymanager.CrlManagerCreateOverlay.logTrace("avpki.keymanager.CrlManagerCreateOverlay.fileContainsAsciiPatern():...........................End.");
+	return containsAsciiPattern;
+    },
+
+    checkIfFileIsBase64 : function (aFile) 
+    {
+	avpki.keymanager.CrlManagerCreateOverlay.logTrace("avpki.keymanager.CrlManagerCreateOverlay.checkIfFileIsBase64():...........................Start.");
+
+	var base64File = false;
+	do {
+	    // TODO: check if the file has "-----BEGIN " in it.
+	    base64File = avpki.keymanager.CrlManagerCreateOverlay.fileContainsAsciiPatern(aFile, "-----BEGIN", 100);
+	    avpki.keymanager.CrlManagerCreateOverlay.logDebug("epkcertfilesBinding.checkIfFileIsBase64(): base64File? " + base64File);
+	} while (0);
+
+	avpki.keymanager.CrlManagerCreateOverlay.logTrace("avpki.keymanager.CrlManagerCreateOverlay.checkIfFileIsBase64():...........................End.");
+	return base64File;
+    },
+
+    loadCRL : function () 
+    {
+	avpki.keymanager.CrlManagerCreateOverlay.logTrace("avpki.keymanager.CrlManagerCreateOverlay.loadCRL():...........................Start.");
+
+	var fp = Components.classes["@mozilla.org/filepicker;1"]
+			.createInstance(Components.interfaces.nsIFilePicker);
+    	fp.init(window,
+	  	"Select file containg the Signed-CRL for import",
+          	Components.interfaces.nsIFilePicker.modeOpen
+		);
+	/*
+    	fp.appendFilter(bundle.GetStringFromName("file_browse_Certificate_spec"),
+                  "*.crt; *.cert; *.cer; *.pem; *.der; *.pk7; *.p7");
+    	*/
+
+    	fp.appendFilter("CRL File (Base64)", "*.crl; *.pem");
+    	fp.appendFilter("CRL File (DER)", "*.crl; *.der");
+    	fp.appendFilters(Components.interfaces.nsIFilePicker.filterAll);
+
+    	if (fp.show() == Components.interfaces.nsIFilePicker.returnOK) {
+            var base64File = true;
+	    avpki.keymanager.CrlManagerCreateOverlay.logDebug("avpki.keymanager.CrlManagerCreateOverlay.loadCRL(): fp.filterIndex: " + fp.filterIndex);
+	    switch(fp.filterIndex) {
+	        case 0: 
+        	    base64File = true;
+	            break;
+	        case 1: 
+        	    base64File = false;
+	            break;
+	        case 2: 
+	        default:
+        	    base64File = avpki.keymanager.CrlManagerCreateOverlay.checkIfFileIsBase64(fp.file);
+	            break;
+	    }
+	    avpki.keymanager.CrlManagerCreateOverlay.logDebug("avpki.keymanager.CrlManagerCreateOverlay.loadCRL(): base64File: " + base64File);
+
+            try {
+	        /*
+	        XPCOM API: alrICRL.loadCRLFromFile(in nsILocalFile aCRLFile, in boolean asciiFormat);
+	        */
+	        avpki.keymanager.CrlManagerCreateOverlay.mCRLManager.loadCRLFromFile(fp.file, base64File);
+            } catch(ex) {
+	        var msg = "Failed to load CRL - ex: " + ex;
+	        alert(msg);
+	        avpki.keymanager.CrlManagerCreateOverlay.logError("avpki.keymanager.CrlManagerCreateOverlay.loadCRL(): " + msg);
+		return;
+            }
+        }
+
+	avpki.keymanager.CrlManagerCreateOverlay.refreshCRL();
+
+	avpki.keymanager.CrlManagerCreateOverlay.logTrace("avpki.keymanager.CrlManagerCreateOverlay.loadCRL():...........................End.");
+    },
+
+    refreshCRL : function () 
+    {
+	avpki.keymanager.CrlManagerCreateOverlay.logTrace("avpki.keymanager.CrlManagerCreateOverlay.refreshCRL():...........................Start.");
+
+	window.location.reload(true);
+
+	avpki.keymanager.CrlManagerCreateOverlay.logTrace("avpki.keymanager.CrlManagerCreateOverlay.refreshCRL():...........................End.");
+    },
+
+    adaptCertNickName : function (aCert, keepTokenName, nameSuffix) 
+    {
+
+        var tmpCert = aCert;
+        if (!tmpCert) {
+	    return null;
+        }
+
+        var tmpStrList = null; 
+        var newNickName = tmpCert.nickname;
+        if (!newNickName || ((newNickName == "") || (newNickName == "(no nickname)"))) {
+	    newNickName = tmpCert.commonName;
+	    if (newNickName == "") {
+		    return null;
+	    }
+        }
+
+        if (!keepTokenName) {
+	    if (newNickName.indexOf(":") >= 0) {
+	        tmpStrList = tmpCert.nickname.split(":");
+	        if (tmpStrList.length > 1) {
+		    newNickName = tmpStrList[1];
+	        }
+	    }
+        }
+        if (newNickName.indexOf("=") >= 0) {
+	    newNickName = tmpCert.commonName;
+	    tmpStrList = newNickName.split(" ");
+	    newNickName = tmpStrList[0];
+        }
+    
+        // TODO:  xxxx
+        newNickName = newNickName.replace(/\(/g, "");
+        newNickName = newNickName.replace(/\)/g, "");
+        newNickName = newNickName.replace(/\*/g, "X");
+        newNickName = newNickName.replace(/\./g, "_");
+        newNickName = newNickName.replace(/-/g, "_");
+        newNickName = newNickName.replace(/:/g, "_");
+        newNickName = newNickName.replace(/\W/g,"");
+    
+        newNickName = newNickName.replace(/__/g, "_");
+        newNickName = newNickName.replace(/^_/, "");
+    
+        avpki.keymanager.CrlManagerCreateOverlay.logDebug("avpki.keymanager.CrlManagerCreateOverlay.adaptCertNickName(): newNickName: " + newNickName);
+
+
+        if (nameSuffix && (nameSuffix.length > 0)) {
+	    newNickName += "_" + nameSuffix;
+        }
+
+        avpki.keymanager.CrlManagerCreateOverlay.logDebug("avpki.keymanager.CrlManagerCreateOverlay.adaptCertNickName(): newNickName: " + newNickName);
+
+        return newNickName;
+    },
+
+    lastMethod : function () 
+    {
+    }
+}
+
+
+
+]]>
+</script>
+
+<dialog id="crlviewer"
+    >
+    <!--
+    <hbox id="dialogButtons">
+    </hbox>
+    -->
+	<hbox id="modifyDialogButtons"
+            xinsertbefore="deleteCrl"
+            insertfater="dialogButtons"
+	    xstyle="border: 1px solid red;"
+	    >
+            <button id="createCRL"
+                label="&keymgr.crlmanager.crl.create.label;"
+                tooltiptext="&keymgr.crlmanager.crl.create.tooltip;"
+                xinsertbefore="deleteCrl"
+                oncommand="avpki.keymanager.CrlManagerCreateOverlay.createCRL();"
+	        />
+            <button id="viewCRL"
+                label="&keymgr.crlmanager.crl.view.label;"
+                tooltiptext="&keymgr.crlmanager.crl.view.tooltip;"
+                oncommand="avpki.keymanager.CrlManagerCreateOverlay.viewCRL();"
+	        />
+            <button id="editCRL"
+                label="&keymgr.crlmanager.crl.edit.label;"
+                tooltiptext="&keymgr.crlmanager.crl.edit.tooltip;"
+                xinsertbefore="deleteCrl"
+                oncommand="avpki.keymanager.CrlManagerCreateOverlay.editCRL();"
+	        />
+            <button id="exportCRL"
+                label="&keymgr.crlmanager.crl.export.label;"
+                tooltiptext="&keymgr.crlmanager.crl.export.tooltip;"
+                oncommand="avpki.keymanager.CrlManagerCreateOverlay.exportCRL();"
+	        />
+            <button id="loadCRL"
+                label="&keymgr.crlmanager.crl.load.label;"
+                tooltiptext="&keymgr.crlmanager.crl.load.tooltip;"
+                oncommand="avpki.keymanager.CrlManagerCreateOverlay.loadCRL();"
+	        />
+            <button id="refreshCRL"
+                label="&keymgr.crlmanager.crl.refresh.label;"
+                tooltiptext="&keymgr.crlmanager.crl.refresh.tooltip;"
+                oncommand="avpki.keymanager.CrlManagerCreateOverlay.refreshCRL();"
+	        />
+        </hbox>
+
+</dialog>
+
+</overlay>
+

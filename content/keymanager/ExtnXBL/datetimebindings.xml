@@ -1,0 +1,439 @@
+<?xml version="1.0"?>
+
+<!-- @(#) $Id: datetimebindings.xml,v 1.1 2009/12/02 07:09:50 subrata Exp $ -->
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is Avaya Labs Research, Avaya Inc. Code.
+   -
+   - The Initial Developer of the Original Code is
+   -     Subrata Mazumdar, Avaya Labs Research, Avaya Inc.
+   - Portions created by the Initial Developer are Copyright (C) 2007.
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Subrata Mazumdar (mazum@avaya.com)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+
+
+<!DOCTYPE bindings SYSTEM "chrome://keymanager/locale/keyManager.dtd">
+
+<!--
+<!DOCTYPE bindings
+	[
+	<!ENTITY % xmldsigffext.dtd SYSTEM "chrome://xmldsigffext/locale/xmldsigffext.dtd">
+	%xmldsigffext.dtd;
+	]>
+-->
+
+<bindings id="datetimeBindings"
+    xmlns="http://www.mozilla.org/xbl"
+    xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    xmlns:xbl="http://www.mozilla.org/xbl">
+
+    <binding id="datetimepickerBinding"
+	extends="chrome://keymanager/content/ExtnXBL/xmldsigbindings.xml#xmldsig-base"
+        >
+    	<xbl:resources>
+    	    <stylesheet src="chrome://global/skin/textbox.css"/>
+    	    <stylesheet src="chrome://global/skin/datetimepicker.css"/>
+    	    <stylesheet src="chrome://keymanager/skin/datetimebindings.css"/>
+    	</xbl:resources>
+
+	<content>
+	    <xul:groupbox anonid="xmldsig.datetime.hbox"
+		zorient="horizontal"
+	    	xpack="start" xalign="center"
+		>
+		<xul:hbox
+	    	    pack="start" align="center"
+		    xbl:inherits="hidden=readonly"
+		    zoncommand="getBindingParent(this).handleDateTimeChange(this, event);"
+		    onchange="getBindingParent(this).handleDateTimeChange(this, event);"
+		    >
+		    <xul:datepicker anonid="xmldsig.datetime.datepicker"
+			xbl:inherits="type,disabled,readonly,hidden,hidden=timeonly,value=datevalue"
+			type="popup"
+			zvalue="2007-11-24"
+		        />
+		    <xul:timepicker anonid="xmldsig.datetime.timepicker"
+			xbl:inherits="disabled,readonly,hidden,hidden=dateonly,value=timevalue"
+			zvalue="15:19:00"
+		        />
+		</xul:hbox>
+		<xul:textbox anonid="xmldsig.datetime.value" flex="1"
+		    xbl:inherits="value,disabled,readonly,tooltiptext,hidden=hidevalue"
+		    onchange="document.getBindingParent(this).handleDateTimeValueChange(this, event)"
+		    size="24"
+		    >
+		</xul:textbox>
+	        <xul:description collapsed="true">
+		    <children/>
+	        </xul:description>
+	    </xul:groupbox>
+	</content>
+	<implementation>
+	    <field name="mDatePickerElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "xmldsig.datetime.datepicker");
+	    </field>
+	    <field name="mTimePickerElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "xmldsig.datetime.timepicker");
+	    </field>
+	    <field name="mDateTimeValueElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "xmldsig.datetime.value");
+	    </field>
+
+	    <field name="mDateTime"/>
+
+	    <property name="value"
+	        onget="return this.getAttribute('value');"
+		onset="if (val) {this.initDateTime(val);}
+		       else {
+			this.mDateTimeValueElem.value = '';
+			this.handleDateTimeValueChange(this.mDateTimeValueElem);
+		       }
+		       return val;"
+		/>
+	    <property name="dateValue"
+	        onget="this.handleDateTimeChange(); return this.mDateTime;"
+	        onset="this.mDatePickerElem.dateValue=val;
+			this.mTimePickerElem.dateValue=val;
+			this.handleDateTimeChange(this.mTimePickerElem);
+			return val;"
+		/>
+
+	    <constructor>
+		<![CDATA[
+		// this.mMaxLogLevel = 9;
+		this.refresh();
+		]]>
+	    </constructor>
+
+	    <method name="refresh">
+		<body>
+		<![CDATA[
+		this.LogTrace("datetimepickerBinding.refresh(): ...................Start.\n");
+
+		/*
+		dump("datetimepickerBinding.refresh(): this.mDatePickerElem.dateValue: " + this.mDatePickerElem.dateValue + "\n");
+		dump("datetimepickerBinding.refresh(): this.mDatePickerElem.value: " + this.mDatePickerElem.value + "\n");
+		dump("datetimepickerBinding.refresh(): this.mTimePickerElem.dateValue: " + this.mTimePickerElem.dateValue + "\n");
+		dump("datetimepickerBinding.refresh(): this.mTimePickerElem.value: " + this.mTimePickerElem.value + "\n");
+		*/
+
+		// Child element value overrides the 'value' attribute
+		var dateTimeStr = null;
+		if (this.hasChildNodes()) {
+		    dateTimeStr = this.firstChild.nodeValue;
+		}
+		// dump("datetimepickerBinding.refresh(): dateTimeStr: " + dateTimeStr + "\n");
+		if (!dateTimeStr) {
+		    dateTimeStr = this.getAttribute("value");
+		}
+		if (dateTimeStr) {
+		    dateTimeStr = this.trim(dateTimeStr);
+		}
+		if (!dateTimeStr || (dateTimeStr == "")) {
+		    return;
+		}
+		this.LogDebug("datetimepickerBinding.refresh(): dateTimeStr: " + dateTimeStr + "\n");
+
+		this.initDateTime(dateTimeStr);
+
+		this.LogTrace("datetimepickerBinding.refresh(): ...................End.\n");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="initDateTime">
+		<parameter name="aDateTimeStr"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("datetimepickerBinding.initDateTime(): ...................Start.");
+		this.LogDebug("datetimepickerBinding.initDateTime(): aDateTimeStr: " + aDateTimeStr + "\n");
+
+		var dateTimeStr = aDateTimeStr;
+
+		// 1. Extract YYYY-MM-DD from YYYY-MM-DDThh:mm:ss[.ms]Z"
+		var dateStr = dateTimeStr.substr(0, "YYYY-MM-DD".length);
+		this.LogDebug("datetimepickerBinding.initDateTime(): dateStr: >>>" + dateStr + "<<<" + "\n");
+
+		try {
+		    this.mDatePickerElem.value = dateStr;
+		} catch (ex) {
+		    dump("datetimepickerBinding.initDateTime(): 'this.mDatePickerElem.value = " + dateStr + "' failed - ex: " + ex + "\n");
+		}
+
+		// 2. Extract hh:mm:ss[.ms] from YYYY-MM-DDThh:mm:ss[.ms]Z"
+		var timeWithZStr = dateTimeStr.substr(("YYYY-MM-DD".length +1));
+		this.LogDebug("datetimepickerBinding.refresh(): timeWithZStr: >>>" + timeWithZStr + "<<<" + "\n");
+
+		// 3. Extract hh:mm:ss[.ms] from hh:mm:ss[.ms]Z"
+            	var timeItems = timeWithZStr.match(/^([0-9]{1,2})\:([0-9]{1,2})\:?([0-9]{1,2})?\.?([0-9]{1,2})?/);
+		if (timeItems.length <= 0) {
+		    return;
+		}
+
+		var timeStr = "";
+		timeStr = timeItems[0];
+		var timeZoneStr = timeWithZStr.substr(timeStr.length);
+
+		if (timeItems[1].length < 2) {
+		    timeStr = "0" + timeStr;
+		}
+		// 4. Extract hh:mm:ss from hh:mm:ss[.ms]"
+		timeStr = timeStr.substr(0, "hh:mm:ss".length);
+
+		try {
+		    this.mTimePickerElem.value = timeStr;
+		} catch (ex) {
+		    dump("datetimepickerBinding.initDateTime(): this.mTimePickerElem.value = " + timeStr + " failed - ex: " + ex + "\n");
+		}
+		this.handleDateTimeChange();
+
+		this.LogTrace("datetimepickerBinding.initDateTime(): ...................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="initCurrentDateAndTime">
+		<parameter name="aSecondsOffset"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("datetimepickerBinding.initCurrentDateAndTime(): ...................Start.");
+
+		var now = new Date();
+		this.dateValue = now;
+		this.addSeconds(aSecondsOffset);
+
+		this.LogTrace("datetimepickerBinding.initCurrentDateAndTime(): ...................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="addSeconds">
+		<parameter name="aSecondsInc"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("datetimepickerBinding.addSeconds(): ...................Start.");
+		if (!this.mDateTime) {
+		    this.mDateTime = new Date();
+		}
+		var currTime = this.mDateTime.getTime();
+		var newTime = currTime + (aSecondsInc * 1000);
+		var newDate = new Date();
+		newDate.setTime(newTime);
+	
+		this.dateValue = newDate;
+		this.LogTrace("datetimepickerBinding.addSeconds(): ...................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="addDays">
+		<parameter name="aDaysInc"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("datetimepickerBinding.addDays(): ...................Start.");
+		this.addSeconds(aDaysInc * (24 * 60 * 60));
+		this.LogTrace("datetimepickerBinding.addDays(): ...................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="handleDateTimeChange">
+		<parameter name="aTargetElem"/>
+		<parameter name="ev"/>
+	        <body>
+		<![CDATA[
+		this.LogTrace("datetimepickerBinding.handleDateTimeChange(): ...................Start.");
+
+		var ymdDate = this.mDatePickerElem.dateValue;
+		var timeDate = this.mTimePickerElem.dateValue;
+		var dtDate = new Date(ymdDate);
+		if (this.getAttribute("dateonly")) {
+		    dtDate.setHours(0);
+		    dtDate.setMinutes(0);
+		    dtDate.setSeconds(0);
+		}
+		else {
+		    dtDate.setHours(timeDate.getHours());
+		    dtDate.setMinutes(timeDate.getMinutes());
+		    dtDate.setSeconds(timeDate.getSeconds());
+		}
+
+		this.mDateTime = dtDate;
+
+		var dateStr = this.mDatePickerElem.value;
+		// dateStr = dateStr.replace(/\//g, "-");
+
+		var timeStr = this.mTimePickerElem.value;
+		if (this.getAttribute("dateonly")) {
+		    timeStr = "00:00:00";
+		}
+		this.LogDebug("datetimepickerBinding.handleDateTimeChange(): timeStr : " + timeStr);
+
+		// timeItems ==> timeStr, timeStr.hh, timeStr.mm[, timeStr.ss]
+            	var timeItems = timeStr.match(/^([0-9]{1,2})\:([0-9]{1,2})\:?([0-9]{1,2})?$/);
+		/*
+		this.LogDebug("datetimepickerBinding.handleDateTimeChange(): timeItems.length : " + timeItems.length);
+		for (var i = 0; i < timeItems.length; i++) {
+		    this.LogDebug("timeItems[" + i + "] :>" + timeItems[i] + "<");
+		}
+		*/
+		if (timeItems[1].length < 2) {
+		    timeStr = "0" + timeStr;
+		}
+		
+		var dateTimeStr = "";
+		dateTimeStr = dateStr + "T" + timeStr + ".00Z";
+
+		/*
+		if (!this.getAttribute("dateonly") {
+		    && !this.getAttribute("dateonly")) {
+		    dateTimeStr = dateStr + "T" + timeStr + "Z";
+		}
+		else {
+		    if (this.getAttribute("dateonly") {
+		    	dateTimeStr = dateStr;
+		    }
+		    else if (this.getAttribute("dateonly") {
+		    	dateTimeStr = timeStr;
+		    }
+		}
+		*/
+
+		this.LogDebug("handleDateTimeChange(): dateTimeStr: " + dateTimeStr + "");
+		// dump("handleDateTimeChange(): this.mDateTime: " + this.mDateTime + "\n");
+
+		this.mDateTimeValueElem.value = dateTimeStr;
+
+		this.handleDateTimeValueChange(this.mDateTimeValueElem);
+
+		this.LogTrace("datetimepickerBinding.handleDateTimeChange(): ...........................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="handleDateTimeValueChange">
+		<parameter name="aTextValueElem"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		this.LogTrace( "datetimepickerBinding.handleDateTimeValueChange():......................Start.");
+
+		/*
+		if (ev) {
+		    ev.stopPropagation();
+		}
+		*/
+
+		var dateTimeValue = this.trim(aTextValueElem.value);
+		if (dateTimeValue == "") {
+		    this.removeAttribute("value");
+		    if (this.hasChildNodes()) {
+		    	this.removeChild(this.firstChild);
+		    }
+		    this.mDateTime = null;
+		    return;
+		}
+		if (ev) {
+		    this.initDateTime(dateTimeValue);
+		    return;
+		}
+
+		if (!this.hasChildNodes()) {
+		    var valTextNode = document.createTextNode("");
+		    this.appendChild(valTextNode);
+		}
+		this.firstChild.nodeValue = dateTimeValue;
+
+		this.setAttribute("value", dateTimeValue);
+
+		// dump("datetime: \n" + this.serialize(this) + "\n");;
+
+		this.LogTrace( "datetimepickerBinding.handleDateTimeValueChange():......................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="getNSSDate">
+		<body>
+		<![CDATA[
+		this.LogTrace( "datetimepickerBinding.getNSSDate():......................Start.");
+		var YYYY = "" + this.mDateTime.getUTCFullYear();
+		var YY = YYYY.substring(2);
+		var MM = "" + (1 + this.mDateTime.getUTCMonth());
+		if (MM.length < 2) {
+		    MM = "0" + MM;
+		}
+		var DD = "" + this.mDateTime.getUTCDate();
+		if (DD.length < 2) {
+		    DD = "0" + DD;
+		}
+
+		var hh = "" + this.mDateTime.getUTCHours();
+		if (hh.length < 2) {
+		    hh = "0" + hh;
+		}
+		var mm = "" + this.mDateTime.getUTCMinutes();
+		if (mm.length < 2) {
+		    mm = "0" + mm;
+		}
+		var ss = "" + this.mDateTime.getUTCSeconds();
+		if (ss.length < 2) {
+		    ss = "0" + ss;
+		}
+
+		var nssDate = YY + MM + DD + hh + mm + ss + "Z";
+		this.LogTrace( "datetimepickerBinding.getNSSDate():......................End.");
+		return nssDate;
+		]]>
+		</body>
+	    </method>
+
+
+	    <!--
+	    <method name="trim">
+		<parameter name="aStr"/>
+		<body>
+		<![CDATA[
+		// var newStr = (new java.lang.String(aStr)).trim();
+		// return newStr;
+		var sInString = aStr.replace( /^\s+/g, "" );// strip leading
+		return sInString.replace( /\s+$/g, "" );// strip trailing
+		]]>
+		</body>
+	    </method>
+	    -->
+
+	</implementation>
+    </binding>
+
+</bindings>
+

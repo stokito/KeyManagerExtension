@@ -1,0 +1,121 @@
+
+<!ENTITY keymgr.pkcsfilemgr.title					"PKCS File Manager - EPK to PKCS12">
+<!ENTITY keymgr.pkcsfilemgr.osslkeycert.synctool.title			"NSS and OpenSSL Key/Cert Synchronization Tool">
+<!ENTITY keymgr.pkcsfilemgr.osslkeycert.synctool.command.close.label	"Close">
+<!ENTITY keymgr.pkcsfilemgr.file.browse.label				"Browse">
+<!ENTITY keymgr.pkcsfilemgr.file.browse.tooltip				"Click this button to select the file">
+<!ENTITY keymgr.pkcsfilemgr.keystore.privatekey.label			"Encrypted Private Key">
+
+<!ENTITY keymgr.pkcsfilemgr.epk.file.label 				"EPK File">
+<!ENTITY keymgr.pkcsfilemgr.epk.file.type.osslepk.label 		"OSSL-EPK">
+<!ENTITY keymgr.pkcsfilemgr.epk.file.type.osslepk.tooltip 		"Encrypted Private Key in OpenSSL format">
+<!ENTITY keymgr.pkcsfilemgr.epk.file.type.pkcs8.label 			"PKCS8">
+<!ENTITY keymgr.pkcsfilemgr.epk.file.type.pkcs8.tooltip 		"Encrypted Private Key in PKCS8 format">
+<!ENTITY keymgr.pkcsfilemgr.epk.file.has.cert.label 			"Has PKC">
+<!ENTITY keymgr.pkcsfilemgr.epk.file.has.cert.tooltip 			"Encrypted Private Key file contains related public key certificates and possibly the issuert cert chain. Only applicapable for Base-64 formmated file.">
+<!ENTITY keymgr.pkcsfilemgr.epk.file.tooltip				"Enter the path to OpenSSL Encrypted Private key file">
+<!ENTITY keymgr.pkcsfilemgr.epk.file.browse.tooltip			"Click this button to select the OpenSSL Encrypted Private key file">
+<!ENTITY keymgr.pkcsfilemgr.epk.cert.filepicker.label 			"X.509 Cert">
+<!ENTITY keymgr.pkcsfilemgr.epk.cert.filepicker.tooltip			"Enter the path to X.509 Cert file for public key for the associated private key">
+<!ENTITY keymgr.pkcsfilemgr.epk.cert.filepicker.browse.tooltip		"Click this button to select the X.509 Cert file for the private key">
+
+<!ENTITY keymgr.pkcsfilemgr.epkcert2pkcs12.cmd.label			"Convert to PKCS12">
+<!ENTITY keymgr.pkcsfilemgr.epkcert2pkcs12.cmd.tooltip			"Convert to PKCS12">
+
+<!ENTITY keymgr.pkcsfilemgr.pkcs12.label				"PKCS#12">
+<!ENTITY keymgr.pkcsfilemgr.pkcs12.filepicker.label			"PKCS#12 File">
+<!ENTITY keymgr.pkcsfilemgr.pkcs12.filepicker.tooltip			"Enter the path to PKCS#12 file">
+<!ENTITY keymgr.pkcsfilemgr.pkcs12.filepicker.browse.tooltip		"Click this button to select the PKCS#12 file">
+<!ENTITY keymgr.pkcsfilemgr.cert.view.label 				"View Selected Cert">
+<!ENTITY keymgr.pkcsfilemgr.cert.view.tooltip				"View Selected Cert">
+
+<!ENTITY keymgr.pkcsfilemgr.pkcs12.mount.cmd.label			"Mount PKCS#12 File">
+<!ENTITY keymgr.pkcsfilemgr.pkcs12.mount.cmd.tooltip			"Mount PKCS#12 File">
+<!ENTITY keymgr.pkcsfilemgr.pkcs8.mount.cmd.label			"Mount PKCS#8 File">
+<!ENTITY keymgr.pkcsfilemgr.pkcs8.mount.cmd.tooltip			"Mount PKCS#8 File">
+<!ENTITY keymgr.pkcsfilemgr.pkcs8.unmount.cmd.label			"Unmount PKCS#8 File">
+<!ENTITY keymgr.pkcsfilemgr.pkcs8.unmount.cmd.tooltip			"Unmount PKCS#8 File">
+<!ENTITY keymgr.pkcsfilemgr.tokenmenulist.label				"Token MenuList">
+<!ENTITY keymgr.pkcsfilemgr.x509cert.label				"X.509 Cert">
+
+<!ENTITY keymgr.pkcsfilemgr.osslapptype.label				"OpenSSL Application Type">
+<!ENTITY keymgr.pkcsfilemgr.osslapptype.menulist.tooltip		"Select one of the OpenSSL application type from the list">
+<!ENTITY keymgr.pkcsfilemgr.osslapptype.custom.label			"Custom">
+<!ENTITY keymgr.pkcsfilemgr.osslapptype.custom.tooltip			"Custom: Select this item if you want to generate the config file with entires in NVP form sepatared with =">
+<!ENTITY keymgr.pkcsfilemgr.osslapptype.globus.label			"Globus">
+<!ENTITY keymgr.pkcsfilemgr.osslapptype.globus.tooltip			"Globus Toolkit: Select this item if you want to generated the  keys and certifcates to directroies compataible with Globus Tookit security requirements">
+<!ENTITY keymgr.pkcsfilemgr.osslapptype.openssl.label			"OpenSSL">
+<!ENTITY keymgr.pkcsfilemgr.osslapptype.openssl.tooltip			"OpenSSL: Select this item if you want to generated the config file compataible with OpenSSL config file">
+<!ENTITY keymgr.pkcsfilemgr.osslapptype.curl.label			"cURL">
+<!ENTITY keymgr.pkcsfilemgr.osslapptype.curl.tooltip			"cURL: Select this item if you want to generated the config file compataible with  config file for cURL">
+
+<!ENTITY keymgr.pkcsfilemgr.softtoken.type.label 			"Soft-Token Type">
+<!ENTITY keymgr.pkcsfilemgr.softtoken.type.menulist.tooltip		"Select the soft-token type">
+<!ENTITY keymgr.pkcsfilemgr.softtoken.type.osslepk.label 		"OSSL-EPK">
+<!ENTITY keymgr.pkcsfilemgr.softtoken.type.osslepk.tooltip 		"Encrypted Private Key file in OpenSSL format (may contain certs in PEM format - user cert must be the first one, followed by the private key). Supports enryption with PBE_SHA1_3DES algorithm only.">
+<!ENTITY keymgr.pkcsfilemgr.softtoken.type.pkcs8.label 			"PKCS8">
+<!ENTITY keymgr.pkcsfilemgr.softtoken.type.pkcs8.tooltip 		"Encrypted Private Key file in PKCS8 format - supports enryption with PBE_SHA1_3DES algorithm only">
+<!ENTITY keymgr.pkcsfilemgr.softtoken.type.pkcs12.label 		"PKCS12">
+<!ENTITY keymgr.pkcsfilemgr.softtoken.type.pkcs12.tooltip 		"PKCS#12 file containing key pair/certs">
+<!ENTITY keymgr.pkcsfilemgr.softtoken.type.keydb.label 			"Soft-Token DB">
+<!ENTITY keymgr.pkcsfilemgr.softtoken.type.keydb.tooltip 		"Soft-Token DB directory containing cert/key DB">
+<!ENTITY keymgr.pkcsfilemgr.softtoken.file.pkcs12.label			"PKCS12">
+<!ENTITY keymgr.pkcsfilemgr.softtoken.file.pkcs12.tooltip		"Enter the path to PKCS#12 file - file must be in DER format">
+<!ENTITY keymgr.pkcsfilemgr.softtoken.file.pkcs12.browse.tooltip	"Click this button to select the PKCS#12 file - file must be in DER format">
+<!ENTITY keymgr.pkcsfilemgr.softtoken.credential.type.label		"Cred Type: ">
+<!ENTITY keymgr.pkcsfilemgr.softtoken.file.label 			"Soft-Token">
+<!ENTITY keymgr.pkcsfilemgr.softtoken.file.keydb.tooltip		"Soft-Token Key/Cert DB Directory">
+<!ENTITY keymgr.pkcsfilemgr.softtoken.file.keydb.browse.tooltip		"Click this button to select the  directory for the Soft-Token Key/Cert DB Directory.">
+
+<!ENTITY keymgr.pkcsfilemgr.ossl.keystore.label				"Key Stores">
+<!ENTITY keymgr.pkcsfilemgr.ossl.keystore.basedir.apptype.tooltip	"Select the OpenSSL application type from the list - each OpenSSL application store keys/certs in a default directory location.">
+<!ENTITY keymgr.pkcsfilemgr.ossl.keystore.basedir.useprofile.label	"Use Profile ID">
+<!ENTITY keymgr.pkcsfilemgr.ossl.keystore.basedir.useprofile.tooltip	"Use Profile ID">
+<!ENTITY keymgr.pkcsfilemgr.ossl.keystore.basedirpicker.tooltip		"Enter the path to directory for key-store that contains keys and X.509 certificates ">
+<!ENTITY keymgr.pkcsfilemgr.ossl.keystore.basedirpicker.browse.tooltip	"Click this button to select the directory for key-store that contains keys and X.509 certificates">
+<!ENTITY keymgr.pkcsfilemgr.ossl.keystore.profileId.label		"Key Profile ID">
+<!ENTITY keymgr.pkcsfilemgr.ossl.keystore.profileId.tooltip		"Enter the profile-id for key store">
+<!ENTITY keymgr.pkcsfilemgr.ossl.credential.type.label			"Cred Type: ">
+<!ENTITY keymgr.pkcsfilemgr.ossl.credential.type.menuList.tooltip	"Select one of the crdential type from the list ">
+<!ENTITY keymgr.pkcsfilemgr.ossl.credential.type.user.label		"User">
+<!ENTITY keymgr.pkcsfilemgr.ossl.credential.type.user.tooltip		"Will create key and cert files with 'user' prefix">
+<!ENTITY keymgr.pkcsfilemgr.ossl.credential.type.proxy.label		"Proxy">
+<!ENTITY keymgr.pkcsfilemgr.ossl.credential.type.proxy.tooltip		"Will create key and cert files with 'poxy' prefix">
+<!ENTITY keymgr.pkcsfilemgr.ossl.credential.type.host.label		"Host">
+<!ENTITY keymgr.pkcsfilemgr.ossl.credential.type.host.tooltip		"Will create key and cert files with 'host' prefix">
+<!ENTITY keymgr.pkcsfilemgr.ossl.credential.type.service.label		"Service">
+<!ENTITY keymgr.pkcsfilemgr.ossl.credential.type.service.tooltip	"Will create key and cert files with 'service' prefix">
+<!ENTITY keymgr.pkcsfilemgr.ossl.keystore.dirpicker.tooltip		"Enter the path to directory for key-store that contains keys and X.509 certificates ">
+<!ENTITY keymgr.pkcsfilemgr.ossl.keystore.dirpicker.browse.tooltip	"Click this button to select the directory for key-store that contains keys and X.509 certificates">
+<!ENTITY keymgr.pkcsfilemgr.ossl.keystore.softtoken.label 		"Soft-Token">
+<!ENTITY keymgr.pkcsfilemgr.ossl.keystore.softtoken.cert.label 		"OSSL/PKCS12 Cert">
+<!ENTITY keymgr.pkcsfilemgr.ossl.keystore.softtoken.cert.view.tooltip 	"OSSL/PKCS12 Cert">
+
+<!ENTITY keymgr.pkcsfilemgr.softtokenmgr.sync.options.label 		"Sync Option">
+<!ENTITY keymgr.pkcsfilemgr.softtokenmgr.softtoken.label 		"Soft-Token">
+<!ENTITY keymgr.pkcsfilemgr.softtokenmgr.ossl.softtoken.label 		"OSSL Soft-Token">
+<!ENTITY keymgr.pkcsfilemgr.softtokenmgr.ossl.softtoken.cert.view.tooltip "OSSL Soft-Token">
+
+<!ENTITY keymgr.pkcsfilemgr.softtokenmgr.nssdb.label			"NSS CertDB">
+<!ENTITY keymgr.pkcsfilemgr.softtokenmgr.nssdb2ossl.cmd.label		"NSS to OpenSSL SYNC">
+<!ENTITY keymgr.pkcsfilemgr.softtokenmgr.nssdb2ossl.cmd.export.certpicker.tooltip 	"Select the EEC cert for from the list">
+<!ENTITY keymgr.pkcsfilemgr.softtokenmgr.nssdb2ossl.cmd.export.certpicker.view.label	"View">
+<!ENTITY keymgr.pkcsfilemgr.softtokenmgr.nssdb2ossl.cmd.export.certpicker.view.tooltip 	"Click this button to view  X.509 Cert">
+<!ENTITY keymgr.pkcsfilemgr.softtokenmgr.nssdb2ossl.cmd.create.label	"Create New OpenSSL Key/Cert">
+<!ENTITY keymgr.pkcsfilemgr.softtokenmgr.nssdb2ossl.cmd.create.tooltip	"Click this button to create new EEC Key/Cert">
+<!ENTITY keymgr.pkcsfilemgr.softtokenmgr.nssdb2ossl.cmd.export.label	"Export">
+<!ENTITY keymgr.pkcsfilemgr.softtokenmgr.nssdb2ossl.cmd.export.tooltip	"Click this button to export selected keys/cert for OSSL files.">
+
+<!ENTITY keymgr.pkcsfilemgr.softtokenmgr.ossl2nssdb.cmd.label		"OpenSSL to NSS SYNC">
+<!ENTITY keymgr.pkcsfilemgr.softtokenmgr.ossl2nssdb.cmd.import.label	"Import OpenSSL Key/Cert">
+<!ENTITY keymgr.pkcsfilemgr.softtokenmgr.ossl2nssdb.cmd.import.tooltip	"Click this button to import OSSL key/cert to browser Cert DB">
+<!ENTITY keymgr.pkcsfilemgr.softtokenmgr.ossl2nssdb.cmd.mount.tokenname.label	"Token Name:">
+<!ENTITY keymgr.pkcsfilemgr.softtokenmgr.ossl2nssdb.cmd.mount.tokenname.tooltip	"Token name (optional field). If specified, it must be unique. If no name is specified a unique token name is generated.">
+<!ENTITY keymgr.pkcsfilemgr.softtokenmgr.ossl2nssdb.cmd.mount.label	"Mount Soft-Token">
+<!ENTITY keymgr.pkcsfilemgr.softtokenmgr.ossl2nssdb.cmd.mount.tooltip	"Click this button to import OSSL key/cert to a Soft-Token DB - if the soft-token with specified name does not exists, a new token DB will created and then key will be imported in the newly created token.">
+<!ENTITY keymgr.pkcsfilemgr.softtokenmgr.ossl2nssdb.cmd.unmount.label	"Unmount Soft-Token">
+<!ENTITY keymgr.pkcsfilemgr.softtokenmgr.ossl2nssdb.cmd.unmount.tooltip	"Unmount Soft-Token">
+<!ENTITY keymgr.pkcsfilemgr.softtokenmgr.tokenmenulist.label		"Token MenuList">
+<!ENTITY keymgr.pkcsfilemgr.softtokenmgr.x509cert.label			"X.509 Cert">
+<!ENTITY keymgr.pkcsfilemgr.softtokenmgr.x509cert.view.tooltip		"View Selected Cert">
+

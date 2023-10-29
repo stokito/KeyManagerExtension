@@ -1,0 +1,120 @@
+<?xml version="1.0"?> 
+
+<CertProfile
+    baseProfileType="basicconstraints"
+    >
+
+    <profileItem name="profileusertype" value="server"/>
+    <profileItem name="dnsName" value=""/>
+    <profileItem name="ipAddress" value=""/>
+
+    <profileItem name="org_unit" value="GlobusTest"/>
+    <profileItem name="org" value="Grid"/>
+    <profileItem name="locality" value=""/>
+    <profileItem name="state" value=""/>
+    <profileItem name="country" value=""/>
+    <!--
+    -->
+
+    <profileItem name="keysize" value="1024"/>
+    <profileItem name="keytype" value="rsa"/>
+    <profileItem name="sigAlgorithm" value="SHA1"/>
+    <!--
+    <profileItem name="keytype" value="dsa"/>
+    <profileItem name="keytype" value="ec"/>
+    <profileItem name="ecCurveName" value="secp384r1"/>
+    -->
+
+    <profileItem name="serial" value="auto"/>
+    <profileItem name="serial-auto" value="true"/>
+    <!--
+    <profileItem name="serial" value="input"/>
+    <profileItem name="serial_value" value="0085af2beb"/>
+    -->
+
+    <!--
+    <profileItem name="validity" value="auto"/>
+    <profileItem name="validity_auto" value="true"/> 
+
+    <profileItem name="validity" value="days"/>
+    <profileItem name="validity_days" value="true"/> 
+    -->
+    <profileItem name="validity" value="months"/>
+    <profileItem name="validity_months" value="true"/> 
+    <profileItem name="validityDuration" value="60"/> 
+    <!--
+    <profileItem name="validity" value="input"/>
+    <profileItem name="validity_input" value="true"/> 
+    <profileItem name="notAfter" value="100406224034EST"/>
+    <profileItem name="notBefore" value="070406224034EST"/>
+    -->
+
+    <!-- X.509 Standard Extensions -->
+
+    <!--
+    <profileItem name="basicConstraints" value="true"/> 
+    -->
+    <profileItem name="basicConstraints-crit" value="false"/> 
+
+    <profileItem name="keyUsage" value="true"/>
+    <profileItem name="keyUsage-crit" value="false"/>
+    <profileItem name="keyUsage-digitalSignature" value="true"/>
+    <profileItem name="keyUsage-keyEncipherment" value="true"/>
+    <profileItem name="keyUsage-dataEncipherment" value="true"/>
+    <profileItem name="keyUsage-keyAgreement" value="true"/>
+    <profileItem name="keyUsage-nonRepudiation" value="true"/>
+    <!--  
+    <profileItem name="keyUsage-keyCertSign" value="true"/>
+    <profileItem name="keyUsage-cRLSign" value="true"/>
+    -->  
+
+    <profileItem name="extKeyUsage" value="true"/>
+    <profileItem name="extKeyUsage-crit" value="false"/>
+    <profileItem name="extKeyUsage-serverAuth" value="true"/>
+    <!--  
+    <profileItem name="extKeyUsage-clientAuth" value="true"/>
+    <profileItem name="extKeyUsage-codeSign" value="true"/>
+    <profileItem name="extKeyUsage-emailProtect" value="true"/>
+    <profileItem name="extKeyUsage-timeStamp" value="true"/>
+    <profileItem name="extKeyUsage-ocspResponder" value="true"/>
+    <profileItem name="extKeyUsage-NS-govtApproved" value="true"/>
+    -->  
+
+    <profileItem name="subjectKeyIdentifier" value="true"/>
+    <profileItem name="subjectKeyIdentifier-crit" value="false"/>
+    <!--
+    <profileItem name="authorityKeyIdentifier" value="true"/>
+    <profileItem name="authorityKeyIdentifier-crit" value="true"/>
+    <profileItem name="authorityKeyIdentifier-radio-keyIdentifier" value="true"/>
+    <profileItem name="authorityKeyIdentifier-radio-nameserialno" value="true"/>
+    -->
+
+    <!--
+    <profileItem name="SubAltName" value="true"/>
+    <profileItem name="SubAltName-crit" value="true"/>
+    <profileItem name="SubAltNameSelect0" value="myserver.mydomain.com - 3"/>
+    <profileItem name="SubAltName-text" value="myserver.mydomain.com - 3"/>
+    <profileItem name="SubAltName-display-text" value="dnsName:myserver.mydomain.com"/>
+    <profileItem name="SubAltNameSelect0" value="admin@mydomain.com - 2"/>
+    <profileItem name="SubAltNameSelect1" value="192.168.2.1 - 8"/>
+    <profileItem name="SubAltNameSelect2" value="myserver.mydomain.com - 3"/>
+    <profileItem name="SubAltName-text" value="admin@mydomain.com - 2|192.168.2.1 - 8|myserver.mydomain.com - 3"/>
+    <profileItem name="SubAltName-display-text" value="rfc822Name:admin@mydomain.com|ipAddress:192.168.2.1|dnsName:myserver.mydomain.com"/>
+    -->
+
+    <!-- Netscape Extensions -->
+
+    <profileItem name="netscape-cert-type" value="true"/>
+    <profileItem name="netscape-cert-type-crit" value="false"/>
+    <profileItem name="netscape-cert-type-object-signing" value="true"/>
+    <profileItem name="netscape-cert-type-smime" value="true"/>
+    <profileItem name="netscape-cert-type-ssl-client" value="true"/>
+    <profileItem name="netscape-cert-type-ssl-server" value="true"/>
+    <!--
+    <profileItem name="netscape-cert-type-object-signing-ca" value="true"/>
+    <profileItem name="netscape-cert-type-smime-ca" value="true"/>
+    <profileItem name="netscape-cert-type-ssl-ca" value="true"/>
+    -->
+
+</CertProfile>
+

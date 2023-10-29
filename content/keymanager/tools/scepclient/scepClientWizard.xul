@@ -1,0 +1,1741 @@
+<?xml version="1.0"?>
+<!-- @(#) $Id: scepClientWizard.xul,v 1.29 2012/10/03 14:20:41 subrata Exp $ -->
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is Avaya Labs Research, Avaya Inc. Code.
+   -
+   - The Initial Developer of the Original Code is
+   - Subrata Mazumdar, Avaya Labs Research, Avaya Inc.
+   - Portions created by the Initial Developer are Copyright (C) 2007.
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Subrata Mazumdar (mazum@avaya.com)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+
+
+
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://keymanager/skin/kmbindings.css" type="text/css"?>
+
+<!DOCTYPE wizard
+	[
+	<!ENTITY % certManager.dtd SYSTEM "chrome://pippki/locale/certManager.dtd">
+	%certManager.dtd;
+	<!ENTITY % keyManager.dtd SYSTEM "chrome://keymanager/locale/keyManager.dtd">
+	%keyManager.dtd;
+	]>
+
+<wizard id="keymgr.scepclient.wizard"
+    windowtype="avaya:scepclient"
+    xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    title="&keymgr.scepclient.wizard.title;"
+    flex="1"
+    onwizardfinish="return scepClientWizardFinish(this);"
+    onwizardcancel="return scepClientWizardCancel(this);"
+    persist="width height screenX screenY"
+    >
+
+    <!--
+    onload="initScepClientWizard();"
+    style="width: 48em; height: 48em;"
+    -->
+    <script type="application/x-javascript" src="chrome://global/content/strres.js"/>
+  
+    <script type="application/x-javascript" src="chrome://keymanager/content/XULFileUtil.js"/>
+    <script type="application/x-javascript" src="chrome://keymanager/content/certutil.js"/>
+    <script type="application/x-javascript" src="chrome://keymanager/content/BrowserPrefUtil.js"/>
+
+    <script type="application/x-javascript" src="chrome://keymanager/content/httputil.js"/>
+
+    <script type="application/x-javascript" src="chrome://keymanager/content/tools/scepclient/JsSCEPClient.js"/>
+    <script type="application/x-javascript" src="chrome://keymanager/content/tools/scepclient/ScepGetCertInitialData.js"/>
+    <script type="application/x-javascript" src="chrome://keymanager/content/tools/scepclient/scepClientWizard.js"/>
+    <script type="application/x-javascript" src="chrome://keymanager/content/tools/scepclient/scepClientFormReqMsg.js"/>
+
+    <wizardpage
+      pageid="keymgr.scepclient.msgtype.wizardpage"
+      description="&keymgr.scepclient.msgtype.wizardpage.label;"
+      onpageshow="return msgTypePageShow();"
+      onpageadvanced="return msgTypePageAdvanced();"
+      next="keymgr.scepclient.pkcsreq.user.wizardpage"
+      >
+	      <grid flex="1"> 
+	        <columns>
+	           <column/>
+	           <column flex="1"/>
+	           <column flex="10"/>
+	        </columns>
+	        <rows>
+	          <row
+		    align="center"
+		    >
+	            <label value="&keymgr.scepclient.msgtype.label;"/> 
+		    <hbox
+		      pack="start"
+		      >
+	              <menulist id="keymgr.scepclient.msgtype.menuList"
+			persist="value"
+  		        tooltiptext="&keymgr.scepclient.msgtype.menuList.tooltip;"
+		        readonly="true"
+		        oncommand="handleWizardScepReqMsgTypeChange(this, event.target)"
+		        >
+	                <menupopup>
+	                  <menuitem
+			      id="keymgr.scepclient.msgtype.GetCACert"
+			      label="&keymgr.scepclient.msgtype.GetCACert.label;"
+			      value="GetCACert"
+			      selected="true"
+			     />
+	                  <menuitem
+			      id="keymgr.scepclient.msgtype.PKCSReq"
+			      label="&keymgr.scepclient.msgtype.PKCSReq.label;"
+			      value="PKCSReq"
+			     />
+	                  <menuitem
+			      id="keymgr.scepclient.msgtype.GetCertInitial"
+			      label="&keymgr.scepclient.msgtype.GetCertInitial.label;"
+			      value="GetCertInitial"
+			     />
+	                  <menuitem
+			      id="keymgr.scepclient.msgtype.GetCert"
+			      label="&keymgr.scepclient.msgtype.GetCert.label;"
+			      value="GetCert"
+			     />
+	                  <menuitem
+			      id="keymgr.scepclient.msgtype.GetCRL"
+			      label="&keymgr.scepclient.msgtype.GetCRL.label;"
+			      tooltiptext="&keymgr.scepclient.msgtype.GetCRL.tooltip;"
+			      disabled="true"
+			      value="GetCRL"
+			     />
+			  <!--
+	                  <menuitem
+			      id="keymgr.scepclient.msgtype.CertRep"
+			      label="&keymgr.scepclient.msgtype.CertRep.label;"
+			      value="CertRep"
+			     />
+		          -->
+	                </menupopup>
+	              </menulist>
+		    </hbox>
+	          </row>
+
+	          <row hidden="true">
+		    <spacer/>
+	            <label id="keymgr.scepclient.msgtype.wizardpage.next.GetCACert"
+	                value="&keymgr.scepclient.msgtype.wizardpage.next.GetCACert.label;"
+			hidden="true"/>
+	            <label id="keymgr.scepclient.msgtype.wizardpage.next.PKCSReq"
+	                value="&keymgr.scepclient.msgtype.wizardpage.next.PKCSReq.label;"
+			hidden="true"/>
+	            <label id="keymgr.scepclient.msgtype.wizardpage.next.GetCertInitial"
+	                value="&keymgr.scepclient.msgtype.wizardpage.next.GetCertInitial.label;"
+			hidden="true"/>
+	            <label id="keymgr.scepclient.msgtype.wizardpage.next.GetCert"
+	                value="&keymgr.scepclient.msgtype.wizardpage.next.GetCert.label;"
+			hidden="true"/>
+	            <label id="keymgr.scepclient.msgtype.wizardpage.next.GetCRL"
+	                value="&keymgr.scepclient.msgtype.wizardpage.next.GetCRL.label;"
+			hidden="true"/>
+	          </row>
+	        </rows>
+	      </grid>
+    </wizardpage>
+
+  <wizardpage
+    pageid="keymgr.scepclient.pkcsreq.user.wizardpage"
+    description="&keymgr.scepclient.pkcsreq.user.wizardpage.label;"
+    flex="1"
+    onpageshow="return pkcsReqUserCertPageShow();"
+    onpageadvanced="return pkcsReqUserCertPageAdvanced();"
+    next="keymgr.scepclient.pkcsreq.issuer.wizardpage"
+    >
+    <!--
+    next="keymgr.scepclient.pkcsreq.csr.wizardpage"
+    -->
+    <groupbox id="keymgr.scepclient.pkcsreq.user.inputparams">
+	<caption class="header" label="&keymgr.scepclient.pkcsreq.user.inputparams.label;"/>
+	<grid> 
+	    <columns>
+	        <column/>
+	        <column/>
+	        <column flex="10"/>
+	    </columns>
+	    <rows>
+	        <row
+		    align="center"
+		    >
+		    <spacer/>
+		    <hbox
+		    	pack="start"
+		        align="start"
+		        >
+	                <checkbox id="keymgr.scepclient.pkcsreq.user.cert.renew"
+		            label="&keymgr.scepclient.pkcsreq.user.cert.renew.label;"
+  		      	    tooltiptext="&keymgr.scepclient.pkcsreq.user.cert.renew.tooltip;"
+		    	    oncommand="handlePKCSReqUseCertRenewChange(this, event);"
+			    /> 
+		      </hbox>
+	        </row>
+
+	        <row
+		    align="center"
+		    >
+	            <label value="&keymgr.scepclient.pkcsreq.user.cert.label;"/> 
+		    <hbox
+		        pack="start"
+		        align="start"
+		        >
+	                <certpicker id="keymgr.scepclient.pkcsreq.user.certpicker"
+  		            menutooltiptext="&keymgr.scepclient.pkcsreq.user.cert.tooltip;"
+			    tokentypehidden="true"
+			    certtype="user_selfsigned"
+			    certtypehidden="true"
+			    certusage="EmailRecipient"
+			    certusagehidden="false"
+			    certusagedisabled="true"
+		            viewhidden="false"
+	  	            viewlabel="&keymgr.scepclient.wizard.cert.view.label;"
+  		            viewtooltiptext="&keymgr.scepclient.pkcsreq.user.cert.view.tooltip;"
+		            includeTokenInfo="true"
+	       	            oncommand="handlePKCSReqUserCertPickerChange(this, event);"
+	    	            />
+	    		<createcert id="keymgr.scepclient.pkcsreq.user.createcert"
+			    class="menu"
+			    optypelabel="&keymgr.scepclient.pkcsreq.user.cert.create.label;"
+			    casignedhidden="true"
+			    selfproxyhidden="true"
+			    otpkhidden="true"
+			    oncommand="handlePKCSReqUserCertCreate(this, event)"
+			    />
+		      </hbox>
+	          </row>
+
+	          <row
+		      align="center"
+		      >
+	              <label value="&keymgr.scepclient.pkcsreq.user.certreq.challengepw.label;"/>
+		      <hbox pack="start">
+			  <!--
+			  Note: Avaya Device profile menu is hack to support SCEP enrollment 
+			        using Avaya TM for unregitered devices and user.
+				By default, this menu item element is not displayed. 
+				Use the 'keymgr.scepclient.avdevprofile.enabled' perference to enable it.
+			  -->
+	                  <menulist id="keymgr.scepclient.pkcsreq.user.certreq.avdevprofiles"
+			    xpersist="value"
+			    hidden="true"
+  		            tooltiptext="&keymgr.scepclient.pkcsreq.user.certreq.avdevprofiles.tooltip;"
+		            xreadonly="true"
+		            xoncommand="handleAvDeviceProfileChange(this, event.target)"
+		            >
+			    <menupopup>
+	                        <menuitem
+			            id="keymgr.scepclient.pkcsreq.user.certreq.avdevprofile.none"
+			            label="&keymgr.scepclient.pkcsreq.user.certreq.avdevprofile.none.label;"
+				    selected="true"
+			            value=""
+			           />
+	                        <menuitem
+			            id="keymgr.scepclient.pkcsreq.user.certreq.avdevprofile.inouttls"
+			            label="&keymgr.scepclient.pkcsreq.user.certreq.avdevprofile.inouttls.label;"
+			            value="INBOUND_OUTBOUND_TLS"
+			           />
+	                        <menuitem
+			            id="keymgr.scepclient.pkcsreq.user.certreq.avdevprofile.intls"
+			            label="&keymgr.scepclient.pkcsreq.user.certreq.avdevprofile.intls.label;"
+			            value="INBOUND_TLS"
+			           />
+	                        <menuitem
+			            id="keymgr.scepclient.pkcsreq.user.certreq.avdevprofile.outtls"
+			            label="&keymgr.scepclient.pkcsreq.user.certreq.avdevprofile.outtls.label;"
+			            value="OUTBOUND_TLS"
+			           />
+			    </menupopup>
+	                  </menulist>
+	            	  <textbox id="keymgr.scepclient.pkcsreq.user.certreq.challengepw"
+			      type="password"
+			      tooltiptext="&keymgr.scepclient.pkcsreq.user.certreq.challengepw.tooltip;"
+		    	      />
+	      	          <button id="keymgr.scepclient.pkcsreq.user.challengepw.retrieve"
+			      label="&keymgr.scepclient.pkcsreq.user.challengepw.retrieve.label;"
+  		      	      tooltiptext="&keymgr.scepclient.pkcsreq.user.challengepw.retrieve.tooltip;"
+			      oncommand="getUserChallengePassword(event);"
+			      /> 
+		      </hbox>
+	          </row>
+
+	          <row>
+	              <separator class="thin"/>
+	              <spacer/>
+	          </row>
+	    </rows>
+	</grid>
+    </groupbox>
+
+    <groupbox>
+	<caption class="header" label="&keymgr.scepclient.pkcsreq.user.certreq.label;"/>
+	<grid> 
+	    <columns>
+	        <column/>
+	        <column flex="1"/>
+	    </columns>
+	    <rows>
+		<row
+		    align="center"
+		    >
+	            <label value="&keymgr.scepclient.pkcsreq.user.certreq.file.label;"/>
+	            <hbox>
+			<fileselector id="keymgr.scepclient.pkcsreq.user.certreq.filepicker" flex="2"
+			    ascii="true"
+  			    formatlabel="&keymgr.scepclient.wizard.file.format.base64.label;"
+  			    formattooltiptext="&keymgr.scepclient.wizard.file.format.base64.tooltip;"
+			    fileMode="save"
+			    fileDialogMsg="Choose PKCS#10 CSR File for User Key"
+			    fileTypeMsg="PKCS#10 CSR File"
+			    fileTypeFilters="*.csr; *.p10"
+	  		    browselabel="&keymgr.scepclient.wizard.file.browse.label;"
+	  		    browsetooltiptext="&keymgr.scepclient.wizard.file.browse.tooltip;"
+	        	    />
+	            </hbox>
+	        </row>
+
+		<row hidden="row">
+		    <spacer/>
+	            <label id="keymgr.scepclient.pkcsreq.user.wizardpage.next"
+	                value="&keymgr.scepclient.pkcsreq.user.wizardpage.next.label;"
+			hidden="true"/>
+	        </row>
+	    </rows>
+	</grid>
+    </groupbox>
+  </wizardpage>
+
+  <!--
+  <wizardpage
+    pageid="keymgr.scepclient.pkcsreq.csr.wizardpage"
+    description="&keymgr.scepclient.pkcsreq.csr.wizardpage.label;"
+    flex="1"
+    onpageshow="return pkcsReqUserCsrPageShow();"
+    onpageadvanced="return pkcsReqUserCsrPageAdvanced();"
+    next="keymgr.scepclient.pkcsreq.issuer.wizardpage"
+    >
+	    <groupbox id="keymgr.scepclient.pkcsreq.csr.inputparams">
+	      <caption class="header" label="&keymgr.scepclient.pkcsreq.csr.label;"/>
+	      <grid flex="1"> 
+	        <columns>
+	           <column/>
+	           <column flex="1"/>
+	        </columns>
+	        <rows>
+	          <row>
+	            <label value="&keymgr.scepclient.pkcsreq.csr.file.label;"/>
+	    	    <fileitem id="keymgr.scepclient.pkcsreq.csr.file.path_X"
+  			formatlabel="&keymgr.scepclient.wizard.file.format.base64.label;"
+		    	/>
+	          </row>
+	          <row>
+	            <spacer/>
+	            <textbox
+		      id="keymgr.scepclient.pkcsreq.csr.file.asciiData"
+	              multiline="true" rows="5" cols="50"
+		      readonly="true"
+	              style="font-size: 9pt; font-family: Courier; min-width: 80px; overflow: auto;"
+	              />
+	          </row>
+	          <row>
+		    <spacer/>
+	            <label id="keymgr.scepclient.pkcsreq.csr.wizardpage.next"
+	                value="&keymgr.scepclient.pkcsreq.csr.wizardpage.next.label;"
+			hidden="true"/>
+	          </row>
+	        </rows>
+	      </grid>
+	    </groupbox>
+  </wizardpage>
+  -->
+
+
+  <wizardpage
+    pageid="keymgr.scepclient.pkcsreq.issuer.wizardpage"
+    description="&keymgr.scepclient.pkcsreq.issuer.wizardpage.label;"
+    flex="1"
+    onpageshow="return pkcsReqIssuerCertPageShow();"
+    onpageadvanced="return pkcsReqIssuerCertPageAdvanced();"
+    next="keymgr.scepclient.pkcsreq.scepcsrparams.wizardpage"
+    >
+	    <groupbox>
+	      <grid flex="1"> 
+	        <columns>
+	           <column/>
+	           <column flex="1"/>
+	        </columns>
+	        <rows>
+	          <row
+		    align="center"
+		    >
+	            <label control="keymgr.scepclient.pkcsreq.issuer.server.url"
+	              value="&keymgr.scepclient.pkcsreq.issuer.server.url.label;"/>
+	            <hbox 
+		      pack="start"
+		      >
+  	              <textbox id="keymgr.scepclient.pkcsreq.issuer.server.url" flex="1"
+  		        tooltiptext="&keymgr.scepclient.pkcsreq.issuer.server.url.tooltip;"
+			persist="value"
+  	  	        type="autocomplete" 
+  	  	        autocompletesearch="form-history" 
+  	  	        completedefaultindex="true"
+  	  	        completeselectedindex="true"
+		        enablehistory="true"
+  	  	        autocompletesearchparam="keymgr.scepclient.pkcsreq.issuer.server.url"
+		        onchange="handlePKCSReqScepServerURLChange(this, event)"
+		        onpopuphiding="handlePKCSReqScepServerURLChange(this, event)"
+  		        />
+	            </hbox>
+	          </row>
+	          <row
+		    align="center"
+		    >
+		    <spacer/>
+		    <hbox
+		    	pack="start"
+			>
+			<checkbox id="keymgr.scepclient.pkcsreq.issuer.recipient.isra"
+			    label="&keymgr.scepclient.pkcsreq.issuer.recipient.isra.label;"
+			    tooltiptext="&keymgr.scepclient.pkcsreq.issuer.recipient.isra.tooltip;"
+	       	            oncommand="handlePKCSReqRAAsMsgRecipientChange(this, event);"
+			    />
+		    </hbox>
+	          </row>
+
+		  <row id="keymgr.scepclient.pkcsreq.issuer.getinfo.row"
+		      align="center"
+		      >
+		      <label control="keymgr.scepclient.pkcsreq.issuer.caid"
+			  value="&keymgr.scepclient.basic.scepserver.caid.label;"
+			  />
+		      <hbox 
+			  pack="start"
+			  >
+			  <textbox id="keymgr.scepclient.pkcsreq.issuer.caid"
+			      tooltiptext="&keymgr.scepclient.basic.scepserver.caid.tooltip;"
+			      xonchange="handleGetCACertCAIdChange(this, event)"
+			      />
+	      	          <button id="keymgr.scepclient.pkcsreq.issuer.server.getcaps"
+	                      label="&keymgr.scepclient.pkcsreq.issuer.server.getcaps.label;"
+  		      	      tooltiptext="&keymgr.scepclient.pkcsreq.issuer.server.getcaps.tooltip;"
+	                      oncommand="scepGetCACapabilities('keymgr.scepclient.pkcsreq.issuer.server.url', event);"
+			      /> 
+			  <button id="keymgr.scepclient.pkcsreq.issuer.downloadcacert"
+			      label="&keymgr.scepclient.basic.scepserver.downloadcert.label;"
+			      tooltiptext="&keymgr.scepclient.basic.scepserver.downloadcert.tooltip;"
+	                      oncommand="scepDownloadCACert(event);"
+			      /> 
+			  <!--
+	      	          <button id="keymgr.scepclient.basic.scepserver.getcaps"
+			      label="&keymgr.scepclient.basic.scepserver.getcaps.label;"
+  		      	      tooltiptext="&keymgr.scepclient.basic.scepserver.getcaps.tooltip;"
+			      oncommand="SCEPClientBasicForm.scepGetCACapabilities(event);"
+			      /> 
+			  -->
+		      </hbox> 
+		  </row>
+
+	          <row>
+	            <separator class="thin"/>
+	            <spacer/>
+	          </row>
+
+	        </rows>
+	      </grid>
+	    </groupbox>
+
+	    <groupbox id="keymgr.scepclient.pkcsreq.issuer.inputparams">
+	      <caption class="header" label="&keymgr.scepclient.pkcsreq.issuer.inputparams.label;"/>
+	      <grid flex="1"> 
+	        <columns>
+	           <column/>
+	           <column flex="1"/>
+	        </columns>
+	        <rows>
+	          <row
+		    align="center"
+		    >
+	            <label value="&keymgr.scepclient.pkcsreq.issuer.cert.label;"/> 
+		    <hbox>
+	                <certpicker id="keymgr.scepclient.pkcsreq.issuer.certpicker"
+  		            menutooltiptext="&keymgr.scepclient.pkcsreq.issuer.cert.tooltip;"
+			    tokentypehidden="true"
+			    certtype="ca"
+			    certtypehidden="true"
+			    certusage="VerifyCA"
+			    certusagehidden="false"
+			    certusagedisabled="true"
+	  	            viewlabel="&keymgr.scepclient.wizard.cert.view.label;"
+		            viewhidden="false"
+  		            viewtooltiptext="&keymgr.scepclient.wizard.cert.view.tooltip;"
+		            includeTokenInfo="true"
+	       	            oncommand="handlePKCSReqIssuerCertPickerChange(this, event);"
+	    	            />
+		    </hbox>
+	          </row>
+
+	          <row
+		    align="center"
+		    >
+	            <label value="&keymgr.scepclient.pkcsreq.issuer.recipient.cert.label;"/> 
+		    <hbox
+		    	pack="start"
+			>
+	                <certpicker id="keymgr.scepclient.pkcsreq.issuer.recipient.certpicker"
+  		            menutooltiptext="&keymgr.scepclient.pkcsreq.issuer.recipient.cert.tooltip;"
+			    tokentypehidden="true"
+			    certtype="ca"
+			    xcerttypedisabled="true"
+			    xcerttypehidden="true"
+			    certusage="VerifyCA"
+			    certusagehidden="false"
+			    xcertusagedisabled="true"
+	  	            viewlabel="&keymgr.scepclient.wizard.cert.view.label;"
+		            viewhidden="false"
+  		            viewtooltiptext="&keymgr.scepclient.wizard.cert.view.tooltip;"
+		            includeTokenInfo="true"
+	       	            oncommand="handlePKCSReqScepRecipientCertPickerChange(this, event);"
+	    	            />
+		    </hbox>
+	          </row>
+
+		  <!--
+	          <row>
+	            <label value="&keymgr.scepclient.pkcsreq.issuer.cert.subjdn.label;"/> 
+	            <label id="keymgr.scepclient.pkcsreq.issuer.cert.subjdn" value=""/>
+	          </row>
+	          <row>
+	            <label value="&keymgr.issuerinfo.label;"/>
+	            <label id="keymgr.scepclient.pkcsreq.issuer.cert.issuedby"/>
+	          </row>
+	          <row>
+	            <label value="&keymgr.certdetail.serialnumber;"/> 
+	            <label id="keymgr.scepclient.pkcsreq.issuer.cert.serialnumber"/>
+	          </row>
+	          <row>
+	            <label value="&keymgr.expires;"/>
+	            <label id="keymgr.scepclient.pkcsreq.issuer.cert.validityend"/>
+	          </row>
+		  -->
+
+	          <row hidden="true">
+		    <spacer/>
+	            <label id="keymgr.scepclient.pkcsreq.issuer.wizardpage.next"
+	                value="&keymgr.scepclient.pkcsreq.issuer.wizardpage.next.label;"
+			hidden="true"/>
+	          </row>
+	        </rows>
+	      </grid>
+	    </groupbox>
+
+  </wizardpage>
+
+  <wizardpage
+    pageid="keymgr.scepclient.pkcsreq.scepcsrparams.wizardpage"
+    description="&keymgr.scepclient.pkcsreq.scepcsrparams.wizardpage.label;"
+    flex="1"
+    onpageshow="return pkcsReqScepCsrPageShow();"
+    onpageadvanced="return pkcsReqScepCsrPageAdvanced();"
+    next="keymgr.scepclient.pkcsreq.scepreqmsg.wizardpage"
+    >
+	    <groupbox id="keymgr.scepclient.pkcsreq.scepcsrparams">
+	      <caption class="header" label="&keymgr.scepclient.pkcsreq.scepcsrparams.param.label;"/>
+	      <grid flex="1"> 
+	        <columns>
+	           <column/>
+	           <column flex="1"/>
+	        </columns>
+	        <rows>
+	          <row
+		    align="center"
+		    >
+	            <label value="&keymgr.scepclient.pkcsreq.scepcsrparams.user.cert.label;"/> 
+		    <certitem id="keymgr.scepclient.pkcsreq.scepcsrparams.user.cert" 
+	  		viewlabel="&keymgr.scepclient.wizard.cert.view.label;"
+  		      	viewtooltiptext="&keymgr.scepclient.wizard.cert.view.tooltip;"
+		        />
+	          </row>
+	          <row
+		    align="center"
+		    >
+	            <label value="&keymgr.scepclient.pkcsreq.scepcsrparams.recipient.cert.label;"/> 
+		    <hbox
+		    	pack="start"
+		    	align="center"
+			>
+			<checkbox id="keymgr.scepclient.pkcsreq.scepcsrparams.recipient.isra"
+			    disabled="true"
+			    label="&keymgr.scepclient.pkcsreq.scepcsrparams.recipient.isra.label;"
+			    tooltiptext="&keymgr.scepclient.pkcsreq.scepcsrparams.recipient.isra.tooltip;"
+			    />
+		        <certitem id="keymgr.scepclient.pkcsreq.scepcsrparams.recipient.cert" 
+	  		    viewlabel="&keymgr.scepclient.wizard.cert.view.label;"
+  		      	    viewtooltiptext="&keymgr.scepclient.wizard.cert.view.tooltip;"
+		            />
+		    </hbox>
+	          </row>
+
+	          <row
+		    align="center"
+		    >
+	            <label value="&keymgr.scepclient.pkcsreq.scepcsrparams.pkcs10.file.label;"/>
+	    	    <fileitem id="keymgr.scepclient.pkcsreq.scepcsrparams.pkcs10.file.path"
+  			formatlabel="&keymgr.scepclient.wizard.file.format.base64.label;"
+		    	/>
+	          </row>
+
+	          <row
+		    align="center"
+		    >
+	            <label value="&keymgr.scepclient.pkcsreq.scepcsrparams.hashAlgName.label;"/>
+		    <hbox pack="start" align="start">
+	    		<hashalgmenu id="keymgr.scepclient.pkcsreq.scepcsrparams.hashAlgName.menulist"
+			    sha1disabled="true"
+			    sha256disabled="true"
+			    sha384disabled="true"
+			    sha512disabled="true"
+			    value="MD5"
+			    xvalue="SHA1"
+	        	    />
+		    </hbox>
+	          </row>
+	          <row
+		    align="center"
+		    >
+		      <label value="&keymgr.scepclient.wizard.scephttpmethod.label;"/>
+		      <hbox 
+			  pack="start"
+		          >
+	                  <scephttpmethod id="keymgr.scepclient.pkcsreq.scepcsrparams.scephttpmethod"
+			      oncommand="handlePKCSReqScepHttpMethodChange(this, event); "
+			      />
+		      </hbox> 
+	          </row>
+	        </rows>
+	      </grid>
+	    </groupbox>
+
+	    <groupbox>
+	      <caption class="header" label="&keymgr.scepclient.pkcsreq.scepcsrparams.reqmsg.label;"/>
+	      <grid flex="1"> 
+	        <columns>
+	           <column/>
+	           <column flex="1"/>
+	        </columns>
+	        <rows>
+	          <row
+		    align="center"
+		    >
+	            <label value="&keymgr.scepclient.pkcsreq.scepcsrparams.file.label;"/>
+	    	    <fileselector id="keymgr.scepclient.pkcsreq.scepcsrparams.file.path"
+			ascii="true"
+  			formatlabel="&keymgr.scepclient.wizard.file.format.base64.label;"
+  			formattooltiptext="&keymgr.scepclient.wizard.file.format.base64.tooltip;"
+			fileMode="save"
+			fileDialogMsg="Choose PKCS7 File for SCEP CSR Message"
+			fileTypeMsg="SCEP PKCS#7 CSR File"
+			fileTypeFilters="*.p7m; *.pk7"
+	  		browselabel="&keymgr.scepclient.wizard.file.browse.label;"
+	  		browsetooltiptext="&keymgr.scepclient.wizard.file.browse.tooltip;"
+	        	/>
+	          </row>
+	          <row>
+		    <spacer/>
+	            <label id="keymgr.scepclient.pkcsreq.scepcsrparams.wizardpage.next"
+	                value="&keymgr.scepclient.pkcsreq.scepcsrparams.wizardpage.next.label;"
+			hidden="true"/>
+	          </row>
+	        </rows>
+	      </grid>
+	    </groupbox>
+  </wizardpage>
+
+
+  <wizardpage
+    pageid="keymgr.scepclient.pkcsreq.scepreqmsg.wizardpage"
+    description="&keymgr.scepclient.pkcsreq.scepreqmsg.wizardpage.label;"
+    flex="1"
+    onpageshow="return scepPKCS7ReqMsgSendPageShow();"
+    onpageadvanced="return scepPKCS7ReqMsgSendPageAdvanced();"
+    next="keymgr.scepclient.pkcsreq.sceprespmsg.wizardpage"
+    >
+	    <groupbox id="keymgr.scepclient.scepreqmsg.group">
+	      <caption class="header" label="&keymgr.scepclient.scepreqmsg.label;"/>
+	      <grid flex="1"> 
+	        <columns>
+	           <column/>
+	           <column flex="1"/>
+	        </columns>
+	        <rows>
+	          <row
+		    align="center"
+		    >
+	            <label value="&keymgr.scepclient.scepreqmsg.type.label;"/> 
+		    <hbox
+		      pack="start"
+		      >
+	              <menulist id="keymgr.scepclient.scepreqmsg.type"
+  		        tooltiptext="&keymgr.scepclient.scepreqmsg.type.tooltip;"
+			disabled="true"
+		        >
+	                <menupopup>
+	                  <menuitem
+			      label="GetCACert"
+			      value="GetCACert"
+			      hidden="true"
+			     />
+	                  <menuitem
+			      label="PKCSReq"
+			      value="PKCSReq"
+			     />
+	                  <menuitem
+			      label="GetCertInitial"
+			      value="GetCertInitial"
+			     />
+	                  <menuitem
+			      label="GetCert"
+			      value="GetCert"
+			     />
+	                  <menuitem
+			      label="GetCRL"
+			      value="GetCRL"
+			      hidden="true"
+			     />
+			  <!--
+	                  <menuitem
+			      label="CertRep"
+			      value="CertRep"
+			     />
+		          -->
+	                </menupopup>
+	              </menulist>
+		    </hbox>
+	          </row>
+
+	          <row align="center">
+	            <label value="&keymgr.scepclient.pkcsreq.user.cert.label;"/> 
+		    <hbox>
+	                <certitem id="keymgr.scepclient.scepreqmsg.user.cert"
+			    xflex="1"
+	  		    viewlabel="&keymgr.scepclient.wizard.cert.view.label;"
+  		      	    viewtooltiptext="&keymgr.scepclient.wizard.cert.view.tooltip;"
+		    	    />
+		        <spacer flex="1"/>
+		    </hbox>
+		    <!--
+		    -->
+	          </row>
+
+	          <row align="center">
+	            <label value="&keymgr.scepclient.scepreqmsg.recipient.cert.label;"/> 
+		    <hbox>
+	                <certitem id="keymgr.scepclient.scepreqmsg.recipient.cert"
+			    xflex="1"
+	  		    viewlabel="&keymgr.scepclient.wizard.cert.view.label;"
+  		      	    viewtooltiptext="&keymgr.scepclient.wizard.cert.view.tooltip;"
+		    	    />
+		        <spacer flex="1"/>
+		    </hbox>
+	          </row>
+
+	          <row align="center">
+	            <label value="&keymgr.scepclient.scepreqmsg.transactionId.label;"/>
+		    <hbox pack="start">
+	                <textbox id="keymgr.scepclient.scepreqmsg.transactionId"
+			    readonly="true"
+			    />
+		    </hbox>
+	          </row>
+
+	          <row align="center">
+	            <label value="&keymgr.scepclient.wizard.scep.server.url.label;"/>
+		    <hbox pack="start">
+  	            	<textbox id="keymgr.scepclient.scepreqmsg.server.url" flex="1"
+			    readonly="true"
+  		      	    tooltiptext="&keymgr.scepclient.wizard.scep.server.url.tooltip;"
+		      	    />
+		    </hbox>
+	          </row>
+	          <row
+		    align="center"
+		    >
+		      <label value="&keymgr.scepclient.wizard.scephttpmethod.label;"/>
+		      <hbox 
+			  pack="start"
+		          >
+	                  <scephttpmethod id="keymgr.scepclient.scepreqmsg.scephttpmethod"
+			      disabled="true"
+  		      	      tooltiptext="&keymgr.scepclient.wizard.scephttpmethod.tooltip;"
+			      xoncommand="handlePKCSReqScepHttpMethodChange(this, event); "
+			      />
+		      </hbox> 
+	          </row>
+	          <row align="center">
+	            <label value="&keymgr.scepclient.scepreqmsg.file.label;"/>
+	    	    <fileitem id="keymgr.scepclient.scepreqmsg.file.path"
+		        formatlabel="&keymgr.scepclient.wizard.file.format.base64.label;"
+  		      	formattooltiptext="&keymgr.scepclient.wizard.file.format.base64.tooltip;"
+	        	/>
+	          </row>
+	          <row>
+	            <spacer/>
+	            <textbox
+		      id="keymgr.scepclient.scepreqmsg.file.asciiData"
+	              multiline="true" xrows="5" xcols="50"
+		      readonly="true"
+	              style="font-size: 9pt; font-family: Courier; min-width: 80px; overflow: auto;"
+		      hidden="true"
+	              />
+	          </row>
+	        </rows>
+	      </grid>
+	    </groupbox>
+
+	    <groupbox>
+	      <caption class="header" label="&keymgr.scepclient.scepreqmsg.resp.label;"/>
+	      <grid flex="1"> 
+	        <columns>
+	           <column/>
+	           <column flex="1"/>
+	        </columns>
+	        <rows>
+	          <row>
+	            <label value="&keymgr.scepclient.scepreqmsg.resp.file.label;"/>
+	    	    <fileselector id="keymgr.scepclient.scepreqmsg.resp.file.path"
+			formathidden="true"
+		        formatlabel="&keymgr.scepclient.wizard.file.format.base64.label;"
+  		      	formattooltiptext="&keymgr.scepclient.wizard.file.format.base64.tooltip;"
+			fileMode="save"
+			fileDialogMsg="Choose PKCS7 File for SCEP Response Message"
+			fileTypeMsg="PKCS#7 File"
+			fileTypeFilters="*.pk7; *.p7m"
+			browselabel="&keymgr.scepclient.wizard.file.browse.label;"
+			browsetooltiptext="&keymgr.scepclient.wizard.file.browse.tooltip;"
+	        	/>
+	          </row>
+	          <row>
+		    <spacer/>
+	            <label id="keymgr.scepclient.pkcsreq.scepreqmsg.wizardpage.next"
+	                value="&keymgr.scepclient.pkcsreq.scepreqmsg.wizardpage.next.label;"
+			hidden="true"/>
+	          </row>
+	        </rows>
+	      </grid>
+	    </groupbox>
+  </wizardpage>
+
+  <wizardpage
+    pageid="keymgr.scepclient.pkcsreq.sceprespmsg.wizardpage"
+    description="&keymgr.scepclient.pkcsreq.sceprespmsg.wizardpage.label;"
+    flex="1"
+    onpageshow="return scepPKCS7RespMsgPageShow();"
+    onpageadvanced="return scepPKCS7RespMsgPageAdvanced();"
+    next="keymgr.scepclient.pkcsreq.importcert.wizardpage"
+    >
+	    <groupbox id="keymgr.scepclient.pkcsreq.sceprespmsg">
+	      <caption class="header" label="&keymgr.scepclient.pkcsreq.sceprespmsg.label;"/>
+	      <grid flex="1"> 
+	        <columns>
+	           <column/>
+	           <column flex="1"/>
+	        </columns>
+	        <rows>
+	          <row>
+	            <label value="&keymgr.scepclient.pkcsreq.sceprespmsg.file.label;"/>
+	    	    <fileitem id="keymgr.scepclient.pkcsreq.sceprespmsg.file.path_X"
+  			formatlabel="&keymgr.scepclient.wizard.file.format.base64.label;"
+		    	/>
+	          </row>
+	          <row>
+	            <spacer/>
+	            <textbox
+		      id="keymgr.scepclient.pkcsreq.sceprespmsg.file.asciiData"
+	              multiline="true" rows="5" cols="50" 
+		      readonly="true"
+		      hidden="true"
+	              style="font-size: 9pt; font-family: Courier; min-width: 80px; overflow: auto;"
+	              />
+	          </row>
+	        </rows>
+	      </grid>
+	    </groupbox>
+
+	    <groupbox>
+	      <caption class="header" label="&keymgr.scepclient.pkcsreq.sceprespmsg.cert.label;"/>
+	      <grid flex="1"> 
+	        <columns>
+	           <column/>
+	           <column flex="1"/>
+	        </columns>
+	        <rows>
+	          <row>
+	            <label value="&keymgr.scepclient.pkcsreq.sceprespmsg.cert.file.label;"/>
+	    	    <fileselector id="keymgr.scepclient.pkcsreq.sceprespmsg.cert.file.path"
+			ascii="true"
+		        formatlabel="&keymgr.scepclient.wizard.file.format.base64.label;"
+  		      	formattooltiptext="&keymgr.scepclient.wizard.file.format.base64.tooltip;"
+			fileMode="save"
+			fileDialogMsg="Choose PKCS7 File for SCEP Response Message"
+			fileTypeMsg="PKCS#7 Cert File"
+			fileTypeFilters="*.pk7; *.p7m"
+			browselabel="&keymgr.scepclient.wizard.file.browse.label;"
+			browsetooltiptext="&keymgr.scepclient.wizard.file.browse.tooltip;"
+			/>
+	          </row>
+	          <row>
+		    <spacer/>
+	            <label id="keymgr.scepclient.pkcsreq.sceprespmsg.wizardpage.next"
+	                value="&keymgr.scepclient.pkcsreq.sceprespmsg.wizardpage.next.label;"
+			hidden="true"/>
+	          </row>
+	        </rows>
+	      </grid>
+	    </groupbox>
+  </wizardpage>
+
+  <wizardpage
+    pageid="keymgr.scepclient.pkcsreq.importcert.wizardpage"
+    description="&keymgr.scepclient.pkcsreq.importcert.wizardpage.label;"
+    flex="1"
+    onpageshow="return scepPKCS7ResponseHandlerPageShow();"
+    onpageadvanced="return scepPKCS7ResponseHandlerPageAdvanced();"
+    next="keymgr.scepclient.wizard.page.final"
+    >
+	    <groupbox id="keymgr.scepclient.pkcsreq.importcert">
+	      <caption class="header" label="&keymgr.scepclient.pkcsreq.importcert.label;"/>
+	      <grid flex="1"> 
+	        <columns>
+	           <column/>
+	           <column flex="1"/>
+	        </columns>
+	        <rows>
+		  <!--
+	          <row align="center">
+	            <label value="&keymgr.scepclient.scepreqmsg.recipient.cert.label;"/> 
+		    <hbox>
+	                <certitem id="keymgr.scepclient.scepreqmsg.recipient.cert"
+			    xflex="1"
+	  		    viewlabel="&keymgr.scepclient.wizard.cert.view.label;"
+  		      	    viewtooltiptext="&keymgr.scepclient.wizard.cert.view.tooltip;"
+		    	    />
+		        <spacer flex="1"/>
+		    </hbox>
+	          </row>
+		  -->
+
+	          <row align="center">
+	            <label value="&keymgr.scepclient.pkcsreq.importcert.file.label;"/>
+	    	    <fileitem id="keymgr.scepclient.pkcsreq.importcert.file.path"
+  			formatlabel="&keymgr.scepclient.wizard.file.format.base64.label;"
+		    	/>
+	          </row>
+	          <row>
+	            <spacer/>
+	            <textbox
+		      id="keymgr.scepclient.pkcsreq.importcert.file.asciiData"
+	              multiline="true" rows="10" cols="50" flex="5"
+		      readonly="true"
+	              style="font-size: 9pt; font-family: Courier; min-width: 80px; overflow: auto;"
+	              />
+	          </row>
+	          <row>
+		    <spacer/>
+	            <label id="keymgr.scepclient.pkcsreq.importcert.wizardpage.next"
+	                value="&keymgr.scepclient.pkcsreq.importcert.wizardpage.next.label;"
+			hidden="true"/>
+	          </row>
+	        </rows>
+	      </grid>
+	    </groupbox>
+  </wizardpage>
+
+  <wizardpage
+    pageid="keymgr.scepclient.wizard.page.final"
+    description="&keymgr.scepclient.wizard.page.final.label;"
+    flex="1"
+    onpageshow="return scepFinalPageShow();"
+    onpageadvanced="return scepFinalPageAdvanced();"
+    >
+    <groupbox id="keymgr.scepclient.pkcsreq.final">
+	<caption class="header" label="&keymgr.scepclient.pkcsreq.final.label;"/>
+	<grid flex="1"> 
+	    <columns>
+	           <column/>
+	           <column flex="1"/>
+	    </columns>
+	    <rows>
+	        <row align="center">
+	            <label value="&keymgr.scepclient.pkcsreq.final.cert.label;"/> 
+		    <hbox>
+	                <certitem id="keymgr.scepclient.pkcsreq.final.cert"
+			    xflex="1"
+	  		    viewlabel="&keymgr.scepclient.wizard.cert.view.label;"
+  		      	    viewtooltiptext="&keymgr.scepclient.wizard.cert.view.tooltip;"
+		    	    />
+		        <spacer flex="1"/>
+		    </hbox>
+	        </row>
+	    </rows>
+	</grid>
+    </groupbox>
+  </wizardpage>
+
+  <wizardpage
+    pageid="keymgr.scepclient.getcacert.wizardpage"
+    description="&keymgr.scepclient.getcacert.wizardpage.label;"
+    flex="1"
+    onpageshow="return getCACertPageShow();"
+    onpageadvanced="return getCACertPageAdvanced();"
+    next="keymgr.scepclient.wizard.page.final"
+    >
+	    <groupbox id="keymgr.scepclient.getcacert.inputparams">
+	      <caption class="header" label="&keymgr.scepclient.getcacert.inputparams.label;"/>
+	      <grid> 
+	        <columns>
+	           <column/>
+	           <column flex="1"/>
+	        </columns>
+	        <rows>
+	          <row
+		    align="center"
+		    >
+	            <label control="keymgr.scepclient.getcacert.msgtype"
+	              value="&keymgr.scepclient.getcacert.msgtype.label;"/>
+	            <radiogroup id="keymgr.scepclient.getcacert.msgtype" orient="horizontal"
+		      	oncommand="handleGetCACertMsgTypeChange(this, event)"
+		    	>
+			<grid>
+			    <columns>
+			        <column/>
+			        <column/>
+			    </columns>
+			    <rows>
+			      <row>
+	                        <radio id="keymgr.scepclient.getcacert.msgtype.ca"
+		                    label="&keymgr.scepclient.getcacert.msgtype.ca.label;"
+  		      	            tooltiptext="&keymgr.scepclient.getcacert.msgtype.ca.tooltip;"
+  		                    selected="true"
+  		                    value="GetCACert"
+  		                    group="keymgr.scepclient.getcacert.msgtype"
+				    />
+	                        <radio id="keymgr.scepclient.getcacert.msgtype.cara"
+		                    label="&keymgr.scepclient.getcacert.msgtype.cara.label;"
+  		      	            tooltiptext="&keymgr.scepclient.getcacert.msgtype.cara.tooltip;"
+  		                    value="GetCACert"
+				    responsemaycontainra="true"
+  		                    group="keymgr.scepclient.getcacert.msgtype"
+				    />
+			      </row>
+			      <row>
+	                        <radio id="keymgr.scepclient.getcacert.msgtype.carachain"
+		                    label="&keymgr.scepclient.getcacert.msgtype.carachain.label;"
+  		      	            tooltiptext="&keymgr.scepclient.getcacert.msgtype.carachain.tooltip;"
+  		                    value="GetCACertChain"
+				    responsemaycontainra="true"
+  		                    group="keymgr.scepclient.getcacert.msgtype"
+				    />
+	                        <radio id="keymgr.scepclient.getcacert.msgtype.next"
+		                    label="&keymgr.scepclient.getcacert.msgtype.next.label;"
+  		      	            tooltiptext="&keymgr.scepclient.getcacert.msgtype.next.tooltip;"
+				    disabled="true"
+  		                    value="GetNextCACert"
+				    responsemaycontainra="true"
+  		                    group="keymgr.scepclient.getcacert.msgtype"
+				    />
+			      </row>
+			    </rows>
+			</grid>
+	            </radiogroup>
+	          </row>
+				<!--
+	                        <radio id="keymgr.scepclient.getcacert.msgtype.caps"
+		                    label="&keymgr.scepclient.getcacert.msgtype.caps.label;"
+  		      	            tooltiptext="&keymgr.scepclient.getcacert.msgtype.caps.tooltip;"
+  		                    value="GetCACaps"
+  		                    group="keymgr.scepclient.getcacert.msgtype"
+				    />
+				-->
+
+	          <row id="keymgr.scepclient.getcacert.israfirstcert.row"
+		    align="center"
+		    >
+		    <spacer/>
+		    <hbox 
+			pack="start"
+		        >
+		        <checkbox id="keymgr.scepclient.getcacert.israfirstcert"
+			  checked="true"
+		          label="&keymgr.scepclient.getcacert.israfirstcert.label;"
+		          tooltiptext="&keymgr.scepclient.getcacert.israfirstcert.tooltip;"
+		          />
+		    </hbox> 
+	          </row>
+
+	          <row
+		    align="center"
+		    >
+	            <label control="keymgr.scepclient.getcacert.caid"
+	              value="&keymgr.scepclient.getcacert.caid.label;"/>
+
+		    <hbox 
+			pack="start"
+		        >
+		        <textbox id="keymgr.scepclient.getcacert.caid"
+		          tooltiptext="&keymgr.scepclient.getcacert.caid.tooltip;"
+		          onchange="handleGetCACertCAIdChange(this, event)"
+		          />
+		    </hbox> 
+	          </row>
+
+	          <row
+		    align="center"
+		    hidden="true"
+		    >
+		    <spacer/>
+		    <hbox 
+			pack="start"
+		        >
+		        <checkbox id="keymgr.scepclient.getcacert.isra"
+		          label="Is RA?"
+		          oncommand="updateGetCACertMessageParam()"
+		          />
+		    </hbox> 
+	          </row>
+
+	          <row
+		    align="center"
+		    >
+	            <label control="keymgr.scepclient.getcacert.param"
+	              value="&keymgr.scepclient.getcacert.param.label;"/>
+		    <hbox 
+			pack="start"
+		        >
+		        <checkbox id="keymgr.scepclient.getcacert.param.encode"
+		          label="Encode"
+		          tooltiptext="Encode Message parameters in the URL."
+			  checked="true"
+		          oncommand="updateGetCACertMessageParam()"
+		          />
+  	                <textbox id="keymgr.scepclient.getcacert.param" flex="1"
+  		          tooltiptext="&keymgr.scepclient.getcacert.param.tooltip;"
+			  readonly="true"
+  	  	          xtype="autocomplete" 
+  	  	          xautocompletesearch="form-history" 
+  	  	          xcompletedefaultindex="true"
+  	  	          xcompleteselectedindex="true"
+		          xenablehistory="true"
+  	  	          xautocompletesearchparam="keymgr.scepclient.getcacert.param"
+		          xonchange="handleScepServerURLFieldChange(this)"
+  		          />
+  		          <!--
+		          forcecomplete="true"
+  		          -->
+	            </hbox>
+	          </row>
+
+	          <row
+		    align="center"
+		    >
+	            <label control="keymgr.scepclient.getcacert.server.url"
+	              value="&keymgr.scepclient.wizard.scep.server.url.label;"/>
+	            <hbox flex="1"
+		      align="center"
+		      >
+		      <!--
+	      	      <button id="keymgr.scepclient.getcacert.server.getcaps"
+	                label="&keymgr.scepclient.wizard.scep.server.getcaps.label;"
+  		      	tooltiptext="&keymgr.scepclient.wizard.scep.server.getcaps.tooltip;"
+	                oncommand="scepGetCACapabilities('keymgr.scepclient.getcacert.server.url', event);"
+			/> 
+		      -->
+  	              <textbox id="keymgr.scepclient.getcacert.server.url" flex="1"
+  		        tooltiptext="&keymgr.scepclient.wizard.scep.server.url.tooltip;"
+  	  	        type="autocomplete" 
+  	  	        autocompletesearch="form-history" 
+  	  	        completedefaultindex="true"
+  	  	        completeselectedindex="true"
+		        enablehistory="true"
+  	  	        autocompletesearchparam="keymgr.scepclient.getcacert.server.url"
+		        onchange="handleGetCACertScepServerURLChange(this, event)"
+		        onpopuphiding="handleGetCACertScepServerURLChange(this, event)"
+  		        />
+	      	      <button id="keymgr.scepclient.getcacert.cmd"
+	                label="&keymgr.scepclient.getcacert.cmd.label;"
+	                tooltiptext="&keymgr.scepclient.getcacert.cmd.tooltip;"
+	                oncommand="scepGetCACertChain('keymgr.scepclient.getcacert.server.url', 'ScepClientWizardGetCACertConsoleFrame');"/> 
+	            </hbox>
+	          </row>
+
+	          <row id="keymgr.scepclient.getcacert.capabilities.row"
+		    align="center"
+		    >
+		    <label value="CA Capabilties"/>
+		    <vbox pack="start"
+			>
+		    	<textbox id="keymgr.scepclient.getcacert.capabilities"
+			    flex="1"
+			    multiline="true"
+			    readonly="true"
+			    rows="3"
+		    	    />
+		    	<hbox
+			    pack="start"
+			    >
+	      	            <button id="keymgr.scepclient.getcacert.server.getcaps"
+	                    	label="&keymgr.scepclient.wizard.scep.server.getcaps.label;"
+  		      	    	tooltiptext="&keymgr.scepclient.wizard.scep.server.getcaps.tooltip;"
+	                    	xoncommand="scepGetCACapabilities('keymgr.scepclient.getcacert.server.url', event);"
+	                    	oncommand="showGetCACapabilities('keymgr.scepclient.getcacert.server.url', event);"
+			    	/> 
+		    	</hbox> 
+	    	    	<fileselector id="keymgr.scepclient.getcacert.file.path"
+			    hidden="true"
+		            formatlabel="&keymgr.scepclient.wizard.file.format.base64.label;"
+  		      	    formattooltiptext="&keymgr.scepclient.wizard.file.format.base64.tooltip;"
+			    fileMode="save"
+			    fileDialogMsg="Choose PKCS7 File for SCEP Response Message"
+			    fileTypeMsg="PKCS#7 Cert File"
+			    fileTypeFilters="*.pk7; *.p7m"
+			    browselabel="&keymgr.scepclient.wizard.file.browse.label;"
+			    browsetooltiptext="&keymgr.scepclient.wizard.file.browse.tooltip;"
+			    />
+		    </vbox>
+	          </row>
+
+	          <row id="keymgr.scepclient.getcacert.edittrustinfo.row"
+		    align="center"
+		    hidden="true"
+		    >
+		    <spacer/>
+		    <hbox
+		    	style="border: 2px solid red;"
+			>
+		    	<textbox id="keymgr.scepclient.getcacert.edittrustinfo"
+			    flex="1"
+			    style="border:red "
+			    multiline="true"
+			    rows="2"
+			    value="&keymgr.scepclient.getcacert.edittrustinfo.text;"
+		    	    />
+		    </hbox> 
+	          </row>
+
+
+	        </rows>
+	      </grid>
+	    </groupbox>
+	    <iframe flex="5"
+	        id="ScepClientWizardGetCACertConsoleFrame"
+	        name="ScepClientWizardGetCACertConsoleFrame"
+	        style="border:none"
+	        width="400px" height="100px"
+	        src="about:blank"
+	        >
+	    </iframe>
+  </wizardpage>
+
+  <wizardpage
+    pageid="keymgr.scepclient.getcertinitial.wizardpage"
+    description="&keymgr.scepclient.getcertinitial.wizardpage.label;"
+    flex="1"
+    onpageshow="return getCertInitialPageShow();"
+    onpageadvanced="return getCertInitialPageAdvanced();"
+    next="keymgr.scepclient.pkcsreq.scepreqmsg.wizardpage"
+    >
+	    <groupbox id="keymgr.scepclient.getcertinitial">
+	      <caption class="header" label="&keymgr.scepclient.getcertinitial.label;"/>
+	      <grid> 
+	        <columns>
+	           <column/>
+	           <column flex="10"/>
+	        </columns>
+	        <rows>
+	          <row
+		    align="center"
+		    >
+	            <label value="&keymgr.scepclient.getcertinitial.reqid.label;"/> 
+		    <hbox
+		      pack="start"
+		      >
+	              <menulist id="keymgr.scepclient.getcertinitial.reqid.menulist"
+  		        tooltiptext="&keymgr.scepclient.getcertinitial.reqid.menulist.tooltip;"
+			editable="true"
+			readonly="true"
+			oncommand="handleGetCertInitialMenuListChange(this, event)"
+			>
+	                <menupopup>
+	                </menupopup>
+	              </menulist>
+	              <button id="keymgr.scepclient.getcertinitial.reqid.cmd.delete"
+	  		label="&keymgr.scepclient.getcertinitial.reqid.cmd.delete.label;"
+  		      	tooltiptext="&keymgr.scepclient.getcertinitial.reqid.cmd.delete.tooltip;"
+	       		oncommand="deleteSelectedGetCertInitialReqId('keymgr.scepclient.getcertinitial.reqid.menulist');"/>
+		    </hbox>
+	          </row>
+	        </rows>
+	      </grid>
+	    </groupbox>
+
+	    <groupbox id="keymgr.scepclient.getcertinitial.params">
+	      <caption class="header" label="&keymgr.scepclient.getcertinitial.params.label;"/>
+	      <grid flex="1"> 
+	        <columns>
+	           <column/>
+	           <column flex="1"/>
+	        </columns>
+	        <rows>
+	          <row
+		    align="center"
+		    >
+	            <label value="&keymgr.scepclient.getcertinitial.user.cert.label;"/> 
+		    <hbox>
+		      <certitem id="keymgr.scepclient.getcertinitial.user.cert" 
+			flex="1"
+	  		viewlabel="&keymgr.scepclient.wizard.cert.view.label;"
+  		      	viewtooltiptext="&keymgr.scepclient.wizard.cert.view.tooltip;"
+		        />
+		      <spacer flex="2"/>
+		    </hbox>
+	          </row>
+
+	          <row hidden="true"
+		    align="center"
+		    >
+		    <spacer/>
+	            <textbox id="keymgr.scepclient.getcertinitial.user.subject"
+			  readonly="true"
+		    	  />
+	          </row>
+
+	          <row
+		    align="center"
+		    >
+	            <label value="&keymgr.scepclient.getcertinitial.receipient.cert.label;"/> 
+		    <hbox
+		      pack="start"
+		      >
+		      <certitem id="keymgr.scepclient.getcertinitial.receipient.cert" 
+	  		viewlabel="&keymgr.scepclient.wizard.cert.view.label;"
+  		      	viewtooltiptext="&keymgr.scepclient.wizard.cert.view.tooltip;"
+		        />
+		    </hbox>
+	          </row>
+
+	          <row hidden="true">
+		    <spacer/>
+	            <textbox id="keymgr.scepclient.getcertinitial.receipient.subject"
+			  readonly="true"
+		    	  />
+	          </row>
+
+	          <row
+		    align="center"
+		    >
+	            <label value="&keymgr.scepclient.getcertinitial.transactionId.label;"/> 
+		    <hbox
+		      pack="start"
+		      >
+	              <textbox id="keymgr.scepclient.getcertinitial.transactionId"
+			readonly="true"
+		    	/>
+		    </hbox>
+	          </row>
+
+	          <row
+		    align="center"
+		    >
+	            <label value="&keymgr.scepclient.getcertinitial.server.url.label;"/> 
+	            <hbox 
+		      pack="start"
+		      >
+	      	      <button id="keymgr.scepclient.getcertinitial.server.getcaps"
+	                label="&keymgr.scepclient.wizard.scep.server.getcaps.label;"
+  		      	tooltiptext="&keymgr.scepclient.wizard.scep.server.getcaps.tooltip;"
+	                xoncommand="scepGetCACapabilities('keymgr.scepclient.getcertinitial.server.url', event);"
+	                oncommand="showGetCertInitialCACapabilities('keymgr.scepclient.getcertinitial.server.url', event);"
+			/> 
+	              <textbox id="keymgr.scepclient.getcertinitial.server.url"
+			flex="1"
+			readonly="true"
+		    	/>
+	            </hbox>
+	          </row>
+
+	          <row
+		    align="center"
+		    >
+	            <label value="&keymgr.scepclient.getcertinitial.hashAlgName.label;"/>
+		    <hbox
+			pack="start"
+		        >
+	    	       <hashalgmenu id="keymgr.scepclient.getcertinitial.hashAlgName.menulist"
+			    sha1disabled="true"
+			    sha256disabled="true"
+			    sha384disabled="true"
+			    sha512disabled="true"
+			    value="MD5"
+			    xvalue="SHA1"
+	        	    />
+		    </hbox>
+	          </row>
+	          <row
+		    align="center"
+		    >
+		    <label value="&keymgr.scepclient.wizard.scephttpmethod.label;"/>
+		    <hbox
+		    	pack="start"
+		        >
+	                <scephttpmethod id="keymgr.scepclient.getcertinitial.http.method"
+			    oncommand="handleGetCertInitialHttpMethodChange(this, event)"
+			    />
+		    </hbox>
+	          </row>
+		</rows>
+	      </grid>
+	    </groupbox>
+
+	    <groupbox>
+	      <caption class="header" label="&keymgr.scepclient.getcertinitial.scepreqmsg.label;"/>
+	      <grid flex="1"> 
+	        <columns>
+	           <column/>
+	           <column flex="1"/>
+	        </columns>
+	        <rows>
+	          <row
+		    align="center"
+		    >
+	            <label value="&keymgr.scepclient.getcertinitial.scepreqmsg.file.label;"/>
+	    	    <fileselector id="keymgr.scepclient.getcertinitial.scepreqmsg.filepicker"
+			ascii="true"
+		        formatlabel="&keymgr.scepclient.wizard.file.format.base64.label;"
+  		      	formattooltiptext="&keymgr.scepclient.wizard.file.format.base64.tooltip;"
+			fileMode="save"
+			fileDialogMsg="Choose PKCS7 File for SCEP GetCertIntial Message"
+			fileTypeMsg="PKCS#7 SCEP GetCertIntial File"
+			fileTypeFilters="*.pk7; *.p7m"
+			browselabel="&keymgr.scepclient.wizard.file.browse.label;"
+			browsetooltiptext="&keymgr.scepclient.wizard.file.browse.tooltip;"
+			/>
+	          </row>
+
+	          <row hidden="true">
+		    <spacer/>
+	            <label id="keymgr.scepclient.getcertinitial.wizardpage.next"
+	                value="&keymgr.scepclient.getcertinitial.wizardpage.next.label;"
+			hidden="true"/>
+	          </row>
+	        </rows>
+	      </grid>
+	    </groupbox>
+  </wizardpage>
+
+  <wizardpage
+    pageid="keymgr.scepclient.getcert.wizardpage"
+    description="&keymgr.scepclient.getcert.wizardpage.label;"
+    flex="1"
+    onpageshow="return getCertPageShow();"
+    onpageadvanced="return getCertPageAdvanced();"
+    next="keymgr.scepclient.pkcsreq.scepreqmsg.wizardpage"
+    >
+	    <groupbox id="keymgr.scepclient.getcert.inputparams">
+	      <caption class="header" label="&keymgr.scepclient.getcert.inputparams.label;"/>
+	      <grid> 
+	        <columns>
+	           <column/>
+	           <column flex="1"/>
+	        </columns>
+	        <rows>
+	          <row
+		    align="center"
+		    >
+	            <label value="&keymgr.scepclient.getcert.issuer.certpicker.label;"/> 
+		    <hbox
+		    	pack="start"
+			>
+	                <certpicker id="keymgr.scepclient.getcert.issuer.certpicker"
+  		            menutooltiptext="&keymgr.scepclient.getcert.issuer.certpicker.tooltip;"
+			    tokentypehidden="true"
+			    certtype="ca"
+			    certusage="VerifyCA"
+			    certtypehidden="true"
+		            viewhidden="false"
+	  	            viewlabel="&keymgr.scepclient.wizard.cert.view.label;"
+  		            viewtooltiptext="&keymgr.scepclient.wizard.cert.view.tooltip;"
+	       	            oncommand="handleGetCertCACertPickerChange(this, event);"
+	    	            >
+	                </certpicker>
+		    </hbox>
+	          </row>
+
+	          <row
+		    align="center"
+		    >
+		    <spacer/>
+		    <hbox
+		    	pack="start"
+			>
+			<checkbox id="keymgr.scepclient.getcert.recipient.isra"
+			    label="&keymgr.scepclient.getcert.recipient.isra.label;"
+			    tooltiptext="&keymgr.scepclient.getcert.recipient.isra.tooltip;"
+	       	            oncommand="handleGetCertUseRAAsMsgRecipientChange(this, event);"
+			    />
+		    </hbox>
+	          </row>
+
+	          <row
+		    align="center"
+		    >
+	            <label value="&keymgr.scepclient.getcert.recipient.certpicker.label;"/> 
+		    <hbox
+		    	pack="start"
+		    	align="center"
+			>
+	                <certpicker id="keymgr.scepclient.getcert.recipient.certpicker"
+  		            menutooltiptext="&keymgr.scepclient.getcert.recipient.certpicker.tooltip;"
+			    tokentypehidden="true"
+			    certtype="ca"
+			    certtypediabled="true"
+			    xcerttypehidden="true"
+			    certusagehidden="false"
+			    xcertusagedisabled="true"
+			    certusage="VerifyCA"
+		            viewhidden="false"
+	  	            viewlabel="&keymgr.scepclient.wizard.cert.view.label;"
+  		            viewtooltiptext="&keymgr.scepclient.wizard.cert.view.tooltip;"
+		            includeTokenInfo="true"
+	       	            oncommand="handleGetCertSCEPRecipientCertPickerChange(this, event);"
+	    	            />
+		    </hbox>
+	          </row>
+
+	          <row
+		    align="center"
+		    >
+	            <label value="&keymgr.scepclient.getcert.server.url.label;"/> 
+	            <hbox 
+		      pack="start"
+		      >
+	      	      <button id="keymgr.scepclient.getcert.server.getcaps"
+	                label="&keymgr.scepclient.wizard.scep.server.getcaps.label;"
+  		      	tooltiptext="&keymgr.scepclient.wizard.scep.server.getcaps.tooltip;"
+	                xoncommand="scepGetCACapabilities('keymgr.scepclient.getcert.server.url', event);"
+	                oncommand="showGetCertCACapabilities('keymgr.scepclient.getcert.server.url', event);"
+			/> 
+  	              <textbox id="keymgr.scepclient.getcert.server.url" flex="1"
+  		        tooltiptext="&keymgr.scepclient.getcert.server.url.tooltip;"
+  	  	        type="autocomplete" 
+  	  	        autocompletesearch="form-history" 
+  	  	        completedefaultindex="true"
+  	  	        completeselectedindex="true"
+		        enablehistory="true"
+  	  	        autocompletesearchparam="keymgr.scepclient.getcert.server.url"
+		        onchange="handleGetCertServerURLChange(this, event)"
+		        onpopuphiding="handleGetCertServerURLChange(this, event)"
+  		        />
+	            </hbox>
+	          </row>
+
+	          <row
+		    align="center"
+		    >
+	            <label value="&keymgr.scepclient.getcert.serialNo.label;"/> 
+		    <hbox
+			pack="start"
+		        >
+	              <checkbox id="keymgr.scepclient.getcert.self"
+		          label="&keymgr.scepclient.getcert.self.label;"
+  		      	  tooltiptext="&keymgr.scepclient.getcert.self.tooltip;"
+		          checked="true"
+		    	  oncommand="handleGetCertSelfChange(this);"
+			  /> 
+	              <textbox id="keymgr.scepclient.getcert.serialNo"
+  		      	tooltiptext="&keymgr.scepclient.getcert.serialNo.tooltip;"
+  	  	        autocompletesearch="form-history" 
+  	  	        completedefaultindex="true"
+  	  	        completeselectedindex="true"
+		        enablehistory="true"
+  	  	        autocompletesearchparam="keymgr.scepclient.getcert.serialNo"
+		        onchange="handleGetCertSerialNoChange(this)"
+		    	value=""
+			/>
+		    </hbox>
+	          </row>
+
+	          <row id="keymgr.scepclient.getcert.user.certpicker.row"
+		    align="center"
+		    >
+	            <label value="&keymgr.scepclient.getcert.user.certpicker.label;"/> 
+		    <hbox
+			pack="start"
+		        >
+	                <certpicker id="keymgr.scepclient.getcert.user.certpicker"
+  		            menutooltiptext="&keymgr.scepclient.getcert.user.certpicker.tooltip;"
+			    tokentypehidden="true"
+			    certtype="user"
+			    certtypehidden="false"
+			    certusagehidden="false"
+			    xcertusagedisabled="true"
+			    certusage="EmailRecipient"
+		            viewhidden="false"
+	  	            viewlabel="&keymgr.scepclient.wizard.cert.view.label;"
+	  	            viewtooltiptext="&keymgr.scepclient.wizard.cert.view.tooltip;"
+	       	            oncommand="handleGetCertSignerCertPickerChange(this, event);"
+	    	            />
+		    </hbox>
+	          </row>
+
+		  <!--
+	          <row>
+	            <label value="&keymgr.scepclient.pkcsreq.user.cert.subjdn.label;"/> 
+	            <label id="keymgr.scepclient.getcert.user.cert.subjdn" value=""/>
+	          </row>
+	          <row>
+	            <label value="&keymgr.issuerinfo.label;"/>
+	            <label id="keymgr.scepclient.getcert.user.cert.issuedby"/>
+	          </row>
+	          <row>
+	            <label value="&keymgr.certdetail.serialnumber;"/> 
+	            <label id="keymgr.scepclient.getcert.user.cert.serialnumber"/>
+	          </row>
+	          <row>
+	            <label value="&keymgr.expires;"/>
+	            <label id="keymgr.scepclient.getcert.user.cert.validityend"/>
+	          </row>
+		  -->
+	          <row
+		    align="center"
+		    >
+	            <label value="&keymgr.scepclient.getcert.hashAlgName.label;"/>
+		    <hbox
+			pack="start"
+		        >
+	    	       <hashalgmenu id="keymgr.scepclient.getcert.hashAlgName.menulist"
+			    sha1disabled="true"
+			    sha256disabled="true"
+			    sha384disabled="true"
+			    sha512disabled="true"
+			    value="MD5"
+			    xvalue="SHA1"
+	        	    />
+		    </hbox>
+	          </row>
+	          <row
+		    align="center"
+		    >
+		    <label value="&keymgr.scepclient.wizard.scephttpmethod.label;"/>
+		    <hbox
+		    	pack="start"
+		        >
+	                <scephttpmethod id="keymgr.scepclient.getcert.http.method"
+			    oncommand="handleGetCertHttpMethodChange(this, event)"
+			    />
+		    </hbox>
+	          </row>
+	        </rows>
+	      </grid>
+	    </groupbox>
+
+	    <groupbox>
+	      <caption class="header" label="&keymgr.scepclient.getcert.scepreqmsg.label;"/>
+	      <grid flex="1"> 
+	        <columns>
+	           <column/>
+	           <column flex="1"/>
+	        </columns>
+	        <rows>
+	          <row
+		    align="center"
+		    >
+	            <label value="&keymgr.scepclient.getcert.scepreqmsg.file.label;"/>
+	    	    <fileselector id="keymgr.scepclient.getcert.scepreqmsg.filepicker"
+			ascii="true"
+		        formatlabel="&keymgr.scepclient.wizard.file.format.base64.label;"
+  		      	formattooltiptext="&keymgr.scepclient.wizard.file.format.base64.tooltip;"
+			fileMode="save"
+			fileDialogMsg="Choose PKCS7 File for SCEP GetCert Message"
+			fileTypeMsg="PKCS#7 SCEP GetCert File"
+			fileTypeFilters="*.pk7; *.p7m"
+			browselabel="&keymgr.scepclient.wizard.file.browse.label;"
+			browsetooltiptext="&keymgr.scepclient.wizard.file.browse.tooltip;"
+			/>
+	          </row>
+
+	          <row hidden="true">
+		    <spacer/>
+	            <label id="keymgr.scepclient.getcert.wizardpage.next"
+	                value="&keymgr.scepclient.getcert.wizardpage.next.label;"
+			hidden="true"/>
+	          </row>
+	        </rows>
+	      </grid>
+	    </groupbox>
+  </wizardpage>
+
+  <wizardpage
+    pageid="keymgr.scepclient.wizard.page.getCRL"
+    description="&keymgr.scepclient.wizard.page.getCRL.label;"
+    flex="1"
+    onpageshow="return getCRLPageShow();"
+    onpageadvanced="return getCRLPageAdvanced();"
+    next="keymgr.scepclient.pkcsreq.scepreqmsg.wizardpage"
+    >
+	<textbox id="keymgr.scepclient.getcrl.info"
+	    value="Use browser's CRL manager to get CRL from CA."
+	    />
+  </wizardpage>
+
+  <!--
+  <wizardpage
+    pageid="keymgr.scepclient.wizard.page.getCRL.req"
+    description="&keymgr.scepclient.wizard.page.getCRL.send.label;"
+    flex="1"
+    onpageshow="return getCRLReqPageShow();"
+    onpageadvanced="return getCRLReqPageAdvanced();"
+    next="keymgr.scepclient.pkcsreq.scepreqmsg.wizardpage"
+    >
+  </wizardpage>
+  -->
+
+  <wizardpage
+    pageid="keymgr.scepclient.wizard.page.error"
+    description="&keymgr.scepclient.wizard.page.error.label;"
+    flex="1"
+    onpageshow="return errorPageShow();"
+    >
+  </wizardpage>
+
+</wizard>

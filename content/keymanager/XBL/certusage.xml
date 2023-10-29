@@ -1,0 +1,346 @@
+<?xml version="1.0"?>
+<!-- @(#) $Id: certusage.xml,v 1.10 2008/09/24 16:15:08 subrata Exp $ -->
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is Avaya Labs Research, Avaya Inc. Code.
+   -
+   - The Initial Developer of the Original Code is
+   - Subrata Mazumdar, Avaya Labs Research, Avaya Inc.
+   - Portions created by the Initial Developer are Copyright (C) 2007.
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Subrata Mazumdar (mazum@avaya.com)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+
+
+<bindings id="certusagemenuBindings"
+    xmlns="http://www.mozilla.org/xbl"
+    xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    xmlns:xbl="http://www.mozilla.org/xbl">
+
+	<!--
+        <resources>
+        </resources>
+				Source: mozilla/security/manager/ssl/public/nsIX509Cert.idl
+				Possible uses are: verifyForUsage(), getUsagesString(), getUsagesArray()
+
+    			        certUsageSSLClient = 0,
+    			        certUsageSSLServer = 1,
+    			        certUsageSSLServerWithStepUp = 2,
+    			        certUsageSSLCA = 3,
+    			        certUsageEmailSigner = 4,
+    			        certUsageEmailRecipient = 5,
+    			        certUsageObjectSigner = 6,
+    			        certUsageUserCertImport = 7,
+    			        certUsageVerifyCA = 8,
+    			        certUsageProtectedObjectSigner = 9,
+    			        certUsageStatusResponder = 10,
+    			        certUsageAnyCA = 11
+	-->
+
+    <binding id="certusagemenuBinding">
+    	<!-- content, property, method and event descriptions go here -->
+    	<content>
+	    <xul:hbox>
+	        <xul:menulist anonid="certusagemenu.usage.menulist"
+		    xbl:inherits="value,hidden,disabled,tooltiptext,crop,sizetopopup"
+		    xvalue="SSLClient"
+		    tooltiptext="Select the cert usages from the list"
+        	    oncommand="getBindingParent(this).handleCertUsageChange(this, event)"
+	            >
+                    <xul:menupopup>
+                        <xul:menuitem anonid="certusagemenu.usage.SSLClientX"
+			    xbl:inherits="label=SSLClientXlabel"
+			      label="Any Usage"
+			      value=""
+			      usagevalue="-1"
+			      />
+                            <xul:menuitem anonid="certusagemenu.usage.SSLClient"
+			      xbl:inherits="label=SSLClientlabel,hidden=caonly"
+			      label="SSLClient"
+			      value="SSLClient"
+			      usagevalue="0"
+			      />
+                            <xul:menuitem anonid="certusagemenu.usage.SSLServer"
+			      xbl:inherits="label=SSLServerlabel,hidden=caonly"
+			      label="SSLServer"
+			      value="SSLServer"
+			      usagevalue="1"
+			      />
+                            <xul:menuitem anonid="certusagemenu.usage.SSLServerWithStepUp"
+			      xbl:inherits="label=SSLServerWithStepUplabel,hidden=caonly"
+			      label="SSLServerWithStepUp"
+			      value="SSLServerWithStepUp"
+			      usagevalue="2"
+			      />
+                            <xul:menuitem anonid="certusagemenu.usage.SSLCA"
+			      xbl:inherits="label=SSLCAlabel,hidden=noncaonly"
+			      label="SSLCA"
+			      value="SSLCA"
+			      usagevalue="3"
+			      />
+                            <xul:menuitem anonid="certusagemenu.usage.EmailSigner"
+			      xbl:inherits="label=EmailSignerlabel,hidden=caonly"
+			      label="EmailSigner"
+			      value="EmailSigner"
+			      usagevalue="4"
+			      />
+                            <xul:menuitem anonid="certusagemenu.usage.EmailRecipient"
+			      xbl:inherits="label=EmailRecipientlabel,hidden=caonly"
+			      label="EmailRecipient"
+			      value="EmailRecipient"
+			      usagevalue="5"
+			      />
+                            <xul:menuitem anonid="certusagemenu.usage.ObjectSigner"
+			      xbl:inherits="label=ObjectSignerlabel,hidden=caonly"
+			      label="ObjectSigner"
+			      value="ObjectSigner"
+			      usagevalue="6"
+			      />
+                            <xul:menuitem anonid="certusagemenu.usage.UserCertImport"
+			      xbl:inherits="label=UserCertImportlabel,hidden=caonly"
+			      label="UserCertImport"
+			      value="UserCertImport"
+			      usagevalue="7"
+			      />
+                            <xul:menuitem anonid="certusagemenu.usage.VerifyCA"
+			      xbl:inherits="label=VerifyCAlabel,hidden=noncaonly"
+			      label="VerifyCA"
+			      value="VerifyCA"
+			      usagevalue="8"
+			      />
+                            <xul:menuitem anonid="certusagemenu.usage.ProtectedObjectSigner"
+			      xbl:inherits="label=ProtectedObjectSignerlabel,hidden=caonly"
+			      label="ProtectedObjectSigner"
+			      value="ProtectedObjectSigner"
+			      usagevalue="9"
+			      />
+                            <xul:menuitem anonid="certusagemenu.usage.StatusResponder"
+			      xbl:inherits="label=StatusResponderlabel,hidden=noncaonly"
+			      label="StatusResponder"
+			      value="StatusResponder"
+			      usagevalue="10"
+			      />
+                            <xul:menuitem anonid="certusagemenu.usage.AnyCA"
+			      xbl:inherits="label=AnyCAlabel,hidden=noncaonly"
+			      label="AnyCA"
+			      value="AnyCA"
+			      usagevalue="11"
+			      />
+                        </xul:menupopup>
+                    </xul:menulist>
+	    </xul:hbox>
+    	</content>
+
+	<implementation>
+	    <field name="mCertUsageMenuListElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certusagemenu.usage.menulist");
+	    </field>
+	    <field name="mCertUsage" readonly="true">
+		-1
+	    </field>
+
+	    <property name="certUsage" readonly="true"
+	        onget="return this.mCertUsage;"
+		/>
+
+	    <!--
+	    <property name="value"
+	        onget="return this.getAttribute('value');"
+	        onset="return this.getAttribute('value', val);"
+		/>
+	    -->
+
+	    <property name="value">
+	        <getter>
+		<![CDATA[
+		    return this.mCertUsageMenuListElem.value;
+		]]>
+	        </getter>
+	        <setter>
+		<![CDATA[
+		    if (val) {
+		    	this.mCertUsageMenuListElem.value = val;
+		    }
+		    else {
+		    	this.mCertUsageMenuListElem.value = "";
+		    }
+		    this.handleCertUsageChange(this.mCertUsageMenuListElem);
+		    return val;
+		]]>
+	        </setter>
+	    </property>
+
+	    <constructor>
+		<![CDATA[
+		// dump("certusagemenuBinding:constructor():..............Start.\n");
+
+		// refreshList();
+
+		// dump("certusagemenuBinding:constructor():..............End.\n");
+		]]>
+	    </constructor>
+
+	    <method name="refreshList">
+	        <body>
+		<![CDATA[
+		// dump("certusagemenuBinding:refreshList():..............Start.\n");
+
+		// dump("certusagemenuBinding:refreshList(): this.mCertUsageMenuListElem.selectedIndex: " + this.mCertUsageMenuListElem.selectedIndex + "\n");
+		if (this.mCertUsageMenuListElem.selectedIndex < 0) {
+		    if (this.mCertUsageMenuListElem.selectedItem) {
+			var tmpValue = this.mCertUsageMenuListElem.value;
+			this.mCertUsageMenuListElem.value = "";
+			this.mCertUsageMenuListElem.value = tmpValue;
+		    }
+		    else {
+		    	this.mCertUsageMenuListElem.selectedIndex = 0;
+			var tmpValue = this.getAttribute("certusage");
+			if (!tmpValue) {
+			    tmpValue = this.getAttribute("value");
+			}
+			if (!tmpValue) {
+			    tmpValue = this.mCertUsageMenuListElem.getAttribute("value");
+			}
+			if (tmpValue) {
+			    this.mCertUsageMenuListElem.value = tmpValue;
+			}
+			else {
+		    	    this.mCertUsageMenuListElem.selectedIndex = 0;
+			}
+		    }
+		}
+
+		var selectedMenuItem = this.mCertUsageMenuListElem.selectedItem;
+		if (selectedMenuItem && selectedMenuItem.hidden) {
+		    // TODO: we assume that first menu item will not be hidden
+		    this.mCertUsageMenuListElem.selectedIndex = 0;
+		}
+		// dump("certusagemenuBinding:refreshList(): this.mCertUsageMenuListElem.selectedIndex: " + this.mCertUsageMenuListElem.selectedIndex + "\n");
+
+		if (this.mCertUsageMenuListElem.selectedIndex < 0) {
+		    // dump("certusagemenuBinding:refreshList():..............End(1).\n");
+		    return;
+		}
+		this.handleCertUsageChange(this.mCertUsageMenuListElem);
+		
+		// dump("certusagemenuBinding:refreshList(): this.mCertUsageMenuListElem.value: " + this.mCertUsageMenuListElem.value + "\n");
+		// dump("certusagemenuBinding:refreshList():..............End.\n");
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="refresh">
+	        <body>
+		<![CDATA[
+		this.refreshList();
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="handleCertUsageChange">
+		<parameter name="aMenuListElem"/>
+		<parameter name="ev"/>
+	        <body>
+		<![CDATA[
+		var selectedItemElem = aMenuListElem.selectedItem;
+		/*
+		dump("certusagemenuBinding:handleCertUsageChange(): aMenuListElem.value : " + aMenuListElem.value +
+			" selectedItemElem.label: " + selectedItemElem.label +
+			" selectedItemElem.value: " + selectedItemElem.value +
+			"  .......Start.\n"
+			);
+		*/
+
+		if (aMenuListElem.selectedItem) {
+		    var usageValue = aMenuListElem.selectedItem.getAttribute("usagevalue");
+		    this.mCertUsage = parseInt(usageValue);
+		}
+
+		/*
+		dump("certusagemenuBinding:handleCertUsageChange(): " +
+			" this.mCertUsage: " + this.mCertUsage +
+			" selectedItemElem: " + selectedItemElem.value +
+			"  .......End.\n"
+			);
+		*/
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="mapCertUsageStrToInt">
+		<parameter name="usageStr"/>
+	        <body>
+		<![CDATA[
+    		if (usageStr == "SSLClient") {
+		    return 0;
+		}
+    		else if (usageStr == "SSLServer") {
+		    return 1;
+		}
+    		else if (usageStr == "SSLServerWithStepUp") {
+		    return 2;
+		}
+    		else if (usageStr == "SSLCA") {
+		    return 3;
+		}
+    		else if (usageStr == "EmailSigner") {
+		    return 4;
+		}
+    		else if (usageStr == "EmailRecipient") {
+		    return 5;
+		}
+    		else if (usageStr == "ObjectSigner") {
+		    return 6;
+		}
+    		else if (usageStr == "UserCertImport") {
+		    return 7;
+		}
+    		else if (usageStr == "VerifyCA") {
+		    return 8;
+		}
+    		else if (usageStr == "ProtectedObjectSigner") {
+		    return 9;
+		}
+    		else if (usageStr == "StatusResponder") {
+		    return 10;
+		}
+    		else if (usageStr == "AnyCA") {
+		    return 11;
+		}
+		return -1;
+		]]>
+	        </body>
+	    </method>
+
+	</implementation>
+    </binding>
+
+</bindings>

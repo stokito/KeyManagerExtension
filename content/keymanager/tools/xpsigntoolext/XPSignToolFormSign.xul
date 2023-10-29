@@ -1,0 +1,506 @@
+<?xml version="1.0"?>
+<!-- @(#) $Id: XPSignToolFormSign.xul,v 1.20 2012/10/03 14:20:48 subrata Exp $ -->
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is Avaya Labs Research, Avaya Inc. Code.
+   -
+   - The Initial Developer of the Original Code is
+   - Subrata Mazumdar, Avaya Labs Research, Avaya Inc.
+   - Portions created by the Initial Developer are Copyright (C) 2007.
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Subrata Mazumdar (mazum@avaya.com)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+
+
+<!DOCTYPE overlay
+	[
+	<!ENTITY % keyManager.dtd SYSTEM "chrome://keymanager/locale/keyManager.dtd">
+	%keyManager.dtd;
+	<!ENTITY % xpsigntoolext.dtd SYSTEM "chrome://keymanager/locale/xpsigntoolext.dtd">
+	%xpsigntoolext.dtd;
+	]>
+
+
+<overlay id="xpsigntoolext.form.sign.win" 
+    xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    >
+
+  <script type="application/x-javascript" src="chrome://keymanager/content/tools/xpsigntoolext/XPSignToolFormSign.js"/>
+
+    <vbox class="box-padded" id="xpsigntoolext.form.overlay.sign">
+	    <grid flex="1"> 
+		<columns>
+		    <column/>
+		    <column flex="1"/>
+		</columns>
+		<rows>
+		    <row align="center">
+			<label class="header" 
+			    value="&xpsigntoolext.form.sign.file.archive.type.label;"
+			    control="xpsigntoolext.form.sign.file.archive.type"
+			    /> 
+            		<hbox pack="start">
+			    <!--
+              		    <checkbox id="xpsigntoolext.form.sign.file.archive.type.xpi"
+				label="&xpsigntoolext.form.sign.file.archive.type.xpi.label;"
+                		tooltiptext="&xpsigntoolext.form.sign.file.archive.type.xpi.tooltip;"
+				checked="true"
+				sigParamName="xpiArchive"
+                		/>
+			    -->
+              		    <radiogroup id="xpsigntoolext.form.sign.file.archive.type"
+			        oncommand="xpsigntoolext_handleInputFileTypeOptionChange(this, event)"
+			        >
+			        <groupbox orient="horizontal">
+                    	            <radio id="xpsigntoolext.form.sign.file.archive.type.xpi"
+                      		    	label="&xpsigntoolext.form.sign.file.archive.type.xpi.label;"
+                      		    	tooltiptext="&xpsigntoolext.form.sign.file.archive.type.xpi.tooltip;"
+                      		        selected="true"
+                      		    	value="xpi"
+					sigParamName="xpiArchive"
+                      		    	group="xpsigntoolext.form.sign.file.archive.type"
+				    	/>
+				    <!--
+                    	            <radio id="xpsigntoolext.form.sign.file.archive.type.htmlwithjs"
+                      		    	label="&xpsigntoolext.form.sign.file.archive.type.htmlwithjs.label;"
+                      		    	tooltiptext="&xpsigntoolext.form.sign.file.archive.type.htmlwithjs.tooltip;"
+                      		    	value="javascript"
+					sigParamName="javascript"
+					group="xpsigntoolext.form.sign.file.archive.type"
+					/>
+				    -->
+                    	            <radio id="xpsigntoolext.form.sign.file.archive.type.javascript"
+                      		    	label="&xpsigntoolext.form.sign.file.archive.type.javascript.label;"
+                      		    	tooltiptext="&xpsigntoolext.form.sign.file.archive.type.javascript.tooltip;"
+                      		    	value="javascript"
+					sigParamName="javascript"
+					group="xpsigntoolext.form.sign.file.archive.type"
+					/>
+                    	            <radio id="xpsigntoolext.form.sign.file.archive.type.generic"
+                      		    	label="&xpsigntoolext.form.sign.file.archive.type.generic.label;"
+                      		    	tooltiptext="&xpsigntoolext.form.sign.file.archive.type.generic.tooltip;"
+                      		    	value="generic"
+                      		    	group="xpsigntoolext.form.sign.file.archive.type"
+				    	/>
+			        </groupbox>
+              		    </radiogroup>
+              		    <spacer flex="1"/>
+            		</hbox>
+		    </row>
+
+            	    <row align="center">
+			<label class="header" value="&xpsigntoolext.form.sign.file.archive.in.label;"/>
+			<groupbox pack="start">
+              		    <radiogroup id="xpsigntoolext.form.sign.file.archive.in.options"
+			    	oncommand="xpsigntoolext_handleInputFileOptionChange(this, event)"
+			    	>
+	                	<hbox flex="1">
+                    		    <radio id="xpsigntoolext.form.sign.file.archive.in.option.file"
+                      		    	label="&xpsigntoolext.form.sign.file.archive.in.option.file.label;"
+                      		    	tooltiptext="&xpsigntoolext.form.sign.file.archive.in.option.file.tooltip;"
+                      		        xselected="true"
+                      		    	value="file"
+                      		    	group="xpsigntoolext.form.sign.file.archive.in.options"
+				    	/>
+            	            	    <fileselector id="xpsigntoolext.form.sign.file.archive.in.file.path" flex="2"
+				        formathidden="true"
+			                fileMode="open"
+			                fileDialogMsg="Choose Archive File for signing"
+			                fileTypeMsg="Archive File"
+			        	fileTypeFilters="*.jar; *.xpi; *.zip; *.war; *.ear;"
+			                xpifileTypeMsg="XPI Archive File"
+			        	xpifileTypeFilters="*.xpi;"
+			                jsfileTypeMsg="HTML File"
+			        	jsfileTypeFilters="*.html; *.htm;"
+			                jarfileTypeMsg="Archive File"
+			        	jarfileTypeFilters="*.jar; *.zip; *.war; *.ear;"
+  			                filetooltiptext="&xpsigntoolext.form.sign.file.archive.in.file.path.tooltip;"
+                	                browselabel="&xpsigntoolext.form.file.browser.label;"
+                	                browsetooltiptext="&xpsigntoolext.form.sign.file.archive.in.file.browser.tooltip;"
+				    	onpopuphiding="xpsigntoolext_handleInputArchiveFilePickerChange(this, event);"
+				    	onchange="xpsigntoolext_handleInputArchiveFilePickerChange(this, event);"
+				    	oncommand="xpsigntoolext_handleInputArchiveFilePickerChange(this, event);"
+                	            	/>
+				    <!--
+				    -->
+	                    	    <button id="xpsigntoolext.form.sign.file.archive.in.extract"
+					hidden="true"
+	  		                label="&xpsigntoolext.form.file.extract.label;"
+  		      	                tooltiptext="&xpsigntoolext.form.file.extract.tooltip;"
+               		                oncommand="xpsigntoolext_extractArchiveFileById('xpsigntoolext.form.sign.file.archive.in.file.path', 'xpsigntoolext.form.sign.file.archive.tmp.path');"
+					/>
+	                	</hbox>
+	                	<hbox flex="1">
+                    		    <radio id="xpsigntoolext.form.sign.file.archive.in.option.dir"
+                      		    	label="&xpsigntoolext.form.sign.file.archive.in.option.dir.label;"
+                      		    	tooltiptext="&xpsigntoolext.form.sign.file.archive.in.option.dir.tooltip;"
+                      		        value="dir"
+                      		    	group="xpsigntoolext.form.sign.file.archive.in.options"
+					/>
+                	    	    <hbox id="xpsigntoolext.form.sign.file.archive.in.dir.hbox" flex="2">
+              		    	        <checkbox id="xpsigntoolext.form.sign.file.archive.recursive"
+					    checked="true"
+					    label="&xpsigntoolext.form.sign.file.archive.recursive.label;"
+                			    tooltiptext="&xpsigntoolext.form.sign.file.archive.recursive.tooltip;"
+					    sigParamName="recursive"
+                			    />
+            	            	        <fileselector id="xpsigntoolext.form.sign.file.archive.in.dir.path" flex="1"
+			                    fileMode="folder"
+			                    fileDialogMsg="Choose Archive Directory"
+			                    fileTypeMsg="Archive Directory"
+  			                    filetooltiptext="&xpsigntoolext.form.sign.file.archive.in.dir.path.tooltip;"
+                	                    browselabel="&xpsigntoolext.form.file.browser.label;"
+                	                    browsetooltiptext="&xpsigntoolext.form.sign.file.archive.in.dir.browser.tooltip;"
+				    	    onpopuphiding="xpsigntoolext_handleInputArchiveDirPickerChange(this, event);"
+				    	    onchange="xpsigntoolext_handleInputArchiveDirPickerChange(this, event);"
+				    	    oncommand="xpsigntoolext_handleInputArchiveDirPickerChange(this, event);"
+                	            	    />
+                		    </hbox>
+                		</hbox>
+              		    </radiogroup>
+			</groupbox>
+                    </row>
+
+		    <row align="center">
+			<label class="header" value="&xpsigntoolext.form.sign.signer.cert.label;"/>
+			<certpicker id="xpsigntoolext.form.sign.signer.certpicker"
+  		  	    menutooltiptext="&xpsigntoolext.form.sign.signer.certpicker.tooltip;"
+		  	    tokentypehidden="true"
+			    certtype="user"
+		  	    certtypedisabled="true"
+		    	    certusage="ObjectSigner"
+		  	    certusagehidden="false"
+		  	    certusagedisabled="true"
+		  	    viewhidden="false"
+	  	  	    viewlabel="&xpsigntoolext.form.sign.cert.view.label;"
+  		  	    viewtooltiptext="&xpsigntoolext.form.sign.cert.view.tooltip;"
+		  	    includeTokenInfo="true"
+			    sigParamName="signerNickName"
+	       	  	    oncommand="xpsigntoolext_SignerCertPickerChanged(this, event, 'xpsigntoolext.form.sign.signer');"
+		  	    >
+			</certpicker>
+		    </row>
+		    <row align="center">
+		    	<spacer/>
+			<hbox 
+			    style="border: 2px solid yellow;"
+			    >
+			    <textbox id="xpsigntoolext.form.sign.signer.cert.info"
+			        flex="1"
+			        value="&xpsigntoolext.form.sign.signer.cert.info.text;"
+			        multiline="true"
+			        readonly="true"
+			        />
+			</hbox> 
+		    </row>
+
+		    <!--
+		    -->
+		    <row id="xpsigntoolext.form.sign.update.key.add.row"
+			align="center"
+		    	collapsed="true"
+			>
+		    	<spacer/>
+			<groupbox 
+			    xorient="horizontal"
+			    pack="start" align="start"
+			    >
+			    <hbox pack="start">
+              		        <checkbox id="xpsigntoolext.form.sign.update.key.add.option"
+				    label="Add update key"
+                		    tooltiptext="Select this checkbox if you want to add base64 of signing cert as update key - this will modify the install.rdf file"
+                		    />
+              		        <checkbox id="xpsigntoolext.form.sign.update.rdf.sign.option"
+				    label="Sign update.rdf"
+                		    tooltiptext="Select this checkbox if you want to sign the update.rdf file"
+			            oncommand="xpsigntoolext_handleSignUpdateRdfOption(this, event)"
+                		    />
+			    </hbox>
+	                    <hbox id="xpsigntoolext.form.sign.update.rdf.filepicker.hbox">
+              		        <checkbox id="xpsigntoolext.form.sign.xpi.hash.compute.option"
+				    label="Add XPI hash"
+                		    tooltiptext="Select this checkbox if you want to add has of the XPI file  to update.rdf file"
+                		    />
+			        <fileselector id="xpsigntoolext.form.sign.update.rdf.filepicker" flex="1"
+				    formathidden="true"
+			            fileMode="open"
+			            fileDialogMsg="Choose update.rdf file"
+			            fileTypeMsg="RDF file"
+  			            filetooltiptext="Enter the update.rdf file path"
+			            fileTypeFilters="*.rdf"
+			            browselabel="&xpsigntoolext.form.file.browser.label;"
+			            browsetooltiptext="Click this button to select the update.rdf file path"
+			            />
+	                    </hbox>
+			</groupbox>
+		    </row>
+
+
+		    <row
+		    	hidden="true"
+			align="center"
+		    	>
+			<label class="header" 
+			    value="&xpsigntoolext.form.sign.file.archive.tmp.label;"
+			    control="xpsigntoolext.form.sign.file.archive.tmp.path"
+			    /> 
+	                <hbox>
+			    <fileselector id="xpsigntoolext.form.sign.file.archive.tmp.path" flex="1"
+			        fileMode="folder"
+			        fileDialogMsg="Choose Temp Packaging Dir"
+			        fileTypeMsg="Packaging Dir"
+  			        filetooltiptext="&xpsigntoolext.form.sign.file.archive.tmp.path.tooltip;"
+			        browselabel="&xpsigntoolext.form.file.browser.label;"
+			        browsetooltiptext="&xpsigntoolext.form.sign.file.archive.tmp.browser.tooltip;"
+			        />
+	                </hbox>
+		    </row>
+
+		    <row align="center">
+			<label class="header" 
+			    value="&xpsigntoolext.form.sign.file.archive.options.common.label;"
+			    control="xpsigntoolext.form.sign.file.archive.options.common"
+			    /> 
+			<groupbox>
+            		<hbox pack="start">
+              		    <checkbox id="xpsigntoolext.form.sign.file.archive.sign.time"
+				checked="true"
+				persist="true"
+				label="&xpsigntoolext.form.sign.file.archive.sign.time.label;"
+                		tooltiptext="&xpsigntoolext.form.sign.file.archive.sign.time.tooltip;"
+				sigParamName="includeSigningTime"
+                		/>
+              		    <checkbox id="xpsigntoolext.form.sign.file.archive.optimize"
+				checked="true"
+				persist="true"
+				label="&xpsigntoolext.form.sign.file.archive.optimize.label;"
+                		tooltiptext="&xpsigntoolext.form.sign.file.archive.optimize.tooltip;"
+				sigParamName="optimize"
+                		/>
+              		    <checkbox id="xpsigntoolext.form.sign.file.archive.js.savearc"
+				checked="true"
+				persist="true"
+				label="&xpsigntoolext.form.sign.file.archive.js.savearc.label;"
+                		tooltiptext="&xpsigntoolext.form.sign.file.archive.js.savearc.tooltip;"
+				sigParamName="leavearc"
+                		/>
+              		    <spacer flex="1"/>
+            		</hbox>
+			</groupbox>
+		    </row>
+
+		    <!--
+		    <row align="center">
+              		<spacer flex="1"/>
+            		<hbox>
+              		    <checkbox id="xpsigntoolext.form.sign.file.archive.javascript"
+				label="&xpsigntoolext.form.sign.file.archive.javascript.label;"
+                		tooltiptext="&xpsigntoolext.form.sign.file.archive.javascript.tooltip;"
+				sigParamName="javascript"
+                		/>
+              		    <spacer flex="1"/>
+            		</hbox>
+		    </row>
+		    -->
+
+		    <!--
+		    <row align="center">
+              		<spacer flex="1"/>
+            		<hbox>
+              		    <checkbox id="xpsigntoolext.form.sign.file.archive.optimize"
+				checked="true"
+				label="&xpsigntoolext.form.sign.file.archive.optimize.label;"
+                		tooltiptext="&xpsigntoolext.form.sign.file.archive.optimize.tooltip;"
+				sigParamName="optimize"
+                		/>
+              		    <spacer flex="1"/>
+            		</hbox>
+		    </row>
+		    -->
+
+
+		    <row align="center">
+			<label class="header" 
+			    value="&xpsigntoolext.form.sign.file.archive.compression.label;"
+			    control="xpsigntoolext.form.sign.file.archive.compression"
+			    /> 
+            		<hbox pack="start">
+			    <textbox id="xpsigntoolext.form.sign.file.archive.compression"
+				size="6" maxlength="8" value="-1"
+				persist="true"
+                		tooltiptext="&xpsigntoolext.form.sign.file.archive.compression.tooltip;"
+				sigParamName="compressionLevel"
+                		/>
+              		    <spacer flex="1"/>
+            		</hbox>
+		    </row>
+
+		    <row align="center">
+			<label class="header" 
+			    value="&xpsigntoolext.form.sign.file.archive.installscript.label;"
+			    control="xpsigntoolext.form.sign.file.archive.installscript.path"
+			    /> 
+            		<hbox>
+            	            <fileselector id="xpsigntoolext.form.sign.file.archive.installscript.path" flex="2"
+				formathidden="true"
+			        fileMode="open"
+			        fileDialogMsg="Choose Install Script"
+			        fileTypeMsg="Install Script"
+			        fileTypeFilters="*.js"
+  			        filetooltiptext="&xpsigntoolext.form.sign.file.archive.installscript.path.tooltip;"
+                	        browselabel="&xpsigntoolext.form.file.browser.label;"
+                	        browsetooltiptext="&xpsigntoolext.form.sign.file.archive.installscript.browser.tooltip;"
+			    	sigParamName="installScript"
+                	        />
+				<!--
+				oncommand="xpsigntoolext_handleInputArchiveFilePickerChange(this, event);"
+				-->
+              		    <spacer flex="1"/>
+            		</hbox>
+		    </row>
+
+		    <row align="center">
+			<label class="header" 
+			    value="&xpsigntoolext.form.sign.file.archive.metafile.label;"
+			    control="xpsigntoolext.form.sign.file.archive.metafile.path"
+			    /> 
+            		<hbox>
+            	            <fileselector id="xpsigntoolext.form.sign.file.archive.metafile.path" flex="2"
+				formathidden="true"
+			        fileMode="open"
+			        fileDialogMsg="Choose Install Script"
+			        fileTypeMsg="Install Script"
+			        fileTypeFilters="*.mf"
+  			        filetooltiptext="&xpsigntoolext.form.sign.file.archive.metafile.path.tooltip;"
+                	        browselabel="&xpsigntoolext.form.file.browser.label;"
+                	        browsetooltiptext="&xpsigntoolext.form.sign.file.archive.metafile.browser.tooltip;"
+			    	sigParamName="metafile"
+                	        />
+				<!--
+				oncommand="xpsigntoolext_handleInputArchiveFilePickerChange(this, event);"
+				-->
+              		    <spacer flex="1"/>
+            		</hbox>
+		    </row>
+
+		    <row align="center">
+		      <separator class="thin"/>
+		      <spacer/>
+		    </row>
+
+		    <row align="center">
+			<label class="header" 
+			    value="&xpsigntoolext.form.sign.file.archive.base.name.label;"
+			    control="xpsigntoolext.form.sign.file.archive.base.name"
+			    /> 
+            		<hbox pack="start">
+			    <textbox id="xpsigntoolext.form.sign.file.archive.base.name"
+                		tooltiptext="&xpsigntoolext.form.sign.file.archive.base.name.tooltip;"
+				size="24" xmaxlength="24"
+				value=""
+			    	sigParamName="baseName"
+                		/>
+              		    <checkbox id="xpsigntoolext.form.sign.file.archive.useNickName"
+				label="&xpsigntoolext.form.sign.file.archive.useNickName.label;"
+				checked="true"
+				persist="true"
+                		tooltiptext="&xpsigntoolext.form.sign.file.archive.useNickName.tooltip;"
+				oncommand="xpsigntoolext_setBaseName(this, event);"
+                		/>
+              		    <spacer flex="1"/>
+            		</hbox>
+		    </row>
+
+		    <row align="center">
+		      <separator class="thick"/>
+		      <spacer/>
+		    </row>
+
+		    <row id="xpsigntoolext.form.sign.file.archive.scriptdir"
+		        hidden="true"
+			align="center"
+			>
+			<label class="header" 
+			    value="&xpsigntoolext.form.sign.file.archive.scriptdir.label;"
+			    control="xpsigntoolext.form.sign.file.archive.scriptdir.path"
+			    /> 
+	                <hbox>
+			    <fileselector id="xpsigntoolext.form.sign.file.archive.scriptdir.path" flex="1"
+			        fileMode="folder"
+			        fileDialogMsg="Choose Script Dir"
+			        fileTypeMsg="Script Dir"
+  			        filetooltiptext="&xpsigntoolext.form.sign.file.archive.scriptdir.path.tooltip;"
+			        browselabel="&xpsigntoolext.form.file.browser.label;"
+			        browsetooltiptext="&xpsigntoolext.form.sign.file.archive.scriptdir.browser.tooltip;"
+			        sigParamName="scriptdir"
+			        />
+	                </hbox>
+			<!--
+	                <hbox>
+              		    <spacer flex="1"/>
+	                </hbox>
+			-->
+		    </row>
+
+		    <row id="xpsigntoolext.form.sign.file.archive.out"
+			align="center"
+		    	>
+			<label class="header" 
+			    value="&xpsigntoolext.form.sign.file.archive.out.label;"
+			    control="xpsigntoolext.form.sign.file.archive.out.path"
+			    /> 
+			    <fileselector id="xpsigntoolext.form.sign.file.archive.out.path" flex="1"
+			        formathidden="true"
+			        fileMode="save"
+			        fileDialogMsg="Choose Signed File Path"
+			        fileTypeMsg="Signed File"
+			        fileTypeFilters="*.jar; *.xpi; *.zip; *.war; *.ear;"
+  			        filetooltiptext="&xpsigntoolext.form.sign.file.archive.out.path.tooltip;"
+			        browselabel="&xpsigntoolext.form.file.browser.label;"
+			        browsetooltiptext="&xpsigntoolext.form.sign.file.archive.out.browser.tooltip;"
+				onblur="xpsigntoolext_handleOuputArchiveFilePickerChange(this, event);"
+				onpopuphiding="xpsigntoolext_handleOuputArchiveFilePickerChange(this, event);"
+				onchange="xpsigntoolext_handleOuputArchiveFilePickerChange(this, event);"
+				oncommand="xpsigntoolext_handleOuputArchiveFilePickerChange(this, event);"
+			        />
+			    <!--
+			    <button id="xpsigntoolext.form.sign.file.archive.out.verify"
+			    	label="&xpsigntoolext.form.sign.file.archive.out.verify.label;"
+				hidden="true"
+				oncommand="xpsigntoolext_loadAndVerifySignedArchive(event);"
+				/>
+			    -->
+		    </row>
+		</rows>
+	    </grid>
+    </vbox>
+</overlay>
+

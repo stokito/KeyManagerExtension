@@ -1,0 +1,315 @@
+<?xml version="1.0"?>
+<!-- @(#) $Id: AttrCertBasicForm.xul,v 1.15 2009/04/20 02:07:18 subrata Exp $ -->
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is Avaya Labs Research, Avaya Inc. Code.
+   -
+   - The Initial Developer of the Original Code is
+   - Subrata Mazumdar, Avaya Labs Research, Avaya Inc.
+   - Portions created by the Initial Developer are Copyright (C) 2007.
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Subrata Mazumdar (mazum@avaya.com)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+
+<?xml-stylesheet href="chrome://keymanager/skin/kmbindings.css" type="text/css"?>
+
+<!DOCTYPE overlay
+	[
+	<!ENTITY % keyManager.dtd SYSTEM "chrome://keymanager/locale/keyManager.dtd">
+	%keyManager.dtd;
+	<!ENTITY % attrcertext.dtd SYSTEM "chrome://keymanager/locale/attrcertext.dtd">
+	%attrcertext.dtd;
+	]>
+
+
+<overlay id="attrcertext.form.basic.win" 
+    xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    >
+    <vbox class="box-padded" id="attrcertext.form.tabpanel.basic"
+	flex="1"
+	xstyle="overflow:auto; height:380px;"
+	zstyle="overflow:auto;"
+    	>
+
+	<!--
+	<groupbox id="attrcertext.form.basic.holder.cert.info">
+	    <caption class="header" label="&attrcertext.form.basic.holder.cert.info.label;"/>
+	-->
+	    <grid id="attrcertext.form.basic.grid" 
+		flex="1"
+	        > 
+		<columns>
+		    <column/>
+		    <column flex="1"/>
+		</columns>
+		<rows>
+		    <row align="center">
+			<label class="header" value="&attrcertext.form.basic.holder.cert.label;"/>
+			<hbox flex="1">
+			    <deck id="attrcertext.form.basic.holder.cert.deck"
+				selectedIndex="0"
+				flex="1"
+				pack="start"
+				>
+				<certpicker id="keymgr.attrcert.form.basic.holder.nickName.menulist"
+  		  	            menutooltiptext="&attrcertext.form.basic.holder.nickName.menulist.tooltip;"
+				    tokentypehidden="true"
+				    certtype="server"
+				    xusertypedisabled="true"
+				    catypedisabled="true"
+				    certtypetooltiptext="Select the certificate type from the list"
+				    viewhidden="false"
+				    viewlabel="&attrcertext.form.basic.cert.view.label;"
+  		  	            viewtooltiptext="&attrcertext.form.basic.cert.view.tooltip;"
+				    includeTokenInfo="true"
+				    certPropName="holderNickName"
+	       	  	            oncommand="AttrCertBasicForm_HolderCertPickerMenuChanged(this, event);"
+				    />
+				<hbox id="attrcertext.form.basic.holder.cert.item.hbox"
+				    pack="start"
+				    >
+				    <certitem id="attrcertext.form.basic.holder.cert.item"
+				        viewlabel="&attrcertext.form.basic.cert.view.label;"
+				        viewtooltiptext="&attrcertext.form.basic.cert.view.tooltip;"
+				        />
+				</hbox>
+				<groupbox id="attrcertext.form.basic.holder.issuer.serial"
+				    orient="horizontal"
+				    flex="1"
+				    >
+				    <grid id="attrcertext.form.basic.holder.issuer.serial.grid" flex="1"> 
+					<columns>
+					    <column/>
+					    <column flex="1"/>
+					</columns>
+					<rows>
+					    <row>
+					        <label class="header" value="Issuer"/>
+					    	<textbox id="attrcertext.form.basic.holder.issuer.name"
+						    readonly="true"
+				    		    certPropName="holderCert.issuerName"
+						    />
+					    </row>
+					    <row>
+					        <label class="header" value="Serial No"/>
+					    	<textbox id="attrcertext.form.basic.holder.serial.no"
+						    readonly="true"
+				    		    certPropName="holderCert.serialNumber"
+						    />
+					    </row>
+					</rows>
+				    </grid>
+				</groupbox>
+				<hbox id="attrcertext.form.basic.holder.entity.name" flex="1">
+				    <textbox id="attrcertext.form.basic.holder.subject.name"
+				    	readonly="true"
+					certPropName="holderCert.subjectName"
+					flex="1"
+					/>
+				</hbox>
+			    </deck>
+			</hbox>
+		    </row>
+		    <row align="center">
+			<label class="header" value="&attrcertext.form.basic.signer.cert.label;"/>
+			<hbox
+			    pack="start"
+			    >
+			    <deck id="attrcertext.form.basic.signer.cert.deck"
+				selectedIndex="0"
+				flex="1"
+				>
+			        <certpicker id="keymgr.attrcert.form.basic.signer.nickName.menulist"
+  		  	            menutooltiptext="&attrcertext.form.basic.signer.nickName.menulist.tooltip;"
+			            tokentypehidden="true"
+			            certtype="user"
+			            certtypedisabled="true"
+			            viewhidden="false"
+			            viewlabel="&attrcertext.form.basic.cert.view.label;"
+  		  	            viewtooltiptext="&attrcertext.form.basic.cert.view.tooltip;"
+			            includeTokenInfo="true"
+			            certPropName="signerNickName"
+	       	  	            oncommand="AttrCertBasicForm_SignerCertPickerMenuChanged(this, event);"
+			            />
+				<hbox id="attrcertext.form.basic.signer.cert.item.hbox"
+				    pack="start"
+				    >
+			            <certitem id="attrcertext.form.basic.signer.cert.item"
+			                viewlabel="&attrcertext.form.basic.cert.view.label;"
+			                viewtooltiptext="&attrcertext.form.basic.cert.view.tooltip;"
+			                />
+				</hbox>
+				<hbox id="attrcertext.form.basic.signer.entity.name">
+				    <textbox id="attrcertext.form.basic.holder.subject.name"
+				    	readonly="true"
+					certPropName="issuerCert.subjectName"
+					flex="1"
+					/>
+				</hbox>
+			    </deck>
+			</hbox>
+		    </row>
+		    <row>
+		      <separator class="thin"/>
+		      <spacer/>
+		    </row>
+		    <row align="center">
+			<label class="header"
+			    control="attrcertext.form.basic.certdetail.alias"
+			    value="&attrcertext.form.basic.certdetail.alias.label;"/> 
+			<hbox pack="start">
+  	                <groupbox pack="start" orient="horizontal">
+			    <checkbox id="attrcertext.form.basic.certdetail.alias.autogen"
+				label="&attrcertext.form.basic.certdetail.alias.autogen.label;"
+				checked="true"
+				tooltiptext="&attrcertext.form.basic.certdetail.alias.autogen.tooltip;"
+				/>
+			    <textbox id="attrcertext.form.basic.certdetail.alias"
+				value=""
+				size="40" maxlength="80"
+				tooltiptext="&attrcertext.form.basic.certdetail.alias.tooltip;"
+				certPropName="nickName"
+				onchange="AttrCertBasicForm_handleAliasChange(this, event)"
+				/>
+  	                </groupbox>
+  	                </hbox>
+		    </row>
+		    <row align="center">
+			<label class="header"
+			    control="attrcertext.form.basic.certdetail.x509VersionGroup"
+			    value="&attrcertext.form.basic.certdetail.x509Version.label;"/> 
+			<radiogroup id="attrcertext.form.basic.certdetail.x509VersionGroup" flex="1"
+  		              onclick="handlex509VersionChange(this, event.target)"
+			      certPropName="version"
+			      >
+  	                    <hbox pack="start">
+				<radio id="attrcertext.form.basic.certdetail.x509Version1"
+				    label="&attrcertext.form.basic.certdetail.x509Version1.label;"
+				    tooltiptext="&attrcertext.form.basic.certdetail.x509Version1.tooltip;"
+  		                    selected="true"
+  		                    value="1"
+			      	    certPropName="ver-1"
+  		                    group="attrcertext.form.basic.certdetail.x509VersionGroup"/>
+				<!--
+				<radio id="attrcertext.form.basic.certdetail.x509Version3"
+				    label="&attrcertext.form.basic.certdetail.x509Version3.label;"
+				    tooltiptext="&attrcertext.form.basic.certdetail.x509Version3.tooltip;"
+  		                    value="3"
+			      	    certPropName="ver-3"
+  		                    group="attrcertext.form.basic.certdetail.x509VersionGroup"/>
+				<spring flex="1"/>
+				-->
+  	                    </hbox>
+			</radiogroup>
+		    </row>
+		    <row align="center">
+			<label class="header"
+			    control="attrcertext.form.basic.certdetail.serialnumberGroup"
+			    value="&attrcertext.form.basic.certdetail.serialNumber.label;"/> 
+			<hbox id="attrcertext.form.basic.certdetail.serialnumber.hbox"
+			    pack="start"
+			    align="center"
+			    >
+			    <radiogroup id="attrcertext.form.basic.certdetail.serialnumberGroup"
+  	                        onclick="handleSerialnumberChange(this)"
+				certPropName="serial"
+				>
+				<hbox id="attrcertext.form.basic.certdetail.serialnumber.group.hbox"
+				    pack="start"
+				    >
+				    <radio id="attrcertext.form.basic.certdetail.autoGenerateSerialNo"
+					label="&attrcertext.form.basic.certdetail.autoGenerateSerialNo.label;"
+					tooltiptext="&attrcertext.form.basic.certdetail.autoGenerateSerialNo.tooltip;"
+  		                        selected="true"
+  		                        value="auto"
+					certPropName="serial-auto"
+  		                        group="attrcertext.form.basic.certdetail.serialnumberGroup"/>
+				    <radio id="attrcertext.form.basic.certdetail.inputSerialNo"
+					label="&attrcertext.form.basic.certdetail.inputSerialNo.label;"
+					tooltiptext="&attrcertext.form.basic.certdetail.inputSerialNo.tooltip;"
+  		                        value="input"
+					certPropName="serial_input"
+  		                        group="attrcertext.form.basic.certdetail.serialnumberGroup"/>
+				</hbox>
+			    </radiogroup>
+			    <textbox id="attrcertext.form.basic.certdetail.serialnumber.value"
+				    size="20" maxlength="80"
+				    tooltiptext="&attrcertext.form.basic.certdetail.serialnumber.tooltip;"
+				    certPropName="serial_value"
+				    />
+			</hbox>
+		    </row>
+		    <row align="center">
+			<label class="header"
+			    control="attrcertext.form.basic.certdetail.sigAlgName.menulist"
+			    value="&attrcertext.form.basic.certdetail.sigAlgName.label;"/>
+			<hbox pack="start" >
+			    <hashalgmenu id="attrcertext.form.basic.certdetail.sigAlgName.menulist"
+				value="SHA1"
+	       	      	        oncommand="attrcert_handleSigAlgorithmChange(this, event.originalTarget);"
+				certPropName="sigAlgorithm"
+				/>
+			</hbox>
+		    </row>
+		    <row id="attrcertext.form.basic.attribute.info.row"
+			align="center"
+		        >
+			<label class="header" 
+			    value="&attrcertext.form.basic.attribute.info.label;"/>
+			<groupbox>
+			    <description>
+			    You must add atleast one attribute to the certificate.
+			    </description>
+			</groupbox>
+		    </row>
+		    <row align="center">
+			<label class="header"
+			    control="attrcertext.form.basic.certdetail.validityGroup"
+			    value="&attrcertext.form.basic.certdetail.validity.label;"
+			    /> 
+			<hbox pack="start" >
+			    <certvalidity id="attrcertext.form.basic.certdetail.validity"
+				/>
+			</hbox>
+		    </row>
+		    <row>
+			<separator class="thin"/>
+			<spacer/>
+		    </row>
+		</rows>
+	    </grid>
+	<!--
+	</groupbox>
+	-->
+	<certextnutil id="attrcertext.form.basic.certextn.util" collapsed="true"/>
+    </vbox>
+</overlay>
+

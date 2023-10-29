@@ -1,0 +1,128 @@
+<!ENTITY keymgr.certenroll.wizard.win.title		"Cert Enrollment Tool">
+<!ENTITY keymgr.certenroll.options.win.title		"Cert Enrollment Tool Preferences">
+<!ENTITY keymgr.certenroll.version			"0.1.2.20080508">
+<!ENTITY keymgr.certenroll.wizard.overlay.title		"Cert Enrollment Tool">
+
+<!ENTITY keymgr.certenroll.wizard.file.browse.label	"Browse">
+<!ENTITY keymgr.certenroll.wizard.file.browse.tooltip	"Click this button to select the path to the  file">
+
+<!ENTITY keymgr.certenroll.title.label			"Avaya Product Cert">
+<!ENTITY keymgr.certenroll.wizard.label			"Certificate Creation Wizard ">
+
+<!ENTITY keymgr.certenroll.cmd.create.label		"Create">
+<!ENTITY keymgr.certenroll.cmd.close.label		"Close">
+<!ENTITY keymgr.certenroll.cmd.cancel.label		"Cancel">
+<!ENTITY keymgr.certenroll.cmd.help.label		"Help">
+
+<!ENTITY keymgr.certenroll.wizard.page.cert.profile.label			"Certificate Profile">
+<!ENTITY keymgr.certenroll.wizard.page.cert.profile.type.label			"Cert Profile Type">
+<!ENTITY keymgr.certenroll.wizard.page.cert.profile.firstName.label		"First Name">
+<!ENTITY keymgr.certenroll.wizard.page.cert.profile.firstName.tooltip		"Enter frist name of user or server DNS name or IP-address">
+<!ENTITY keymgr.certenroll.wizard.page.cert.profile.lastName.label		"Last Name">
+<!ENTITY keymgr.certenroll.wizard.page.cert.profile.lastName.tooltip		"Enter last Name of user; in case of server ignore it.">
+<!ENTITY keymgr.certenroll.wizard.page.cert.profile.commonName.label		"Common Name">
+<!ENTITY keymgr.certenroll.wizard.page.cert.profile.commonName.tooltip		"Common Name">
+<!ENTITY keymgr.certenroll.wizard.page.cert.profile.nickName.label		"Nick Name">
+<!ENTITY keymgr.certenroll.wizard.page.cert.profile.subjectDN.label		"Subject">
+<!ENTITY keymgr.certenroll.wizard.page.cert.profile.importSignedCert.label	"Import Signed Cert in Cert DB">
+<!ENTITY keymgr.certenroll.wizard.page.cert.profile.tokenName.label		"Security Device">
+<!ENTITY keymgr.certenroll.wizard.page.cert.profile.currCert.label		"Existing Cert?">
+<!ENTITY keymgr.certenroll.wizard.page.cert.profile.currCert.isPresent.label	"Cert Present?">
+<!ENTITY keymgr.certenroll.wizard.page.cert.profile.currCert.selfSigned.label	"Self-Signed?">
+<!ENTITY keymgr.certenroll.wizard.page.cert.profile.currCert.issuerLabel	"Issued By: ">
+<!ENTITY keymgr.certenroll.wizard.page.cert.profile.currCert.view.label		"View">
+<!ENTITY keymgr.certenroll.wizard.page.cert.profile.newKey.generate.label	"Generate new Key-Pair">
+<!ENTITY keymgr.certenroll.wizard.page.cert.profile.outfile.label		"Cert Profile File Path">
+<!ENTITY keymgr.certenroll.wizard.page.cert.profile.outfile.tooltip		"Enter cert profile output XML file path">
+
+<!ENTITY keymgr.certenroll.wizard.page.csr.label	"Generate Key-pair and CSR">
+<!ENTITY keymgr.certenroll.form.csrFile.path.label	"Generated CSR File">
+<!ENTITY keymgr.certenroll.form.csrFile.format.label	"Base64">
+<!ENTITY keymgr.certenroll.form.csrFile.browse.label	"Browse">
+
+<!ENTITY keymgr.certenroll.wizard.page.issuer.label	"Sign-on to Product Certificate Authority (CA) Server">
+<!ENTITY keymgr.certenroll.form.issuer.info.label		"Cert Issuer ">
+<!ENTITY keymgr.certenroll.form.issuer.server.url.label	"CA Server URL">
+<!ENTITY keymgr.certenroll.form.issuer.server.url.tooltip	"Enter the URL of the Server hosting the CA">
+<!ENTITY keymgr.certenroll.form.issuer.server.login.label	"Login">
+<!ENTITY keymgr.certenroll.form.issuer.server.getCACertChain.label "Download CA Certs">
+<!ENTITY keymgr.certenroll.form.issuer.subjdn.label	"Issuer Subject DN">
+<!ENTITY keymgr.certenroll.form.issuer.subjdn.tooltip	"Enter Subject DN of the Issuer (CA) - Optional">
+<!ENTITY keymgr.certenroll.form.issuer.alias.label	"Issuer Alias">
+<!ENTITY keymgr.certenroll.form.issuer.alias.tooltip	"Enter alias of the Issuer (CA) - Optional">
+<!ENTITY keymgr.certenroll.cmd.form.basic.label		"Basic ">
+<!ENTITY keymgr.certenroll.cmd.form.advanced.label	"Advanced ">
+
+<!ENTITY keymgr.certenroll.wizard.page.csrUpload.label		"Upload CSR to CA">
+
+<!ENTITY keymgr.certenroll.wizard.page.csrDownload.label	"Download Signed Cert from CA">
+<!ENTITY keymgr.certenroll.wizard.page.issuer.label	"Sign-on to Product Certificate Authority (CA) Server">
+<!ENTITY keymgr.certenroll.issuer.server.type.label	"CA Server Type">
+<!ENTITY keymgr.certenroll.issuer.server.type.pkcs10CA	"PKCS10 CA">
+<!ENTITY keymgr.certenroll.issuer.server.type.simpleCA	"Simple CA">
+<!ENTITY keymgr.certenroll.issuer.server.type.msCertService	"MS Cert Service">
+<!ENTITY keymgr.certenroll.issuer.server.type.scep	"SCEP Server">
+<!ENTITY keymgr.certenroll.issuer.server.type.openCA	"Open CA">
+<!ENTITY keymgr.certenroll.issuer.server.type.ejbCA	"EJB CA">
+
+<!ENTITY keymgr.certenroll.wizard.page.viewCert.label	"View Certificate">
+
+<!ENTITY keymgr.certenroll.scep.wizard.title			"SCEP Cert Enrollment Tool">
+<!ENTITY keymgr.certenroll.scep.cert.view.label		"View Cert">
+<!ENTITY keymgr.certenroll.scep.cert.view.tooltip		"Click this button to view the selected certificate">
+<!ENTITY keymgr.certenroll.scep.file.format.base64.label	"Base64">
+<!ENTITY keymgr.certenroll.scep.file.format.base64.tooltip	"Check this box if the file is in Base64 format. Otherwse, it is in binary (DER) format.">
+<!ENTITY keymgr.certenroll.scep.file.browse.label		"Browse">
+<!ENTITY keymgr.certenroll.scep.file.browse.tooltip		"Click this button to select the output file">
+
+<!ENTITY keymgr.certenroll.scep.page.param.data.label		"SCEP Paramaters">
+<!ENTITY keymgr.certenroll.scep.page.selectcert.user.label	"Generate Key and Select User Cert">
+<!ENTITY keymgr.certenroll.scep.page.selectcert.scepserver.label	"Select CA and SCEP Server Cert">
+<!ENTITY keymgr.certenroll.scep.page.scepclient.label		"SCEP Client For Enrollment">
+<!ENTITY keymgr.certenroll.scep.page.casignedcert.view.label	"View CA-Signed Cert">
+
+<!ENTITY keymgr.certenroll.scep.param.data.scepserver.url.label		"SCEP URL">
+<!ENTITY keymgr.certenroll.scep.param.data.scepserver.url.tooltip		"Enter the SCEP URL for CA or RA">
+<!ENTITY keymgr.certenroll.scep.param.data.scepserver.isra.label		"Send request to RA">
+<!ENTITY keymgr.certenroll.scep.param.data.scepserver.isra.tooltip	"Check this box if you want send the SCEP cert enrollment request to the RA insead of CA">
+
+<!ENTITY keymgr.certenroll.scep.param.data.scepserver.caid.label 		"CA Identity">
+<!ENTITY keymgr.certenroll.scep.param.data.scepserver.caid.tooltip 	"(OPTIONAL) CA Identity is string which is understood by the CA. If a certificate authority has multiple CA certificates this field can be used to distinguish which is required.">
+<!ENTITY keymgr.certenroll.scep.param.data.scepserver.downloadcert.label	"Download CA Cert">
+<!ENTITY keymgr.certenroll.scep.param.data.scepserver.downloadcert.tooltip	"Download CA Cert">
+<!ENTITY keymgr.certenroll.scep.param.data.scepserver.getcaps.label	"Get CA Capabilities">
+<!ENTITY keymgr.certenroll.scep.param.data.scepserver.getcaps.tooltip	"Get CA Capabilities">
+
+<!ENTITY keymgr.certenroll.scep.param.data.scepserver.ca.subjectdn.label		"CA Cert Subject DN">
+<!ENTITY keymgr.certenroll.scep.param.data.scepserver.ca.subjectdn.tooltip		"Distingusihed name (DN) of the certificate issuer (CA) - example: 'cn=xxx[,ou=orgu1,o=org1,c=us]'">
+<!ENTITY keymgr.certenroll.scep.param.data.scepserver.ca.subjectdn.format.label	"Format Subject">
+<!ENTITY keymgr.certenroll.scep.param.data.scepserver.ca.subjectdn.format.tooltip	"Use a dialog window to format the subject DN of the CA.">
+<!ENTITY keymgr.certenroll.scep.param.data.scepserver.ca.cert.label	"CA Certificate">
+<!ENTITY keymgr.certenroll.scep.param.data.scepserver.ca.cert.tooltip	"X.509 certificate of CA. If this certifcate is inteneded recipient of SCEP message then certificate must be enabled for following key-usages : EmailRecipient also.">
+<!ENTITY keymgr.certenroll.scep.param.data.scepserver.recipient.cert.label		"SCEP Recipient Cert">
+<!ENTITY keymgr.certenroll.scep.param.data.scepserver.recipient.subjectdn.label		"Cert Subject DN">
+<!ENTITY keymgr.certenroll.scep.param.data.scepserver.recipient.subjectdn.tooltip		"Distingusihed name of the certificate to be created - example: 'cn=xxx[,ou=orgu1,o=org1,c=us]'">
+<!ENTITY keymgr.certenroll.scep.param.data.scepserver.recipient.subjectdn.format.label	"Format Subject">
+<!ENTITY keymgr.certenroll.scep.param.data.scepserver.recipient.subjectdn.format.tooltip	"Use a dialog window to format the subject DN.">
+<!ENTITY keymgr.certenroll.scep.param.data.scepserver.recipient.cert.tooltip		"Certificate of RA for SCEP based enrollment. The certificate must be signed by the CA cert selected above. Certifcate must be enabled for following key-usages :  EmailRecipient, i.e., the certificate can be used for encryption.">
+<!ENTITY keymgr.certenroll.scep.param.data.scepserver.recipient.filterwithca.label	"List CA-Signed Certs Only">
+<!ENTITY keymgr.certenroll.scep.param.data.scepserver.recipient.filterwithca.tooltip	"Only list server (recipient RA) certs signed by the selected CA">
+<!ENTITY keymgr.certenroll.scep.param.data.user.cert.label		"User Certificate ">
+<!ENTITY keymgr.certenroll.scep.param.data.user.subjectdn.label		"Cert Subject DN">
+<!ENTITY keymgr.certenroll.scep.param.data.user.subjectdn.tooltip		"Distingusihed name of the certificate to be created - example: 'cn=xxx[,ou=orgu1,o=org1,c=us]'">
+<!ENTITY keymgr.certenroll.scep.param.data.user.subjectdn.format.label	"Format Subject">
+<!ENTITY keymgr.certenroll.scep.param.data.user.subjectdn.format.tooltip	"Use a dialog window to format the subject DN.">
+<!ENTITY keymgr.certenroll.scep.param.data.user.cert.tooltip		"Select the certificate from the list. The selected certificate must be enabled for following key-usages : EmailRecipient, EmailSigner. You can verify usage info in the certificate viewer. Click 'View Cert' to open the certificate viewer.">
+<!ENTITY keymgr.certenroll.scep.param.data.user.cert.menulist.tooltip	"Select the certificate from the list">
+<!ENTITY keymgr.certenroll.scep.param.data.user.cert.view.label		"View Cert">
+<!ENTITY keymgr.certenroll.scep.param.data.user.cert.view.tooltip		"Click this button to view the selected user certificate">
+<!ENTITY keymgr.certenroll.scep.param.data.user.cert.create.label		"Create New Cert">
+<!ENTITY keymgr.certenroll.scep.param.data.user.cert.create.simple.label	"Create Cert Simple">
+<!ENTITY keymgr.certenroll.scep.param.data.user.cert.create.advanced.label "Create Cert Advanced">
+<!ENTITY keymgr.certenroll.scep.param.data.user.challengepw.label		"Challenge Password">
+<!ENTITY keymgr.certenroll.scep.param.data.user.challengepw.tooltip	"Challenge password attribute for PKCS#10 that can be used for out-of-band authentication for enrollment request.">
+<!ENTITY keymgr.certenroll.scep.param.data.user.challengepw.retrieve.label	"Retrieve Challenge Password">
+<!ENTITY keymgr.certenroll.scep.param.data.user.challengepw.retrieve.tooltip	"Retrieve Challenge Password">
+<!ENTITY keymgr.certenroll.scep.param.data.user.signedcert.certitem.label	"CA-signed Cert">
+<!ENTITY keymgr.certenroll.scep.param.data.user.signedcert.certitem.view.tooltip	"Click this button to view the enrolled CA-signed certificate">
+

@@ -1,0 +1,808 @@
+<?xml version="1.0"?>
+<!-- @(#) $Id: SoftTokenDBManagerDialog.xul,v 1.14 2012/10/07 17:21:08 subrata Exp $ -->
+
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is Avaya Labs Research, Avaya Inc. Code.
+   -
+   - The Initial Developer of the Original Code is
+   - Subrata Mazumdar, Avaya Labs Research, Avaya Inc.
+   - Portions created by the Initial Developer are Copyright (C) 2007.
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Subrata Mazumdar (mazum@avaya.com)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://keymanager/skin/kmbindings.css" type="text/css"?>
+
+<!DOCTYPE dialog
+	[
+	<!ENTITY % certManager.dtd SYSTEM "chrome://pippki/locale/certManager.dtd">
+	%certManager.dtd;
+	<!ENTITY % keyManager.dtd SYSTEM "chrome://keymanager/locale/keyManager.dtd">
+	%keyManager.dtd;
+	]>
+
+<dialog id="keymgr.softtoken.dbmanager.dialog"
+  title="SoftToken DB Manager Dialog"
+  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"      
+  persist="screenX screenY width height"
+  buttons="accept,cancel"
+  ondialogaccept="return SoftTokenDBManagerDialog.accept();"
+  ondialogcancel="return SoftTokenDBManagerDialog.cancel();"
+  onload="SoftTokenDBManagerDialog.init();">
+
+<script type="application/x-javascript">
+<![CDATA[
+
+var SoftTokenDBManagerDialog = {
+
+    mTestMode 			: false,
+
+    /* nsIIOService	*/ mIOService : null,
+    /* nsIProperties	*/ mDirService : null,
+    /* nsIX509CertDB	*/ mX509CertDB : null,
+    /* nsIPK11TokenDB   */ mTokenDB	: null,
+    /* alrIKeyManager	*/ mKeyManager : null,
+    /* alrISoftTokenDBManager	*/ mSoftTokenDBManager : null,
+
+    mDialogElem 		: null,
+    mAcceptButtonElem		: null,
+
+    mSoftTokenElem		: null,
+    mSoftTokenNameElem		: null,
+    mCertPrefixElem		: null,
+    mReadonlyDBRowElem		: null,
+    mReadonlyDBElem		: null,
+    mEnableFipsElem		: null,
+    mPerformLoginElem		: null,
+    mSoftTokenSaveInfoElem	: null,
+
+    mDialogParams		: null,
+    mSoftTokenDBCmdOption	: 0, // 0 ==> Create, 1 ==> Mount
+    mSoftTokenType		: null,
+
+    mSoftTokenDBInfoStr		: null,
+    mMountedSoftTokenDBDir	: null,
+
+    mMaxLogLevel : 2,
+    log : function(level, msg)
+    {
+	if (level > this.mMaxLogLevel) {
+        	return;
+        }
+        dump(msg + "\n");
+    },
+
+    logError : function(msg)
+    {
+        this.log(2, msg);
+    },
+    logTrace : function(msg)
+    {
+        this.log(4, msg);
+    },
+    logDebug : function(msg)
+    {
+        this.log(8, msg);
+    },
+
+    loginToInternalToken : function () 
+    {
+	// this.mMaxLogLevel = 9;
+        this.logTrace("SoftTokenDBManagerDialog.loginToInternalToken():................Start.");
+
+	var token = null;
+        try {
+            token = this.mTokenDB.getInternalKeyToken();
+        } catch (ex) {}
+	if (!token) {
+	    return;
+	}
+
+
+
+        var testOption = false;
+        var testPassword = null;
+	do {
+
+            var Prefs = Components.classes["@mozilla.org/preferences-service;1"]
+			.getService(Components.interfaces.nsIPrefService);
+            try {
+                var prefBranchPrefixId = "extensions.avpki.tools.test.";
+                var prefsBranch = Prefs.getBranch(prefBranchPrefixId);
+                if (!prefsBranch) {
+    	            break;
+                }
+
+                var prefBoolValue = prefsBranch.getBoolPref("enabled");
+	        if (prefBoolValue) {
+	            testOption = true;
+	        }
+		if (!testOption) {
+		    break;
+		}
+
+                var prefStringValue = prefsBranch.getCharPref("password");
+	        if (prefStringValue && (prefStringValue != "")) {
+	            testPassword = prefStringValue;
+	        }
+            } catch (ex) {
+	    	this.logDebug("SoftTokenDBManagerDialog.loginToInternalToken():  ex: " + ex);
+	    }
+
+	} while (0);
+
+	if (testOption && testPassword) {
+	    this.mTestMode = testOption;
+            /**********************************************/
+            /* TODO:  TEST CODE - remove after test phase */
+            /**********************************************/
+            if (this.mTestMode) {
+        	var tokenPassword = testPassword;
+		try {
+                    token.checkPassword(tokenPassword);
+		} catch (ex) {}
+	    }
+	}
+
+	try {
+            token.login(false);
+            this.logTrace("SoftTokenDBManagerDialog.loginToInternalToken(): successfully logged in to internal-token.");
+        } catch (ex) {}
+
+        this.logTrace("SoftTokenDBManagerDialog.loginToInternalToken():................End.");
+	// this.mMaxLogLevel = 4;
+	return;
+    },
+
+    trim : function (aStr) 
+    {
+    	// var newStr = (new java.lang.String(aStr)).trim();
+	// return newStr;
+	if (!aStr) {
+	    return aStr;
+	}
+	var sInString = aStr.replace( /^\s+/g, "" ); // strip leading whitespace
+	return sInString.replace( /\s+$/g, "" ); // strip trailing whitespace
+    },
+
+
+    initXPComServiceInfo : function ()
+    {
+        this.logTrace("SoftTokenDBManagerDialog.initXPComServiceInfo():................Start.");
+
+        try {
+    	    this.mIOService = Components.classes["@mozilla.org/network/io-service;1"]
+		    		.getService(Components.interfaces.nsIIOService);
+	    this.mDirService = Components.classes['@mozilla.org/file/directory_service;1']
+				.getService(Components.interfaces.nsIProperties);
+	    this.mX509CertDB = Components.classes["@mozilla.org/security/x509certdb;1"]
+	                        .getService(Components.interfaces.nsIX509CertDB);
+            this.mTokenDB = Components.classes["@mozilla.org/security/pk11tokendb;1"]
+                                .getService(Components.interfaces.nsIPK11TokenDB);
+	    this.mKeyManager = Components.classes["@avaya.com/pkm/keymanager;1"]
+	                        .getService(Components.interfaces.alrIKeyManager);
+	    this.mSoftTokenDBManager = Components.classes["@avaya.com/pkm/softtokendbmanager;1"]
+	                        .getService(Components.interfaces.alrISoftTokenDBManager);
+        } catch (ex) {
+    	    alert("SoftTokenDBManagerDialog.initXPComServiceInfo(): failed to initialize one or more XPCOM based required services- ex: " + ex + "");
+    	    this.logError("SoftTokenDBManagerDialog.initXPComServiceInfo(): failed to initialize one or more XPCOM based required services- ex: " + ex + "");
+	    throw ex;
+        }
+
+	this.logTrace("SoftTokenDBManagerDialog.initXPComServiceInfo():................End.");
+    },
+
+    init : function()
+    {
+	this.logTrace("SoftTokenDBManagerDialog.init():......................Start.");
+
+	/*
+    	this.mSoftTokenDBManager = Components.classes["@avaya.com/pkm/softtokendbmanager;1"]
+		    .getService(Components.interfaces.alrISoftTokenDBManager);
+	*/
+	this.initXPComServiceInfo();
+
+
+    	this.mDialogElem	= document.getElementById("keymgr.softtoken.dbmanager.dialog");
+	this.mAcceptButtonElem	=  this.mDialogElem.getButton("accept");
+
+	this.mSoftTokenNameElem = document.getElementById("keymgr.softtoken.dbmanager.db.tokenname");
+	this.mSoftTokenElem	= document.getElementById("keymgr.softtoken.dbmanager.db.softtoken");
+    	this.mCertPrefixElem	= document.getElementById("keymgr.softtoken.dbmanager.db.certprefix");
+    	this.mReadonlyDBRowElem	= document.getElementById("keymgr.softtoken.dbmanager.db.readonly.row");
+    	this.mReadonlyDBElem	= document.getElementById("keymgr.softtoken.dbmanager.db.readonly");
+    	// this.mEnableFipsElem = document.getElementById("keymgr.softtoken.dbmanager.db.fips");
+    	this.mPerformLoginElem	= document.getElementById("keymgr.softtoken.dbmanager.db.login");
+    	this.mSoftTokenSaveInfoElem = document.getElementById("keymgr.softtoken.dbmanager.db.saveinfo");
+
+	this.mSoftTokenDBCmdOption = 1; //default
+        if ((window.arguments) && (window.arguments.length > 0)) {
+    	    this.mDialogParams = window.arguments[0].QueryInterface(Components.interfaces.nsIDialogParamBlock);
+	    this.mSoftTokenDBCmdOption = this.mDialogParams.GetInt(0);
+	}
+
+	this.mSoftTokenElem.refresh();
+    	if (this.mSoftTokenDBCmdOption == 0) {  // Create DB option
+	    // For creating new Soft-token DB dir, disable file based soft-token options.
+	    this.mSoftTokenElem.softtokentype = "keydb";
+	    this.mSoftTokenElem.setAttribute("softtokentypedisabled", true);
+	}
+	this.handleSoftTokenChange(this.mSoftTokenElem);
+
+	this.handleTokenNameChange(this.mSoftTokenNameElem);
+
+    	if (this.mSoftTokenDBCmdOption == 0) { 
+	     // Create DB option
+	    this.mPerformLoginElem.checked = true;
+	    this.mPerformLoginElem.disabled = true;
+	}
+
+	this.loginToInternalToken();
+
+	this.logTrace("SoftTokenDBManagerDialog.init():......................End.");
+    },
+
+    validateDialogFormFields : function()
+    {
+	this.mAcceptButtonElem.disabled = true;
+
+	if (!this.mSoftTokenElem.readytomount) {
+	    return false;
+	}
+
+	if (this.mSoftTokenNameElem.value == "") {
+	    return false;
+	}
+
+	this.mAcceptButtonElem.disabled = false;
+	return true;
+    },
+
+    handleDBDirPathChange : function(aSoftTokenDBDirElem, ev)
+    {
+	this.validateDialogFormFields();
+    },
+
+    handleSoftTokenChange : function(aSoftTokenDBDirElem, ev)
+    {
+	this.logTrace("SoftTokenDBManagerDialog.handleSoftTokenChange():......................Start.");
+
+    	this.mSoftTokenType = this.mSoftTokenElem.softtokentype
+
+	if (this.mSoftTokenElem.softtokentype == "keydb") {
+	    this.mSoftTokenSaveInfoElem.hidden = false;
+
+	    this.mReadonlyDBElem.checked = false;
+	    this.mReadonlyDBElem.disabled = false;
+	}
+	else {
+	    this.mSoftTokenSaveInfoElem.checked = false;
+	    this.mSoftTokenSaveInfoElem.hidden = true;
+
+	    this.mReadonlyDBElem.checked = true;
+	    this.mReadonlyDBElem.disabled = true;
+	}
+
+    	if (this.mSoftTokenDBCmdOption != 0) {  // NOT Create DB option
+	    this.validateDialogFormFields();
+	    return;
+	}
+
+	this.mReadonlyDBElem.checked = false;
+	this.mReadonlyDBRowElem.hidden = true;
+
+	var softTokenDBDirPath = this.mSoftTokenElem.keydbdirpath;
+	var softTokenDBDir = this.mSoftTokenElem.keydbdir;
+	// this.logDebug("SoftTokenDBManagerDialog.handleSoftTokenChange(): softTokenDBDir: " + softTokenDBDir);
+	// this.logDebug("SoftTokenDBManagerDialog.handleSoftTokenChange(): softTokenDBDirPath: " + softTokenDBDirPath);
+	do {
+	    if (!softTokenDBDir.exists()) {
+	    	softTokenDBDir.create();
+		break;
+	    }
+
+	    var softTokenKeyDBFile = softTokenDBDir.clone();
+            softTokenKeyDBFile.append("key3.db");
+	    if (softTokenKeyDBFile.exists()) {
+	    	this.mAcceptButtonElem.disabled = true;
+		alert("Please choose another directory - a soft-token already exists in the choosen directory.");
+		return;
+	    }
+	} while (false);
+
+	this.validateDialogFormFields();
+
+	this.logTrace("SoftTokenDBManagerDialog.handleSoftTokenChange():......................End.");
+    },
+
+    handleTokenNameChange : function(aTokenNameElem, ev)
+    {
+	this.logTrace("SoftTokenDBManagerDialog.handleTokenNameChange():......................Start.");
+
+        var tokenName = this.trim(aTokenNameElem.value);
+	aTokenNameElem.value = tokenName;
+
+	if (tokenName == "") {
+	    this.mAcceptButtonElem.disabled = true;
+	    return;
+	}
+	var token = null;
+	try {
+	    token = this.mTokenDB.findTokenByName(tokenName);
+	} catch (ex) {}
+	if (token) {
+	    alert("Selected token name already exists - select another name.");
+	    this.mAcceptButtonElem.disabled = true;
+	    return;
+	}
+
+	this.validateDialogFormFields();
+
+	this.logTrace("SoftTokenDBManagerDialog.handleTokenNameChange():......................End.");
+    },
+
+
+    mountEPKSoftToken : function()
+    {
+	this.logTrace("SoftTokenDBManagerDialog.mountEPKSoftToken():......................Start.");
+
+	if (!this.mSoftTokenElem.epkfile) {
+	    throw ("No Key File");
+	}
+
+	var epkFile = null;
+	var epkFileBase64 = false;
+	var epkcertFile = null;
+	var epkcertFileBase64 = false;
+
+    	var tokenName = null;
+	var readOnly = false;
+	var enableFips = false;
+
+	var /* nsIX509Cert   */ resolvedX059Cert = null;
+        var /* nsILocalFile  */ softTokenDBDir = null;
+	var /* nsIPKCS11Slot */ mountedSlot = null;
+	try {
+	    var softTokenDBDirObj = new Object();
+
+	    epkFile = this.mSoftTokenElem.epkfile;
+	    epkFileBase64 = this.mSoftTokenElem.epkfilebase64;
+	    epkcertFile = this.mSoftTokenElem.epkcertfile;
+	    epkcertFileBase64 = this.mSoftTokenElem.epkcertfilebase64;
+
+	    this.logDebug("SoftTokenDBManagerDialog.mountEPKSoftToken(): epkFileBase64: " + epkFileBase64 + " epkcertFileBase64: " + epkcertFileBase64);
+	    tokenName = this.mSoftTokenNameElem.value;
+
+	    this.mMountedSoftTokenDBDir = null;
+	    if (this.mSoftTokenElem.softtokentype == "pkcs8") {
+		mountedSlot = this.mKeyManager.mountPKCS8FileSlot(
+						epkFile, epkFileBase64,
+						epkcertFile, epkcertFileBase64,
+						tokenName,
+						readOnly, enableFips,
+						softTokenDBDirObj
+						);
+	    }
+	    else {
+		if (this.mSoftTokenElem.epkhascert) {
+		    epkcertFile = epkFile;
+		    epkcertFileBase64 = true;
+		}
+		var iterationCnt = 1;
+		mountedSlot = this.mKeyManager.mountOpenSSLEPKFileSlot(
+						epkFile, iterationCnt,
+						epkcertFile, epkcertFileBase64,
+						tokenName,
+						readOnly, enableFips,
+						softTokenDBDirObj
+						);
+	    }
+	    if (softTokenDBDirObj.value) {
+	        softTokenDBDir = softTokenDBDirObj.value.QueryInterface(Components.interfaces.nsILocalFile);;
+	    }
+	    /*
+	    if (epkcertFile) {
+		resolvedX059Cert = this.mKeyManager.createX509CertFromFile(
+					epkcertFile, epkcertFileBase64
+					);
+	    }
+	    */
+	} catch (ex) {
+	    alert("SoftTokenDBManagerDialog.mountEPKSoftToken(): this.mKeyManager.mountPKCS8FileSlot() failed - ex: " + ex);
+	    this.logError("SoftTokenDBManagerDialog.mountEPKSoftToken(): this.mKeyManager.mountPKCS8FileSlot() failed - ex: " + ex);
+	    throw ex;
+	}
+
+	this.mMountedSoftTokenDBDir = softTokenDBDir;
+
+	this.logTrace("SoftTokenDBManagerDialog.mountEPKSoftToken():......................End.");
+	return mountedSlot;
+    },
+
+    mountPKCS12File : function()
+    {
+	this.logTrace("SoftTokenDBManagerDialog.mountPKCS12File():......................Start.");
+
+	if (!this.mSoftTokenElem.pkcs12file) {
+	    this.logTrace("SoftTokenDBManagerDialog.mountPKCS12File():......................End(0).");
+	    throw ("No PKCS12 File");
+	}
+
+    	var tokenName = null;
+        var readOnly = false;
+        var enableFips = false;
+        var softTokenDBDirObj = new Object();
+
+	var /* nsIX509Cert   */	resolvedX059Cert = null;
+        var /* nsILocalFile  */ softTokenDBDir = null;
+        var /* nsIPKCS11Slot */ mountedSlot = null;
+        try {
+	    tokenName = this.mSoftTokenNameElem.value;
+            mountedSlot = this.mSoftTokenDBManager.mountPKCS12FileSlot(
+				        this.mSoftTokenElem.pkcs12file,
+					tokenName,
+				        readOnly, enableFips,
+				        softTokenDBDirObj
+				        );
+	    if (softTokenDBDirObj.value) {
+	        softTokenDBDir = softTokenDBDirObj.value.QueryInterface(Components.interfaces.nsILocalFile);;
+	    }
+        } catch (ex) {
+	    alert("SoftTokenDBManagerDialog.mountPKCS12File(): this.mSoftTokenDBManager.mountPKCS12FileSlot() failed - ex: " + ex);
+    	    this.logError("SoftTokenDBManagerDialog.mountPKCS12File(): this.mSoftTokenDBManager.mountPKCS12FileSlot() failed - ex: " + ex);
+	    throw ex;
+        }
+	this.mMountedSoftTokenDBDir = softTokenDBDir;
+
+	this.logTrace("SoftTokenDBManagerDialog.mountPKCS12File():......................End.");
+	return mountedSlot;
+    },
+
+    manageSoftTokenDB : function()
+    {
+	this.logTrace("SoftTokenDBManagerDialog.manageSoftTokenDB():......................Start.");
+
+	var mountedSlot = null;
+
+
+	if (!this.mSoftTokenElem.keydbdir) {
+	    this.logTrace("SoftTokenDBManagerDialog.manageSoftTokenDB():......................End(0).");
+	    return mountedSlot;
+	}
+
+    	var softTokenDBDirPath = null;
+    	var tokenName = null;
+    	var certPrefix = null;
+    	var readonly = false;
+    	var enableFips = false;
+    	var performLogin = false;
+
+	softTokenDBDirPath = this.mSoftTokenElem.keydbdirpath;
+	tokenName = this.mSoftTokenNameElem.value;
+	certPrefix = this.mCertPrefixElem.value;
+	if (this.mReadonlyDBElem.checked) {
+	    readonly = true;
+	}
+	if (this.mPerformLoginElem.checked) {
+	    performLogin = true;
+	}
+
+	mountedSlot = null;
+    	if (this.mSoftTokenDBCmdOption == 0) {  // Create DB option
+	    try {
+	    	mountedSlot = this.mSoftTokenDBManager.createSoftTokenDBSlot(
+                        softTokenDBDirPath,
+                        certPrefix,
+                        tokenName,
+			enableFips,
+			performLogin
+			);
+	    } catch (ex) {
+	    	var errmsg = "Failed to create slot for Soft-Token DB - ex: " + ex;
+		alert(errmsg);
+	    	this.logError(errmsg);
+	    }
+	}
+	else { // Mount DB option
+	    try {
+	    	mountedSlot = this.mSoftTokenDBManager.mountSoftTokenDBSlot(
+                        softTokenDBDirPath,
+                        certPrefix,
+                        tokenName,
+			this.mReadonlyDBElem.checked,
+			enableFips,
+                        this.mPerformLoginElem.checked
+			);
+	    } catch (ex) {
+	    	var errmsg = "Failed to mount slot for Soft-Token DB : " + softTokenDBDirPath + " - ex: " + ex;
+		alert(errmsg);
+	    	this.logError(errmsg);
+	    }
+	}
+	if (!mountedSlot) {
+	    return mountedSlot;
+	}
+
+	if (this.mPerformLoginElem.checked) {
+	    var token = mountedSlot.getToken();
+	    token.login(true);
+	}
+
+	var softTokenDBInfoStr = null;
+	if (this.mSoftTokenSaveInfoElem.checked) {
+	    var softTokenDBInfoObj = new Object();
+
+	    softTokenDBInfoObj.mSoftTokenDBPath = softTokenDBDirPath;
+	    softTokenDBInfoObj.mSoftTokenDBFile = null;
+	    softTokenDBInfoObj.mSoftTokenName = tokenName;
+	    softTokenDBInfoObj.mSoftTokenCertPrefix = certPrefix;
+	    softTokenDBInfoObj.mSoftTokenReadOnly = this.mReadonlyDBElem.checked;
+	    softTokenDBInfoObj.mPerformLogin = this.mPerformLoginElem.checked;
+	    softTokenDBInfoObj.mSoftTokenDisabled = false;
+
+	    var softTokenDBInfoStr = this.saveSoftTokenDBInfo(softTokenDBInfoObj);
+	}
+	this.mSoftTokenDBInfoStr = softTokenDBInfoStr;
+	this.mMountedSoftTokenDBDir = null;
+
+
+	this.logTrace("SoftTokenDBManagerDialog.manageSoftTokenDB():......................End.");
+	return mountedSlot;
+    },
+
+    accept : function()
+    {
+	this.logTrace("SoftTokenDBManagerDialog.accept():......................Start.");
+
+	if (!this.mSoftTokenElem.readytomount) {
+	    this.logTrace("SoftTokenDBManagerDialog.accept():......................End(0).");
+	    return;
+	}
+
+	this.mMountedSoftTokenDBDir = null;
+
+	var /* nsIPKCS11Slot */ mountedSlot = null;
+	try {
+	    if ((this.mSoftTokenElem.softtokentype == "pkcs8") || (this.mSoftTokenElem.softtokentype == "osslepk")) {
+	        mountedSlot = this.mountEPKSoftToken();
+	    }
+	    else if (this.mSoftTokenElem.softtokentype == "pkcs12") {
+	        mountedSlot = this.mountPKCS12File();
+	    }
+	    else if (this.mSoftTokenElem.softtokentype == "keydb") {
+	        mountedSlot = this.manageSoftTokenDB();
+	    }
+	} catch (ex) {
+	    mountedSlot = null;
+	}
+
+
+	if (!this.mDialogParams) {
+	    return;
+	}
+
+    	this.mDialogParams.SetInt(0, 0); // Success or failure
+	if (!mountedSlot) {
+	    this.logTrace("SoftTokenDBManagerDialog.accept():......................End(1).");
+	    return;
+	}
+
+	var tokenName = this.mSoftTokenNameElem.value;
+
+    	this.mDialogParams.SetInt(0, 1); // Success or failure
+    	this.mDialogParams.SetString(0, tokenName);
+	if (this.mSoftTokenDBInfoStr) {
+    	    this.mDialogParams.SetString(1, this.mSoftTokenDBInfoStr);
+	}
+
+        var pkiParams = null;
+        try {
+	    pkiParams = this.mDialogParams.QueryInterface(Components.interfaces.nsIPKIParamBlock);
+	    pkiParams.setISupportAtIndex(1, mountedSlot);
+	    var mountedToken = mountedSlot.getToken();
+	    if (mountedToken) {
+		this.logDebug("SoftTokenDBManagerDialog.accept(): token.tokenName: " + mountedToken.tokenName);
+	    	pkiParams.setISupportAtIndex(2, mountedToken);
+	    }
+	    if (mMountedSoftTokenDBDir) {
+	    	pkiParams.setISupportAtIndex(3, mMountedSoftTokenDBDir);
+	    }
+        } catch (ex) { }
+
+
+	this.logTrace("SoftTokenDBManagerDialog.accept():......................End.");
+	return;
+    },
+
+    saveSoftTokenDBInfo : function(softTokenDBInfoObj)
+    {
+	this.logTrace("SoftTokenDBManagerDialog.saveSoftTokenDBInfo():......................Start.");
+
+    	var softTokenDBInfoStr = "";
+	softTokenDBInfoStr = softTokenDBInfoObj.mSoftTokenDBPath + "," + softTokenDBInfoObj.mSoftTokenName;
+
+	softTokenDBInfoStr += ",";
+	if (softTokenDBInfoObj.mSoftTokenCertPrefix && (softTokenDBInfoObj.mSoftTokenCertPrefix != "")) {
+	    softTokenDBInfoStr += softTokenDBInfoObj.mSoftTokenCertPrefix;
+	}
+
+	softTokenDBInfoStr += ",";
+	if (softTokenDBInfoObj.mSoftTokenReadOnly)  {
+	    softTokenDBInfoStr += "true";
+	}
+
+	if (softTokenDBInfoObj.mSoftTokenDisabled)  {
+	    softTokenDBInfoStr += ",";
+	    softTokenDBInfoStr += "true";
+	}
+	this.logTrace("SoftTokenDBManagerDialog.saveSoftTokenDBInfo(): softTokenDBInfoStr: " + softTokenDBInfoStr + "");
+
+
+	var Prefs = Components.classes["@mozilla.org/preferences-service;1"]
+                   		.getService(Components.interfaces.nsIPrefService);
+	var prefsBranch = Prefs.getBranch("extensions.avpki.softtokendbmgr.");
+
+	var softTokenDBInfoList = "";
+	try {
+	    softTokenDBInfoList = prefsBranch.getCharPref("dbinfolist");
+	    if (!softTokenDBInfoList) {
+		softTokenDBInfoList = "";
+	    }
+	} catch (e) { }
+
+	if (softTokenDBInfoList != "") {
+	    softTokenDBInfoList += "|";
+	}
+	softTokenDBInfoList += softTokenDBInfoStr;
+	this.logTrace("SoftTokenDBManagerDialog.saveSoftTokenDBInfo(): softTokenDBInfoList: " + softTokenDBInfoList + "");
+
+	prefsBranch.setCharPref("dbinfolist", softTokenDBInfoList);
+
+	this.logTrace("SoftTokenDBManagerDialog.saveSoftTokenDBInfo():......................End.");
+	return softTokenDBInfoStr;
+    },
+
+    cancel : function()
+    {
+	this.logTrace("SoftTokenDBManagerDialog.cancel():......................Start.");
+
+	if (this.mDialogParams) {
+    	    this.mDialogParams.SetInt(0, 0);
+	}
+
+	this.logTrace("SoftTokenDBManagerDialog.cancel():......................End.");
+    }
+};
+
+]]>
+</script>
+
+    <groupbox id="keymgr.softtoken.dbmanager.gbox"
+	style="overflow:auto"
+        >
+        <textbox
+	    readonly="true"
+	    multiline="true"
+	    rows="4"
+	    value="WARNING!!! Be very careful when you are mounting external soft-tokens. You should always make sure that no other application is using the token database. Also, be very careful when you save the mounting info - browser will automatically load the keys/certs from the token-db without any prompt."
+            />
+        <grid id="keymgr.softtoken.dbmanager.grid">
+	    <columns>
+	        <column/>
+	        <column flex="1"/>
+	    </columns>
+	    <rows>
+	        <row
+		    align="center"
+		    >
+	    	    <label class="header" value="Soft-Token"/>
+		    <!--
+		    <fileselector id="keymgr.softtoken.dbmanager.db.dirpath" 
+		        persist="value"
+		        fileMode="folder"
+		        fileDialogMsg="Select Soft-Token DB Directory"
+		        filetooltiptext="Soft-Token Key/Cert DB Directory"
+		        fileTypeMsg="Soft-Token DB"
+		        fileTypeFilters="*.db"
+		        xbrowselabel="Browse"
+		        xbrowsetooltiptext=""
+		        onchange="SoftTokenDBManagerDialog.handleDBDirPathChange(this, event);"
+		        oncommand="SoftTokenDBManagerDialog.handleDBDirPathChange(this, event);"
+		        />
+		    -->
+		    <softtoken id="keymgr.softtoken.dbmanager.db.softtoken"
+		        orient="vertical"
+			excludecredtype="true"
+		        softtokentype="keydb"
+		        persist="softtokentype"
+		        onchange="SoftTokenDBManagerDialog.handleSoftTokenChange(this, event);"
+		        oncommand="SoftTokenDBManagerDialog.handleSoftTokenChange(this, event);"
+		        />
+	        </row>
+
+	        <row
+		    align="center"
+		    >
+	    	    <label class="header" value="Token Name"/>
+		    <hbox pack="start">
+		        <textbox id="keymgr.softtoken.dbmanager.db.tokenname"
+			    onchange="SoftTokenDBManagerDialog.handleTokenNameChange(this, event);"
+			    />
+		    </hbox>
+	        </row>
+
+	        <row
+		    align="center"
+		    >
+	    	    <label class="header" value="Cert-Prefix"/>
+		    <hbox pack="start">
+		        <textbox id="keymgr.softtoken.dbmanager.db.certprefix"
+			    />
+		    </hbox>
+	        </row>
+	        <row id="keymgr.softtoken.dbmanager.db.readonly.row">
+	    	    <spacer/>
+		    <hbox pack="start">
+		        <checkbox id="keymgr.softtoken.dbmanager.db.readonly"
+		            label="Mount as readonly token"
+		            />
+		    </hbox>
+	        </row>
+
+	        <row
+		    align="center"
+		    >
+	    	    <spacer/>
+		    <hbox pack="start">
+		        <checkbox id="keymgr.softtoken.dbmanager.db.login"
+		            label="Login to mounted soft-token"
+		            />
+		    </hbox>
+	        </row>
+
+	        <row
+		    align="center"
+		    >
+	    	    <spacer/>
+		    <hbox pack="start">
+		        <checkbox id="keymgr.softtoken.dbmanager.db.saveinfo"
+		            label="Save the DB path for next browser session"
+			    tooltiptext="Be very careful with this option - you must not load a CetDB while it is opened by another app. Saving token database info will automatically load the database when you open 'Security Device Manager' dialog."
+		            />
+		    </hbox>
+	        </row>
+	    </rows>
+        </grid>
+    </groupbox>
+</dialog>
+

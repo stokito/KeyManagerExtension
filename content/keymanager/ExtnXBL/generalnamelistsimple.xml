@@ -1,0 +1,462 @@
+<?xml version="1.0"?>
+<!-- @(#) $Id: generalnamelistsimple.xml,v 1.12 2009/04/16 13:11:53 subrata Exp $ -->
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is Avaya Labs Research, Avaya Inc. Code.
+   -
+   - The Initial Developer of the Original Code is
+   - Subrata Mazumdar, Avaya Labs Research, Avaya Inc.
+   - Portions created by the Initial Developer are Copyright (C) 2007.
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Subrata Mazumdar (mazum@avaya.com)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+
+<!DOCTYPE bindings SYSTEM "chrome://keymanager/locale/keyManager.dtd">
+
+<bindings id="generalnamelistsimpleBindings"
+    xmlns="http://www.mozilla.org/xbl"
+    xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    xmlns:xbl="http://www.mozilla.org/xbl">
+
+    <script type="application/x-javascript" src="chrome://keymanager/content/GeneralNameItem.js"/>
+
+    <binding id="generalnamelistsimpleBinding"
+	extends="chrome://keymanager/content/ExtnXBL/certextn.xml#certextnbaseBinding"
+	>
+	<!--
+	<resources>
+	    <script type="application/x-javascript" src="chrome://keymanager/content/GeneralNameItem.js"/>
+	</resources>
+	-->
+	<!-- content, property, method and event descriptions go here -->
+	<content>
+	    <xul:groupbox anonid="certextn.stdx509extn.generalnamelist.simple" flex="1">
+	        <xul:vbox flex="1"
+		    xbl:inherits="hidden=readonly"
+		    tooltiptext="You must press the Add button to add the new value to the list."
+	            >
+		    <xul:generalnamesimple anonid="certextn.stdx509extn.generalnamelist.simple.newname"
+			xbl:inherits="type,typetooltip,typedisabled,typehidden,valuetooltip,valuedisabled,namesearchparam=newnamesearchparam"
+			flex="1"
+  	  	    	namesearchparam="attrcert.stdx509extn.generalnamelist.simple.newname"
+		        />
+		    <xul:hbox anonid="keymgr.cert.csr.form.tab.stdx509ext.generalnames.cmds"
+		            xbl:inherits="hidden=readonly,align=cmdalign,pack=cmdpack"
+			    align="center"
+			    pack="center"
+		            >
+		            <xul:button anonid="keymgr.cert.csr.form.tab.stdx509ext.generalnames.add"
+			        xbl:inherits="label=addlabel,tooltiptext=addtooltip"
+			        label="&keymgr.cert.csr.form.tab.stdx509ext.generalnames.add.label;"
+			        tooltiptext="&keymgr.cert.csr.form.tab.stdx509ext.generalnames.add.label;"
+			        oncommand="getBindingParent(this).addNewAltNameToList(false, event);"
+			        /> 
+		            <xul:button anonid="keymgr.cert.csr.form.tab.stdx509ext.generalnames.remove"
+			        xbl:inherits="label=removelabel,tooltiptext=removetooltip"
+			        label="&keymgr.cert.csr.form.tab.stdx509ext.generalnames.remove.label;"
+			        tooltiptext="&keymgr.cert.csr.form.tab.stdx509ext.generalnames.remove.label;"
+			        oncommand="getBindingParent(this).deleteAltNameFromList(event);"
+			        /> 
+		    </xul:hbox>
+		</xul:vbox>
+
+
+		<xul:listbox anonid="certextn.stdx509extn.generalnamelist.simple.list"
+		    xbl:inherits="label=listlabel,tooltiptext=listtooltip,rows,disabled=readonly"
+		    flex="1"
+		    style="overflow:auto;"
+		    rows="2"
+		    />
+		<xul:hbox collapsed="true">
+		    <xul:textbox anonid="certextn.stdx509extn.generalnamelist.simple.options.text"
+			xbl:inherits="certPropName=numTextCertPropName,value=orderedvaluelist"
+			collapsed="true" readonly="true"
+			certPropName="GeneralName-text"
+			/>
+		    <xul:textbox anonid="certextn.stdx509extn.generalnamelist.simple.options.displayText"
+			xbl:inherits="certPropName=dispTextCertPropName,value=typedvaluelist"
+			collapsed="true" readonly="true"
+			certPropName="GeneralName-display-text"
+			/>
+		</xul:hbox>
+	    </xul:groupbox>
+	</content>
+	<implementation>
+	    <field name="mBaseExtnElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certextn.stdx509extn.generalnamelist.simple");
+	    </field>
+	    <field name="mGeneralNameListNewNameElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certextn.stdx509extn.generalnamelist.simple.newname");
+	    </field>
+	    <field name="mGeneralNameListElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certextn.stdx509extn.generalnamelist.simple.list");
+	    </field>
+	    <field name="mGeneralNameOrderedValueElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certextn.stdx509extn.generalnamelist.simple.options.text");
+	    </field>
+	    <field name="mGeneralNameTypedValueElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certextn.stdx509extn.generalnamelist.simple.options.displayText");
+	    </field>
+	    <field name="mGeneralNameItemTypeValueMap">
+	    </field>
+
+	    <property name="orderedvaluelist" readonly="true"
+		onget="this.computeGeneralNameFromList(); return this.mGeneralNameOrderedValueElem.value;"
+		/>
+	    <property name="typedvaluelist"
+		onget="this.computeGeneralNameFromList(); return this.mGeneralNameTypedValueElem.value;"
+		onset="this.reset(); this.addTypedNamesToAltNameList(val);return val;"
+		/>
+	    <property name="value" 
+		onget="return this.typedvaluelist;"
+		onset="this.typedvaluelist=val;return val;"
+		/>
+	    <property name="readonly"
+		onget="return this.mBaseExtnElem.readonly;"
+		onset="this.mBaseExtnElem.readonly = val;
+		       this.setReadonly(this.mBaseExtnElem, val);
+		       this.removeAttribute('readonly');
+		       if (val) {
+		       	this.setAttribute('readonly',true);
+		       }
+		       else {
+		       	this.refresh();
+		       }
+		       return val;"
+		/>
+
+	    <constructor>
+		<![CDATA[
+		// this.LogTrace("generalnamelistsimpleBinding.constructor():......................Start.\n");
+
+		this.refresh();
+
+		// this.LogTrace("generalnamelistsimpleBinding.constructor():......................End.\n");
+		]]>
+	    </constructor>
+
+	    <method name="refresh">
+		<body>
+		<![CDATA[
+		this.removeAllItemsFromList();
+		if (this.mGeneralNameOrderedValueElem.value != "") {
+		    this.updateGeneralNameItemList();
+		}
+		]]>
+		</body>
+	    </method>
+
+	    <method name="removeAllItemsFromList">
+		<body>
+		<![CDATA[
+		for (var i = (this.mGeneralNameListElem.getRowCount() - 1); i >= 0; i--) {
+		    this.mGeneralNameListElem.removeItemAt(i);
+		}
+		]]>
+		</body>
+	    </method>
+
+	    <method name="reset">
+		<body>
+		<![CDATA[
+		// this.LogTrace("generalnamelistsimpleBinding.reset():......................Start.\n");
+
+		this.mGeneralNameListNewNameElem.reset();
+		this.removeAllItemsFromList();
+
+		this.mGeneralNameOrderedValueElem.value = "";
+		this.mGeneralNameTypedValueElem.value = "";
+
+		// this.LogTrace("generalnamelistsimpleBinding.reset():......................End.\n");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="addNewAltNameToList">
+		<parameter name="append"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		// this.LogTrace("generalnamelistsimpleBinding.addNewAltNameToList(): ..................Start.\n");
+
+		var typedGeneralNameItemStr = this.mGeneralNameListNewNameElem.typedvalue;
+		var orderedGeneralNameItemStr = this.mGeneralNameListNewNameElem.orderedvalue;
+
+		/*
+		this.LogDebug("generalnamelistsimpleBinding.addNewAltNameToList(): " + 
+				"typedGeneralNameItemStr: " + typedGeneralNameItemStr + " " + 
+				"orderedGeneralNameItemStr : " + orderedGeneralNameItemStr + " " + 
+				"append : " + append + " " + 
+				"\n");
+		*/
+
+		var rowCount = this.mGeneralNameListElem.getRowCount();
+		// this.LogDebug("generalnamelistsimpleBinding.addNewAltNameToList(): rowCount: " + rowCount + "\n"); 
+		var listItem = null;
+		if (append || (rowCount <= 0)) {
+		    listItem = this.mGeneralNameListElem.appendItem(
+		    		typedGeneralNameItemStr,
+				orderedGeneralNameItemStr
+				);
+		}
+		else {
+		    listItem = this.mGeneralNameListElem.insertItemAt(
+					0, typedGeneralNameItemStr, orderedGeneralNameItemStr
+					);
+		}
+		listItem.setAttribute("tooltiptext", typedGeneralNameItemStr);
+		this.mGeneralNameListElem.selectItem(listItem);
+		this.mGeneralNameListElem.ensureElementIsVisible(listItem);
+
+		this.computeGeneralNameFromList();
+
+		// this.LogTrace("generalnamelistsimpleBinding.addNewAltNameToList(): ..................End.\n");
+		return 1;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="deleteAltNameFromList">
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		this.mGeneralNameListElem.removeItemAt(this.mGeneralNameListElem.selectedIndex);
+		this.mGeneralNameListElem.selectedIndex = -1;
+		this.mGeneralNameListElem.clearSelection();
+	    
+		this.computeGeneralNameFromList();
+		]]>
+		</body>
+	    </method>
+
+	    <method name="computeGeneralNameFromList">
+		<body>
+		<![CDATA[
+		// Format: 
+		//     name format is "<name-value> + <(name-type):[0-9]>"
+		//          | "<name-value> + <oid> + [(bin):1|0] + <(name-type):[0-9]>" 
+		//     "NUM format: avaya.com - 3|10.0.0.1 - 8
+		//          |cn=subrata,ou=alr,o=avaya,c=us - 5|ggggg - 1.22.23.25.26 - 0 - 1|"
+		//     "TXT format: dnsName:abc.com|ipAddress:10.0.0.0
+		//          |directoryName:cn=subrata,ou=alr,o=avaya,c=us
+		//          |otherName:1.22.23.25.26,ggggg,binary|"
+
+		// this.LogTrace("generalnamelistsimpleBinding.computeGeneralNameFromList(): ...........................Start.\n"); 
+
+		var orderedGeneralNameListStr = "";
+		var typedGeneralNameListStr = "";
+
+		var rowCount = this.mGeneralNameListElem.getRowCount();
+		// this.LogDebug("generalnamelistsimpleBinding.computeGeneralNameFromList(): rowCount: " + rowCount + "\n"); 
+		for (var i = 0; i < rowCount; i++) {
+		    var rowItemElem = this.mGeneralNameListElem.getItemAtIndex(i);
+		    /*
+		    this.LogDebug("generalnamelistsimpleBinding.computeGeneralNameFromList(): i: " + i + " " + 
+				"label: " + rowItemElem.label + " " + 
+				"\n"); 
+		    */
+		    if (!rowItemElem || !rowItemElem.value) {
+			continue;
+		    }
+		    /*
+		    this.LogDebug("generalnamelistsimpleBinding.computeGeneralNameFromList(): i: " + i + " " + 
+				"label: " + rowItemElem.label + " " + 
+				"value: " + rowItemElem.value + " " + 
+				"\n"); 
+		    */
+
+		    if (i != 0) {
+		    	orderedGeneralNameListStr += "|";
+		    }
+		    orderedGeneralNameListStr += rowItemElem.value;
+
+		    if (i != 0) {
+		    	typedGeneralNameListStr += "|";
+		    }
+		    typedGeneralNameListStr += rowItemElem.label;
+		}
+		/*
+		this.LogDebug("generalnamelistsimpleBinding.computeGeneralNameFromList(): " + 
+				"orderedGeneralNameListStr: " + orderedGeneralNameListStr + " " + 
+				"typedGeneralNameListStr: " + typedGeneralNameListStr + " " +
+				"\n");
+		*/
+
+		this.mGeneralNameOrderedValueElem.value = orderedGeneralNameListStr;
+		this.mGeneralNameTypedValueElem.value = typedGeneralNameListStr;
+
+		// this.LogTrace("generalnamelistsimpleBinding.computeGeneralNameFromList(): ...........................End.\n"); 
+		]]>
+		</body>
+	    </method>
+
+	    <method name="updateGeneralNameItemList">
+		<body>
+		<![CDATA[
+		// this.LogDebug("generalnamelistsimpleBinding.updateGeneralNameItemList(): genNameOptionsText: "  + this.mGeneralNameOrderedValueElem.value + "\n");
+		// this.LogDebug("genNameOptionsDisplayText: "  + this.mGeneralNameTypedValueElem.value + "\n");
+
+		var genNameListOrderedValue = this.mGeneralNameOrderedValueElem.value.split("|");
+		if (genNameListOrderedValue.length <= 0) {
+		    return;
+		}
+		// this.LogDebug("generalnamelistsimpleBinding.updateGeneralNameItemList(): genNameListOrderedValue.length: "  + genNameListOrderedValue.length + "\n");
+
+		var genNameListTypedValue = this.mGeneralNameTypedValueElem.value.split("|");
+		// this.LogDebug("generalnamelistsimpleBinding.updateGeneralNameItemList(): genNameListTypedValue.length: "  + genNameListTypedValue.length + "\n");
+
+		for (var i = 0; i < genNameListOrderedValue.length; i++) {
+		    var genNameOptionsItemValue = genNameListOrderedValue[i];
+		    if (genNameOptionsItemValue == "") {
+			continue;
+		    }
+		    var genNameOptionsItemName = genNameOptionsItemValue;
+		    if (i <= genNameListTypedValue.length) {
+			genNameOptionsItemName = genNameListTypedValue[i];
+		    }
+		    // this.LogDebug("generalnamelistsimpleBinding.updateGeneralNameItemList(): genNameOptionsItemName: "  + genNameOptionsItemName + " genNameOptionsItemValue: " + genNameOptionsItemValue + "\n");
+		    var listItem = this.mGeneralNameListElem.appendItem(genNameOptionsItemName, genNameOptionsItemValue);
+		    listItem.setAttribute("tooltiptext", genNameOptionsItemValue);
+		}
+		]]>
+		</body>
+	    </method>
+
+	    <method name="addTypedNameItemToAltNameList">
+		<parameter name="aTypedGeneralNameItemStr"/>
+		<body>
+		<![CDATA[
+
+		this.mGeneralNameListNewNameElem.reset();
+		var orderedGeneralNameItemStr = this.mGeneralNameListNewNameElem.mapTypedGeneralNameItem(aTypedGeneralNameItemStr);
+		if (!orderedGeneralNameItemStr) {
+		    this.mGeneralNameListNewNameElem.reset();
+		    return;
+		}
+		this.addNewAltNameToList(false);
+		this.mGeneralNameListNewNameElem.reset();
+		]]>
+		</body>
+	    </method>
+
+	    <method name="addTypedNamesToAltNameList">
+		<parameter name="aTypedGeneralNamesStr"/>
+		<body>
+		<![CDATA[
+		// this.LogTrace("generalnamelistsimpleBinding.addTypedNamesToAltNameList(): ...........................Start.\n"); 
+
+		var typedGeneralNameItemList = aTypedGeneralNamesStr.split("|");
+		if (typedGeneralNameItemList.length <= 0) {
+		    return;
+		}
+
+
+		var rowCount = this.mGeneralNameListElem.getRowCount();
+		// this.LogDebug("generalnamelistsimpleBinding.addTypedNamesToAltNameList(): rowCount: " + rowCount + "\n"); 
+		for (var i = (typedGeneralNameItemList.length -1); i >= 0; i--) {
+		    var typedGeneralNameItemStr = this.trim(typedGeneralNameItemList[i]);
+		    if (typedGeneralNameItemStr == "") {
+			continue;
+		    }
+		    /*
+		    this.LogDebug("generalnamelistsimpleBinding.addTypedNamesToAltNameList(): i: " + i +
+		    		" typedGeneralNameItemStr: " + typedGeneralNameItemStr + "\n"); 
+		    */
+
+		    // Update mGeneralNameListNewNameElem with the typedGeneralNameItemStr.
+		    this.mGeneralNameListNewNameElem.reset();
+		    var orderedGeneralNameItemStr
+		    	= this.mGeneralNameListNewNameElem.mapTypedGeneralNameItem(typedGeneralNameItemStr);
+		    if (!orderedGeneralNameItemStr) {
+			continue;
+		    }
+		    this.addNewAltNameToList(false);
+
+		}
+		this.mGeneralNameListNewNameElem.reset();
+
+		/*
+		rowCount = this.mGeneralNameListElem.getRowCount();
+		this.LogDebug("generalnamelistsimpleBinding.addTypedNamesToAltNameList(): rowCount: " + rowCount + "\n"); 
+		for (var i = 0; i < rowCount; i++) {
+		    var rowItemElem = this.mGeneralNameListElem.getItemAtIndex(i);
+		    this.LogDebug("generalnamelistsimpleBinding.addTypedNamesToAltNameList(): i: " + i + " " + 
+				"label: " + rowItemElem.label + " " + 
+				"\n"); 
+		}
+		this.LogDebug("\n\n");
+		*/
+
+		// this.computeGeneralNameFromList();
+
+		// this.LogTrace("generalnamelistsimpleBinding.addTypedNamesToAltNameList(): ...........................End.\n"); 
+		
+		]]>
+		</body>
+	    </method>
+
+
+	    <method name="toCertProps">
+		<parameter name="aCertProps"/>
+		<body>
+		<![CDATA[
+		this.computeGeneralNameFromList();
+		this.certExtnToProps(this.mBaseExtnElem, aCertProps);
+		]]>
+		</body>
+	    </method>
+
+	    <method name="updateCertProps">
+		<parameter name="aCertProps"/>
+		<body>
+		<![CDATA[
+		this.reset();
+		this.updateCertExtnProps(this.mBaseExtnElem, aCertProps);
+		this.refresh();
+		]]>
+		</body>
+	    </method>
+
+	    <method name="mergeCertProps">
+		<parameter name="aCertProps"/>
+		<body>
+		<![CDATA[
+		this.updateCertExtnProps(this.mBaseExtnElem, aCertProps, true);
+		this.refresh();
+		]]>
+		</body>
+	    </method>
+
+	</implementation>
+    </binding>
+
+</bindings>
+

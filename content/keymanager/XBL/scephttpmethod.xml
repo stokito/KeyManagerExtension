@@ -1,0 +1,142 @@
+<?xml version="1.0"?>
+<!-- @(#) $Id: scephttpmethod.xml,v 1.2 2010/01/04 05:54:16 subrata Exp $ -->
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is Avaya Labs Research, Avaya Inc. Code.
+   -
+   - The Initial Developer of the Original Code is
+   - Subrata Mazumdar, Avaya Labs Research, Avaya Inc.
+   - Portions created by the Initial Developer are Copyright (C) 2007.
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Subrata Mazumdar (mazum@avaya.com)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+
+
+<!DOCTYPE bindings SYSTEM "chrome://keymanager/locale/keyManager.dtd">
+
+<bindings id="scephttpmethodBindings"
+    xmlns="http://www.mozilla.org/xbl"
+    xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    xmlns:xbl="http://www.mozilla.org/xbl">
+
+
+    <binding id="scephttpmethodBinding">
+	<!--
+        <resources>
+	    <stylesheet src="chrome://xmldsigffext/skin/kmbindings.css"/>
+        </resources>
+	-->
+    	<!-- content, property, method and event descriptions go here -->
+    	<content>
+	    <xul:hbox>
+                    <xul:menulist anonid="keymgr.scepclient.wizard.scephttpmethod.menulist"
+		        xbl:inherits="value,hidden,disabled,tooltiptext,crop,sizetopopup,src"
+  		      	tooltiptext="&keymgr.scepclient.wizard.scephttpmethod.tooltip;"
+			minwidth="80"
+        		xoncommand="handleScepReqHttpMethodChange(this, event)"
+        		>
+                        <xul:menupopup>
+			    <xul:menuitem anonid="keymgr.scepclient.wizard.scephttpmethod.get"
+			    	xbl:inherits="label=getlabel,disabled=getdisabled,hidden=gethidden,tooltiptext=gettooltip"
+			        label="&keymgr.scepclient.wizard.scephttpmethod.get.label;"
+			        tooltiptext="&keymgr.scepclient.wizard.scephttpmethod.get.tooltip;"
+			        value="GET"
+			        />
+			    <xul:menuitem anonid="keymgr.scepclient.wizard.scephttpmethod.post"
+			    	xbl:inherits="label=postlabel,disabled=postdisabled,hidden=posthidden,tooltiptext=posttooltip"
+			        label="&keymgr.scepclient.wizard.scephttpmethod.post.label;"
+			        tooltiptext="&keymgr.scepclient.wizard.scephttpmethod.post.tooltip;"
+			        disabled="true"
+			        value="POST"
+			        />
+			    <xul:menuitem anonid="keymgr.scepclient.wizard.scephttpmethod.postform"
+			    	xbl:inherits="label=postformlabel,disabled=postformdisabled,hidden=postformhidden,tooltiptext=postformtooltip"
+			    	label="&keymgr.scepclient.wizard.scephttpmethod.postform.label;"
+				tooltiptext="&keymgr.scepclient.wizard.scephttpmethod.postform.tooltip;"
+				disabled="true"
+				value="POST-FORM"
+				/>
+                        </xul:menupopup>
+                    </xul:menulist>
+	    </xul:hbox>
+    	</content>
+	<implementation>
+	    <field name="mSecpHttpMethodMenuListElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.scepclient.wizard.scephttpmethod.menulist");
+	    </field>
+	    <property name="disabled"
+	        onget="return this.mSecpHttpMethodMenuListElem.disabled;"
+	        onset="return this.mSecpHttpMethodMenuListElem.disabled=val;"
+		/>
+	    <property name="value">
+	        <getter>
+		<![CDATA[
+		    return this.mSecpHttpMethodMenuListElem.value;
+		]]>
+	        </getter>
+	        <setter>
+		<![CDATA[
+		    // this.setAttribute('value',val);
+		    this.mSecpHttpMethodMenuListElem.value = val;
+		    this.handleScepReqHttpMethodChange(this.mSecpHttpMethodMenuListElem);
+		    return val;
+		]]>
+	        </setter>
+	    </property>
+
+	    <constructor>
+		<![CDATA[
+		]]>
+	    </constructor>
+
+	    <!--
+	    <method name="reset">
+	        <body>
+		<![CDATA[
+		this.value = "SHA1";
+		]]>
+	        </body>
+	    </method>
+	    -->
+
+	    <method name="handleScepReqHttpMethodChange">
+		<parameter name="aSecpHttpMethodMenuListElem"/>
+		<parameter name="ev"/>
+	        <body>
+		<![CDATA[
+		]]>
+	        </body>
+	    </method>
+
+	</implementation>
+    </binding>
+
+</bindings>

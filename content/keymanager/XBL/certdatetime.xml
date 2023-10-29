@@ -1,0 +1,874 @@
+<?xml version="1.0"?>
+
+<!-- @(#) $Id: certdatetime.xml,v 1.4 2010/05/20 04:46:30 subrata Exp $ -->
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is Avaya Labs Research, Avaya Inc. Code.
+   -
+   - The Initial Developer of the Original Code is
+   -     Subrata Mazumdar, Avaya Labs Research, Avaya Inc.
+   - Portions created by the Initial Developer are Copyright (C) 2007.
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Subrata Mazumdar (mazum@avaya.com)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+
+
+<!DOCTYPE bindings SYSTEM "chrome://keymanager/locale/keyManager.dtd">
+
+<!--
+<!DOCTYPE bindings
+	[
+	<!ENTITY % keyManager.dtd SYSTEM "chrome://keymanager/locale/keyManager.dtd">
+	%keyManager.dtd;
+	]>
+-->
+
+<bindings id="certdatetimeBindings"
+    xmlns="http://www.mozilla.org/xbl"
+    xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    xmlns:xbl="http://www.mozilla.org/xbl">
+
+    <binding id="certdatetimepicker"
+	extends="chrome://keymanager/content/XBL/x509certbase.xml#x509certbase"
+        >
+    	<xbl:resources>
+    	    <stylesheet src="chrome://global/skin/textbox.css"/>
+    	    <stylesheet src="chrome://global/skin/datetimepicker.css"/>
+	    <stylesheet src="chrome://keymanager/skin/kmbindings.css"/>
+    	</xbl:resources>
+
+	<content>
+	    <xul:groupbox anonid="keymgr.datetime.hbox"
+		zorient="horizontal"
+	    	xpack="start" xalign="center"
+		>
+		<xul:hbox
+	    	    pack="start" align="center"
+		    xbl:inherits="hidden=readonly"
+		    zoncommand="getBindingParent(this).handleDateTimeChange(this, event);"
+		    onchange="getBindingParent(this).handleDateTimeChange(this, event);"
+		    >
+		    <xul:datepicker anonid="keymgr.datetime.datepicker"
+			xbl:inherits="type,disabled,readonly,hidden,hidden=timeonly,tooltiptext=datetooltiptext"
+			ztype="popup"
+			zvalue="2007-11-24"
+		        />
+		    <xul:timepicker anonid="keymgr.datetime.timepicker"
+			xbl:inherits="disabled,readonly,hidden,hidden=dateonly,tooltiptext=timetooltiptext"
+			zvalue="15:19:00"
+			onkeydown="getBindingParent(this).handleTimePickerKeyPress(this, event);"
+		        />
+		</xul:hbox>
+		<xul:textbox anonid="keymgr.datetime.value" flex="1"
+		    xbl:inherits="value,disabled,readonly,tooltiptext,hidden=valuehidden"
+		    onchange="document.getBindingParent(this).handleDateTimeStringValueChange(this, event)"
+		    size="24"
+		    >
+		</xul:textbox>
+	        <xul:description collapsed="true">
+		    <children/>
+	        </xul:description>
+	    </xul:groupbox>
+	</content>
+	<implementation>
+	    <field name="mDatePickerElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.datetime.datepicker");
+	    </field>
+	    <field name="mTimePickerElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.datetime.timepicker");
+	    </field>
+	    <field name="mDateTimeStringValueElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.datetime.value");
+	    </field>
+
+	    <field name="mDateTimeValue"/>
+
+	    <property name="value"
+	        onget="return this.getAttribute('value');"
+		onset="if (val) {this.initWithDateTimeValue(val);}
+		       else {
+			this.mDateTimeStringValueElem.value = '';
+			this.handleDateTimeStringValueChange(this.mDateTimeStringValueElem);
+		       }
+		       return val;"
+		/>
+	    <property name="dateValue"
+	        onget="this.handleDateTimeChange(); return this.mDateTimeValue;"
+	        onset="this.mDatePickerElem.dateValue=val;
+			this.mTimePickerElem.dateValue=val;
+			this.handleDateTimeChange(this.mTimePickerElem);
+			return val;"
+		/>
+
+	    <constructor>
+		<![CDATA[
+		// this.mMaxLogLevel = 9;
+		// this.refresh();
+		// setTimeout(document.getBindingParent(this).refresh(), 5000);
+		]]>
+	    </constructor>
+
+	    <method name="refresh">
+		<body>
+		<![CDATA[
+		// this.mMaxLogLevel = 9;
+		this.LogTrace("datetimepickerBinding.refresh(): ...................Start.");
+		/*
+		this.LogDebug("datetimepickerBinding.refresh(): this.mDatePickerElem.dateValue: " + this.mDatePickerElem.dateValue);
+		this.LogDebug("datetimepickerBinding.refresh(): this.mDatePickerElem.value: " + this.mDatePickerElem.value);
+		this.LogDebug("datetimepickerBinding.refresh(): this.mTimePickerElem.dateValue: " + this.mTimePickerElem.dateValue);
+		this.LogDebug("datetimepickerBinding.refresh(): this.mTimePickerElem.value: " + this.mTimePickerElem.value);
+		*/
+
+		// Child element value overrides the 'value' attribute
+		var dateTimeStr = null;
+		if (this.hasChildNodes()) {
+		    dateTimeStr = this.firstChild.nodeValue;
+		}
+		this.LogDebug("datetimepickerBinding.refresh(): dateTimeStr: " + dateTimeStr);
+		if (!dateTimeStr) {
+		    dateTimeStr = this.getAttribute("value");
+		}
+		if (dateTimeStr) {
+		    dateTimeStr = this.trim(dateTimeStr);
+		}
+		this.LogDebug("datetimepickerBinding.refresh(): dateTimeStr: " + dateTimeStr);
+
+		if (!dateTimeStr || (dateTimeStr == "")) {
+		    this.initCurrentDateAndTime(0);
+		    // this.handleDateTimeChange();
+		    this.LogTrace("datetimepickerBinding.refresh(): ...................End(1).");
+		    return;
+		}
+
+		this.initWithDateTimeValue(dateTimeStr);
+
+		this.LogTrace("datetimepickerBinding.refresh(): ...................End.\n");
+		// this.mMaxLogLevel = 2;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="parseXULDateTime_XXXX">
+		<parameter name="aDateTimeStr"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("datetimepickerBinding.parseXULDateTime_XXXX(): ...................Start.");
+
+		this.LogDebug("datetimepickerBinding.parseXULDateTime_XXXX(): aDateTimeStr: " + aDateTimeStr);
+
+		var dateTimeStr = this.trim(aDateTimeStr);
+		if (!dateTimeStr || (dateTimeStr == "")) {
+		    throw new String("Invalid Date/Time: " + dateTimeStr);
+		}
+
+		// 1. Extract YYYY-MM-DD from YYYY-MM-DDThh:mm:ss[.ms]Z"
+		var dateStr = dateTimeStr.substr(0, "YYYY-MM-DD".length);
+		this.LogDebug("datetimepickerBinding.parseXULDateTime_XXXX(): dateStr: >>>" + dateStr + "<<<");
+
+		try {
+		    this.mDatePickerElem.value = dateStr;
+		} catch (ex) {
+		    dump("datetimepickerBinding.parseXULDateTime_XXXX(): 'this.mDatePickerElem.value = " + dateStr + "' failed - ex: " + ex);
+		}
+
+		// 2. Extract hh:mm:ss[.ms] from YYYY-MM-DDThh:mm:ss[.ms]Z"
+		var timeWithZStr = dateTimeStr.substr(("YYYY-MM-DD".length +1));
+		this.LogDebug("datetimepickerBinding.refresh(): timeWithZStr: >>>" + timeWithZStr + "<<<");
+
+		// 3. Extract hh:mm:ss[.ms] from hh:mm:ss[.ms]Z"
+            	var timeItems = timeWithZStr.match(/^([0-9]{1,2})\:([0-9]{1,2})\:?([0-9]{1,2})?\.?([0-9]{1,2})?/);
+		if (timeItems.length <= 0) {
+		    this.handleDateTimeChange();
+		    return;
+		}
+		this.LogDebug("datetimepickerBinding.refresh(): timeItems.length: " + timeItems.length);
+
+		var timeStr = "";
+		timeStr = timeItems[0];
+		var timeZoneStr = timeWithZStr.substr(timeStr.length);
+
+		if (timeItems[1].length < 2) {
+		    timeStr = "0" + timeStr;
+		}
+		// 4. Extract hh:mm:ss from hh:mm:ss[.ms]"
+		timeStr = timeStr.substr(0, "hh:mm:ss".length);
+		this.LogDebug("datetimepickerBinding.refresh(): timeStr(hh:mm:ss): >>>" + timeStr + "<<<");
+
+		try {
+		    this.mTimePickerElem.value = timeStr;
+		} catch (ex) {
+		    dump("datetimepickerBinding.parseXULDateTime_XXXX(): this.mTimePickerElem.value = " + timeStr + " failed - ex: " + ex);
+		}
+		this.handleDateTimeChange();
+
+		this.LogTrace("datetimepickerBinding.parseXULDateTime_XXXX(): ...................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="parseXULDateTime">
+		<parameter name="aDateTimeStr"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("datetimepickerBinding.parseXULDateTime(): ...................Start.");
+		this.LogDebug("datetimepickerBinding.parseXULDateTime(): aDateTimeStr: " + aDateTimeStr);
+
+		var dateTimeStr = this.trim(aDateTimeStr);
+		if (!dateTimeStr || (dateTimeStr == "")) {
+		    throw new String("Invalid Date/Time: " + dateTimeStr);
+		}
+
+		/*
+		Format : YYYY-MM-DDThh:mm:ss[.ms]Z 
+			 YYYY-MM-DDThh:mm:ss[.ms]{-+}0000 
+
+		Minimum valid YYYY-MM-DDThh:mm:ssZ which is 20 bytes.
+		Maximum valid GeneralizedTime is  YYYY-MM-DDThh:mm:ss.ms+0000 which is 27 bytes.
+		*/
+
+		var dateStr = "";
+		var dateStrLength = dateTimeStr.length;
+		// if ((dateTimeStr.length < 20) || (dateTimeStr.length > 27)) {
+		if ((dateTimeStr.length < 10) || (dateTimeStr.length > 27)) {
+		    throw new String("Invalid Date/Time: " + dateTimeStr);
+		}
+
+
+		var offset = 0; 
+		var year = parseInt(dateTimeStr.substr(offset, 4), 10); offset += 4; offset++;
+		var month = parseInt(dateTimeStr.substr(offset, 2), 10); offset += 2; offset++;
+		var day = parseInt(dateTimeStr.substr(offset, 2), 10); offset +=2; offset++;
+
+		var hour = 0;
+		var minute = 0;
+		var seconds = 0;
+
+		if (offset < dateStrLength) {
+		    hour = parseInt(dateTimeStr.substr(offset, 2), 10); offset +=2; offset++;
+		}
+		if (offset < dateStrLength) {
+		    minute = parseInt(dateTimeStr.substr(offset, 2), 10); offset +=2; offset++;
+		}
+		if (offset < dateStrLength) {
+		    seconds = parseInt(dateTimeStr.substr(offset, 2), 10); offset +=2; 
+		}
+		this.LogDebug("year: " + year + " month : " + month + " day: " + day + " hour : "  + hour + " minute: " + minute);
+
+		var milliseconds = 0;
+		var zone = null;
+		
+		if (offset < dateStrLength) {
+		    zone = dateTimeStr.substr(offset, 1); offset += 1;
+		}
+		if (zone == ".") {
+		    zone = null;
+		    if (offset < dateStrLength) {
+		    	milliseconds = parseInt(dateTimeStr.substr(offset, 2), 10);  offset += 2;
+		    }
+		    if (offset < dateStrLength) {
+		    	zone = dateTimeStr.substr(offset, 1); offset += 1;
+		    }
+		}
+		this.LogDebug("seconds: " + seconds + " milliseconds : "  + milliseconds + " zone: " + zone);
+		if (zone && !((zone == "+") || (zone == "-") || (zone == "Z"))) {
+		    throw new String("Invalid Date/Time: " + dateTimeStr + " - zone info is missing.");
+		}
+
+		// var utcDateTime = Date.UTC(year, (month-1), day, hour, minute, seconds, milliseconds);
+		var utcDate = new Date(); 
+
+		utcDate.setUTCFullYear(year, (month-1), day); 
+		utcDate.setUTCHours(hour, minute, seconds);
+		if (milliseconds > 0) {
+		    utcDate.setUTCMilliseconds(milliseconds);
+		}
+
+		this.LogDebug("parseXULDateTime(): Base localTime: " + utcDate.toString() + " UTCTime: " + utcDate.toUTCString() + "");
+		if (zone == "Z") {
+		    return utcDate;
+		}
+
+		var hourOffset = 0;
+		if (offset < dateStrLength) {
+		    hourOffset = parseInt(dateTimeStr.substr(offset, 2), 10); offset += 2;
+		}
+		var minuteOffset = 0;
+		if (offset < dateStrLength) {
+		    minuteOffset = parseInt(dateTimeStr.substr(offset, 2), 10); offset += 2;
+		}
+		var milisecondOffset = (1000 * ((60 * ((60 * hourOffset) + minuteOffset)) + 0));
+		// this.LogDebug("hourOffset: " + hourOffset + " minuteOffset : "  + minuteOffset + " milisecondOffset: " + milisecondOffset);
+
+		var localTime = utcDate.getTime();
+
+		if (zone == "+") {
+		    localTime -= milisecondOffset;
+		}
+		else {
+		    localTime += milisecondOffset;
+		}
+		utcDate.setTime(localTime);
+
+		this.LogDebug("parseXULDateTime(): localTime: " +  utcDate.toString() + " UTCTime: " +  utcDate.toUTCString() + "");
+
+		this.LogTrace("datetimepickerBinding.parseXULDateTime(): ...................End.");
+		return utcDate;
+		]]>
+		</body>
+	    </method>
+
+
+	    <method name="parseGeneralizedTime">
+		<parameter name="aDateTimeStr"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("datetimepickerBinding.parseGeneralizedTime(): ...................Start.");
+
+		var dateTimeStr = this.trim(aDateTimeStr);
+		if (!dateTimeStr || (dateTimeStr == "")) {
+		    throw new String("Invalid Date/Time: " + dateTimeStr);
+		}
+
+		/*
+		Minimum valid GeneralizedTime is ccyymmddhhmmZ       which is 13 bytes.
+		Maximum valid GeneralizedTime is ccyymmddhhmmss+0000 which is 19 bytes.
+		Maximum valid GeneralizedTime is ccyymmddhhmmss.fff+0000 which is 23 bytes.
+		*/
+		var dateStr = "";
+		if ((dateTimeStr.length < 13) || (dateTimeStr.length > 23)) {
+		    throw new String("Invalid Date/Time: " + dateTimeStr + " - bad length.");
+		}
+
+
+		var offset = 0; 
+		var year = parseInt(dateTimeStr.substr(offset, 4), 10); offset += 4;
+		var month = parseInt(dateTimeStr.substr(offset, 2), 10); offset += 2;
+		var day = parseInt(dateTimeStr.substr(offset, 2), 10); offset +=2;
+		var hour = parseInt(dateTimeStr.substr(offset, 2), 10); offset +=2;
+		var minute = parseInt(dateTimeStr.substr(offset, 2), 10); offset +=2;
+		this.LogDebug("year: " + year + " month : " + month + " day: " + day + " hour : "  + hour + " minute: " + minute + " offset: " + offset);
+
+		var seconds = parseInt(dateTimeStr.substr(offset, 2), 10);
+		if (isNaN(seconds)) {
+		    seconds = parseInt("00", 10);
+		}
+		else {
+		     offset +=2;
+		}
+		var milliseconds = 0;
+		var zone = dateTimeStr.substr(offset, 1); offset += 1;
+		this.LogDebug("offset: " + offset + " seconds: " + seconds + " milliseconds : "  + milliseconds + " zone: " + zone);
+		if (zone == ".") {
+		    this.LogTrace("datetimepickerBinding.parseGeneralizedTime(): ...................40.");
+		    milliseconds = parseInt(dateTimeStr.substr(offset,3), 10);  offset += 3;
+		    if (isNaN(milliseconds)) {
+		    	milliseconds = 0;
+		    }
+		    zone = dateTimeStr.substr(offset, 1); offset += 1;
+		}
+		this.LogDebug("seconds: " + seconds + " milliseconds : "  + milliseconds + " zone: " + zone);
+		if (!((zone == "+") || (zone == "-") || (zone == "Z"))) {
+		    throw new String("Invalid Date/Time: " + dateTimeStr + " - zone info is missing.");
+		}
+
+		// var utcDateTime = Date.UTC(year, (month-1), day, hour, minute, seconds, milliseconds);
+		var utcDate = new Date(); 
+
+		utcDate.setUTCFullYear(year, (month-1), day); 
+		utcDate.setUTCHours(hour, minute, seconds);
+		if (milliseconds > 0) {
+		    utcDate.setUTCMilliseconds(milliseconds);
+		}
+
+		this.LogDebug("parseGeneralizedTime(): Base localTime: " + utcDate.toString() + " UTCTime: " + utcDate.toUTCString() + "");
+		if (zone == "Z") {
+		    return utcDate;
+		}
+
+		var hourOffset = parseInt(dateTimeStr.substr(offset, 2), 10); offset += 2;
+		var minuteOffset = parseInt(dateTimeStr.substr(offset, 2), 10); offset += 2;
+		var milisecondOffset = (1000 * ((60 * ((60 * hourOffset) + minuteOffset)) + 0));
+		// this.LogDebug("hourOffset: " + hourOffset + " minuteOffset : "  + minuteOffset + " milisecondOffset: " + milisecondOffset);
+
+		var localTime = utcDate.getTime();
+
+		if (zone == "+") {
+		    localTime -= milisecondOffset;
+		}
+		else {
+		    localTime += milisecondOffset;
+		}
+		utcDate.setTime(localTime);
+
+		this.LogDebug("parseGeneralizedTime(): localTime: " +  utcDate.toString() + " UTCTime: " +  utcDate.toUTCString() + "");
+
+		this.LogTrace("datetimepickerBinding.parseGeneralizedTime(): ...................End.");
+		return utcDate;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="parseUTCTime">
+		<parameter name="aDateTimeStr"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("datetimepickerBinding.parseUTCTime(): ...................End.");
+
+		var dateTimeStr = this.trim(aDateTimeStr);
+		if (!dateTimeStr || (dateTimeStr == "")) {
+		    return;
+		}
+
+		/*
+		Minimum valid UTCTime is yymmddhhmmZ       which is 11 bytes. 
+		Maximum valid UTCTime is yymmddhhmmss+0000 which is 17 bytes.
+		*/
+
+		if ((dateTimeStr.length < 11) || (dateTimeStr.length > 17)) {
+		    return;
+		}
+
+		/*
+		 Using two digit years, we can only represent dates from 1970 to 2069. 
+		 For more info, see DER_AsciiToTime() in .../mozilla/security/nss/lib/util/dertime.c.
+		*/
+		var century = "20";
+		var year = parseInt(dateTimeStr.substr(0, 2), 10); 
+		if (year >= 70) {
+		    century = "19";
+		}
+		var generalizedTime = century + dateTimeStr;
+
+		var utcDate = this.parseGeneralizedTime(generalizedTime);
+
+		this.LogTrace("datetimepickerBinding.parseUTCTime(): ...................End.");
+		return utcDate;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="initWithDateTimeValue">
+		<parameter name="aDateTimeStr"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("datetimepickerBinding.initWithDateTimeValue(): ...................Start.");
+
+		var dateTimeFormatType = this.getAttribute("format");
+		var dateTimeValue = null;
+		if (!dateTimeFormatType) {
+		    dateTimeValue = this.parseXULDateTime(aDateTimeStr);
+		}
+		else if (dateTimeFormatType == "generalizedtime") {
+		    dateTimeValue = this.parseGeneralizedTime(aDateTimeStr);
+		}
+		else if (dateTimeFormatType == "utctime") {
+		    dateTimeValue = this.parseUTCTime(aDateTimeStr);
+		}
+		else {
+		    dateTimeValue = this.parseXULDateTime(aDateTimeStr);
+		}
+
+		this.dateValue = dateTimeValue;
+		this.LogDebug("datetimepickerBinding.initWithDateTimeValue(): aDateTimeStr: " + aDateTimeStr);
+		]]>
+		</body>
+	    </method>
+
+	    <method name="initCurrentDateAndTime">
+		<parameter name="aSecondsOffset"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("datetimepickerBinding.initCurrentDateAndTime(): ...................Start.");
+
+		var now = new Date();
+		try {
+		    this.dateValue = now;
+		} catch (ex) {}
+		this.LogTrace("datetimepickerBinding.initCurrentDateAndTime(): ...................10.");
+
+		if (aSecondsOffset > 0) {
+		    this.addSeconds(aSecondsOffset);
+		}
+		this.LogTrace("datetimepickerBinding.initCurrentDateAndTime(): ...................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="addSeconds">
+		<parameter name="aSecondsInc"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("datetimepickerBinding.addSeconds(): ...................Start.");
+
+		var currTime = this.mDateTimeValue.getTime();
+		var newTime = currTime + (aSecondsInc * 1000);
+		var newDate = new Date();
+		newDate.setTime(newTime);
+	
+		this.dateValue = newDate;
+
+		this.LogTrace("datetimepickerBinding.addSeconds(): ...................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="addDays">
+		<parameter name="aDaysInc"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("datetimepickerBinding.addDays(): ...................Start.");
+		this.addSeconds(aDaysInc * (24 * 60 * 60));
+		this.LogTrace("datetimepickerBinding.addDays(): ...................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="handleTimePickerKeyPress">
+		<parameter name="aTargetElem"/>
+		<parameter name="ev"/>
+	        <body>
+		<![CDATA[
+		// this.mMaxLogLevel = 9;
+		this.LogTrace("datetimepickerBinding.handleTimePickerKeyPress(): ...................Start.");
+
+		// DOM_VK_CONTROL && DOM_VK_0
+		this.LogDebug("datetimepickerBinding.handleTimePickerKeyPress(): ev.keyCode: " + ev.keyCode);
+
+		if (ev.ctrlKey) {
+		    if (ev.keyCode == KeyEvent.DOM_VK_0) {
+			this.LogTrace("datetimepickerBinding.handleTimePickerKeyPress(): ...................10.");
+			try {
+		    	    this.mTimePickerElem.value = "00:00:00";
+			} catch (ex) {
+		    	    dump("datetimepickerBinding.handleTimePickerKeyPress(): this.mTimePickerElem.value = " + timeStr + " failed - ex: " + ex);
+			}
+			this.handleDateTimeChange();
+		    }
+		}
+		this.LogTrace("datetimepickerBinding.handleTimePickerKeyPress(): ...................End.");
+		// this.mMaxLogLevel = 2;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="handleDateTimeChange">
+		<parameter name="aTargetElem"/>
+		<parameter name="ev"/>
+	        <body>
+		<![CDATA[
+		this.LogTrace("datetimepickerBinding.handleDateTimeChange(): ...................Start.");
+
+		var ymdDate = this.mDatePickerElem.dateValue;
+		var timeDate = this.mTimePickerElem.dateValue;
+		this.LogDebug("datetimepickerBinding.handleDateTimeChange(): ymdDate: " + ymdDate.toString());
+		this.LogDebug("datetimepickerBinding.handleDateTimeChange(): timeDate: " + timeDate.toString());
+
+		var dtDate = new Date(ymdDate);
+		dtDate.setHours(timeDate.getHours());
+		dtDate.setMinutes(timeDate.getMinutes());
+		dtDate.setSeconds(timeDate.getSeconds());
+		
+		this.setDateTimeValue(dtDate);
+
+		]]>
+		</body>
+	    </method>
+
+
+	    <method name="formatXULDateTimeValueX">
+		<parameter name="aDateTimeValue"/>
+	        <body>
+		<![CDATA[
+
+		var dateStr = this.mDatePickerElem.value;
+		// dateStr = dateStr.replace(/\//g, "-");
+
+		var timeStr = this.mTimePickerElem.value;
+		this.LogDebug("datetimepickerBinding.handleDateTimeChange(): timeStr : " + timeStr);
+
+		// timeItems ==> timeStr, timeStr.hh, timeStr.mm[, timeStr.ss]
+            	var timeItems = timeStr.match(/^([0-9]{1,2})\:([0-9]{1,2})\:?([0-9]{1,2})?$/);
+		/*
+		this.LogDebug("datetimepickerBinding.handleDateTimeChange(): timeItems.length : " + timeItems.length);
+		for (var i = 0; i < timeItems.length; i++) {
+		    this.LogDebug("timeItems[" + i + "] :>" + timeItems[i] + "<");
+		}
+		*/
+		if (timeItems[1].length < 2) {
+		    timeStr = "0" + timeStr;
+		}
+		
+		var dateTimeStr = "";
+		dateTimeStr = dateStr + "T" + timeStr + ".00Z";
+
+		/*
+		if (!this.getAttribute("dateonly") {
+		    && !this.getAttribute("dateonly")) {
+		    dateTimeStr = dateStr + "T" + timeStr + "Z";
+		}
+		else {
+		    if (this.getAttribute("dateonly") {
+		    	dateTimeStr = dateStr;
+		    }
+		    else if (this.getAttribute("dateonly") {
+		    	dateTimeStr = timeStr;
+		    }
+		}
+		*/
+
+		this.LogDebug("handleDateTimeChange(): dateTimeStr: " + dateTimeStr + "");
+		// this.LogDebug("handleDateTimeChange(): this.mDateTimeValue: " + this.mDateTimeValue);
+
+		return dateTimeStr;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="formatInteger">
+		<parameter name="aIntValue"/>
+		<parameter name="aLength"/>
+	        <body>
+		<![CDATA[
+		var intStr = "" + aIntValue;
+		for (var i = intStr.length; i < aLength; i++) {
+		     intStr = "0" + intStr;
+		}
+		return intStr;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="formatXULDateTimeValue">
+		<parameter name="aDateTimeValue"/>
+	        <body>
+		<![CDATA[
+		this.LogTrace("datetimepickerBinding.formatXULDateTimeValue(): ...................Start.");
+		var dateTimeStr = "";
+
+		var dateOnly = false;
+		var timeOnly = false;
+		var bothdatetime = true;
+
+		/*
+		if (this.getAttribute("dateonly") == true) {
+		    dateOnly = true;
+		    bothdatetime = false;
+		}
+		if (this.getAttribute("timeonly") == true) {
+		    timeOnly = true;
+		    bothdatetime = false;
+		}
+		if (dateOnly && timeOnly) {
+		    bothdatetime = true;
+		}
+		this.LogDebug("datetimepickerBinding.formatDateTimeValue(): bothdatetime: " + bothdatetime + " dateOnly: " + dateOnly + " timeOnly: " + timeOnly);
+		*/
+
+		var year = aDateTimeValue.getUTCFullYear();
+		var month = aDateTimeValue.getUTCMonth(); month++;
+		var day = aDateTimeValue.getUTCDate();
+		var hour = aDateTimeValue.getUTCHours();
+		var minute = aDateTimeValue.getUTCMinutes();
+		var seconds = aDateTimeValue.getUTCSeconds();
+		var milliseconds = aDateTimeValue.getUTCMilliseconds();
+
+
+		dateTimeStr += this.formatInteger(year, 4); dateTimeStr += "-";
+		dateTimeStr += this.formatInteger(month, 2); dateTimeStr += "-";
+		dateTimeStr += this.formatInteger(day, 2); dateTimeStr += "T";
+
+		dateTimeStr += this.formatInteger(hour, 2); dateTimeStr += ":";
+		dateTimeStr += this.formatInteger(minute, 2); dateTimeStr += ":";
+		dateTimeStr += this.formatInteger(seconds, 2); dateTimeStr += ".";
+		dateTimeStr += this.formatInteger(milliseconds, 2);
+
+		dateTimeStr += "Z";
+
+		this.LogTrace("datetimepickerBinding.formatXULDateTimeValue(): ...................End.");
+		return dateTimeStr;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="formatGeneralizedTime">
+		<parameter name="aDateTimeValue"/>
+		<parameter name="aIsUTCTime"/>
+	        <body>
+		<![CDATA[
+		this.LogTrace("datetimepickerBinding.formatGeneralizedTime(): ...................Start.");
+		this.LogDebug("datetimepickerBinding.formatDateTimeValue(): aIsUTCTime: " + aIsUTCTime);
+
+		var dateTimeStr = "";
+
+		var year = aDateTimeValue.getUTCFullYear();
+		var month = aDateTimeValue.getUTCMonth(); month++;
+		var day = aDateTimeValue.getUTCDate();
+		var hour = aDateTimeValue.getUTCHours();
+		var minute = aDateTimeValue.getUTCMinutes();
+		var seconds = aDateTimeValue.getUTCSeconds();
+		var milliseconds = aDateTimeValue.getUTCMilliseconds();
+
+		if (aIsUTCTime) {
+		    dateTimeStr += this.formatInteger((year%100), 2);
+		}
+		else {
+		    dateTimeStr += this.formatInteger(year, 4);
+		}
+		dateTimeStr += this.formatInteger(month, 2);
+		dateTimeStr += this.formatInteger(day, 2);
+		dateTimeStr += this.formatInteger(hour, 2);
+		dateTimeStr += this.formatInteger(minute, 2);
+		dateTimeStr += this.formatInteger(seconds, 2);
+		// var dateTimeStr += this.formatInteger(milliseconds, 3);
+		dateTimeStr += "Z";
+
+		this.LogTrace("datetimepickerBinding.formatGeneralizedTime(): ...................End.");
+		return dateTimeStr;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="formatDateTimeValue">
+		<parameter name="aDateTimeValue"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("datetimepickerBinding.formatDateTimeValue(): ...................Start.");
+
+		var dateTimeFormatType = this.getAttribute("format");
+		this.LogDebug("datetimepickerBinding.formatDateTimeValue(): dateTimeFormatType: " + dateTimeFormatType);
+		var dateTimeValueStr = null;
+		if (!dateTimeFormatType) {
+		    dateTimeValueStr = this.formatXULDateTimeValue(aDateTimeValue);
+		}
+		else if (dateTimeFormatType == "generalizedtime") {
+		    dateTimeValueStr = this.formatGeneralizedTime(aDateTimeValue);
+		}
+		else if (dateTimeFormatType == "utctime") {
+		    dateTimeValueStr = this.formatGeneralizedTime(aDateTimeValue, true);
+		}
+		else {
+		    dateTimeValueStr = this.formatXULDateTimeValue(aDateTimeValue);
+		}
+		this.LogDebug("datetimepickerBinding.formatDateTimeValue(): dateTimeValueStr: " + dateTimeValueStr);
+
+		this.LogTrace("datetimepickerBinding.formatDateTimeValue(): ...................End.");
+		return dateTimeValueStr;
+		]]>
+		</body>
+	    </method>
+
+
+	    <method name="setDateTimeValue">
+		<parameter name="aDateTimeValue"/>
+	        <body>
+		<![CDATA[
+		this.LogTrace("datetimepickerBinding.setDateTimeValue(): ...........................Start.");
+
+		this.mDateTimeValue = aDateTimeValue;
+
+		var dateTimeStr = this.formatDateTimeValue(aDateTimeValue);
+		this.LogDebug("datetimepickerBinding.setDateTimeValue(): dateTimeStr: " + dateTimeStr);
+
+		try {
+		    this.mDateTimeStringValueElem.value = dateTimeStr;
+		} catch(ex) {}
+		this.handleDateTimeStringValueChange(this.mDateTimeStringValueElem);
+
+		this.LogTrace("datetimepickerBinding.setDateTimeValue(): ...........................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="handleDateTimeStringValueChange">
+		<parameter name="aTextValueElem"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		this.LogTrace( "datetimepickerBinding.handleDateTimeStringValueChange():......................Start.");
+
+		/*
+		if (ev) {
+		    ev.stopPropagation();
+		}
+		*/
+
+		var dateTimeValue = this.trim(aTextValueElem.value);
+		if (dateTimeValue == "") {
+		    this.removeAttribute("value");
+		    if (this.hasChildNodes()) {
+		    	this.removeChild(this.firstChild);
+		    }
+		    this.mDateTimeValue = null;
+		    return;
+		}
+
+		if (ev) {
+		    this.initWithDateTimeValue(dateTimeValue);
+		    return;
+		}
+
+		/*
+		if (!this.hasChildNodes()) {
+		    var valTextNode = document.createTextNode("");
+		    this.appendChild(valTextNode);
+		}
+		this.firstChild.nodeValue = dateTimeValue;
+		*/
+
+		this.setAttribute("value", dateTimeValue);
+
+		// this.LogDebug("datetime: \n" + this.serialize(this) + "\n");;
+
+		this.LogTrace( "datetimepickerBinding.handleDateTimeStringValueChange():......................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <!--
+	    <method name="trim">
+		<parameter name="aStr"/>
+		<body>
+		<![CDATA[
+		// var newStr = (new java.lang.String(aStr)).trim();
+		// return newStr;
+		var sInString = aStr.replace( /^\s+/g, "" );// strip leading
+		return sInString.replace( /\s+$/g, "" );// strip trailing
+		]]>
+		</body>
+	    </method>
+	    -->
+
+	</implementation>
+    </binding>
+
+</bindings>
+

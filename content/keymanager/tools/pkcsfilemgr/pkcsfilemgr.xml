@@ -1,0 +1,3939 @@
+<?xml version="1.0"?>
+<!-- @(#) $Id: pkcsfilemgr.xml,v 1.23 2010/12/24 20:04:31 subrata Exp $ -->
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is Avaya Labs Research, Avaya Inc. Code.
+   -
+   - The Initial Developer of the Original Code is
+   - Subrata Mazumdar, Avaya Labs Research, Avaya Inc.
+   - Portions created by the Initial Developer are Copyright (C) 2007.
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Subrata Mazumdar (mazum@avaya.com)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+
+
+<!DOCTYPE bindings SYSTEM "chrome://keymanager/locale/pkcsfilemgr.dtd">
+
+<bindings id="pkcsfilemgrBindings"
+    xmlns="http://www.mozilla.org/xbl"
+    xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    xmlns:xbl="http://www.mozilla.org/xbl">
+
+    <binding id="osslapptypeBinding"
+	>
+	<xbl:resources>
+	</xbl:resources>
+
+	<!-- content, property, method and event descriptions go here -->
+	<content>
+	    <xul:menulist anonid="keymgr.pkcsfilemgr.osslapptype.menulist"
+		xbl:inherits="disabled,value=osslapptype,tooltiptext"
+		tooltiptext="&keymgr.pkcsfilemgr.osslapptype.menulist.tooltip;"
+		oncommand="getBindingParent(this).handleOsslAppTypeMenuChange(this, event)"
+		>
+		<xul:menupopup>
+		    <xul:menuitem anonid="keymgr.pkcsfilemgr.osslapptype.custom"
+			xul:inherits="hidden=customhidden,disabled=customdisabled"
+			label="&keymgr.pkcsfilemgr.osslapptype.custom.label;"
+			tooltiptext="&keymgr.pkcsfilemgr.osslapptype.custom.tooltip;"
+			value="custom"
+			/>
+		    <xul:menuitem anonid="keymgr.pkcsfilemgr.osslapptype.globus"
+			xul:inherits="hidden=globushidden,disabled=globusdisabled"
+			label="&keymgr.pkcsfilemgr.osslapptype.globus.label;"
+			tooltiptext="&keymgr.pkcsfilemgr.osslapptype.globus.tooltip;"
+			value="globus"
+			/>
+		    <xul:menuitem anonid="keymgr.pkcsfilemgr.osslapptype.openssl"
+			xul:inherits="hidden=opensslhidden,disabled=openssldisabled"
+			label="&keymgr.pkcsfilemgr.osslapptype.openssl.label;"
+			tooltiptext="&keymgr.pkcsfilemgr.osslapptype.openssl.tooltip;"
+			value="openssl"
+			/>
+		    <xul:menuitem anonid="keymgr.pkcsfilemgr.osslapptype.curl"
+			xul:inherits="hidden=curlhidden,disabled=curldisabled"
+			disabled="true"
+			label="&keymgr.pkcsfilemgr.osslapptype.curl.label;"
+			tooltiptext="&keymgr.pkcsfilemgr.osslapptype.curl.tooltip;"
+			value="curl"
+			/>
+		</xul:menupopup>
+	    </xul:menulist>
+	</content>
+	<implementation>
+	    <field name="mDirService">
+		Components.classes['@mozilla.org/file/directory_service;1']
+				.getService(Components.interfaces.nsIProperties);
+	    </field>
+	    <field name="mOSSLAppTypeMenuElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.pkcsfilemgr.osslapptype.menulist");
+	    </field>
+	    <field name="mOSSLGenericAppBaseDir"/>
+	    <field name="mOSSLGlobusBaseDir"/>
+	    <field name="mOSSLAppBaseDir"/>
+
+	    <property name="disabled"
+		onget="return this.getAttribute('disabled');"
+		onset="if (val) {this.setAttribute('disabled', true);}
+			else {this.removeAttribute('disabled');}
+			return val;"
+		/>
+	    <property name="value"
+		onget="return this.mOSSLAppTypeMenuElem.value;"
+		onset="this.mOSSLAppTypeMenuElem.value=val;
+			this.handleSoftTokenTypeChange(this.mOSSLAppTypeMenuElem);
+			return val;"
+		/>
+
+	    <property name="osslapptype"
+		onget="return this.value;"
+		onset="this.value=val;
+			return val;"
+		/>
+	    <property name="osslappbasedir" readonly="true"
+		onget="if (!this.mOSSLAppBaseDir) {
+			this.handleOsslAppTypeMenuChange(this.mOSSLAppTypeMenuElem);
+			}
+			if (!this.mOSSLAppBaseDir) {
+			    return null;
+			}
+			return this.mOSSLAppBaseDir.clone();"
+		/>
+
+	    <method name="getProfileDir">
+		<parameter name="aProfileId"/>
+		<body>
+		<![CDATA[
+		var profileDir = this.mDirService.get(aProfileId, Components.interfaces.nsIFile);
+		return profileDir;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="getHomeDir">
+		<body>
+		<![CDATA[
+		return this.getProfileDir("Home");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="getOSSLGenericAppBaseDir">
+		<body>
+		<![CDATA[
+		const PERMS_FILE      = 0644; // u+rw,g+r,o+r
+		const PERMS_DIRECTORY = 0700; // u+rwx
+
+		if (this.mOSSLGenericAppBaseDir) {
+		    return this.mOSSLGenericAppBaseDir.clone();
+		}
+
+		/*
+		var osslGenericAppBaseDir = Components.classes["@mozilla.org/file/directory_service;1"].
+			getService(Components.interfaces.nsIProperties).
+			get("TmpD", Components.interfaces.nsIFile);
+		*/
+		var osslGenericAppBaseDir =  this.getProfileDir("TmpD");
+		osslGenericAppBaseDir.append("KeyManager");
+		osslGenericAppBaseDir.append("OSSL_APP_GENERIC");
+
+		if (!osslGenericAppBaseDir.exists()) {
+		    osslGenericAppBaseDir.create(Components.interfaces.nsILocalFile.DIRECTORY_TYPE, PERMS_DIRECTORY);
+		}
+
+		this.mOSSLAppBaseDir = osslGenericAppBaseDir;
+		return osslGenericAppBaseDir;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="getGlobusBaseDir">
+		<body>
+		<![CDATA[
+		const PERMS_FILE      = 0644; // u+rw,g+r,o+r
+		const PERMS_DIRECTORY = 0700; // u+rwx
+
+		if (this.mOSSLGlobusBaseDir) {
+		    return this.mOSSLGlobusBaseDir.clone();
+		}
+
+		var globusBaseDir = this.getHomeDir();
+		if (!globusBaseDir) {
+		    return null;
+		}
+
+		globusBaseDir.append(".globus");
+		if (!globusBaseDir.exists()) {
+		    globusBaseDir.create(Components.interfaces.nsILocalFile.DIRECTORY_TYPE, PERMS_DIRECTORY);
+		}
+
+		this.mOSSLGlobusBaseDir = globusBaseDir;
+		return globusBaseDir;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="handleOsslAppTypeMenuChange">
+		<parameter name="aOSSLAppTypeMenuElem"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		// this.LogTrace("osslapptypeBinding.handleOsslAppTypeMenuChange():......................Start.");
+
+		this.mOSSLAppBaseDir = null;
+
+		if (!aOSSLAppTypeMenuElem.selectedItem) {
+		    return;
+		}
+
+		this.mOSSLAppBaseDir = aOSSLAppTypeMenuElem.selectedItem.appbasedir;
+		if (this.mOSSLAppBaseDir) {
+		    return;
+		}
+
+		if (aOSSLAppTypeMenuElem.selectedItem.value == "globus") {
+		    this.mOSSLAppBaseDir = this.getGlobusBaseDir();
+		}
+		else if (aOSSLAppTypeMenuElem.selectedItem.value == "openssl") {
+		    this.mOSSLAppBaseDir = this.getOSSLGenericAppBaseDir();
+		}
+		else {
+		    this.mOSSLAppBaseDir = null;
+		}
+
+		if (this.mOSSLAppBaseDir) {
+		    aOSSLAppTypeMenuElem.selectedItem.appbasedir = this.mOSSLAppBaseDir;
+		}
+
+		// this.LogTrace("osslapptypeBinding.handleOsslAppTypeMenuChange():......................End.");
+		]]>
+		</body>
+	    </method>
+
+	</implementation>
+    </binding>
+
+
+    <binding id="osslcredentialtypeBinding"
+	>
+	<xbl:resources>
+	</xbl:resources>
+
+	<!-- content, property, method and event descriptions go here -->
+	<content>
+	<xul:hbox anonid="keymgr.pkcsfilemgr.ossl.credential.type.hbox"
+	    pack="start"
+	    >
+	    <xul:textbox anonid="keymgr.pkcsfilemgr.ossl.credential.type.value"
+		xbl:inherits="hidden=credtypevaluehidden,value=credtypevalue"
+		size="4"
+		onchange="getBindingParent(this).handleCredentialTypeValueChange(this, event)"
+		/>
+	    <xul:menulist anonid="keymgr.pkcsfilemgr.ossl.credential.type.menuList"
+		xbl:inherits="tooltiptext=menutooltiptext,disabled,value=credentialtype"
+		tooltiptext="&keymgr.pkcsfilemgr.ossl.credential.type.menuList.tooltip;"
+		oncommand="getBindingParent(this).handleCredTypeMenuListChange(this, event)"
+		>
+		<xul:menupopup>
+		    <xul:menuitem anonid="keymgr.pkcsfilemgr.ossl.credential.type.user"
+			xul:inherits="hidden=userhidden,disabled=userdisabled"
+			label="&keymgr.pkcsfilemgr.ossl.credential.type.user.label;"
+			tooltiptext="&keymgr.pkcsfilemgr.ossl.credential.type.user.tooltip;"
+			selected="true"
+			value="user"
+			/>
+		    <xul:menuitem anonid="keymgr.pkcsfilemgr.ossl.credential.type.proxy"
+			xul:inherits="hidden=proxyhidden,disabled=proxydisabled"
+			label="&keymgr.pkcsfilemgr.ossl.credential.type.proxy.label;"
+			tooltiptext="&keymgr.pkcsfilemgr.ossl.credential.type.proxy.tooltip;"
+			value="proxy"
+			/>
+		    <xul:menuitem anonid="keymgr.pkcsfilemgr.ossl.credential.type.host"
+			xul:inherits="hidden=hosthidden,disabled=hostdisabled"
+			label="&keymgr.pkcsfilemgr.ossl.credential.type.host.label;"
+			tooltiptext="&keymgr.pkcsfilemgr.ossl.credential.type.host.tooltip;"
+			value="host"
+			/>
+		    <xul:menuitem anonid="keymgr.pkcsfilemgr.ossl.credential.type.service"
+			xul:inherits="hidden=servicehidden,disabled=servicedisabled"
+			label="&keymgr.pkcsfilemgr.ossl.credential.type.service.label;"
+			tooltiptext="&keymgr.pkcsfilemgr.ossl.credential.type.service.tooltip;"
+			value="service"
+			/>
+		    <children includes="menuitem"/>
+		</xul:menupopup>
+	    </xul:menulist>
+	</xul:hbox>
+	</content>
+	<implementation>
+	    <field name="mCredentialTypeValueElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.pkcsfilemgr.ossl.credential.type.value");
+	    </field>
+	    <field name="mCredentialTypeMenuElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.pkcsfilemgr.ossl.credential.type.menuList");
+	    </field>
+
+	    <property name="disabled"
+		onget="return this.getAttribute('disabled');"
+		onset="if (val) {this.setAttribute('disabled', true);}
+			else {this.removeAttribute('disabled');}
+			return val;"
+		/>
+	    <property name="value"
+		onget="return this.mCredentialTypeValueElem.value;"
+		onset="this.mCredentialTypeMenuElem.value=val;
+			this.handleCredTypeMenuListChange(this.mCredentialTypeMenuElem);
+			return val;"
+		/>
+
+	    <property name="credentialtype"
+		onget="return this.value;"
+		onset="this.value=val;
+			return val;"
+		/>
+
+	    <constructor>
+		<![CDATA[
+		]]>
+	    </constructor>
+	    <method name="refresh">
+		<body>
+		<![CDATA[
+		this.handleCredTypeMenuListChange(this.mCredentialTypeMenuElem);
+		]]>
+		</body>
+	    </method>
+
+	    <method name="handleCredentialTypeValueChange">
+		<parameter name="aCredentialTypeValueElem"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		// this.LogTrace("osslcredentialtypeBinding.handleCredentialTypeValueChange():......................Start.");
+		if (ev) {
+		    this.mCredentialTypeMenuElem.value = aCredentialTypeValueElem.value;
+		}
+
+		// this.LogTrace("osslcredentialtypeBinding.handleCredentialTypeValueChange():......................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="handleCredTypeMenuListChange">
+		<parameter name="aCredentialTypeMenuElem"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		// this.LogTrace("osslcredentialtypeBinding.handleCredTypeMenuListChange():......................Start.");
+
+		var credType = aCredentialTypeMenuElem.value;
+		this.mCredentialTypeValueElem.value = credType;
+		this.handleCredentialTypeValueChange(this.mCredentialTypeValueElem);
+
+		// this.LogTrace("osslcredentialtypeBinding.handleCredTypeMenuListChange():......................End.");
+		]]>
+		</body>
+	    </method>
+
+	</implementation>
+    </binding>
+
+    <binding id="softtokentypeBinding"
+	>
+	<xbl:resources>
+	</xbl:resources>
+
+	<!-- content, property, method and event descriptions go here -->
+	<content>
+	    <xul:menulist anonid="keymgr.pkcsfilemgr.softtoken.type.menulist"
+		xbl:inherits="value=softtokentype,hidden=softtokentypehidden,disabled=softtokentypedisabled"
+		tooltiptext="&keymgr.pkcsfilemgr.softtoken.type.menulist.tooltip;"
+		oncommand="getBindingParent(this).handleSoftTokenTypeMenuChange(this, event)"
+		>
+		<xul:menupopup>
+		    <xul:menuitem anonid="keymgr.pkcsfilemgr.softtoken.type.pkcs8"
+			xbl:inherits="hidden=pkcs8hidden,disabled=pkcs8disabled"
+			label="&keymgr.pkcsfilemgr.softtoken.type.pkcs8.label;"
+			tooltiptext="&keymgr.pkcsfilemgr.softtoken.type.pkcs8.tooltip;"
+			value="pkcs8"
+			/>
+		    <xul:menuitem anonid="keymgr.pkcsfilemgr.softtoken.type.osslepk"
+			xbl:inherits="hidden=osslepkhidden,disabled=osslepkdisabled"
+			label="&keymgr.pkcsfilemgr.softtoken.type.osslepk.label;"
+			tooltiptext="&keymgr.pkcsfilemgr.softtoken.type.osslepk.tooltip;"
+			value="osslepk"
+			/>
+		    <xul:menuitem anonid="keymgr.pkcsfilemgr.softtoken.type.pkcs12"
+			xbl:inherits="hidden=pkcs12hidden,disabled=pkcs12disabled"
+			label="&keymgr.pkcsfilemgr.softtoken.type.pkcs12.label;"
+			tooltiptext="&keymgr.pkcsfilemgr.softtoken.type.pkcs12.tooltip;"
+			value="pkcs12"
+		    />
+		    <xul:menuitem anonid="keymgr.pkcsfilemgr.softtoken.type.keydb"
+			xbl:inherits="hidden=keydbhidden,disabled=keydbdisabled"
+			label="&keymgr.pkcsfilemgr.softtoken.type.keydb.label;"
+			tooltiptext="&keymgr.pkcsfilemgr.softtoken.type.keydb.tooltip;"
+			value="keydb"
+		    />
+		</xul:menupopup>
+	    </xul:menulist>
+	</content>
+	<implementation>
+	    <field name="mSoftTokenTypeMenuElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.pkcsfilemgr.softtoken.type.menulist");
+	    </field>
+
+	    <property name="disabled"
+		onget="return this.getAttribute('disabled');"
+		onset="if (val) {this.setAttribute('disabled', true);}
+			else {this.removeAttribute('disabled');}
+			return val;"
+		/>
+	    <property name="value"
+		onget="return this.mSoftTokenTypeMenuElem.value;"
+		onset="this.mSoftTokenTypeMenuElem.value=val;
+			this.handleSoftTokenTypeMenuChange(this.mSoftTokenTypeMenuElem);
+			return val;"
+		/>
+
+	    <property name="softtokentype"
+		onget="return this.value;"
+		onset="this.value=val;
+			return val;"
+		/>
+
+	    <method name="handleSoftTokenTypeMenuChange">
+		<parameter name="aSoftTokenTypeMenuElem"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		// this.LogTrace("osslcredentialtypeBinding.handleSoftTokenTypeMenuChange():......................Start.");
+		// this.LogTrace("osslcredentialtypeBinding.handleSoftTokenTypeMenuChange():......................End.");
+		]]>
+		</body>
+	    </method>
+
+	</implementation>
+    </binding>
+
+    <binding id="epkcertfilesBinding"
+	extends="chrome://keymanager/content/XBL/x509certbase.xml#x509certbase"
+	>
+	<xbl:resources>
+	    <stylesheet src="chrome://keymanager/skin/kmbindings.css"/>
+	</xbl:resources>
+
+	<!-- content, property, method and event descriptions go here -->
+	<content>
+
+	<xul:grid
+	    xbl:inherits="flex"
+	    flex="1"
+	    >
+	    <xul:columns>
+		<xul:column/>
+		<xul:column flex="1"/>
+	    </xul:columns>
+	    <xul:rows>
+		<xul:row
+		    align="center"
+		    >
+		    <xul:label value="&keymgr.pkcsfilemgr.epk.file.label;"/>
+		    <xul:hbox
+			pack="start"
+			align="center"
+			>
+			<xul:hbox anonid="keymgr.pkcsfilemgr.epk.file.type.hbox"
+			    xbl:inherits="hidden=epkfiletypehidden"
+			    pack="start"
+			    align="start"
+			    >
+			    <xul:radiogroup anonid="keymgr.pkcsfilemgr.epk.file.type.options"
+				oncommand="getBindingParent(this).handleEPKFileTypeChange(this, event)"
+				>
+				<xul:groupbox
+				    pack="start"
+				    xorient="horizontal"
+				    >
+				    <xul:radio anonid="keymgr.pkcsfilemgr.epk.file.type.osslepk"
+					label="&keymgr.pkcsfilemgr.epk.file.type.osslepk.label;"
+					tooltiptext="&keymgr.pkcsfilemgr.epk.file.type.osslepk.tooltip;"
+					value="osslepk"
+					group="keymgr.pkcsfilemgr.epk.file.type.options"
+					/>
+				    <xul:radio anonid="keymgr.pkcsfilemgr.epk.file.type.pkcs8"
+					label="&keymgr.pkcsfilemgr.epk.file.type.pkcs8.label;"
+					tooltiptext="&keymgr.pkcsfilemgr.epk.file.type.pkcs8.tooltip;"
+					value="pkcs8"
+					group="keymgr.pkcsfilemgr.epk.file.type.options"
+					/>
+				</xul:groupbox>
+			    </xul:radiogroup>
+			</xul:hbox>
+			<xul:checkbox anonid="keymgr.pkcsfilemgr.epk.file.has.cert"
+			    xbl:inherits="hidden=epkhascerthidden,disabled=epkhascertdisabled"
+			    label="&keymgr.pkcsfilemgr.epk.file.has.cert.label;"
+			    tooltiptext="&keymgr.pkcsfilemgr.epk.file.has.cert.tooltip;"
+			    oncommand="getBindingParent(this).handleEPKFileHasCertChange(this, event)"
+			    />
+			<xul:fileselector anonid="keymgr.pkcsfilemgr.epk.filepicker" flex="1"
+			    ascii="true"
+			    formatlabel="Base64"
+			    xformathidden="true"
+			    fileDialogMsg="Choose either PKCS8 or OpenSSL Encrypted Private Key File"
+			    fileTypeMsg="Encrypted Private Key File"
+			    fileTypeFilters="*.pem; *.pk8; *.key"
+			    osslepkFileTypeFilters="*.pem; *.pk8; *.key"
+			    pkcs8FileTypeFilters="*.pk8; *.key"
+			    filetooltiptext="&keymgr.pkcsfilemgr.epk.file.tooltip;"
+			    browselabel="&keymgr.pkcsfilemgr.file.browse.label;"
+			    browsetooltiptext="&keymgr.pkcsfilemgr.epk.file.browse.tooltip;"
+			    onpopuphiding="getBindingParent(this).handleEPKFilePathChange(this, event)"
+			    ontextentered="getBindingParent(this).handleEPKFilePathChange(this, event)"
+			    oncommand="getBindingParent(this).handleEPKFilePathChange(this, event)"
+			    onchange="getBindingParent(this).handleEPKFilePathChange(this, event)"
+			    />
+		    </xul:hbox>
+		</xul:row>
+		<xul:row
+		    anonid="keymgr.pkcsfilemgr.epk.cert.filepicker.row"
+		    align="center"
+		    >
+		    <xul:label value="&keymgr.pkcsfilemgr.epk.cert.filepicker.label;"/>
+		    <xul:fileselector anonid="keymgr.pkcsfilemgr.epk.cert.filepicker" flex="1"
+			ascii="true"
+			formatdisabled="true"
+			formatlabel="Base64"
+			fileDialogMsg="Choose X509 Cert file for Private Key"
+			fileTypeMsg="X.509 Cert file"
+			fileTypeFilters="*.cer; *.pem; *.crt"
+			filetooltiptext="&keymgr.pkcsfilemgr.epk.cert.filepicker.tooltip;"
+			browselabel="&keymgr.pkcsfilemgr.file.browse.label;"
+			browsetooltiptext="&keymgr.pkcsfilemgr.epk.cert.filepicker.browse.tooltip;"
+			onpopuphiding="getBindingParent(this).handleEPKCertFilePathChange(this, event)"
+			ontextentered="getBindingParent(this).handleEPKCertFilePathChange(this, event)"
+			oncommand="getBindingParent(this).handleEPKCertFilePathChange(this, event)"
+			onchange="getBindingParent(this).handleEPKCertFilePathChange(this, event)"
+			/>
+		</xul:row>
+	    </xul:rows>
+	</xul:grid>
+	</content>
+	<implementation>
+	    <!--
+	    <field name="mIOService">
+		Components.classes["@mozilla.org/network/io-service;1"]
+				.getService(Components.interfaces.nsIIOService);
+	    </field>
+	    <field name="mDirService">
+		Components.classes['@mozilla.org/file/directory_service;1']
+				.getService(Components.interfaces.nsIProperties);
+	    </field>
+	    <field name="mX509CertDB">
+		Components.classes["@mozilla.org/security/x509certdb;1"]
+			.getService(Components.interfaces.nsIX509CertDB);
+	    </field>
+	    <field name="mSoftTokenDBManager">
+		Components.classes["@avaya.com/pkm/softtokendbmanager;1"]
+				.getService(Components.interfaces.alrISoftTokenDBManager);
+	    </field>
+
+	    <field name="mXmlSerializer">new XMLSerializer();</field>
+	    -->
+	    <field name="mKeyManager">
+		Components.classes["@avaya.com/pkm/keymanager;1"]
+			.getService(Components.interfaces.alrIKeyManager);
+	    </field>
+
+	    <field name="mEPKFileTypeHBoxElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.pkcsfilemgr.epk.file.type.hbox");
+	    </field>
+	    <field name="mEPKFileTypeOptionsElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.pkcsfilemgr.epk.file.type.options");
+	    </field>
+	    <field name="mEPKFileTypeOsslEPKElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.pkcsfilemgr.epk.file.type.osslepk");
+	    </field>
+	    <field name="mEPKFileTypePKCS8Elem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.pkcsfilemgr.epk.file.type.pkcs8");
+	    </field>
+	    <field name="mEPKFileHasCertElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.pkcsfilemgr.epk.file.has.cert");
+	    </field>
+	    <field name="mEPKFilePickerElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.pkcsfilemgr.epk.filepicker");
+	    </field>
+	    <field name="mEPKCertFilePickerRowElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.pkcsfilemgr.epk.cert.filepicker.row");
+	    </field>
+	    <field name="mEPKCertFilePickerElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.pkcsfilemgr.epk.cert.filepicker");
+	    </field>
+
+	    <field name="mReadyToMount">false</field>
+	    <field name="mCredentialType">false</field>
+	    <field name="mX509Cert"/>
+
+	    <property name="readytomount" readonly="true"
+		onget="return this.mReadyToMount;"
+		/>
+	    <property name="epkfiletype"
+		onget="return this.mEPKFileTypeOptionsElem.selectedItem.value;"
+		onset="if (val == 'pkcs8') {
+			    this.mEPKFileTypeOptionsElem.selectedItem = this.mEPKFileTypePKCS8Elem;
+			}
+			else {
+			    this.mEPKFileTypeOptionsElem.selectedItem=this.mEPKFileTypeOsslEPKElem
+			};
+			this.handleEPKFileTypeChange(this.mEPKFileTypeOptionsElem);
+			return val;"
+		/>
+	    <property name="epkhascert" readonly="true"
+		onget="return this.mEPKFileHasCertElem.checked;"
+		/>
+	    <property name="epkFilePickerElem" readonly="true"
+		onget="return this.mEPKFilePickerElem;"
+		/>
+	    <property name="epkcertFilePickerElem" readonly="true"
+		onget="return this.mEPKCertFilePickerElem;"
+		/>
+	    <property name="epkfile"
+		onget="return this.mEPKFilePickerElem.file;"
+		onset="this.mEPKFilePickerElem.file=val;
+			this.handleEPKFilePathChange(this.mEPKFilePickerElem);
+			return val;"
+		/>
+	    <property name="epkfilepath"
+		onget="return this.mEPKFilePickerElem.filepath;"
+		onset="this.mEPKFilePickerElem.filepath=val;
+			this.handleEPKFilePathChange(this.mEPKFilePickerElem);
+			return val;"
+		/>
+	    <property name="epkfilebase64"
+		onget="return this.mEPKFilePickerElem.ascii;"
+		onset="this.mEPKFilePickerElem.ascii=val;
+			this.handleEPKFilePathChange(this.mEPKFilePickerElem);
+			return val;"
+		/>
+	    <property name="epkcertfile"
+		onget="return this.mEPKCertFilePickerElem.file;"
+		onset="this.mEPKCertFilePickerElem.file=val;
+			this.handleEPKFilePathChange(this.mEPKCertFilePickerElem);
+			return val;"
+		/>
+	    <property name="epkcertfilepath"
+		onget="return this.mEPKCertFilePickerElem.filepath;"
+		onset="this.mEPKCertFilePickerElem.filepath=val;
+			this.handleEPKFilePathChange(this.mEPKCertFilePickerElem);
+			return val;"
+		/>
+	    <property name="epkcertfilebase64"
+		onget="return this.mEPKCertFilePickerElem.ascii;"
+		onset="this.mEPKCertFilePickerElem.ascii=val;
+			this.handleEPKFilePathChange(this.mEPKCertFilePickerElem);
+			return val;"
+		/>
+
+	    <property name="keybasedir"
+		onget="return this.mEPKFilePickerElem.displayDirFile;"
+		onset="if (val) {
+			this.mEPKFilePickerElem.displayDirFile=val;
+			this.mEPKCertFilePickerElem.displayDirFile=val;
+			}
+			else {
+			this.mEPKFilePickerElem.displayDirFile=null;
+			this.mEPKFilePickerElem.file=null;
+			this.mEPKCertFilePickerElem.displayDirFile=null;
+			this.mEPKCertFilePickerElem.file=null;
+			}
+			return val;"
+		/>
+	    <property name="keybasedirpath"
+		onget="return this.mEPKFilePickerElem.fileDisplayDirPath;"
+		onset="if (val &amp;&amp; (val != '')) {
+			this.mEPKFilePickerElem.fileDisplayDirPath=val;
+			this.mEPKCertFilePickerElem.fileDisplayDirPath=val;
+			}
+			else {
+			this.mEPKFilePickerElem.filepath='';
+			this.mEPKCertFilePickerElem.filepath='';
+			}
+			return val;"
+		/>
+
+	    <property name="credentialtype"
+		onget="return this.getAttribute('credentialtype');"
+		>
+		<setter>
+		<![CDATA[
+		this.LogTrace( "epkcertfilesBinding.credentialtype.set():.....................Start.");
+		if ((val) && (val != '')) {
+		    this.selectFileByCredentialType(this.keybasedir, val);
+		}
+		else {
+		    this.removeAttribute('credentialtype');
+		    this.epkfile = null;
+		    this.epkcertfile = null;
+		}
+		this.LogTrace( "epkcertfilesBinding.credentialtype.set():.....................End.");
+		return val;
+		]]>
+		</setter>
+	    </property>
+
+	    <constructor>
+		<![CDATA[
+		// this.mMaxLogLevel = 9;
+		this.LogTrace("epkcertfilesBinding.constructor():......................Start.");
+
+		// this.refresh();
+
+		this.LogTrace("epkcertfilesBinding.constructor():......................End.");
+		]]>
+	    </constructor>
+
+	    <method name="refresh">
+		<body>
+		<![CDATA[
+		this.LogTrace("epkcertfilesBinding.refresh():......................Start.");
+
+		this.handleEPKFileTypeChange(this.mEPKFileTypeOptionsElem);
+		this.handleEPKCertFilePathChange(this.mEPKCertFilePickerElem);
+		this.handleEPKFilePathChange(this.mEPKFilePickerElem);
+
+		this.LogTrace("epkcertfilesBinding.refresh():......................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="reset">
+		<body>
+		<![CDATA[
+		this.LogTrace("epkcertfilesBinding.reset():......................Start.");
+
+		this.mEPKFileHasCertElem.checked = false;
+		this.epkfilepath = "";
+		this.epkcertfilepath = "";
+
+		// this.refresh();
+
+		this.LogTrace("epkcertfilesBinding.reset():......................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="isTokenReadyToMount">
+		<body>
+		<![CDATA[
+		this.LogTrace("epkcertfilesBinding.isTokenReadyToMount():................Start.");
+
+		do {
+		    if (!this.mEPKFilePickerElem.file) {
+			this.mReadyToMount = false;
+			break;
+		    }
+		    if (this.mEPKFilePickerElem.ascii && this.mEPKFileHasCertElem.checked) {
+			this.mReadyToMount = true;
+			break;
+		    }
+		    if (!this.mEPKFilePickerElem.ascii && !this.mEPKCertFilePickerElem.file) {
+			// EPK file is not base-64 (i.e. binary), and no cert file path
+			this.mReadyToMount = false;
+			break;
+		    }
+	
+		    if (this.mEPKFilePickerElem.ascii && !this.mEPKFileHasCertElem.checked && !this.mEPKCertFilePickerElem.file) {
+			// EPK file is base-64, but it does not have cert and and no cert file path
+			this.mReadyToMount = false;
+			break;
+		    }
+
+		    this.mReadyToMount = true;
+		} while (false);
+
+		this.LogDebug("epkcertfilesBinding.isTokenReadyToMount(): readytomount: " + this.readytomount);
+
+		if (!this.mReadyToMount) {
+		    this.mX509Cert = null;
+		}
+
+		this.LogTrace("epkcertfilesBinding.isTokenReadyToMount():................End.");
+		return this.mReadyToMount;
+		]]>
+		</body>
+	    </method>
+
+
+	    <method name="handleEPKFileTypeChange">
+		<parameter name="aEPKFileTypeOptionsElem"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("epkcertfilesBinding.handleEPKFileTypeChange():......................Start.");
+		/*
+		if (ev) {
+		    ev.stopPropagation();
+		}
+		*/
+
+		if (!aEPKFileTypeOptionsElem.selectedItem) {
+		    return;
+		}
+
+		this.LogDebug("epkcertfilesBinding.handleEPKFileTypeChange(): this.epkfiletype: " + this.epkfiletype);
+
+		if (this.epkfiletype == "osslepk") {
+		    this.mEPKFilePickerElem.ascii = true;
+		    this.mEPKFilePickerElem.setAttribute("formathidden", true);
+		}
+		else {
+		    this.mEPKFilePickerElem.removeAttribute("formathidden");
+		}
+
+		var credType = this.credentialtype;
+		if (ev && credType) {
+		    this.selectFileByCredentialType(this.keybasedir, credType);
+		}
+
+
+		this.LogTrace("epkcertfilesBinding.handleEPKFileTypeChange():......................End.");
+		]]>
+		</body>
+	    </method>
+
+
+	    <method name="checkIfFileIsBase64">
+		<parameter name="aFilePickerElem"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("epkcertfilesBinding.checkIfFileIsBase64():......................Start.");
+		var base64File = false;
+		do {
+		    // TODO: check if the file has "-----BEGIN " in it.
+		    base64File = aFilePickerElem.fileContainsAsciiPatern("-----BEGIN", 100);
+		    this.LogDebug("epkcertfilesBinding.checkIfFileIsBase64(): base64File? " + base64File);
+		} while (0);
+
+		this.LogTrace("epkcertfilesBinding.checkIfFileIsBase64():......................End.");
+		return base64File;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="isEPKFileTypeOpenSSL">
+		<parameter name="aFilePickerElem"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("epkcertfilesBinding.isEPKFileTypeOpenSSL():......................Start.");
+		var isEPKFileTypeOpenSSL = false;
+		do {
+		    var containsCert = this.epkFileContainsCert(aFilePickerElem); 
+
+		    // TODO: check if the file has "-----BEGIN ENCRYPTED PRIVATE KEY-----" in it.
+		    var isPKSCS8File = false;
+		    if (containsCert) {
+			// read the whole file if necessary 
+			isPKSCS8File = aFilePickerElem.fileContainsAsciiPatern("-----BEGIN ENCRYPTED PRIVATE KEY-----");
+		    }
+		    else {
+			// Private key is only item - so 100 bytes is enough 
+			isPKSCS8File = aFilePickerElem.fileContainsAsciiPatern("-----BEGIN ENCRYPTED PRIVATE KEY-----", 200);
+		    }
+		    this.LogDebug("epkcertfilesBinding.isEPKFileTypeOpenSSL(): isPKSCS8File? " + isPKSCS8File);
+		    this.LogDebug("epkcertfilesBinding.isEPKFileTypeOpenSSL(): containsCert? " + containsCert);
+		} while (0);
+		isEPKFileTypeOpenSSL = !isPKSCS8File;
+
+		this.LogTrace("epkcertfilesBinding.isEPKFileTypeOpenSSL():......................End.");
+		return isEPKFileTypeOpenSSL;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="epkFileContainsCert">
+		<parameter name="aFilePickerElem"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("epkcertfilesBinding.epkFileContainsCert():......................Start.");
+
+		var containsCert = false;
+		do {
+		    // TODO: check if the file has "-----BEGIN CERTIFICATE" in it.
+		    containsCert = aFilePickerElem.fileContainsAsciiPatern("-----BEGIN CERTIFICATE", 100);
+		    this.LogDebug("epkcertfilesBinding.epkFileContainsCert(): containsCert? " + containsCert);
+		} while (0);
+
+		this.LogTrace("epkcertfilesBinding.epkFileContainsCert():......................End.");
+		return containsCert;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="handleEPKFileHasCertChange">
+		<parameter name="aEPKFileHasCertElem"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("epkcertfilesBinding.handleEPKFileHasCertChange():......................Start.");
+
+		if (aEPKFileHasCertElem.checked) {
+		    this.mEPKCertFilePickerRowElem.hidden = true;
+		}
+		else {
+		    this.mEPKCertFilePickerRowElem.hidden = false;
+		}
+	
+		this.isTokenReadyToMount();
+
+		this.LogTrace("epkcertfilesBinding.handleEPKFileHasCertChange():......................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="handleEPKFilePathChange">
+		<parameter name="aEPKFilePickerElem"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("epkcertfilesBinding.handleEPKFilePathChange():......................Start.");
+
+		if (ev) {
+		    var targetElem = ev.originalTarget;
+		    if (targetElem.localName == "checkbox") {
+			return;
+		    }
+		}
+
+		var epkFileBase64 = false;
+		var epkFileHasCert = false;
+		var epkFileTypeOpenSSL = false;
+
+		epkFileBase64 = this.checkIfFileIsBase64(aEPKFilePickerElem);
+
+		if (epkFileBase64) {
+		    this.LogTrace("epkcertfilesBinding.handleEPKFilePathChange():................10.");
+
+		    // aEPKFilePickerElem.ascii = epkFileBase64;
+		    epkFileTypeOpenSSL = this.isEPKFileTypeOpenSSL(aEPKFilePickerElem);
+		    this.LogDebug("epkcertfilesBinding.handleEPKFilePathChange(): epkFileTypeOpenSSL? " + epkFileTypeOpenSSL);
+		    if (epkFileTypeOpenSSL) {
+			this.mEPKFileTypeOptionsElem.selectedItem = this.mEPKFileTypeOsslEPKElem;
+		    }
+		    else {
+			this.mEPKFileTypeOptionsElem.selectedItem = this.mEPKFileTypePKCS8Elem;
+		    }
+		    this.LogTrace("epkcertfilesBinding.handleEPKFilePathChange():................20.");
+	
+		    epkFileHasCert = this.epkFileContainsCert(aEPKFilePickerElem);
+		    this.mEPKFileHasCertElem.checked = epkFileHasCert;
+		    this.mEPKFileHasCertElem.hidden = false;
+		}
+		else {
+		    this.mEPKFileHasCertElem.checked = false;
+		    this.mEPKFileHasCertElem.hidden = true;
+		}
+		if (this.mEPKFileHasCertElem.checked) {
+		    this.mX509Cert = null;
+		}
+
+		aEPKFilePickerElem.ascii = epkFileBase64;
+
+		this.LogDebug("epkcertfilesBinding.handleEPKFileTypeChange(): this.epkfiletype: " + this.epkfiletype);
+		this.LogTrace("epkcertfilesBinding.handleEPKFilePathChange():................30.");
+
+		this.handleEPKFileTypeChange(this.mEPKFileTypeOptionsElem);
+		this.handleEPKFileHasCertChange(this.mEPKFileHasCertElem);
+	
+		this.isTokenReadyToMount();
+
+		this.LogTrace("epkcertfilesBinding.handleEPKFilePathChange():......................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="handleEPKCertFilePathChange">
+		<parameter name="aEPKCertFilePickerElem"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("epkcertfilesBinding.handleEPKCertFilePathChange():......................Start.");
+
+		this.mX509Cert = null;
+
+		if (ev) {
+		    var targetElem = ev.originalTarget;
+		    if (targetElem.localName == "checkbox") {
+			return;
+		    }
+		}
+
+		var epkCertFileBase64 = this.checkIfFileIsBase64(aEPKCertFilePickerElem);
+		aEPKCertFilePickerElem.ascii = epkCertFileBase64;
+
+		this.isTokenReadyToMount();
+
+		this.LogTrace("epkcertfilesBinding.handleEPKCertFilePathChange():......................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="selectFileByCredentialType">
+		<parameter name="aDisplayDirFile"/>
+		<parameter name="aCredType"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("epkcertfilesBinding.selectFileByCredentialType():......................Start.");
+
+		var keyFileName = null;
+		var certFileName = null;
+		if (this.epkfiletype == "osslepk") {
+		    keyFileName = aCredType + "key.pem";
+		}
+		else {
+		    keyFileName = aCredType + "key.pk8";
+		}
+		var keyFile = this.mEPKFilePickerElem.findFileByName(aDisplayDirFile, keyFileName);
+		if (!keyFile) {
+		    var displayDirFile = null;
+		    if (aDisplayDirFile) {
+			displayDirFile = aDisplayDirFile.clone();
+		    }
+		    else {
+			displayDirFile = this.mEPKFilePickerElem.displayDirFile.clone();
+		    }
+		    displayDirFile.append("private");
+		    keyFile = this.mEPKFilePickerElem.findFileByName(displayDirFile, keyFileName);
+		    if (!keyFile) {
+			keyFileName = aCredType + ".key";
+			keyFile = this.mEPKFilePickerElem.findFileByName(displayDirFile, keyFileName);
+		    }
+		}
+		if (!keyFile) {
+		    keyFileName = aCredType + ".key";
+		    keyFile = this.mEPKFilePickerElem.findFileByName(aDisplayDirFile, keyFileName);
+		}
+		if (!keyFile) {
+		    this.mEPKFilePickerElem.filepath = "";
+		}
+		this.handleEPKFilePathChange(this.mEPKFilePickerElem);
+
+		var certFileName = aCredType + "cert.pem";
+		var certFile = this.mEPKCertFilePickerElem.findFileByName(aDisplayDirFile, certFileName); 
+		if (!certFile) {
+		    certFileName = aCredType + "cert.cer";
+		    certFile = this.mEPKCertFilePickerElem.findFileByName(aDisplayDirFile, certFileName); 
+		}
+		if (!certFile) {
+		    this.mEPKCertFilePickerElem.filepath = "";
+		}
+		this.handleEPKCertFilePathChange(this.mEPKCertFilePickerElem);
+
+		this.setAttribute('credentialtype', aCredType);
+
+		this.LogTrace("epkcertfilesBinding.selectFileByCredentialType():......................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="getX509Cert">
+		<parameter name="aForceRefresh"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("epkcertfilesBinding.getX509Cert():......................Start.");
+
+		if (!this.readytomount) {
+		    return null;
+		}
+
+		if (!aForceRefresh && this.mX509Cert) {
+		    return this.mX509Cert;
+		}
+		var certFile = null;
+		var certFileIsBase64 = false;
+		if (this.epkhascert && this.epkfile) {
+		    certFile = this.epkfile;
+		    certFileIsBase64 = this.epkfilebase64;
+		}
+		else if (this.epkcertfile) {
+		    certFile = this.epkcertfile;
+		    certFileIsBase64 = this.epkcertfilebase64;
+		}
+		if (!certFile) {
+		    return null;
+		}
+
+		var x509Cert = null;
+		if (!this.epkhascert) {
+		    try {
+			x509Cert = this.mKeyManager.createX509CertFromFile(certFile, certFileIsBase64);
+		    } catch (ex) { }
+		}
+		else {
+		    try {
+			x509Cert = this.mKeyManager.createX509CertFromFile(certFile, certFileIsBase64);
+		    } catch (ex) { }
+		}
+		this.LogDebug("epkcertfilesBinding.getX509Cert(): x509Cert: " + x509Cert);
+		this.mX509Cert = x509Cert;
+		
+		this.LogTrace("epkcertfilesBinding.getX509Cert():......................End.");
+		return this.mX509Cert;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="methodX1">
+		<parameter name="aEPKCertFilePickerElem"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("epkcertfilesBinding.methodX1():......................Start.");
+		this.LogTrace("epkcertfilesBinding.methodX1():......................End.");
+		]]>
+		</body>
+	    </method>
+
+	</implementation>
+    </binding>
+
+
+	    <!--
+	    <xul:row>
+		<xul:label value="&keymgr.pkcsfilemgr.softtoken.type.label;"/>
+	    </xul:row>
+	    -->
+
+    <binding id="softtokenBinding"
+	extends="chrome://keymanager/content/XBL/x509certbase.xml#x509certbase"
+	>
+	<xbl:resources>
+	    <stylesheet src="chrome://keymanager/skin/kmbindings.css"/>
+	</xbl:resources>
+
+	<!-- content, property, method and event descriptions go here -->
+	<content>
+
+	<xul:grid
+	    xbl:inherits="flex"
+	    flex="1"
+	    >
+	    <xul:columns>
+		<xul:column flex="1"/>
+	    </xul:columns>
+	    <xul:rows>
+		<xul:row
+		    align="center"
+		    >
+		    <xul:hbox anonid="keymgr.pkcsfilemgr.softtoken.type.hbox"
+			pack="start" align="center"
+			>
+			<xul:softtokentype anonid="keymgr.pkcsfilemgr.softtoken.type"
+			    xbl:inherits="softtokentype,softtokentypehidden,softtokentypedisabled,pkcs8hidden,pkcs8disabled,osslepkhidden,osslepkdisabled,pkcs12hidden,pkcs12disabled,keydbhidden,keydbdisabled"
+			    onpopuphiding="getBindingParent(this).handleSoftTokenTypeChange(this, event)"
+			    oncommand="getBindingParent(this).handleSoftTokenTypeChange(this, event)"
+			    />
+			<xul:hbox anonid="keymgr.pkcsfilemgr.softtoken.credential.type.hbox"
+			    xbl:inherits="hidden=excludecredtype"
+			    >
+			    <xul:label value="&keymgr.pkcsfilemgr.softtoken.credential.type.label;"/>
+			    <xul:osslcredentialtype anonid="keymgr.pkcsfilemgr.softtoken.credential.type"
+				xbl:inherits="credtypedisabled,credtype,credtypevaluehidden,credtypevalue,hidden=excludecredtype"
+				onpopuphiding="getBindingParent(this).handleCredentialTypeChange(this, event)"
+				oncommand="getBindingParent(this).handleCredentialTypeChange(this, event)"
+				onchange="getBindingParent(this).handleCredentialTypeChange(this, event)"
+				/>
+			</xul:hbox>
+		    </xul:hbox>
+		</xul:row>
+		<xul:row
+		    align="center"
+		    >
+		    <xul:deck anonid="keymgr.pkcsfilemgr.softtoken.file.deck"
+			flex="1"
+			>
+			<xul:epkcertfiles anonid="keymgr.pkcsfilemgr.softtoken.file.epkcertfiles"
+			    flex="1"
+			    epkfiletypehidden="true"
+			    onpopuphiding="getBindingParent(this).handleEPKCertFilesChange(this, event)"
+			    ontextentered="getBindingParent(this).handleEPKCertFilesChange(this, event)"
+			    oncommand="getBindingParent(this).handleEPKCertFilesChange(this, event)"
+			    onchange="getBindingParent(this).handleEPKCertFilesChange(this, event)"
+			    />
+			<xul:fileselector anonid="keymgr.pkcsfilemgr.softtoken.file.pkcs12"
+			    flex="1"
+			    formathidden="true"
+			    fileDialogMsg="Choose PKCS#12 File"
+			    fileTypeMsg="PKCS#12 File"
+			    fileTypeFilters="*.p12; *.pfx"
+			    filetooltiptext="&keymgr.pkcsfilemgr.softtoken.file.pkcs12.tooltip;"
+			    browselabel="&keymgr.pkcsfilemgr.file.browse.label;"
+			    browsetooltiptext="&keymgr.pkcsfilemgr.softtoken.file.pkcs12.browse.tooltip;"
+			    ontextentered="getBindingParent(this).handlePKCS12FileChange(this, event);"
+			    onpopuphiding="getBindingParent(this).handlePKCS12FileChange(this, event);"
+			    onchange="getBindingParent(this).handlePKCS12FileChange(this, event);"
+			    oncommand="getBindingParent(this).handlePKCS12FileChange(this, event);"
+			    />
+			<xul:fileselector anonid="keymgr.pkcsfilemgr.softtoken.file.keydb"
+			    flex="1"
+			    fileMode="folder"
+			    fileDialogMsg="Select Soft-Token DB Directory"
+			    fileTypeMsg="Soft-Token DB"
+			    fileTypeFilters="*.db"
+			    filetooltiptext="Soft-Token Key/Cert DB Directory"
+			    browsetooltiptext=""
+			    ontextentered="getBindingParent(this).handleSoftTokenDBDirChange(this, event);"
+			    onpopuphiding="getBindingParent(this).handleSoftTokenDBDirChange(this, event);"
+			    onchange="getBindingParent(this).handleSoftTokenDBDirChange(this, event);"
+			    oncommand="getBindingParent(this).handleSoftTokenDBDirChange(this, event);"
+			    />
+		    </xul:deck>
+		</xul:row>
+		<xul:row
+		    align="center"
+		    >
+		    <xul:hbox
+			pack="start"
+			>
+			<xul:checkbox anonid="keymgr.pkcsfilemgr.ossl.keystore.readytomount"
+			    disabled="true"
+			    label="Is token ready to mount?"
+			    tooltiptext="Is token ready to mount?"
+			    />
+		    </xul:hbox>
+		</xul:row>
+	    </xul:rows>
+	</xul:grid>
+
+	</content>
+
+	<implementation>
+	    <!--
+	    <field name="mIOService">
+		Components.classes["@mozilla.org/network/io-service;1"]
+				.getService(Components.interfaces.nsIIOService);
+	    </field>
+	    <field name="mDirService">
+		Components.classes['@mozilla.org/file/directory_service;1']
+				.getService(Components.interfaces.nsIProperties);
+	    </field>
+	    <field name="mX509CertDB">
+		Components.classes["@mozilla.org/security/x509certdb;1"]
+			.getService(Components.interfaces.nsIX509CertDB);
+	    </field>
+	    <field name="mXmlSerializer">new XMLSerializer();</field>
+	    -->
+	    <field name="mPK11TokenDB">
+		Components.classes["@mozilla.org/security/pk11tokendb;1"]
+			.getService(Components.interfaces.nsIPK11TokenDB);
+	    </field>
+	    <field name="mKeyManager">
+		Components.classes["@avaya.com/pkm/keymanager;1"]
+			.getService(Components.interfaces.alrIKeyManager);
+	    </field>
+	    <field name="mSoftTokenDBManager">
+		Components.classes["@avaya.com/pkm/softtokendbmanager;1"]
+				.getService(Components.interfaces.alrISoftTokenDBManager);
+	    </field>
+
+	    <field name="mSoftTokenTypeElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.pkcsfilemgr.softtoken.type");
+	    </field>
+	    <field name="mSoftTokenCredTypeHBoxElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.pkcsfilemgr.softtoken.credential.type.hbox");
+	    </field>
+	    <field name="mSoftTokenCredTypeElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.pkcsfilemgr.softtoken.credential.type");
+	    </field>
+	    <field name="mSoftTokenFileDeckElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.pkcsfilemgr.softtoken.file.deck");
+	    </field>
+	    <field name="mEPKCertFilePickerElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.pkcsfilemgr.softtoken.file.epkcertfiles");
+	    </field>
+	    <field name="mPKCS12FilePickerElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.pkcsfilemgr.softtoken.file.pkcs12");
+	    </field>
+	    <field name="mSoftTokenDBFilePickerElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.pkcsfilemgr.softtoken.file.keydb");
+	    </field>
+	    <field name="mSoftTokenReadyToMountElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.pkcsfilemgr.ossl.keystore.readytomount");
+	    </field>
+
+	    <field name="mReadyToMount">false</field>
+	    <field name="mMountedSlot"/>
+	    <field name="mMountedSoftTokenDBDir"/>
+	    <field name="mX509Cert"/>
+
+	    <property name="readytomount" readonly="true"
+		onget="return this.mReadyToMount;"
+		/>
+	    <property name="mountedslot" readonly="true"
+		onget="return this.mMountedSlot;"
+		/>
+	    <property name="mountedsofttokendbdir" readonly="true"
+		onget="return this.mMountedSoftTokenDBDir;"
+		/>
+	    <property name="mounted" readonly="true"
+		onget="return (this.mMountedSlot ? true : false);"
+		/>
+
+	    <property name="softtokentype"
+		onget="return this.mSoftTokenTypeElem.softtokentype;"
+		onset="this.mSoftTokenTypeElem.softtokentype = val;
+			this.handleSoftTokenTypeChange(this.mSoftTokenTypeElem);
+			return val;"
+		/>
+	    <property name="epkhascert" readonly="true"
+		onget="return this.mEPKCertFilePickerElem.epkhascert;"
+		/>
+	    <property name="epkfile"
+		onget="return this.mEPKCertFilePickerElem.epkfile;"
+		onset="this.mEPKCertFilePickerElem.epkfile=val;
+			this.handleEPKCertFilesChange(this.mEPKCertFilePickerElem);
+			return val;"
+		/>
+	    <property name="epkfilepath"
+		onget="return this.mEPKCertFilePickerElem.epkfilepath;"
+		onset="this.mEPKCertFilePickerElem.epkfilepath=val;
+			this.handleEPKCertFilesChange(this.mEPKCertFilePickerElem);
+			return val;"
+		/>
+	    <property name="epkfilebase64"
+		onget="return this.mEPKCertFilePickerElem.epkfilebase64;"
+		onset="this.mEPKCertFilePickerElem.epkfilebase64=val;
+			this.handleEPKCertFilesChange(this.mEPKCertFilePickerElem);
+			return val;"
+		/>
+	    <property name="epkcertfile"
+		onget="return this.mEPKCertFilePickerElem.epkcertfile;"
+		onset="this.mEPKCertFilePickerElem.epkcertfile=val;
+			this.handleEPKCertFilesChange(this.mEPKCertFilePickerElem);
+			return val;"
+		/>
+	    <property name="epkcertfilepath"
+		onget="return this.mEPKCertFilePickerElem.epkcertfilepath;"
+		onset="this.mEPKCertFilePickerElem.epkcertfilepath=val;
+			this.handleEPKCertFilesChange(this.mEPKCertFilePickerElem);
+			return val;"
+		/>
+	    <property name="epkcertfilebase64"
+		onget="return this.mEPKCertFilePickerElem.epkcertfilebase64;"
+		onset="this.mEPKCertFilePickerElem.epkcertfilebase64=val;
+			this.handleEPKCertFilesChange(this.mEPKCertFilePickerElem);
+			return val;"
+		/>
+
+	    <property name="pkcs12file"
+		onget="return this.mPKCS12FilePickerElem.file;"
+		onset="this.mPKCS12FilePickerElem.file=val;
+			this.handlePKCS12FileChange(this.mPKCS12FilePickerElem);
+			return val;"
+		/>
+	    <property name="pkcs12filepath"
+		onget="return this.mPKCS12FilePickerElem.filepath;"
+		onset="this.mPKCS12FilePickerElem.filepath=val;
+			this.handlePKCS12FileChange(this.mPKCS12FilePickerElem);
+			return val;"
+		/>
+	    <property name="pkcs12filebase64"
+		onget="return this.mPKCS12FilePickerElem.ascii;"
+		onset="this.mPKCS12FilePickerElem.ascii=val;
+			this.handlePKCS12FileChange(this.mPKCS12FilePickerElem);
+			return val;"
+		/>
+
+	    <property name="keydbdir"
+		onget="return this.mSoftTokenDBFilePickerElem.file;"
+		onset="this.mSoftTokenDBFilePickerElem.file=val;
+			this.handleSoftTokenDBDirChange(this.mSoftTokenDBFilePickerElem);
+			return val;"
+		/>
+	    <property name="keydbdirpath"
+		onget="return this.mSoftTokenDBFilePickerElem.filepath;"
+		onset="this.mSoftTokenDBFilePickerElem.filepath=val;
+			this.handleSoftTokenDBDirChange(this.mSoftTokenDBFilePickerElem);
+			return val;"
+		/>
+
+	    <property name="keybasedir"
+		onget="return this.mEPKCertFilePickerElem.keybasedir;"
+		onset="if (val) {
+			this.mEPKCertFilePickerElem.keybasedir=val;
+			this.mPKCS12FilePickerElem.displayDirFile=val;
+			this.mSoftTokenDBFilePickerElem.displayDirFile=val;
+			}
+			else {
+			this.mEPKCertFilePickerElem.keybasedir=null;
+			this.mPKCS12FilePickerElem.displayDirFile=null;
+			this.mPKCS12FilePickerElem.file=null;
+			this.mSoftTokenDBFilePickerElem.displayDirFile=null;
+			this.mSoftTokenDBFilePickerElem.file=null;
+			}
+			this.handleCredentialTypeChange(this.mSoftTokenCredTypeElem);
+			return val;"
+		/>
+	    <property name="keybasedirpath"
+		onget="return this.mEPKCertFilePickerElem.keybasedirpath;"
+		onset="if (val &amp;&amp; (val != '')) {
+			this.mEPKCertFilePickerElem.keybasedirpath=val;
+			this.mPKCS12FilePickerElem.fileDisplayDirPath=val;
+			this.mSoftTokenDBFilePickerElem.fileDisplayDirPath=val;
+			}
+			else {
+			this.mEPKCertFilePickerElem.filepath='';
+			this.mPKCS12FilePickerElem.filepath='';
+			this.mSoftTokenDBFilePickerElem.ffilepath='';
+			}
+			this.handleCredentialTypeChange(this.mSoftTokenCredTypeElem);
+			return val;"
+		/>
+
+	    <property name="keyfile">
+		<getter>
+		<![CDATA[
+		this.LogTrace( "softtokenBinding.keyfile.get():.....................Start.");
+
+		var softTokenKeyFilePickerElem =  this.getSoftTokenKeyFilePickerElem();
+		if (!softTokenKeyFilePickerElem) {
+		    return null;
+		}
+
+		this.LogTrace( "softtokenBinding.keyfile.get():.....................End.");
+		return softTokenKeyFilePickerElem.file;
+		]]>
+		</getter>
+		<!--
+		<setter>
+		<![CDATA[
+		this.LogTrace( "softtokenBinding.keyfile.set():.....................Start.");
+		this.LogTrace( "softtokenBinding.keyfile.set():.....................End.");
+		]]>
+		</setter>
+		-->
+	    </property>
+
+	    <property name="keyfilebase64">
+		<getter>
+		<![CDATA[
+		this.LogTrace( "softtokenBinding.keyfilebase64.get():.....................Start.");
+
+		var softTokenKeyFilePickerElem =  this.getSoftTokenKeyFilePickerElem();
+		if (!softTokenKeyFilePickerElem) {
+		    return false;
+		}
+
+		this.LogTrace( "softtokenBinding.keyfilebase64.get():.....................End.");
+		return softTokenKeyFilePickerElem.ascii;
+		]]>
+		</getter>
+		<!--
+		<setter>
+		<![CDATA[
+		this.LogTrace( "softtokenBinding.keyfilebase64.set():.....................Start.");
+		this.LogTrace( "softtokenBinding.keyfilebase64.set():.....................End.");
+		]]>
+		</setter>
+		-->
+	    </property>
+
+	    <property name="certfile">
+		<getter>
+		<![CDATA[
+		this.LogTrace( "softtokenBinding.certfile.get():.....................Start.");
+
+		var softTokenKeyFilePickerElem =  this.getSoftTokenKeyFilePickerElem();
+		if (!softTokenKeyFilePickerElem) {
+		    return null;
+		}
+
+		this.LogTrace( "softtokenBinding.certfile.get():.....................End.");
+		return softTokenKeyFilePickerElem.file;
+		]]>
+		</getter>
+		<!--
+		<setter>
+		<![CDATA[
+		this.LogTrace( "softtokenBinding.certfile.set():.....................Start.");
+		this.LogTrace( "softtokenBinding.certfile.set():.....................End.");
+		]]>
+		</setter>
+		-->
+	    </property>
+
+	    <property name="certfilebase64">
+		<getter>
+		<![CDATA[
+		this.LogTrace( "softtokenBinding.certfilebase64.get():.....................Start.");
+
+		var softTokenKeyFilePickerElem =  this.getSoftTokenKeyFilePickerElem();
+		if (!softTokenKeyFilePickerElem) {
+		    return false;
+		}
+
+		this.LogTrace( "softtokenBinding.certfilebase64.get():.....................End.");
+		return softTokenKeyFilePickerElem.ascii;
+		]]>
+		</getter>
+		<!--
+		<setter>
+		<![CDATA[
+		this.LogTrace( "softtokenBinding.certfilebase64.set():.....................Start.");
+		this.LogTrace( "softtokenBinding.certfilebase64.set():.....................End.");
+		]]>
+		</setter>
+		-->
+	    </property>
+
+	    <property name="credentialtype"
+		onget="return this.mSoftTokenCredTypeElem.credentialtype;"
+		>
+		<setter>
+		<![CDATA[
+		this.LogTrace( "softtokenBinding.credentialtype.set():.....................Start.");
+
+		if (val) {
+		    this.mSoftTokenCredTypeElem.credentialtype = val;
+		}
+		else {
+		    this.mSoftTokenCredTypeElem.credentialtype = '';
+		}
+		this.handleCredentialTypeChange(this.mSoftTokenCredTypeElem);
+
+		this.LogTrace( "softtokenBinding.credentialtype.set():.....................End.");
+		return val;
+		]]>
+		</setter>
+	    </property>
+
+
+	    <constructor>
+		<![CDATA[
+		// this.mMaxLogLevel = 9;
+		this.LogTrace("softtokenBinding.constructor():......................Start.");
+
+		// this.refresh();
+
+		this.LogTrace("softtokenBinding.constructor():......................End.");
+		]]>
+	    </constructor>
+
+	    <method name="refresh">
+		<body>
+		<![CDATA[
+		this.LogTrace("softtokenBinding.refresh():......................Start.");
+
+
+		this.mEPKCertFilePickerElem.refresh();
+		this.mX509Cert = null;
+
+		if (this.getAttribute("excludecredtype")) {
+		    this.mSoftTokenTypeElem.removeAttribute("keydbhidden");
+		    this.mSoftTokenCredTypeElem.value = "";
+		}
+		else {
+		    this.mSoftTokenTypeElem.setAttribute("keydbhidden", true);
+		}
+
+		var softTokenType = this.softtokentype;
+		if ((softTokenType == "pkcs8") || (softTokenType == "osslepk")) {
+		    this.mEPKCertFilePickerElem.epkfiletype =  softTokenType;
+		}
+		this.handleSoftTokenTypeChange(this.mSoftTokenTypeElem);
+
+		this.mSoftTokenCredTypeElem.refresh();
+		this.handleCredentialTypeChange(this.mSoftTokenCredTypeElem);
+
+		this.LogTrace("softtokenBinding.refresh():......................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="isTokenReadyToMount">
+		<body>
+		<![CDATA[
+		this.LogTrace("softtokenBinding.isTokenReadyToMount():................Start.");
+
+		this.mReadyToMount = false;
+		this.mX509Cert = null;
+
+		var softTokenType = this.softtokentype;
+		if ((softTokenType == "pkcs8") || (softTokenType == "osslepk")) {
+		    if (this.mEPKCertFilePickerElem.readytomount) {
+			this.mReadyToMount = true;
+		    }
+		}
+		else if (softTokenType == "pkcs12") {
+		    if (this.mPKCS12FilePickerElem.file) {
+			this.mReadyToMount = true;
+		    }
+		}
+		else if (softTokenType == "keydb") {
+		    if (this.mSoftTokenDBFilePickerElem.file) {
+			this.mReadyToMount = true;
+		    }
+		}
+		if (!this.mReadyToMount) {
+		    this.mX509Cert = null;
+		}
+
+		this.mSoftTokenReadyToMountElem.checked = this.mReadyToMount;
+
+		this.LogDebug("softtokenBinding.isTokenReadyToMount(): readytomount: " + this.readytomount);
+
+		this.LogTrace("softtokenBinding.isTokenReadyToMount():......................End.");
+		return this.mReadyToMount;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="getSoftTokenKeyFilePickerElem">
+		<body>
+		<![CDATA[
+		this.LogTrace("softtokenBinding.getSoftTokenKeyFilePickerElem():......................Start.");
+
+		var keyFilePickerElem = null;
+
+		var softTokenType = this.softtokentype;
+		if (softTokenType == "pkcs8") {
+		    keyFilePickerElem = this.mEPKCertFilePickerElem.epkFilePickerElem;
+		}
+		else if (softTokenType == "osslepk") {
+		    keyFilePickerElem = this.mEPKCertFilePickerElem.epkFilePickerElem;
+		}
+		else if (softTokenType == "pkcs12") {
+		    keyFilePickerElem = this.mPKCS12FilePickerElem;
+		}
+		else if (softTokenType == "keydb") {
+		    keyFilePickerElem = this.mSoftTokenDBFilePickerElem;
+		}
+		this.LogTrace("softtokenBinding.getSoftTokenKeyFilePickerElem():......................End.");
+		return keyFilePickerElem;
+		]]>
+		</body>
+	    </method>
+	    <method name="getSoftTokenCertFilePickerElem">
+		<body>
+		<![CDATA[
+		this.LogTrace("softtokenBinding.getSoftTokenKeyFilePickerElem():......................Start.");
+		if (!((this.softtokentype == "pkcs8") || (this.softtokentype == "osslepk"))) {
+		    return null;
+		}
+		this.LogTrace("softtokenBinding.getSoftTokenKeyFilePickerElem():......................End.");
+		return this.mEPKCertFilePickerElem.epkcertFilePickerElem;
+		]]>
+		</body>
+	    </method>
+	    <!--
+	    <method name="getSoftTokenDBFilePickerElem">
+		<body>
+		<![CDATA[
+		this.LogTrace("softtokenBinding.getSoftTokenKeyFilePickerElem():......................Start.");
+		if (this.softtokentype != "keydb") {
+		    return null;
+		}
+		this.LogTrace("softtokenBinding.getSoftTokenKeyFilePickerElem():......................End.");
+		return this.mSoftTokenDBFilePickerElem;
+		]]>
+		</body>
+	    </method>
+	    -->
+
+
+	    <method name="handleSoftTokenTypeChange">
+		<parameter name="aSoftTokenTypeMenuElem"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("softtokenBinding.handleSoftTokenTypeChange():......................Start.");
+
+		if (ev) {
+		    if (ev.type != "command") {
+			ev.stopPropagation();
+			return;
+		    }
+		}
+
+		/*
+		if (!aSoftTokenTypeMenuElem.selectedItem) {
+		    return;
+		}
+		*/
+
+		var softTokenType = aSoftTokenTypeMenuElem.softtokentype;
+		this.LogDebug("softtokenBinding.handleSoftTokenTypeChange(): softTokenType: " + softTokenType);
+
+		if (softTokenType == "pkcs8") {
+		    this.mEPKCertFilePickerElem.reset();
+		    this.mEPKCertFilePickerElem.epkfiletype =  softTokenType;
+
+		    // this.mPKCS12FilePickerElem.file = null;
+		    // this.mSoftTokenDBFilePickerElem.file = null;
+
+		    this.mSoftTokenFileDeckElem.selectedPanel = this.mEPKCertFilePickerElem;
+		}
+		else if (softTokenType == "osslepk") {
+		    this.mEPKCertFilePickerElem.reset();
+		    this.mEPKCertFilePickerElem.epkfiletype =  softTokenType;
+
+		    // this.mPKCS12FilePickerElem.file = null;
+		    // this.mSoftTokenDBFilePickerElem.file = null;
+
+		    this.mSoftTokenFileDeckElem.selectedPanel = this.mEPKCertFilePickerElem;
+		}
+		else if (softTokenType == "pkcs12") {
+		    // this.mEPKCertFilePickerElem.reset();
+		    // this.mSoftTokenDBFilePickerElem.file = null;
+
+		    this.mSoftTokenFileDeckElem.selectedPanel = this.mPKCS12FilePickerElem;
+		}
+		else if (softTokenType == "keydb") {
+		    // this.mEPKCertFilePickerElem.reset();
+		    // this.mPKCS12FilePickerElem.file = null;
+
+		    this.mSoftTokenFileDeckElem.selectedPanel = this.mSoftTokenDBFilePickerElem;
+		}
+
+		// this.isTokenReadyToMount();
+
+		/*
+		var credType = this.credentialtype;
+		if (credType) {
+		    this.selectFileByCredentialType(this.keybasedir, credType);
+		}
+		*/
+
+		this.handleCredentialTypeChange(this.mSoftTokenCredTypeElem);
+
+		this.LogTrace("softtokenBinding.handleSoftTokenTypeChange():......................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="handleCredentialTypeChange">
+		<parameter name="aSoftTokenCredTypeElem"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("softtokenBinding.handleCredentialTypeChange():......................Start.");
+
+		if (ev) {
+		    // Only allow command type event to propagate up
+		    if (ev.type != "command") {
+			ev.stopPropagation();
+			return;
+		    }
+		}
+
+
+		this.mX509Cert = null;
+		this.pkcs12file = null;
+		this.keydbdir = null;
+
+		var credType = aSoftTokenCredTypeElem.value;
+		if (credType != '') {
+		    this.selectFileByCredentialType(this.keybasedir, credType);
+		}
+		else {
+		    this.mEPKCertFilePickerElem.credentialtype = "";
+		}
+
+		this.isTokenReadyToMount();
+
+		this.LogTrace("softtokenBinding.handleCredentialTypeChange():......................End.");
+		]]>
+		</body>
+	    </method>
+
+
+
+	    <method name="handleEPKCertFilesChange">
+		<parameter name="aPKCS12FilePickerElem"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("softtokenBinding.handleEPKCertFilesChange():......................Start.");
+
+		this.isTokenReadyToMount();
+
+		this.LogTrace("softtokenBinding.handleEPKCertFilesChange():......................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="handlePKCS12FileChange">
+		<parameter name="aPKCS12FilePickerElem"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("softtokenBinding.handlePKCS12FileChange():......................Start.");
+
+		this.isTokenReadyToMount();
+
+		this.LogTrace("softtokenBinding.handlePKCS12FileChange():......................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="handleSoftTokenDBDirChange">
+		<parameter name="aSoftTokenDBFilePickerElem"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("softtokenBinding.handleSoftTokenDBDirChange():......................Start.");
+
+		this.isTokenReadyToMount();
+
+		// this.LogDebug("softtokenBinding.handleSoftTokenDBDirChange(): keydbdir: " + this.keydbdir);
+
+		this.LogTrace("softtokenBinding.handleSoftTokenDBDirChange():......................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="selectFileByCredentialType">
+		<parameter name="aDisplayDirFile"/>
+		<parameter name="aCredType"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("softtokenBinding.selectFileByCredentialType():......................Start.");
+
+
+		var softTokenType = this.softtokentype;
+		if ((softTokenType == "pkcs8") || (softTokenType == "osslepk")) {
+		    this.mEPKCertFilePickerElem.credentialtype = aCredType;
+		    this.setAttribute('credentialtype', aCredType);
+		    return;
+		}
+		if (softTokenType != "pkcs12") {
+		    return;
+		}
+
+		this.mPKCS12FilePickerElem.file = null;
+
+		var pkcs12FileName = aCredType + "cred.p12";
+		var pkcs12File = this.mPKCS12FilePickerElem.findFileByName(aDisplayDirFile, pkcs12FileName);
+		if (!pkcs12File) {
+		    pkcs12FileName = aCredType + "cred.pfx";
+		    pkcs12File = this.mPKCS12FilePickerElem.findFileByName(aDisplayDirFile, pkcs12FileName);
+		}
+		if (!pkcs12File) {
+		    var displayDirFile = null;
+		    if (aDisplayDirFile) {
+			displayDirFile = aDisplayDirFile.clone();
+		    }
+		    else {
+			displayDirFile = this.mPKCS12FilePickerElem.displayDirFile;
+		    }
+		    if (displayDirFile) {
+			displayDirFile.append("private");
+			pkcs12FileName = aCredType + "cred.p12";
+			pkcs12File = this.mPKCS12FilePickerElem.findFileByName(displayDirFile, pkcs12FileName);
+		    }
+		}
+		if (pkcs12File) {
+		    this.setAttribute('credentialtype', aCredType);
+		}
+
+		this.LogTrace("softtokenBinding.selectFileByCredentialType():......................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="getX509Cert">
+		<parameter name="aForceRefresh"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("softtokenBinding.getX509Cert():......................Start.");
+
+		var x509Cert = null;
+		do {
+		    if (!this.readytomount) {
+			x509Cert = null;
+			break;
+		    }
+
+		    if (!aForceRefresh && this.mX509Cert) {
+			x509Cert = this.mX509Cert;
+			break;
+		    }
+
+		    var softTokenType = this.softtokentype;
+		    this.LogDebug("softtokenBinding.getX509Cert(): softTokenType: " + softTokenType);
+		    if ((softTokenType == "pkcs8") || (softTokenType == "osslepk")) {
+			x509Cert = this.mEPKCertFilePickerElem.getX509Cert();
+			break;
+		    }
+
+		    if (softTokenType != "pkcs12") {
+			this.LogTrace("softtokenBinding.getX509Cert():......................40.");
+			break;
+		    }
+
+		    this.LogTrace("softtokenBinding.getX509Cert():......................50.");
+		    try {
+			var countObj = new Object();
+			var x509CertsObj = new Object();
+			this.mKeyManager.getX509CertsFromPKCS12File(
+				    this.mPKCS12FilePickerElem.file, this.mPKCS12FilePickerElem.ascii,
+				    countObj, x509CertsObj
+				    );
+			var totalCerts = countObj.value;
+			this.LogDebug("softtokenBinding.getX509Cert(): countObj.value : " + countObj.value);
+			this.LogDebug("softtokenBinding.getX509Cert(): x509CertsObj.value : " + x509CertsObj.value);
+
+			if (x509CertsObj.value && x509CertsObj.value.length) {
+			    this.LogDebug("softtokenBinding.getX509Cert(): x509CertsObj.value.length : " + x509CertsObj.value.length);
+			}
+			if (totalCerts == 0) {
+			    break;
+			}
+		    	this.LogTrace("softtokenBinding.getX509Cert():......................60.");
+
+			// Remove the CA-certs from the cert-list 
+			var userCertList = [];
+			for (var i = 0; i < totalCerts; i++) {
+			    var parentCert = x509CertsObj.value[i];
+			    this.LogDebug("softtokenBinding.getX509Cert(): i: " + i + " parentCert: " + parentCert);
+			    if (!parentCert) {
+			    	continue;
+			    }
+			    this.LogDebug("softtokenBinding.getX509Cert(): i: " + i + " parentCert: " + parentCert.subjectName + "(" + parentCert.issuerName + ")");
+			    // If the PKCS#12 file contains only the self-issued cert - then ignore the cert-processing
+			    // and use that cert as user-cert.
+			    if ((totalCerts == 1) && (parentCert.subjectName == parentCert.issuerName)) {
+			    	userCertList[userCertList.length] = parentCert;
+			    	break;
+			    }
+
+			    var isParentCert = false;
+			    for (var j = 0; j < totalCerts; j++) {
+				if (i == j) {
+				    // Ignore the same cert
+				    continue;
+				}
+			    	var childCert = x509CertsObj.value[j];
+			    	this.LogDebug("softtokenBinding.getX509Cert(): j: " + j + " childCert: " + childCert);
+				if (!childCert) {
+				    continue;
+				}
+			    	this.LogDebug("softtokenBinding.getX509Cert(): j: " + j + " childCert: " + childCert.subjectName + "(" + childCert.issuerName + ")");
+
+				// Ignore the same cert 
+				if (parentCert.equals(childCert)) {
+				    continue;
+				}
+				if (parentCert.subjectName == childCert.issuerName) {
+				    this.LogDebug("softtokenBinding.getX509Cert(): found parent cert - i: " + i);
+				    isParentCert = true;
+				    break;
+				}
+			    }
+			    if (!isParentCert) {
+			    	userCertList[userCertList.length] = parentCert;
+			    }
+			}
+		    	this.LogTrace("softtokenBinding.getX509Cert():......................70.");
+
+			totalCerts = userCertList.length;
+			for (var i = 0; i < totalCerts; i++) {
+			    var tmpX509Cert =  userCertList[i];
+			    this.LogDebug("softtokenBinding.getX509Cert(): tmpX509Cert[" + i + "] : " + tmpX509Cert);
+			    if (!tmpX509Cert) {
+			    	continue;
+			    }
+			    var x509Cert2 = tmpX509Cert.QueryInterface(Components.interfaces.nsIX509Cert2);
+			    var x509CertTypeValue = 0;
+			    try {
+				x509CertTypeValue = x509Cert2.certType;
+			    } catch (ex) {}
+			    this.LogDebug("softtokenBinding.getX509Cert(): tmpX509Cert[" + i + "] : " + tmpX509Cert + " x509CertTypeValue: " + x509CertTypeValue + " subject: " + tmpX509Cert.subjectName);
+			    if (totalCerts == 1) {
+				x509Cert = tmpX509Cert;
+				break;
+			    }
+			    if (x509CertTypeValue != Components.interfaces.nsIX509Cert.CA_CERT) {
+				x509Cert = tmpX509Cert;
+				break;
+			    }
+			}
+		    } catch (ex) {
+			alert("Failed to extract certificate from PKCS12 file - possibly invalid password.");
+			this.LogDebug("softtokenBinding.getX509Cert(): this.mKeyManager.getX509CertsFromPKCS12File() failed - ex : " + ex);
+			x509Cert = null;
+		    }
+		} while (0);
+
+		this.mX509Cert = x509Cert;
+
+		this.LogTrace("softtokenBinding.getX509Cert():......................End.");
+		return this.mX509Cert;
+		]]>
+		</body>
+	    </method>
+
+
+	    <method name="getUniqueTokenName">
+		<parameter name="aTokenNamePrefix"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("softtokenBinding.getUniqueTokenName():......................Start.");
+		var tokenName = null;
+		for (var i = 0; i < 100; i++) {
+		    var tmpTokenName = aTokenNamePrefix + "_" + i;
+
+		    var /* nsIPK11Token */ token = null;
+		    try {
+			token = this.mPK11TokenDB.findTokenByName(tmpTokenName);
+		    } catch (ex) {}
+		    if (!token) {
+			tokenName = tmpTokenName;
+			break;
+		    }
+		}
+		this.LogTrace("softtokenBinding.getUniqueTokenName():......................End.");
+		return tokenName;
+		]]>
+		</body>
+	    </method>
+
+
+	    <method name="mountEPKSoftToken">
+		<parameter name="tokenName"/>
+		<parameter name="useAutoPassword"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("softtokenBinding.mountEPKSoftToken():......................Start.");
+		if (!this.epkfile) {
+		    throw ("No Key File");
+		}
+
+		var epkFile = null;
+		var epkFileBase64 = false;
+		var epkcertFile = null;
+		var epkcertFileBase64 = false;
+
+		var readOnly = false;
+		var enableFips = false;
+		var tokenPassword = null;
+		var softTokenDBDirObj = new Object();
+
+		var /* nsIX509Cert   */	resolvedX059Cert = null;
+		var /* nsILocalFile  */ softTokenDBDir = null;
+		var /* nsIPKCS11Slot */ mountedSlot = null;
+		try {
+		    epkFile = this.epkfile;
+		    epkFileBase64 = this.epkfilebase64;
+		    epkcertFile = this.epkcertfile;
+		    epkcertFileBase64 = this.epkcertfilebase64;
+
+		    this.LogDebug("softtokenBinding.mountEPKSoftToken(): epkFileBase64: " + epkFileBase64 + " epkcertFileBase64: " + epkcertFileBase64);
+		    this.LogDebug("softtokenBinding.mountEPKSoftToken(): tokenName: " + tokenName);
+
+		    if (this.softtokentype == "pkcs8") {
+			/*
+			var initialPasswordUC = "";
+			var useAutoPassword = false;
+			var softToken = this.mSoftTokenDBManager.createTempSoftToken(
+						tokenName, 
+						initialPasswordUC, useAutoPassword,
+						softTokenDBDirObj
+						);
+			softToken.login(false);
+			*/
+			// mountedSlot = this.mKeyManager.mountPKCS8FileSlot(
+			mountedSlot = this.mKeyManager.mountPKCS8FileAsTempSlot(
+						epkFile, epkFileBase64,
+						epkcertFile, epkcertFileBase64,
+						tokenName,
+						readOnly, enableFips,
+						tokenPassword, useAutoPassword,
+						softTokenDBDirObj
+						);
+		    }
+		    else {
+			if (this.epkhascert) {
+			    epkcertFile = epkFile;
+			    epkcertFileBase64 = true;
+			}
+			var iterationCnt = 1;
+			// mountedSlot = this.mKeyManager.mountOpenSSLEPKFileSlot(
+			mountedSlot = this.mKeyManager.mountOpenSSLEPKFileAsTempSlot(
+						epkFile, iterationCnt,
+						epkcertFile, epkcertFileBase64,
+						tokenName,
+						readOnly, enableFips,
+						tokenPassword, useAutoPassword,
+						softTokenDBDirObj
+						);
+		    }
+		    if (epkcertFile) {
+			resolvedX059Cert = this.mKeyManager.createX509CertFromFile(
+						epkcertFile, epkcertFileBase64
+						);
+		    }
+		} catch (ex) {
+		    // alert("softtokenBinding.mountEPKSoftToken(): this.mKeyManager.mountPKCS8FileSlot() failed - ex: " + ex);
+		    this.LogError("softtokenBinding.mountEPKSoftToken(): this.mKeyManager.mountPKCS8FileSlot() failed - ex: " + ex);
+		    throw ex;
+		}
+		// this.mX509CertItemElem.cert = resolvedX059Cert;
+
+		if (softTokenDBDirObj.value) {
+		    this.mMountedSoftTokenDBDir = softTokenDBDirObj.value.QueryInterface(Components.interfaces.nsILocalFile);;
+		}
+
+		this.LogTrace("softtokenBinding.mountEPKSoftToken():......................End.");
+		return mountedSlot;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="mountPKCS12File">
+		<parameter name="tokenName"/>
+		<parameter name="useAutoPassword"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("softtokenBinding.mountPKCS12File():......................Start.");
+
+		if (!this.pkcs12file) {
+		    throw ("No PKCS12 File");
+		}
+
+		var readOnly = false;
+		var enableFips = false;
+		var tokenPassword = null;
+
+		var softTokenDBDirObj = new Object();
+
+		var /* nsIX509Cert   */	resolvedX059Cert = null;
+		var /* nsILocalFile  */ softTokenDBDir = null;
+		var /* nsIPKCS11Slot */ mountedSlot = null;
+		try {
+		    // mountedSlot = this.mSoftTokenDBManager.mountPKCS12FileSlot(
+		    mountedSlot = this.mSoftTokenDBManager.mountPKCS12FileAsTempSlot(
+					this.pkcs12file,
+					tokenName,
+					readOnly, enableFips,
+					tokenPassword, useAutoPassword,
+					softTokenDBDirObj
+					);
+		    if (softTokenDBDirObj.value) {
+			this.mMountedSoftTokenDBDir = softTokenDBDirObj.value.QueryInterface(Components.interfaces.nsILocalFile);;
+		    }
+		} catch (ex) {
+		    this.logError("softtokenBinding.mountPKCS12File(): this.mSoftTokenDBManager.mountPKCS12FileSlot() failed - ex: " + ex);
+		    throw ex;
+		}
+
+		this.LogTrace("softtokenBinding.mountPKCS12File():......................End.");
+		return mountedSlot;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="mountSoftTokenDB">
+		<parameter name="tokenName"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("softtokenBinding.mountSoftTokenDB():......................Start.");
+		this.LogDebug("softtokenBinding.mountSoftTokenDB(): keydbdir: " + this.keydbdir);
+
+		if (!this.keydbdir) {
+		    throw ("No DB DIR");
+		}
+
+		var certPrefix = "";
+		var readOnly = false;
+		var enableFips = false;
+		var performLogin = true;
+
+		var /* nsIX509Cert   */	resolvedX059Cert = null;
+		var /* nsILocalFile  */ softTokenDBDir = null;
+		var /* nsIPKCS11Slot */ mountedSlot = null;
+		try {
+		    mountedSlot = this.mSoftTokenDBManager.mountSoftTokenDBSlot(
+					this.keydbdirpath,
+					certPrefix, tokenName,
+					readOnly, enableFips,
+					performLogin
+					);
+		} catch (ex) {
+		    this.logError("softtokenBinding.mountSoftTokenDB(): this.mSoftTokenDBManager.mountSoftTokenDBSlot() failed - ex: " + ex);
+		    throw ex;
+		}
+
+		this.LogTrace("softtokenBinding.mountSoftTokenDB():......................End.");
+		return mountedSlot;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="mountSoftToken">
+		<parameter name="aTokenNamePrefix"/>
+		<parameter name="useAutoPassword"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("softtokenBinding.mountSoftToken():......................Start.");
+
+		if (!this.readytomount) {
+		    return;
+		}
+		var tokenNamePrefix = aTokenNamePrefix;
+		if (!tokenNamePrefix || (tokenNamePrefix == "")) {
+		    tokenNamePrefix = "ExtSoftToken";
+		}
+		var tokenName = this.getUniqueTokenName(tokenNamePrefix);
+
+		this.mMountedSoftTokenDBDir = null;
+		var /* nsIPKCS11Slot */ mountedSlot = null;
+		try {
+		    if ((this.softtokentype == "pkcs8") || (this.softtokentype == "osslepk")) {
+			mountedSlot = this.mountEPKSoftToken(tokenName, useAutoPassword);
+		    }
+		    else if (this.softtokentype == "pkcs12") {
+			mountedSlot = this.mountPKCS12File(tokenName);
+		    }
+		    else if (this.softtokentype == "keydb") {
+			mountedSlot = this.mountSoftTokenDB(tokenName);
+		    }
+		} catch (ex) {
+		    mountedSlot = null;
+		    // throw ex;
+		}
+
+		if (!mountedSlot) {
+		    this.mMountedSlot = null;
+		    this.mMountedSoftTokenDBDir = null;
+
+		    this.LogTrace("softtokenmgrBinding.mountSoftToken():......................End(0).");
+		    throw ("Failed to mount soft-token.");
+		}
+		this.mMountedSlot = mountedSlot;
+
+		var mountedToken = this.mMountedSlot.getToken();
+		this.LogDebug("softtokenmgrBinding.mountSoftToken(): token.tokenName: " + mountedToken.tokenName);
+
+		this.LogTrace("softtokenBinding.mountSoftToken():......................End.");
+		return mountedSlot;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="unmountSoftToken">
+		<body>
+		<![CDATA[
+		this.LogTrace("softtokenBinding.unmountSoftToken():......................Start.");
+
+		if (!this.mMountedSlot) {
+		    return;
+		}
+		try {
+		    this.mSoftTokenDBManager.unmountSoftTokenDBSlot(this.mMountedSlot);
+		    this.mMountedSlot = null;
+
+		    if (this.mMountedSoftTokenDBDir) {
+			this.mMountedSoftTokenDBDir.remove(true);
+		    }
+		    this.mMountedSoftTokenDBDir = null;
+		} catch (ex) {
+		    alert("softtokenmgrBinding.mountSoftToken(): this.mSoftTokenDBManager.mountSoftTokenSlot() failed - ex: " + ex);
+		    this.LogError("softtokenmgrBinding.mountSoftToken(): this.mSoftTokenDBManager.mountSoftTokenSlot() failed - ex: " + ex);
+		}
+
+		this.LogTrace("softtokenBinding.unmountSoftToken():......................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="getTokenUserCertList">
+		<body>
+		<![CDATA[
+		this.LogTrace("softtokenBinding.getTokenUserCertList():......................Start.");
+
+		var certList = [];
+
+		if (!this.mMountedSlot) {
+		    return certList;
+		}
+		var mountedToken = this.mMountedSlot.getToken();
+
+		var certCntObj = {};
+		var certListObj = {};
+		this.mSoftTokenDBManager.getCertList(
+				mountedToken,
+				Components.interfaces.nsIX509Cert.USER_CERT,
+				certCntObj,
+				certListObj
+				);
+		if (!certCntObj.value && (certCntObj.value <= 0)) {
+	    	    return certList;
+		}
+		if (!certListObj.value) {
+	    	    return certList;
+		}
+		certList = certListObj.value;
+
+		this.LogTrace("softtokenBinding.getTokenUserCertList():......................End.");
+		return certList;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="methodX1">
+		<parameter name="aEPKFilePickerElem"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("softtokenBinding.methodX1():......................Start.");
+		this.LogTrace("softtokenBinding.methodX1():......................End.");
+		]]>
+		</body>
+	    </method>
+
+	</implementation>
+    </binding>
+
+    <binding id="osslsofttokenBinding"
+	extends="chrome://keymanager/content/XBL/x509certbase.xml#x509certbase"
+	>
+	<xbl:resources>
+	    <stylesheet src="chrome://keymanager/skin/kmbindings.css"/>
+	</xbl:resources>
+
+	<!-- content, property, method and event descriptions go here -->
+	<content>
+
+	<xul:grid flex="1"
+	    xbl:inherits="flex,style"
+	    >
+	    <xul:columns>
+		<xul:column/>
+		<xul:column flex="1"/>
+	    </xul:columns>
+	    <xul:rows>
+		<xul:row anonid="keymgr.pkcsfilemgr.ossl.keystore.basedir.row"
+		    align="end"
+		    >
+		    <xul:label value="KeyStore Dir"/>
+		    <xul:hbox
+			>
+			<xul:osslapptype anonid="keymgr.pkcsfilemgr.ossl.keystore.basedir.apptype"
+			    xbl:inherits="osslapptype,disabled=osslapptypedisabled,hidden=osslapptypehidden,tooltiptext=osslapptypetooltiptext"
+			    tooltiptext="&keymgr.pkcsfilemgr.ossl.keystore.basedir.apptype.tooltip;"
+			    onpopuphiding="getBindingParent(this).handleAppKeyStoreAppTypeChange(this, event)"
+			    oncommand="getBindingParent(this).handleAppKeyStoreAppTypeChange(this, event)"
+			    />
+			<xul:checkbox anonid="keymgr.pkcsfilemgr.ossl.keystore.basedir.useprofile"
+			    xbl:inherits="disabled=useprofileiddisabled,checked=useprofileid"
+			    label="&keymgr.pkcsfilemgr.ossl.keystore.basedir.useprofile.label;"
+			    tooltiptext="&keymgr.pkcsfilemgr.ossl.keystore.basedir.useprofile.tooltip;"
+			    oncommand="getBindingParent(this).handleAppKeyStoreUseProfileChange(this, event)"
+			    />
+			<xul:fileselector anonid="keymgr.pkcsfilemgr.ossl.keystore.basedirpicker" flex="10"
+			    xbl:inherits="value=keystoredirpath,filetooltiptext=basedirtooltip,browsetooltiptext=basedirbrowsetooltip"
+			    fileMode="folder"
+			    fileDialogMsg="Select Keystore Directory"
+			    fileTypeMsg="OpenSSL KeyStore"
+			    fileTypeFilters="*.pfx; *.p12; *.pk8; *.cer; *.pem; *.crt"
+			    filetooltiptext="&keymgr.pkcsfilemgr.ossl.keystore.basedirpicker.tooltip;"
+			    browselabel="&keymgr.pkcsfilemgr.file.browse.label;"
+			    browsetooltiptext="&keymgr.pkcsfilemgr.ossl.keystore.basedirpicker.browse.tooltip;"
+			    onpopuphiding="getBindingParent(this).handleAppKeyStoreBaseDirChange(this, event)"
+			    ontextentered="getBindingParent(this).handleAppKeyStoreBaseDirChange(this, event)"
+			    onchange="getBindingParent(this).handleAppKeyStoreBaseDirChange(this, event)"
+			    oncommand="getBindingParent(this).handleAppKeyStoreBaseDirChange(this, event)"
+			    />
+		    </xul:hbox>
+		</xul:row>
+
+		<xul:row anonid="keymgr.pkcsfilemgr.ossl.keystore.dir.row"
+		    xbl:inherits="hidden=useprofilehidden"
+		    align="center"
+		    >
+		    <xul:spacer/>
+		    <xul:hbox
+			pack="start"
+			>
+			<xul:hbox anonid="keymgr.pkcsfilemgr.ossl.keystore.profileId.hbox"
+			    flex="1"
+			    >
+			    <xul:label value="&keymgr.pkcsfilemgr.ossl.keystore.profileId.label;"
+				xhidden="true"
+				/>
+			    <xul:textbox anonid="keymgr.pkcsfilemgr.ossl.keystore.profileId"
+				xbl:inherits="disabled=profileiddisabled,value=profileid"
+				size="8"
+				type="autocomplete" 
+				autocompletesearch="form-history" 
+				completeselectedindex="true"
+				autocompletesearchparam="keymgr.pkcsfilemgr.ossl.keystore.profileId"
+				tooltiptext="&keymgr.pkcsfilemgr.ossl.keystore.profileId.tooltip;"
+				onpopuphiding="getBindingParent(this).handleAppKeyStoreProfileIdChange(this, event)"
+				onchange="getBindingParent(this).handleAppKeyStoreProfileIdChange(this, event)"
+				xontextentered="getBindingParent(this).handleAppKeyStoreProfileIdChange(this, event)"
+				/>
+			    <xul:fileselector anonid="keymgr.pkcsfilemgr.ossl.keystore.dirpicker" flex="10"
+				fileMode="folder"
+				fileDialogMsg="Select Keystore Directory"
+				fileTypeMsg="OpenSSL KeyStore"
+				fileTypeFilters="*.pk8; *.cer; *.pem; *.crt"
+				filetooltiptext="&keymgr.pkcsfilemgr.ossl.keystore.dirpicker.tooltip;"
+				browselabel="&keymgr.pkcsfilemgr.file.browse.label;"
+				browsetooltiptext="&keymgr.pkcsfilemgr.ossl.keystore.dirpicker.browse.tooltip;"
+				onpopuphiding="getBindingParent(this).handleAppKeyStoreDirChange(this, event)"
+				ontextentered="getBindingParent(this).handleAppKeyStoreDirChange(this, event)"
+				oncommand="getBindingParent(this).handleAppKeyStoreDirChange(this, event)"
+				onchange="getBindingParent(this).handleAppKeyStoreDirChange(this, event)"
+				/>
+			</xul:hbox>
+		    </xul:hbox>
+		</xul:row>
+
+		<xul:row
+		    align="center"
+		    >
+		    <xul:label value="&keymgr.pkcsfilemgr.ossl.keystore.softtoken.label;"/>
+		    <xul:groupbox
+			xbl:inherits="orient,flex,style"
+			flex="1"
+			pack="start"
+			align="start"
+			orient="horizontal"
+			>
+			<xul:softtoken anonid="keymgr.pkcsfilemgr.ossl.keystore.softtoken"
+			    xbl:inherits="softtokentype,softtokentypehidden,keydbhidden"
+			    flex="1"
+			    persist="softtokentype,softtokentypehidden,keydbhidden"
+			    zsofttokentype="pkcs8"
+			    keydbhidden="true"
+			    onchange="getBindingParent(this).handleSoftTokenChange(this, event);"
+			    oncommand="getBindingParent(this).handleSoftTokenChange(this, event);"
+			    />
+		    </xul:groupbox>
+		</xul:row>
+
+		<xul:row
+		    align="center"
+		    >
+		    <xul:label value="&keymgr.pkcsfilemgr.ossl.keystore.softtoken.cert.label;"/>
+		    <xul:hbox
+			pack="start"
+			>
+			<xul:checkbox anonid="keymgr.pkcsfilemgr.ossl.keystore.softtoken.keyexists"
+			    disabled="true"
+			    label="Is key already exist?"
+			    tooltiptext="Is key already exist ==> key exists and cert is permannet?"
+			    />
+			<xul:certitem anonid="keymgr.pkcsfilemgr.ossl.keystore.softtoken.cert"
+			    showcerttype="true"
+			    xviewlabel="&keymgr.pkcsfilemgr.cert.view.label;"
+			    viewtooltiptext="&keymgr.pkcsfilemgr.ossl.keystore.softtoken.cert.view.tooltip;"
+			    />
+		    </xul:hbox>
+		</xul:row>
+
+	    </xul:rows>
+	</xul:grid>
+	</content>
+
+	<implementation>
+
+	    <field name="mKeyManager">
+		Components.classes["@avaya.com/pkm/keymanager;1"]
+			.getService(Components.interfaces.alrIKeyManager);
+	    </field>
+
+	    <field name="mOSSLKeyStoreAppTypeElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.pkcsfilemgr.ossl.keystore.basedir.apptype");
+	    </field>
+	    <field name="mOSSLKeyStoreUseProfileIdElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.pkcsfilemgr.ossl.keystore.basedir.useprofile");
+	    </field>
+	    <field name="mOSSLKeyStoreBaseDirPickerElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.pkcsfilemgr.ossl.keystore.basedirpicker");
+	    </field>
+	    <field name="mOSSLKeyStoreProfileIdHBoxElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.pkcsfilemgr.ossl.keystore.profileId.hbox");
+	    </field>
+	    <field name="mOSSLKeyStoreProfileIdElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.pkcsfilemgr.ossl.keystore.profileId");
+	    </field>
+	    <field name="mOSSLKeyStoreCredTypeValueElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.pkcsfilemgr.ossl.credential.type.value");
+	    </field>
+	    <field name="mOSSLKeyStoreCredTypeElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.pkcsfilemgr.ossl.credential.type");
+	    </field>
+	    <field name="mOSSLKeyStoreDirPickerElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.pkcsfilemgr.ossl.keystore.dirpicker");
+	    </field>
+	    <field name="mSoftTokenElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.pkcsfilemgr.ossl.keystore.softtoken");
+	    </field>
+	    <field name="mSoftTokenKeyExistsElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.pkcsfilemgr.ossl.keystore.softtoken.keyexists");
+	    </field>
+	    <field name="mSoftTokenCertItemElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.pkcsfilemgr.ossl.keystore.softtoken.cert");
+	    </field>
+
+	    <property name="softTokenElem" readonly="true"
+		onget="return this.mSoftTokenElem;"
+		/>
+	    <property name="keystorebasedir"
+		onget="return this.mOSSLKeyStoreBaseDirPickerElem.file;"
+		onset="this.mOSSLKeyStoreBaseDirPickerElem.file=val;
+			this.handleAppKeyStoreBaseDirChange(this.mOSSLKeyStoreBaseDirPickerElem);
+			return val;"
+		/>
+	    <property name="keystoredir"
+		onget="return this.mOSSLKeyStoreDirPickerElem.file;"
+		onset="this.mOSSLKeyStoreDirPickerElem.file=val;
+			this.mSoftTokenElem.keybasedir=val;
+			this.handleAppKeyStoreDirChange(this.mOSSLKeyStoreDirPickerElem);
+			return val;"
+		/>
+	    <property name="keystoredir"
+		onget="return this.mOSSLKeyStoreDirPickerElem.file;"
+		onset="this.mOSSLKeyStoreDirPickerElem.file=val;
+			this.mSoftTokenElem.keybasedir=val;
+			this.handleAppKeyStoreDirChange(this.mOSSLKeyStoreDirPickerElem);
+			return val;"
+		/>
+	    <property name="keystoredirpath"
+		onget="return this.mOSSLKeyStoreDirPickerElem.filepath;"
+		onset="this.mOSSLKeyStoreDirPickerElem.filepath=val;
+			this.mSoftTokenElem.keybasedirpath=val;
+			this.handleAppKeyStoreDirChange(this.mOSSLKeyStoreDirPickerElem);
+			return val;"
+		/>
+	    <property name="osslapptype" readonly="true"
+		onget="return this.mOSSLKeyStoreAppTypeElem.value;"
+		/>
+	    <property name="profileid" readonly="true"
+		onget="return this.mOSSLKeyStoreProfileIdElem.value;"
+		/>
+	    <property name="isusercert" readonly="true"
+		onget="return this.mSoftTokenCertItemElem.isusercert;"
+		/>
+	    <property name="istempcert" readonly="true"
+		onget="return this.mSoftTokenCertItemElem.istempcert;"
+		/>
+	    <property name="x509cert" readonly="true"
+		onget="return this.mSoftTokenCertItemElem.cert;"
+		/>
+
+	    <constructor>
+		<![CDATA[
+		// this.mMaxLogLevel = 9;
+		this.LogTrace("osslsofttokenBinding.constructor():......................Start.");
+
+		// this.refresh();
+
+		this.LogTrace("osslsofttokenBinding.constructor():......................End.");
+		]]>
+	    </constructor>
+
+	    <method name="refresh">
+		<body>
+		<![CDATA[
+		this.LogTrace("osslsofttokenBinding.refresh():......................Start.");
+
+		this.mSoftTokenElem.refresh();
+		// this.handleOSSLCredentialTypeChange(this.mOSSLKeyStoreCredTypeElem);
+
+		this.handleAppKeyStoreAppTypeChange(this.mOSSLKeyStoreAppTypeElem);
+		// this.handleAppKeyStoreUseProfileChange(this.mOSSLKeyStoreUseProfileIdElem);
+
+		this.handleSoftTokenChange(this.mSoftTokenElem);
+
+
+		this.LogTrace("osslsofttokenBinding.refresh():......................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="handleAppKeyStoreAppTypeChange">
+		<parameter name="aOSSLKeyStoreAppTypeElem"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("osslsofttokenBinding.handleAppKeyStoreAppTypeChange():......................Start.");
+
+		if (ev) {
+		    this.LogDebug("osslsofttokenBinding.handleAppKeyStoreAppTypeChange(): ev.type: " + ev.type);
+		    // Only allow command type event to propagate up
+		    if (ev.type != "command") {
+			ev.stopPropagation();
+			return;
+		    }
+		}
+
+		var osslAppBaseDir = this.mOSSLKeyStoreAppTypeElem.osslappbasedir;
+		this.mOSSLKeyStoreBaseDirPickerElem.file = osslAppBaseDir;
+
+		this.handleAppKeyStoreUseProfileChange(this.mOSSLKeyStoreUseProfileIdElem);
+
+		this.LogTrace("osslsofttokenBinding.handleAppKeyStoreAppTypeChange():......................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="handleAppKeyStoreUseProfileChange">
+		<parameter name="aOSSLKeyStoreUseProfileIdElem"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("osslsofttokenBinding.handleAppKeyStoreUseProfileChange():......................Start.");
+		/*
+		if (ev) {
+		    ev.stopPropagation();
+		}
+		*/
+
+		this.mOSSLKeyStoreProfileIdHBoxElem.hidden = !aOSSLKeyStoreUseProfileIdElem.checked;
+		this.mOSSLKeyStoreDirPickerElem.disabled = aOSSLKeyStoreUseProfileIdElem.checked;
+
+		if (aOSSLKeyStoreUseProfileIdElem.checked) {
+		     this.mOSSLKeyStoreProfileIdElem.focus();
+		}
+		else {
+		    this.mOSSLKeyStoreProfileIdElem.value = "";
+		    this.mOSSLKeyStoreBaseDirPickerElem.focus();
+		}
+		this.handleAppKeyStoreProfileIdChange(this.mOSSLKeyStoreProfileIdElem);
+
+		this.LogTrace("osslsofttokenBinding.handleAppKeyStoreUseProfileChange():......................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="handleAppKeyStoreProfileIdChange">
+		<parameter name="aOSSLKeyStoreProfileIdElem"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("osslsofttokenBinding.handleAppKeyStoreProfileIdChange():......................Start.");
+		/*
+		if (ev) {
+		    ev.stopPropagation();
+		}
+		*/
+
+		this.autoCompleteAction(aOSSLKeyStoreProfileIdElem);
+
+		this.handleAppKeyStoreBaseDirChange(this.mOSSLKeyStoreBaseDirPickerElem);
+
+
+		this.LogTrace("osslsofttokenBinding.handleAppKeyStoreProfileIdChange():......................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="handleAppKeyStoreBaseDirChange">
+		<parameter name="aOSSLKeyStoreBaseDirPickerElem"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("osslsofttokenBinding.handleAppKeyStoreBaseDirChange():......................Start.");
+		/*
+		if (ev) {
+		    ev.stopPropagation();
+		}
+		*/
+		if (ev) {
+		    this.LogDebug("osslsofttokenBinding.handleAppKeyStoreBaseDirChange(): ev.type: " + ev.type);
+		    if (ev.type == "select") {
+			return;
+		    }
+		    this.LogDebug("osslsofttokenBinding.handleAppKeyStoreBaseDirChange(): value: " + aOSSLKeyStoreBaseDirPickerElem.value);
+		}
+
+		if (!this.mOSSLKeyStoreBaseDirPickerElem.file) {
+		    this.keystoredir = null;
+		    this.LogTrace("osslsofttokenBinding.handleAppKeyStoreBaseDirChange():...................End(0).");
+		    return;
+		}
+
+		if (!this.mOSSLKeyStoreBaseDirPickerElem.file.exists()) {
+		    alert("baseDirFile: " + this.mOSSLKeyStoreBaseDirPickerElem.filepath + " does not exists.");
+		    this.LogTrace("osslsofttokenBinding.handleAppKeyStoreBaseDirChange():...................End(1).");
+
+		    this.keystoredir = null;
+		    return;
+		}
+
+		var baseDirFile = this.mOSSLKeyStoreBaseDirPickerElem.file.clone();
+		var profileId = this.mOSSLKeyStoreProfileIdElem.value;
+		if (profileId != "") {
+		     baseDirFile.append(profileId);
+		}
+		this.LogDebug("osslsofttokenBinding.handleAppKeyStoreBaseDirChange(): baseDirFilePath: " + baseDirFile.path);
+
+		this.keystoredir = baseDirFile;
+
+		this.LogDebug("osslsofttokenBinding.handleAppKeyStoreBaseDirChange(): this.mOSSLKeyStoreDirPickerElem.filepath: " + this.mOSSLKeyStoreDirPickerElem.filepath);
+
+		this.LogTrace("osslsofttokenBinding.handleAppKeyStoreBaseDirChange():......................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="handleOSSLCredentialTypeValueChange">
+		<parameter name="aOSSLKeyStoreCredTypeValueElem"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("osslsofttokenBinding.handleOSSLCredentialTypeValueChange():......................Start.");
+		/*
+		if (this.mOSSLKeyStoreDirPickerElem.file && (credType != "")) {
+		    this.mSoftTokenElem.selectFileByCredentialType(
+				this.mOSSLKeyStoreDirPickerElem.file,
+				credType
+				);
+		}
+		*/
+
+		var credType = aOSSLKeyStoreCredTypeValueElem.value;
+		if (credType == "") {
+		    this.mSoftTokenElem.credentialtype = credType;
+		}
+		else {
+		    if (this.mOSSLKeyStoreDirPickerElem.file) {
+			this.mSoftTokenElem.credentialtype = credType;
+		    }
+		}
+
+		this.LogTrace("osslsofttokenBinding.handleOSSLCredentialTypeValueChange():......................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <!--
+	    <method name="handleOSSLCredentialTypeChange">
+		<parameter name="aOSSLKeyStoreCredTypeElem"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("osslsofttokenBinding.handleOSSLCredentialTypeChange():......................Start.");
+		if (ev) {
+		    ev.stopPropagation();
+		}
+		*/
+
+		this.LogTrace("osslsofttokenBinding.handleOSSLCredentialTypeChange():......................End.");
+		]]>
+		</body>
+	    </method>
+	    -->
+
+	    <method name="handleAppKeyStoreDirChange">
+		<parameter name="aOSSLKeyStoreDirPickerElem"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("osslsofttokenBinding.handleAppKeyStoreDirChange():......................Start.");
+		/*
+		if (ev) {
+		    ev.stopPropagation();
+		}
+		*/
+		if (ev) {
+		    this.LogDebug("osslsofttokenBinding.handleAppKeyStoreDirChange(): ev.type: " + ev.type);
+		}
+		this.LogDebug("osslsofttokenBinding.handleAppKeyStoreDirChange(): aOSSLKeyStoreDirPickerElem.file: " + aOSSLKeyStoreDirPickerElem.file);
+
+		var keyBaseDir = null; 
+		do {
+		    if (!aOSSLKeyStoreDirPickerElem.file) {
+			break;
+		    }
+		    if (!aOSSLKeyStoreDirPickerElem.file.exists()) {
+			this.LogError("KeyStoreDir: " + aOSSLKeyStoreDirPickerElem.filepath + " does not exists - select another directory.");
+			if (ev) {
+			    alert("KeyStoreDir: " + aOSSLKeyStoreDirPickerElem.filepath + " does not exists - select another directory.");
+			}
+			break;
+		    }
+		    keyBaseDir = aOSSLKeyStoreDirPickerElem.file;
+		} while (0);
+
+		/*
+		if (!aOSSLKeyStoreDirPickerElem.file) {
+		    this.mSoftTokenElem.keybasedir = null;
+		    this.LogTrace("osslsofttokenBinding.handleAppKeyStoreDirChange():...................End(0).");
+		    return;
+		}
+
+		this.LogDebug("osslsofttokenBinding.handleAppKeyStoreDirChange(): aOSSLKeyStoreDirPickerElem.filepath: " + aOSSLKeyStoreDirPickerElem.filepath);
+		if (!aOSSLKeyStoreDirPickerElem.file.exists()) {
+		    // aOSSLKeyStoreDirPickerElem.focus();
+		    this.mSoftTokenElem.keybasedir = null;
+		    return;
+		}
+		this.mSoftTokenElem.keybasedir = aOSSLKeyStoreDirPickerElem.file;
+		*/
+
+		this.mSoftTokenElem.keybasedir = keyBaseDir;
+		this.handleSoftTokenChange(this.mSoftTokenElem);
+
+		// this.handleOSSLCredentialTypeChange(this.mOSSLKeyStoreCredTypeElem);
+
+		this.LogTrace("osslsofttokenBinding.handleAppKeyStoreDirChange():......................End.");
+		]]>
+		</body>
+	    </method>
+
+
+	    <method name="refreshX509CertItem">
+		<body>
+		<![CDATA[
+		this.LogTrace("osslsofttokenBinding.refreshX509CertItem():......................Start.");
+
+		this.handleSoftTokenChange(this.mSoftTokenElem);
+
+		this.LogTrace("osslsofttokenBinding.refreshX509CertItem():......................End.");
+		return this.mSoftTokenCertItemElem.cert;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="handleSoftTokenChange">
+		<parameter name="aSoftTokenElem"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("osslsofttokenBinding.handleSoftTokenChange():......................Start.");
+		if (ev) {
+    		this.LogDebug("OsslKeyCertSyncTool.handleSoftTokenMgrChange(): ev.type: " + ev.type + "");
+    		this.LogDebug("OsslKeyCertSyncTool.handleSoftTokenMgrChange(): ev.originalTarget: " + ev.originalTarget.localName + "");
+		}
+		/*
+		if (ev) {
+		    ev.stopPropagation();
+		}
+		*/
+
+		var x095Cert = aSoftTokenElem.getX509Cert();
+		this.LogDebug("osslsofttokenBinding.handleSoftTokenChange(): x095Cert: " + x095Cert);
+
+		this.mSoftTokenCertItemElem.cert = x095Cert;
+
+
+		if (!x095Cert) {
+		    this.mSoftTokenCertItemElem.istempcert = null;
+
+		    this.mSoftTokenKeyExistsElem.checked = false;
+		    this.mSoftTokenKeyExistsElem.hidden = true;
+		    this.LogTrace("osslsofttokenBinding.handleSoftTokenChange():......................End(0).");
+		    return;
+		}
+
+		this.mSoftTokenCertItemElem.istempcert = this.mKeyManager.isTemporaryCert(x095Cert);
+
+		var keyExists = false;
+		if (!this.mSoftTokenCertItemElem.istempcert && this.mSoftTokenCertItemElem.isusercert) {
+		    keyExists = true;
+		}
+		this.mSoftTokenCertItemElem.iskeyexist = keyExists;
+		this.mSoftTokenKeyExistsElem.hidden = !keyExists;
+		this.mSoftTokenKeyExistsElem.checked = keyExists;
+
+		this.LogTrace("osslsofttokenBinding.handleSoftTokenChange():......................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="autoCompleteAction">
+		<parameter name="targetElem"/>
+		<body>
+		<![CDATA[
+		var formFieldKey = targetElem.getAttribute("autocompletesearchparam");
+		if (!formFieldKey) {
+		    return;
+		}
+		var formFieldValue = targetElem.value;
+		if (formFieldValue == "") {
+		    return;
+		}
+
+		var formhistory = null;
+		if ("nsIFormHistory" in Components.interfaces){
+		    formhistory = Components.classes["@mozilla.org/satchel/form-history;1"].
+					    getService(Components.interfaces.nsIFormHistory);
+		}
+		else if ("nsIFormHistory2" in Components.interfaces){
+		    formhistory = Components.classes["@mozilla.org/satchel/form-history;1"].
+					    getService(Components.interfaces.nsIFormHistory2);
+		}
+		if (!formhistory) {
+		    return;
+		}
+
+		// use the same value for key as "autocompletesearchparam" in textbox:
+		formhistory.addEntry(formFieldKey, formFieldValue);
+
+		]]>
+		</body>
+	    </method>
+
+	</implementation>
+    </binding>
+
+    <binding id="softtokenmgrBinding"
+	extends="chrome://keymanager/content/XBL/x509certbase.xml#x509certbase"
+	>
+	<xbl:resources>
+	    <stylesheet src="chrome://keymanager/skin/kmbindings.css"/>
+	</xbl:resources>
+
+	<!-- content, property, method and event descriptions go here -->
+	<content>
+
+	<xul:grid zflex="1"
+	    xbl:inherits="flex"
+	    style="overflow:auto;"
+	    >
+	    <xul:columns>
+		<xul:column/>
+		<xul:column flex="1"/>
+	    </xul:columns>
+	    <xul:rows>
+		<xul:row
+		    align="center"
+		    hidden="true"
+		    >
+		    <xul:spacer/>
+		    <xul:hbox
+			pack="start"
+			align="center"
+			>
+			<xul:radiogroup anonid="keymgr.pkcsfilemgr.softtokenmgr.sync.options"
+				oncommand="getBindingParent(this).handleSofokenSyncOptionChange(this, event)"
+				>
+				<xul:groupbox
+				    pack="start"
+				    orient="horizontal"
+				    >
+				    <xul:radio anonid="keymgr.pkcsfilemgr.softtokenmgr.sync.nssdb2ossl"
+					label="&keymgr.pkcsfilemgr.softtokenmgr.nssdb2ossl.cmd.label;"
+					tooltiptext="&keymgr.pkcsfilemgr.softtokenmgr.nssdb2ossl.cmd.label;"
+					value="nssdb2ossl"
+					group="keymgr.pkcsfilemgr.softtokenmgr.sync.options"
+					/>
+				    <xul:radio anonid="keymgr.pkcsfilemgr.softtokenmgr.sync.ossl2nssdb"
+					label="&keymgr.pkcsfilemgr.softtokenmgr.ossl2nssdb.cmd.label;"
+					tooltiptext="&keymgr.pkcsfilemgr.softtokenmgr.ossl2nssdb.cmd.label;"
+					value="ossl2nssdb"
+					group="keymgr.pkcsfilemgr.softtokenmgr.sync.options"
+					/>
+				</xul:groupbox>
+			    </xul:radiogroup>
+		    </xul:hbox>
+		</xul:row>
+		<xul:row
+		    align="center"
+		    >
+		    <xul:label class="header" value="&keymgr.pkcsfilemgr.softtokenmgr.ossl.softtoken.label;"/>
+		    <xul:groupbox 
+			xbl:inherits="flex,style"
+			>
+			<xul:softtoken anonid="keymgr.pkcsfilemgr.softtokenmgr.ossl.softtoken"
+			    class="ossl"
+			    persist="softtokentype,softtokentypehidden,profileid,credtype"
+			    xbl:inherits="softtokentype,softtokentypehidden,profileid,credtypevaluehidden,credtype"
+			    xsofttokentype="pkcs8"
+			    ontextentered="getBindingParent(this).handleOSSLSoftTokenChange(this, event);"
+			    onpopuphiding="getBindingParent(this).handleOSSLSoftTokenChange(this, event);"
+			    onchange="getBindingParent(this).handleOSSLSoftTokenChange(this, event);"
+			    oncommand="getBindingParent(this).handleOSSLSoftTokenChange(this, event);"
+			    />
+		    </xul:groupbox>
+		</xul:row>
+
+		<!--
+		<xul:row>
+		    <spacer/>
+		    <spacer/>
+		</xul:row>
+		-->
+
+		<xul:row anonid="keymgr.pkcsfilemgr.softtokenmgr.nssdb2ossl.cmd.export.row"
+		    align="end"
+		    >
+		    <xul:label class="header" value="&keymgr.pkcsfilemgr.softtokenmgr.nssdb2ossl.cmd.label;"/>
+		    <xul:hbox anonid="keymgr.pkcsfilemgr.softtokenmgr.nssdb2ossl.cmd.export.hbox"
+			pack="start" align="start"
+			>
+			<xul:certpicker anonid="keymgr.pkcsfilemgr.softtokenmgr.nssdb2ossl.cmd.export.certpicker"
+			    xbl:inherits="menutooltiptext=nssdbcerttooltip,tokentypehidden=nssdbtokentypehidden,certtypehidden=nssdbcerttypehidden,viewtooltiptext=certviewtooltiptext"
+			    menutooltiptext="&keymgr.pkcsfilemgr.softtokenmgr.nssdb2ossl.cmd.export.certpicker.tooltip;"
+			    tokentypehidden="true"
+			    certtype="user"
+			    certtypedisabled="true"
+			    xcerttypehidden="true"
+			    xviewlabel="&keymgr.pkcsfilemgr.softtokenmgr.nssdb2ossl.cmd.export.certpicker.view.label;"
+			    viewhidden="false"
+			    viewtooltiptext="&keymgr.pkcsfilemgr.softtokenmgr.nssdb2ossl.cmd.export.certpicker.view.tooltip;"
+	 		    oncommand="getBindingParent(this).handleExportNSSDBCertPickerChange(this, event);"
+			    />
+			<xul:button anonid="keymgr.pkcsfilemgr.softtokenmgr.nssdb2ossl.cmd.export"
+			    xbl:inherits="label=exportcertlabel,tooltiptext=exportcerttooltip"
+			    label="&keymgr.pkcsfilemgr.softtokenmgr.nssdb2ossl.cmd.export.label;"
+			    tooltiptext="&keymgr.pkcsfilemgr.softtokenmgr.nssdb2ossl.cmd.export.tooltip;"
+			    oncommand="getBindingParent(this).exportToOSSLKeystore(event);"
+			    />
+		    </xul:hbox> 
+		</xul:row>
+		<xul:row anonid="keymgr.pkcsfilemgr.softtokenmgr.nssdb2ossl.cmd.create.row"
+		    align="end"
+		    >
+		    <xul:spacer/>
+		    <xul:hbox 
+			pack="start" align="start"
+			>
+			<!--
+			<xul:createcert anonid="keymgr.pkcsfilemgr.softtokenmgr.nssdb2ossl.cmd.create"
+			    xbl:inherits="oplabel=createcertoplabel,optooltip=createcertoptooltip,createCertOp"
+			    oplabel="&keymgr.pkcsfilemgr.softtokenmgr.nssdb2ossl.cmd.create.label;"
+			    optooltip="&keymgr.pkcsfilemgr.softtokenmgr.nssdb2ossl.cmd.create.tooltip;"
+			    createCertOp="createCASignedCert"
+			    oncommand="getBindingParent(this).handleCreateCASignedCert(this, event)"
+			    />
+			-->
+            		<xul:createcertmenu anonid="keymgr.pkcsfilemgr.softtokenmgr.nssdb2ossl.cmd.create"
+			    xbl:inherits="oplabel=createcertoplabel,optooltip=createcertoptooltip,createCertOp,selfproxyhidden,otpkhidden,"
+			    oplabel="&keymgr.pkcsfilemgr.softtokenmgr.nssdb2ossl.cmd.create.label;"
+			    optooltip="&keymgr.pkcsfilemgr.softtokenmgr.nssdb2ossl.cmd.create.tooltip;"
+			    createCertOp="createSelfSignedCert"
+			    selfproxyhidden="true"
+			    otpkhidden="true"
+			    oncommand="getBindingParent(this).handleCreateSignedCert(this, event)"
+			    />
+		    </xul:hbox> 
+		</xul:row>
+
+		<xul:row anonid="keymgr.pkcsfilemgr.softtokenmgr.ossl2nssdb.cmd.row"
+		    align="center"
+		    >
+		    <xul:label class="header" value="&keymgr.pkcsfilemgr.softtokenmgr.ossl2nssdb.cmd.label;"/>
+		    <xul:hbox 
+			pack="start" align="start"
+			>
+			<xul:button anonid="keymgr.pkcsfilemgr.softtokenmgr.ossl2nssdb.cmd.import"
+			    xbl:inherits="label=importcertlabel,tooltiptext=importcerttooltip"
+			    label="&keymgr.pkcsfilemgr.softtokenmgr.ossl2nssdb.cmd.import.label;"
+			    tooltiptext="&keymgr.pkcsfilemgr.softtokenmgr.ossl2nssdb.cmd.import.tooltip;"
+			    oncommand="getBindingParent(this).importFromOSSLKeystore(event);"
+			    />
+			<xul:groupbox anonid="keymgr.pkcsfilemgr.softtokenmgr.ossl2nssdb.cmd.mount.hbox"
+			    pack="start"
+			    align="center"
+			    orient="horizontal"
+			    >
+			    <xul:label value="&keymgr.pkcsfilemgr.softtokenmgr.ossl2nssdb.cmd.mount.tokenname.label;"/>
+			    <xul:textbox anonid="keymgr.pkcsfilemgr.softtokenmgr.ossl2nssdb.cmd.mount.tokenname"
+				xbl:inherits="tooltiptext=tokennametooltip"
+				tooltiptext="&keymgr.pkcsfilemgr.softtokenmgr.ossl2nssdb.cmd.mount.tokenname.tooltip;"
+				size="8"
+				/>
+			   <xul:button anonid="keymgr.pkcsfilemgr.softtokenmgr.ossl2nssdb.cmd.mount"
+				xbl:inherits="label=mountcmdlabel,tooltiptext=mountcmdtooltip"
+				label="&keymgr.pkcsfilemgr.softtokenmgr.ossl2nssdb.cmd.mount.label;"
+				tooltiptext="&keymgr.pkcsfilemgr.softtokenmgr.ossl2nssdb.cmd.mount.tooltip;"
+	 			oncommand="getBindingParent(this).mountSoftToken(event);"
+				/>
+			</xul:groupbox>
+		    </xul:hbox> 
+		</xul:row>
+
+		<xul:row anonid="keymgr.pkcsfilemgr.softtokenmgr.tokenmenulist.row"
+		    hidden="true"
+		    align="center"
+		    >
+		    <xul:label class="header" value="&keymgr.pkcsfilemgr.softtokenmgr.tokenmenulist.label;"/>
+		    <xul:hbox
+			pack="start"
+			align="center"
+			>
+			<xul:tokenmenulist anonid="keymgr.pkcsfilemgr.softtokenmgr.tokenmenulist"
+	 		    xoncommand="getBindingParent(this).handleTokenMenuListChange(this, event);"
+			    />
+			<xul:button anonid="keymgr.pkcsfilemgr.softtokenmgr.ossl2nssdb.cmd.unmount"
+				xbl:inherits="label=unmountcmdlabel,tooltiptext=unmountcmdtooltip"
+				hidden="true"
+				label="&keymgr.pkcsfilemgr.softtokenmgr.ossl2nssdb.cmd.unmount.label;"
+				tooltiptext="&keymgr.pkcsfilemgr.softtokenmgr.ossl2nssdb.cmd.unmount.tooltip;"
+	 			oncommand="getBindingParent(this).unmountSoftToken(event);"
+				/>
+		    </xul:hbox>
+		</xul:row>
+
+	    </xul:rows>
+	</xul:grid>
+	</content>
+
+		<!--
+		<xul:row anonid="keymgr.pkcsfilemgr.softtokenmgr.x509cert.row"
+		    hidden="true"
+		    align="center"
+		    >
+		    <xul:label class="header" value="&keymgr.pkcsfilemgr.softtokenmgr.x509cert.label;"/>
+		    <xul:hbox 
+			pack="start" align="start"
+			>
+			<xul:certitem anonid="keymgr.pkcsfilemgr.softtokenmgr.x509cert.item"
+			    viewlabel="&keymgr.pkcsfilemgr.cert.view.label;"
+			    viewtooltiptext="&keymgr.pkcsfilemgr.softtokenmgr.x509cert.view.tooltip;"
+			    />
+		    </xul:hbox> 
+		</xul:row>
+		-->
+	<implementation>
+	    <field name="mIOService">
+		Components.classes["@mozilla.org/network/io-service;1"]
+				.getService(Components.interfaces.nsIIOService);
+	    </field>
+	    <field name="mDirService">
+		Components.classes['@mozilla.org/file/directory_service;1']
+				.getService(Components.interfaces.nsIProperties);
+	    </field>
+	    <field name="mX509CertDB">
+		Components.classes["@mozilla.org/security/x509certdb;1"]
+			.getService(Components.interfaces.nsIX509CertDB);
+	    </field>
+	    <field name="mPK11TokenDB">
+		Components.classes["@mozilla.org/security/pk11tokendb;1"]
+			.getService(Components.interfaces.nsIPK11TokenDB);
+	    </field>
+	    <field name="mPKCS11ModuleDB">
+		Components.classes["@mozilla.org/security/pkcs11moduledb;1"]
+				.getService(Components.interfaces.nsIPKCS11ModuleDB);
+	    </field>
+	    <field name="mKeyManager">
+		Components.classes["@avaya.com/pkm/keymanager;1"]
+			.getService(Components.interfaces.alrIKeyManager);
+	    </field>
+	    <field name="mSoftTokenDBManager">
+		Components.classes["@avaya.com/pkm/softtokendbmanager;1"]
+				.getService(Components.interfaces.alrISoftTokenDBManager);
+	    </field>
+
+	    <field name="mXmlSerializer">new XMLSerializer();</field>
+
+	    <field name="mSoftTokenElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.pkcsfilemgr.softtokenmgr.softtoken");
+	    </field>
+	    <field name="mOSSLSoftTokenElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.pkcsfilemgr.softtokenmgr.ossl.softtoken");
+	    </field>
+	    <field name="mActiveSoftTokenElem"/>
+
+	    <field name="mExportNSSDBCertPickerRowElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.pkcsfilemgr.softtokenmgr.nssdb2ossl.cmd.export.row");
+	    </field>
+	    <field name="mExportNSSDBCertPickerElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.pkcsfilemgr.softtokenmgr.nssdb2ossl.cmd.export.certpicker");
+	    </field>
+	    <field name="mExportSoftTokenCmdElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.pkcsfilemgr.softtokenmgr.nssdb2ossl.cmd.export");
+	    </field>
+	    <field name="mCreateSoftTokenCmdElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.pkcsfilemgr.softtokenmgr.nssdb2ossl.cmd.create");
+	    </field>
+	    <field name="mImportSoftTokenCmdElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.pkcsfilemgr.softtokenmgr.ossl2nssdb.cmd.import");
+	    </field>
+
+	    <field name="mMountSoftTokenCmdHboxElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.pkcsfilemgr.softtokenmgr.ossl2nssdb.cmd.mount.hbox");
+	    </field>
+	    <field name="mMountSoftTokenNameElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.pkcsfilemgr.softtokenmgr.ossl2nssdb.cmd.mount.tokenname");
+	    </field>
+	    <field name="mMountSoftTokenCmdElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.pkcsfilemgr.softtokenmgr.ossl2nssdb.cmd.mount");
+	    </field>
+	    <field name="mUnmountSoftTokenCmdElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.pkcsfilemgr.softtokenmgr.ossl2nssdb.cmd.unmount");
+	    </field>
+	    <field name="mTokenMenuListElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.pkcsfilemgr.softtokenmgr.tokenmenulist");
+	    </field>
+	    <!--
+	    <field name="mX509CertItemElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.pkcsfilemgr.softtokenmgr.x509cert.item");
+	    </field>
+	    -->
+	    <field name="mMountedSlot"/>
+	    <field name="mMountedSoftTokenDBDir"/>
+
+	    <property name="readytomount" readonly="true"
+		onget="return this.mActiveSoftTokenElem.readytomount;"
+		/>
+	    <property name="mountedslot" readonly="true"
+		onget="return this.mMountedSlot;"
+		/>
+	    <property name="mountedsofttokendbdir" readonly="true"
+		onget="return this.mMountedSoftTokenDBDir;"
+		/>
+
+	    <property name="softtokentype"
+		onget="return this.mActiveSoftTokenElem.softtokentype;"
+		onset="this.mActiveSoftTokenElem.softtokentype = val;
+			this.handleOSSLSoftTokenChange(this.mOSSLSoftTokenElem);
+			return val;"
+		/>
+
+	    <constructor>
+		<![CDATA[
+		// this.mMaxLogLevel = 9;
+		this.LogTrace("softtokenmgrBinding.constructor():......................Start.");
+
+
+		this.mActiveSoftTokenElem = this.mOSSLSoftTokenElem.softTokenElem;
+
+		// this.refresh();
+
+		this.LogTrace("softtokenmgrBinding.constructor():......................End.");
+		]]>
+	    </constructor>
+
+	    <method name="refresh">
+		<body>
+		<![CDATA[
+		this.LogTrace("softtokenmgrBinding.refresh():......................Start.");
+
+		if (this.mPKCS11ModuleDB.isFIPSEnabled) {
+		    this.mMountSoftTokenCmdHboxElem.collapsed = true;
+		}
+
+		this.mOSSLSoftTokenElem.refresh();
+
+		this.mActiveSoftTokenElem = this.mOSSLSoftTokenElem.softTokenElem;
+		if (this.mOSSLSoftTokenElem.softTokenElem) {
+		    this.mActiveSoftTokenElem = this.mOSSLSoftTokenElem.softTokenElem;
+		}
+		else {
+		    this.mActiveSoftTokenElem = this.mOSSLSoftTokenElem;
+		}
+
+		this.mCreateSoftTokenCmdElem.refresh();
+
+		this.handleOSSLSoftTokenChange(this.mOSSLSoftTokenElem);
+		// this.activateMountButton();
+
+		this.LogTrace("softtokenmgrBinding.refresh():......................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="resetForm">
+		<body>
+		<![CDATA[
+		    this.mOSSLSoftTokenElem.keystorebasedir = ""; 
+		    this.refresh();
+		]]>
+		</body>
+	    </method>
+
+	    <method name="handleSofokenSyncOptionChange">
+		<parameter name="aSoftTokenDBSyncOptionsElem"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("softtokenmgrBinding.handleSofokenSyncOptionChange():......................Start.");
+
+		if (aSoftTokenDBSyncOptionsElem.selectedItem.value == "nssdb2ossl") {
+		    this.mOSSLSoftTokenElem.keystorebasedir = ""; 
+		    this.handleOSSLSoftTokenChange(this.mOSSLSoftTokenElem);
+		}
+		else {
+		}
+
+		this.LogTrace("softtokenmgrBinding.handleSofokenSyncOptionChange():......................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="activateMountButton">
+		<body>
+		<![CDATA[
+		this.LogTrace("softtokenmgrBinding.activateMountButton():................Start.");
+
+		/*
+		if (this.mMountSoftTokenNameElem.value == "") {
+		    this.mMountSoftTokenCmdElem.disabled = true;
+		    return;
+		}
+		*/
+
+		var readyToMount = this.mActiveSoftTokenElem.readytomount;
+		this.LogDebug("softtokenmgrBinding.activateMountButton(): readyToMount : " + readyToMount);
+
+		this.LogDebug("softtokenmgrBinding.activateMountButton(): this.mOSSLSoftTokenElem.isusercert : " + this.mOSSLSoftTokenElem.isusercert);
+		this.LogDebug("softtokenmgrBinding.activateMountButton(): this.mOSSLSoftTokenElem.istempcert : " + this.mOSSLSoftTokenElem.istempcert);
+
+		var readyToImport = (readyToMount && !(this.mOSSLSoftTokenElem.isusercert) && (this.mOSSLSoftTokenElem.istempcert));
+		this.LogDebug("softtokenmgrBinding.activateMountButton(): readyToImport : " + readyToImport);
+
+		var readyToExport = (!readyToMount || (!this.mOSSLSoftTokenElem.isusercert) || this.mOSSLSoftTokenElem.istempcert);
+		var readyToView = (!readyToMount || (!this.mOSSLSoftTokenElem.isusercert) || this.mOSSLSoftTokenElem.istempcert);
+		this.LogDebug("softtokenmgrBinding.activateMountButton(): readyToExport : " + readyToExport);
+
+		var x509cert = this.mOSSLSoftTokenElem.x509cert;
+		if (this.mOSSLSoftTokenElem.isusercert && !this.mOSSLSoftTokenElem.istempcert) {
+		    this.mExportNSSDBCertPickerElem.selectedCert = x509cert;
+		}
+
+		if (readyToMount && this.mOSSLSoftTokenElem.istempcert) {
+		    this.mExportNSSDBCertPickerRowElem.hidden = true;
+		}
+		else {
+		    // (readyToMount == false) ===> this.mOSSLSoftTokenElem.istempcert == false
+		    this.mExportNSSDBCertPickerRowElem.hidden = false;
+		    this.mExportSoftTokenCmdElem.hidden = !readyToExport;
+		    // this.mExportNSSDBCertPickerElem.disabled = (readyToMount || this.mOSSLSoftTokenElem.istempcert);
+		    this.mExportNSSDBCertPickerElem.disabled = !readyToExport;
+		}
+		this.mCreateSoftTokenCmdElem.hidden = readyToMount;
+
+		this.mImportSoftTokenCmdElem.disabled = !readyToImport;
+
+		this.mMountSoftTokenCmdElem.disabled = !readyToImport;
+		this.mMountSoftTokenCmdHboxElem.hidden = !readyToImport;
+		if (readyToImport) {
+		    this.mMountSoftTokenNameElem.value ="";
+		}
+
+		this.LogTrace("softtokenmgrBinding.activateMountButton():................End.");
+		]]>
+		</body>
+	    </method>
+
+
+	    <method name="handleOSSLSoftTokenChange">
+		<parameter name="aOSSLSoftTokenElem"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("softtokenmgrBinding.handleOSSLSoftTokenChange():......................Start.");
+
+		if (ev) {
+		    this.LogDebug("softtokenmgrBinding.handleOSSLSoftTokenChange(): ev.type: " + ev.type + " ev.originalTarget.tagName: " + ev.originalTarget.tagName)
+		    if ((ev.type != "command") && (ev.originalTarget.localName == "menuitem")) {
+			ev.stopPropagation();
+			return;
+		    }
+		}
+
+		/*
+		if (ev) {
+		    ev.stopPropagation();
+		}
+		*/
+		// this.LogDebug("softtokenmgrBinding.handleOSSLSoftTokenChange(): keydbdir: " + this.mActiveSoftTokenElem.keydbdir);
+
+		this.mMountSoftTokenCmdHboxElem.hidden = false;
+		this.mUnmountSoftTokenCmdElem.hidden = true;
+
+		this.activateMountButton();
+
+		this.LogTrace("softtokenmgrBinding.handleOSSLSoftTokenChange():......................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="handleExportNSSDBCertPickerChange">
+		<parameter name="aExportNSSDBCertPickerElem"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("softtokenmgrBinding.handleExportNSSDBCertPickerChange():......................Start.");
+		this.LogTrace("softtokenmgrBinding.handleExportNSSDBCertPickerChange():......................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="exportToOSSLKeystore">
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("softtokenmgrBinding.exportToOSSLKeystore():......................Start.");
+
+		var dialogCmd		= "browser"; //  [new | file | browser]
+		var certToBeExported	= this.mExportNSSDBCertPickerElem.selectedCert; 
+		var keyStoreBaseDirPath	= null;
+		var osslAppType		= "custom"; // [custom | globus | openssl | curl]
+		osslAppType		= this.mOSSLSoftTokenElem.osslapptype;
+		var profileId		= this.mOSSLSoftTokenElem.profileid;
+		var keyStoreType	= "PKCS12"; // [PRIVATE_KEY | PKCS12 | ENGINE]
+		var osslCredentialType 	= this.mActiveSoftTokenElem.credentialtype; // [user|host|service|proxy|...]
+
+		var softtokentype = this.mActiveSoftTokenElem.softtokentype;
+		if ((softtokentype == "pkcs8") || (softtokentype == "osslepk")) {
+		    keyStoreType = "PRIVATE_KEY";
+		}
+
+		var keyStoreBaseDir = this.mOSSLSoftTokenElem.keystorebasedir; 
+		if (keyStoreBaseDir) {
+		    keyStoreBaseDirPath = keyStoreBaseDir.path;
+		}
+		this.LogDebug("OSSLKeyConfigurator.initXULForm(): " + 
+			"dialogCmd : " + dialogCmd + " " + 
+			"certToBeExported : " + certToBeExported + " " + 
+			"osslAppType : " + osslAppType + " " + 
+			"keystoredir : " + this.mOSSLSoftTokenElem.keystoredir + " " + 
+			"keyStoreBaseDirPath : " + keyStoreBaseDirPath + " " + 
+			"profileId : " + profileId + " " + 
+			"keyStoreType : " + keyStoreType + " " + 
+			"osslCredentialType : " + osslCredentialType + " " + 
+			"\n");
+
+		var pkiParams = Components.classes["@mozilla.org/security/pkiparamblock;1"]
+			.createInstance(Components.interfaces.nsIPKIParamBlock);
+		var dialogParams = pkiParams.QueryInterface(Components.interfaces.nsIDialogParamBlock);
+
+		pkiParams.setISupportAtIndex(1, null);
+		if (certToBeExported) {
+		    pkiParams.setISupportAtIndex(1, certToBeExported);
+		}
+
+		dialogParams.SetString(0, dialogCmd);
+
+		if (osslAppType && (osslAppType != "")) {
+		    dialogParams.SetString(1, osslAppType);
+		}
+		if (keyStoreBaseDirPath && (keyStoreBaseDirPath != "")) {
+		    dialogParams.SetString(2, keyStoreBaseDirPath);
+		}
+		if (profileId && (profileId != "")) {
+		    dialogParams.SetString(3, profileId);
+		}
+
+		if (keyStoreType && (keyStoreType != "")) {
+		    dialogParams.SetString(4, keyStoreType);
+		}
+		if (osslCredentialType && (osslCredentialType != "")) {
+		    dialogParams.SetString(5, osslCredentialType);
+		}
+
+    		this.setAttribute("wait-cursor", true);
+		window.openDialog(
+			'chrome://keymanager/content/tools/pkcsfilemgr/osslkeyconf.xul', "osslkeyconfx",
+			'chrome,centerscreen,resizable,modal,titlebar',
+			dialogParams
+			);
+    		this.removeAttribute("wait-cursor");
+
+		this.LogTrace("softtokenmgrBinding.exportToOSSLKeystore():......................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="handleCreateCASignedCert">
+		<parameter name="aCreateSoftTokenCmdElem"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("softtokenmgrBinding.handleCreateCASignedCert():......................Start.");
+
+		var newX509Cert = aCreateSoftTokenCmdElem.newCert;
+		if (newX509Cert) {
+		    this.mExportNSSDBCertPickerElem.refresh();
+		    this.mExportNSSDBCertPickerElem.selectedCert = newX509Cert;
+		}
+
+		this.LogTrace("softtokenmgrBinding.handleCreateCASignedCert():......................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="handleCreateSignedCert">
+		<parameter name="aCreateSoftTokenCmdElem"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("softtokenmgrBinding.handleCreateSignedCert():......................Start.");
+
+		var newX509Cert = aCreateSoftTokenCmdElem.newCert;
+		if (newX509Cert) {
+		    this.mExportNSSDBCertPickerElem.refresh();
+		    this.mExportNSSDBCertPickerElem.selectedCert = newX509Cert;
+		}
+
+		this.LogTrace("softtokenmgrBinding.handleCreateSignedCert():......................End.");
+		]]>
+		</body>
+	    </method>
+
+
+	    <method name="importEPKKeystore">
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("softtokenmgrBinding.importEPKKeystore():......................Start.");
+
+		if (!this.mActiveSoftTokenElem.epkfile) {
+		    throw ("No Key File");
+		}
+
+		var epkFile = null;
+		var epkFileBase64 = false;
+		var epkcertFile = null;
+		var epkcertFileBase64 = false;
+
+		var /* nsIX509Cert   */	importedX059Cert = null;
+		try {
+		    epkFile = this.mActiveSoftTokenElem.epkfile;
+		    epkFileBase64 = this.mActiveSoftTokenElem.epkfilebase64;
+		    epkcertFile = this.mActiveSoftTokenElem.epkcertfile;
+		    epkcertFileBase64 = this.mActiveSoftTokenElem.epkcertfilebase64;
+		    this.LogDebug("softtokenmgrBinding.importEPKKeystore(): epkFileBase64: " + epkFileBase64 + " epkcertFileBase64: " + epkcertFileBase64);
+		    if (this.softtokentype == "pkcs8") {
+			importedX059Cert = this.mKeyManager.importPKCS8File(
+						null,
+						epkFile, epkFileBase64,
+						epkcertFile, epkcertFileBase64
+						);
+		    }
+		    else {
+			if (this.mActiveSoftTokenElem.epkhascert) {
+			    epkcertFile = epkFile;
+			    epkcertFileBase64 = true;
+			}
+			var iterationCnt = 1;
+			importedX059Cert = this.mKeyManager.importOpenSSLEPKFile(
+						null,
+						epkFile, iterationCnt,
+						epkcertFile, epkcertFileBase64
+						);
+		    }
+		} catch (ex) {
+		    alert("softtokenmgrBinding.importEPKKeystore(): this.mKeyManager.importPKCS8File() failed - ex: " + ex);
+		    this.LogError("softtokenmgrBinding.importEPKKeystore(): this.mKeyManager.importPKCS8File() failed - ex: " + ex);
+		    throw ex;
+		}
+
+		this.LogTrace("softtokenmgrBinding.importEPKKeystore(): importedX059Cert: " + importedX059Cert);
+
+		this.LogTrace("softtokenmgrBinding.importEPKKeystore():......................End.");
+		return importedX059Cert;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="importPKCS12Keystore">
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("softtokenmgrBinding.importPKCS12Keystore():......................Start.");
+
+		if (!this.mActiveSoftTokenElem.pkcs12file) {
+		    throw ("No PKCS12 File");
+		}
+
+		var /* nsIX509Cert   */	importedX059Cert = null;
+		try {
+		    this.mX509CertDB.importPKCS12File(
+					null,
+					this.mActiveSoftTokenElem.pkcs12file
+					);
+		    importedX059Cert = this.mOSSLSoftTokenElem.refreshX509CertItem();
+		} catch (ex) {
+		    alert("softtokenmgrBinding.importPKCS12Keystore(): this.mX509CertDB.importPKCS12File() failed - ex: " + ex);
+		    this.logError("softtokenmgrBinding.importPKCS12Keystore(): this.mX509CertDB.importPKCS12File() failed - ex: " + ex);
+		    throw ex;
+		}
+
+		// this.mX509CertItemElem.cert = importedX059Cert;
+
+		this.LogTrace("softtokenmgrBinding.importPKCS12Keystore(): importedX059Cert: " + importedX059Cert);
+
+		this.LogTrace("softtokenmgrBinding.importPKCS12Keystore():......................End.");
+		return importedX059Cert;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="importFromOSSLKeystore">
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("softtokenmgrBinding.importFromOSSLKeystore():......................Start.");
+
+		if (!this.readytomount) {
+		    this.LogTrace("softtokenmgrBinding.importFromOSSLKeystore():......................End(0).");
+		    return;
+		}
+
+		// this.mX509CertItemElem.cert = null;
+		var /* nsIX509Cert   */	importedX059Cert = null;
+		try {
+		    if ((this.softtokentype == "pkcs8") || (this.softtokentype == "osslepk")) {
+			importedX059Cert = this.importEPKKeystore(ev);
+		    }
+		    else if (this.softtokentype == "pkcs12") {
+			importedX059Cert = this.importPKCS12Keystore(ev);
+		    }
+		    else {
+		    }
+
+		    if (importedX059Cert) {
+			this.mExportNSSDBCertPickerElem.refresh();
+			importedX059Cert = this.mOSSLSoftTokenElem.refreshX509CertItem();
+			if (importedX059Cert) {
+			    this.mExportNSSDBCertPickerElem.selectedCert = importedX059Cert;
+			}
+		    }
+		} catch (ex) {
+		    this.LogError("softtokenmgrBinding.importFromOSSLKeystore(): failed to import key/cert - ex: " + ex);
+		}
+
+		this.activateMountButton();
+
+		this.LogTrace("softtokenmgrBinding.importFromOSSLKeystore():......................End.");
+		return;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="getUniqueTokenName">
+		<parameter name="aTokenNamePrefix"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("softtokenmgrBinding.getUniqueTokenName():......................Start.");
+		var tokenName = null;
+		for (var i = 0; i < 100; i++) {
+		    var tmpTokenName = aTokenNamePrefix + "_" + i;
+
+		    var /* nsIPK11Token */ token = null;
+		    try {
+			token = this.mPK11TokenDB.findTokenByName(tmpTokenName);
+		    } catch (ex) {}
+		    if (!token) {
+			tokenName = tmpTokenName;
+			break;
+		    }
+		}
+		this.LogTrace("softtokenmgrBinding.getUniqueTokenName():......................End.");
+		return tokenName;
+		]]>
+		</body>
+	    </method>
+
+
+	    <method name="mountEPKSoftToken">
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("softtokenmgrBinding.mountEPKSoftToken():......................Start.");
+		if (!this.mActiveSoftTokenElem.epkfile) {
+		    throw ("No Key File");
+		}
+
+		var epkFile = null;
+		var epkFileBase64 = false;
+		var epkcertFile = null;
+		var epkcertFileBase64 = false;
+
+		var tokenName = null;
+		var readOnly = false;
+		var enableFips = false;
+		var softTokenDBDirObj = new Object();
+
+		var /* nsIX509Cert   */	resolvedX059Cert = null;
+		var /* nsILocalFile  */ softTokenDBDir = null;
+		var /* nsIPKCS11Slot */ mountedSlot = null;
+		try {
+		    if (this.mMountSoftTokenNameElem.value == "") {
+			var tmpTokenName = this.getUniqueTokenName("PKCS8SoftToken");
+			if (tmpTokenName) {
+			    this.mMountSoftTokenNameElem.value = tmpTokenName;
+			}
+			tokenName = tmpTokenName;
+		    }
+		    else {
+			tokenName = this.mMountSoftTokenNameElem.value;
+		    }
+
+		    epkFile = this.mActiveSoftTokenElem.epkfile;
+		    epkFileBase64 = this.mActiveSoftTokenElem.epkfilebase64;
+		    epkcertFile = this.mActiveSoftTokenElem.epkcertfile;
+		    epkcertFileBase64 = this.mActiveSoftTokenElem.epkcertfilebase64;
+
+		    this.LogDebug("softtokenmgrBinding.mountEPKSoftToken(): epkFileBase64: " + epkFileBase64 + " epkcertFileBase64: " + epkcertFileBase64);
+		    this.LogDebug("softtokenmgrBinding.mountEPKSoftToken(): tokenName: " + tokenName);
+
+		    if (this.softtokentype == "pkcs8") {
+			/*
+			var initialPasswordUC = "";
+			var useAutoPassword = false;
+			var softToken = this.mSoftTokenDBManager.createTempSoftToken(
+						tokenName, 
+						initialPasswordUC, useAutoPassword,
+						softTokenDBDirObj
+						);
+			softToken.login(false);
+			*/
+			mountedSlot = this.mKeyManager.mountPKCS8FileSlot(
+						epkFile, epkFileBase64,
+						epkcertFile, epkcertFileBase64,
+						tokenName,
+						readOnly, enableFips,
+						softTokenDBDirObj
+						);
+		    }
+		    else {
+			if (this.mActiveSoftTokenElem.epkhascert) {
+			    epkcertFile = epkFile;
+			    epkcertFileBase64 = true;
+			}
+			var iterationCnt = 1;
+			mountedSlot = this.mKeyManager.mountOpenSSLEPKFileSlot(
+						epkFile, iterationCnt,
+						epkcertFile, epkcertFileBase64,
+						tokenName,
+						readOnly, enableFips,
+						softTokenDBDirObj
+						);
+		    }
+		    if (epkcertFile) {
+			resolvedX059Cert = this.mKeyManager.createX509CertFromFile(
+						epkcertFile, epkcertFileBase64
+						);
+		    }
+		} catch (ex) {
+		    alert("softtokenmgrBinding.mountEPKSoftToken(): this.mKeyManager.mountPKCS8FileSlot() failed - ex: " + ex);
+		    this.LogError("softtokenmgrBinding.mountEPKSoftToken(): this.mKeyManager.mountPKCS8FileSlot() failed - ex: " + ex);
+		    throw ex;
+		}
+		// this.mX509CertItemElem.cert = resolvedX059Cert;
+
+		if (softTokenDBDirObj.value) {
+		    this.mMountedSoftTokenDBDir = softTokenDBDirObj.value.QueryInterface(Components.interfaces.nsILocalFile);;
+		}
+
+		this.LogTrace("softtokenmgrBinding.mountEPKSoftToken():......................End.");
+		return mountedSlot;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="mountPKCS12File">
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("softtokenmgrBinding.mountPKCS12File():......................Start.");
+
+		if (!this.mActiveSoftTokenElem.pkcs12file) {
+		    throw ("No PKCS12 File");
+		}
+
+		var tokenName = null;
+		var readOnly = false;
+		var enableFips = false;
+		var softTokenDBDirObj = new Object();
+
+		var /* nsIX509Cert   */	resolvedX059Cert = null;
+		var /* nsILocalFile  */ softTokenDBDir = null;
+		var /* nsIPKCS11Slot */ mountedSlot = null;
+		try {
+		    if (this.mMountSoftTokenNameElem.value == "") {
+			var tmpTokenName = this.getUniqueTokenName("PKCS12SoftToken");
+			if (tmpTokenName) {
+			    this.mMountSoftTokenNameElem.value = tmpTokenName;
+			}
+			tokenName = tmpTokenName;
+		    }
+		    else {
+			tokenName = this.mMountSoftTokenNameElem.value;
+		    }
+		    mountedSlot = this.mSoftTokenDBManager.mountPKCS12FileSlot(
+					this.mActiveSoftTokenElem.pkcs12file,
+					tokenName,
+					readOnly, enableFips,
+					softTokenDBDirObj
+					);
+		    if (softTokenDBDirObj.value) {
+			this.mMountedSoftTokenDBDir = softTokenDBDirObj.value.QueryInterface(Components.interfaces.nsILocalFile);;
+		    }
+		} catch (ex) {
+		    alert("softtokenmgrBinding.mountPKCS12File(): this.mSoftTokenDBManager.mountPKCS12FileSlot() failed - ex: " + ex);
+		    this.logError("softtokenmgrBinding.mountPKCS12File(): this.mSoftTokenDBManager.mountPKCS12FileSlot() failed - ex: " + ex);
+		    throw ex;
+		}
+
+		this.LogTrace("softtokenmgrBinding.mountPKCS12File():......................End.");
+		return mountedSlot;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="mountSoftTokenDB">
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("softtokenmgrBinding.mountSoftTokenDB():......................Start.");
+
+		// this.LogDebug("softtokenmgrBinding.mountSoftTokenDB(): keydbdir: " + this.mActiveSoftTokenElem.keydbdir);
+
+		if (!this.mActiveSoftTokenElem.keydbdir) {
+		    throw ("No DB DIR");
+		}
+
+		var certPrefix = "";
+		var tokenName = "XXSoftTokenDBXX";
+		var readOnly = false;
+		var enableFips = false;
+		var performLogin = true;
+
+		var /* nsIX509Cert   */	resolvedX059Cert = null;
+		var /* nsILocalFile  */ softTokenDBDir = null;
+		var /* nsIPKCS11Slot */ mountedSlot = null;
+		try {
+		    if (this.mMountSoftTokenNameElem.value != "") {
+			this.mMountSoftTokenNameElem.value = "NSSDBSoftToken"
+		    }
+		    tokenName = this.mMountSoftTokenNameElem.value;
+		    mountedSlot = this.mSoftTokenDBManager.mountSoftTokenDBSlot(
+					this.mActiveSoftTokenElem.keydbdirpath,
+					certPrefix, tokenName,
+					readOnly, enableFips,
+					performLogin
+					);
+		} catch (ex) {
+		    alert("softtokenmgrBinding.mountSoftTokenDB(): this.mSoftTokenDBManager.mountPKCS12FileSlot() failed - ex: " + ex);
+		    this.logError("softtokenmgrBinding.mountSoftTokenDB(): this.mSoftTokenDBManager.mountPKCS12FileSlot() failed - ex: " + ex);
+		    throw ex;
+		}
+
+		this.LogTrace("softtokenmgrBinding.mountSoftTokenDB():......................End.");
+		return mountedSlot;
+		]]>
+		</body>
+	    </method>
+
+
+	    <method name="mountSoftToken">
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("softtokenmgrBinding.mountSoftToken():......................Start.");
+
+		if (!this.readytomount) {
+		    return;
+		}
+
+		this.mMountedSoftTokenDBDir = null;
+		// this.mX509CertItemElem.cert = null;
+
+		var /* nsIPKCS11Slot */ mountedSlot = null;
+		try {
+		    if ((this.softtokentype == "pkcs8") || (this.softtokentype == "osslepk")) {
+			mountedSlot = this.mountEPKSoftToken(ev);
+		    }
+		    else if (this.softtokentype == "pkcs12") {
+			mountedSlot = this.mountPKCS12File(ev);
+		    }
+		    else if (this.softtokentype == "keydb") {
+			mountedSlot = this.mountSoftTokenDB(ev);
+		    }
+		    this.mExportNSSDBCertPickerElem.refresh();
+		    var mountedX059Cert = this.mOSSLSoftTokenElem.refreshX509CertItem();
+		    if (mountedX059Cert) {
+			this.mExportNSSDBCertPickerElem.selectedCert = mountedX059Cert;
+		    }
+		} catch (ex) {
+		    mountedSlot = null;
+		}
+		this.activateMountButton();
+
+		if (!mountedSlot) {
+		    this.mMountedSlot = null;
+		    this.mMountedSoftTokenDBDir = null;
+
+		    this.LogTrace("softtokenmgrBinding.mountSoftToken():......................End(0).");
+		    throw ("Failed to mount.");
+		}
+		this.mMountedSlot = mountedSlot;
+		var mountedToken = mountedSlot.getToken();
+		this.LogDebug("softtokenmgrBinding.mountSoftToken(): token.tokenName: " + mountedToken.tokenName);
+
+		this.mTokenMenuListElem.refresh();
+		this.mTokenMenuListElem.token = mountedToken;
+
+		this.mMountSoftTokenCmdHboxElem.hidden = true;
+		// this.mUnmountSoftTokenCmdElem.hidden = false;
+
+		this.LogTrace("softtokenmgrBinding.mountSoftToken():......................End.");
+		return mountedSlot;
+		]]>
+		</body>
+	    </method>
+
+
+	    <method name="unmountSoftToken">
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("softtokenmgrBinding.unmountSoftToken():......................Start.");
+		if (!this.mMountedSlot) {
+		    return;
+		}
+		try {
+		    this.mSoftTokenDBManager.unmountSoftTokenDBSlot(this.mMountedSlot);
+		    this.mMountedSlot = null;
+
+		    this.mTokenMenuListElem.refresh();
+		    // this.mX509CertItemElem.cert = null;
+
+		    if (this.mMountedSoftTokenDBDir) {
+			this.mMountedSoftTokenDBDir.remove(true);
+		    }
+		    this.mMountedSoftTokenDBDir = null;
+		} catch (ex) {
+		    alert("softtokenmgrBinding.unmountSoftToken(): this.mSoftTokenDBManager.mountSoftTokenSlot() failed - ex: " + ex);
+		    this.LogError("softtokenmgrBinding.unmountSoftToken(): this.mSoftTokenDBManager.mountSoftTokenSlot() failed - ex: " + ex);
+		}
+
+		this.LogTrace("softtokenmgrBinding.unmountSoftToken():......................End.");
+		]]>
+		</body>
+	    </method>
+
+
+	</implementation>
+    </binding>
+
+</bindings>
+

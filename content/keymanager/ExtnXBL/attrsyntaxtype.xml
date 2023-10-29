@@ -1,0 +1,585 @@
+<?xml version="1.0"?>
+<!-- @(#) $Id: attrsyntaxtype.xml,v 1.13 2009/04/21 03:41:03 subrata Exp $ -->
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is Avaya Labs Research, Avaya Inc. Code.
+   -
+   - The Initial Developer of the Original Code is
+   - Subrata Mazumdar, Avaya Labs Research, Avaya Inc.
+   - Portions created by the Initial Developer are Copyright (C) 2007.
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Subrata Mazumdar (mazum@avaya.com)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+
+<!DOCTYPE bindings SYSTEM "chrome://keymanager/locale/keyManager.dtd">
+
+<bindings id="attrsyntaxtypeBindings"
+    xmlns="http://www.mozilla.org/xbl"
+    xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    xmlns:xbl="http://www.mozilla.org/xbl">
+
+    <binding id="attrsyntaxvalueBinding"
+	extends="chrome://keymanager/content/ExtnXBL/certextn.xml#certextnbaseBinding"
+        >
+        <!--
+        <resources>
+    	    <script type="application/x-javascript" src="chrome://keymanager/content/GeneralNameItem.js"/>
+    		    onchange="getBindingParent(this).handleFilePathChange(this)"
+  	  	    onkeyup="if (event.keyCode == 13)
+  	  			{getBindingParent(this).autoCompleteAction(event.target)};"
+        </resources>
+        -->
+    	<!-- content, property, method and event descriptions go here -->
+    	<content>
+	    <xul:vbox anonid="keymgr.ac.attrsyntax.values.vbox"
+		flex="1"
+	    	>
+	        <xul:hbox
+		    flex="1"
+		    >
+	            <xul:vbox
+		        flex="1"
+		        >
+			<xul:hbox pack="start" align="center"
+			    xbl:inherits="hidden=readonly"
+			    flex="1"
+			    >
+                            <xul:menulist anonid="keymgr.ac.attrsyntax.values.newvalue.type.menu"
+		                xbl:inherits="value=valuetype,tooltiptext=valuetypetooltip,disabled=valuetypedisabled,readonly"
+		                tooltiptext="Select the one of value type (octets|oid|string) from the list."
+		                oncommand="getBindingParent(this).onValueTypeSelection(this, event)"
+		                >
+          	                <xul:menupopup>
+          	                    <xul:menuitem anonid="keymgr.ac.attrsyntax.values.newvalue.type.string"
+          	                        label="String"
+          		                tooltiptext="String"
+          		                value="string"
+          		                />
+          	                    <xul:menuitem anonid="keymgr.ac.attrsyntax.values.newvalue.type.octets"
+          	                        label="Octets"
+          		                tooltiptext="Octets"
+          		                value="octets"
+          		                />
+          	                    <xul:menuitem anonid="keymgr.ac.attrsyntax.values.newvalue.type.oid"
+          	                        label="Oid"
+          		                tooltiptext="Oid"
+          		                value="oid"
+          		                />
+		                </xul:menupopup>
+                            </xul:menulist>
+		            <xul:textbox anonid="keymgr.ac.attrsyntax.values.newvalue.text"
+			        xbl:inherits="tooltiptext=newvaluetooltip,autocompletesearchparam=newvaluesearchparam"
+			        flex="1"
+  	  	                type="autocomplete" 
+  	  	                autocompletesearch="form-history" 
+  	  	                completeselectedindex="true"
+  	  	                xautocompletesearchparam="keymgr.ac.attrsyntax.values.newvalue.text"
+		                />
+			</xul:hbox>
+	                <xul:listbox anonid="keymgr.ac.attrsyntax.values.list"
+			    xbl:inherits="style,label=listlabel,tooltiptext=listtooltip,rows"
+			    flex="1"
+	    	    	    style="overflow:auto;"
+		            rows="3"
+			    >
+	                </xul:listbox>
+	        	<xul:textbox anonid="keymgr.ac.attrsyntax.values.text"
+		    	    collapsed="true" readonly="true"
+			    />
+	            </xul:vbox>
+	            <xul:vbox anonid="keymgr.ac.attrsyntax.values.cmds"
+		        align="start" 
+		        xbl:inherits="hidden=readonly"
+		        >
+	                <xul:button anonid="keymgr.ac.attrsyntax.values.cmd.add"
+			    xbl:inherits="label=addlabel,tooltiptext=addtooltip"
+		            label="Add"
+		    	    oncommand="getBindingParent(this).addNewValueToList(event);"
+			    /> 
+	                <xul:button anonid="keymgr.ac.attrsyntax.values.cmd.remove"
+			    xbl:inherits="label=removelabel,tooltiptext=removetooltip"
+		            label="Remove"
+		    	    oncommand="getBindingParent(this).deleteValueFromList(event);"
+			    /> 
+	            </xul:vbox>
+	        </xul:hbox>
+	    </xul:vbox>
+    	</content>
+	<implementation>
+	    <field name="mTextValueListVBoxElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.ac.attrsyntax.values.vbox");
+	    </field>
+	    <field name="mNewValueTypeMenuElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.ac.attrsyntax.values.newvalue.type.menu");
+	    </field>
+	    <field name="mNewValueElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.ac.attrsyntax.values.newvalue.text");
+	    </field>
+	    <field name="mTextValueListListElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.ac.attrsyntax.values.list");
+	    </field>
+	    <field name="mTextValueListValueTextElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.ac.attrsyntax.values.text");
+	    </field>
+
+	    <property name="value"
+	        onget="this.computeAttributeListValue(); return this.mTextValueListValueTextElem.value;"
+	        onset="this.mTextValueListValueTextElem.value=val; this.updateValueList();return val;"
+		/>
+	    <property name="newvalue"
+	        onget="return this.mNewValueElem.value;"
+	        onset="this.mNewValueElem.value=val; return val;"
+		/>
+	    <property name="readonly"
+	        onget="return this.mTextValueListVBoxElem.readonly;"
+	    	onset="this.mTextValueListVBoxElem.readonly = val;
+		       this.setReadonly(this.mTextValueListVBoxElem, val);
+	    	       if (val) {
+		       	this.setAttribute('readonly',true);
+		       }
+                       else {
+		       	this.removeAttribute('readonly');
+		       	this.refresh();
+		       }
+		       return val;"
+		/>
+
+	    <constructor>
+		<![CDATA[
+		// this.LogTrace("attrsyntaxvalueBinding.constructor():......................Start.\n");
+
+		this.refresh();
+
+		var autoCompleteSearchParamOld = this.mNewValueElem.getAttribute("autocompletesearchparam");
+		this.setAutoCompleteSearchParam(
+				this.mNewValueElem,
+				getBindingParent(this)
+				);
+		var autoCompleteSearchParam = this.mNewValueElem.getAttribute("autocompletesearchparam");
+                // dump("setAutoCompleteSearchParam():\t" + autoCompleteSearchParam + "\t==> " + autoCompleteSearchParam + "\n");
+
+
+		// this.LogDebug("attrsyntaxvalueBinding.constructor(): autoCompleteSearchParam: " + autoCompleteSearchParam + "\n");
+
+		// this.LogTrace("attrsyntaxvalueBinding.constructor():......................End.\n");
+		]]>
+	    </constructor>
+
+	    <method name="setAutoCompleteSearchParam">
+		<parameter name="aTargetElem"/>
+		<parameter name="aBindingParent"/>
+	        <body>
+		<![CDATA[
+		/*
+		dump("setAutoCompleteSearchParam(): this.localName: " + this.localName + " " +
+					"aBindingParentTag: " + aBindingParent.localName +
+					"\n");
+		*/
+
+		/*
+		 * Our goal is to derive a unique name for the aTargetElem. 
+		 * I do not like the scheme currently implemeted.
+		 * Hopefully, I will come up with a better scheme. 
+		 */
+
+		// If the autoCompleteSearchParam attribute is specieifed, then use it.
+		var autoCompleteSearchParam = aTargetElem.getAttribute("autocompletesearchparam");
+		if (autoCompleteSearchParam) {
+		    return;
+		}
+
+		// If the autoCompleteSearchParam attribute is not specified but this element 
+		// has an id, then use that id as autoCompleteSearchParam attribute.
+		if (this.id) {
+		    autoCompleteSearchParam = this.id;
+		    aTargetElem.setAttribute("autocompletesearchparam", autoCompleteSearchParam);
+		    return;
+		}
+		// Otherwise, if the binding parent has an id, then use that id and the tag name 
+		// of this elements.
+		if (aBindingParent && aBindingParent.id) {
+		    autoCompleteSearchParam = aBindingParent.id;
+		    autoCompleteSearchParam += "." + this.localName;
+		    aTargetElem.setAttribute("autocompletesearchparam", autoCompleteSearchParam);
+		    return;
+		}
+
+		// Otherwise, if the aBindingParent exists, use its tag name as 
+		// prefix for autoCompleteSearchParam. Otherwise, use the "keymgr" 
+		// as prefix. Finally, append the tag name of this element and the 
+		// anonid of the target element to the prefix.
+		if (aBindingParent) {
+		    autoCompleteSearchParam = aBindingParent.localName;
+		}
+		else {
+		    autoCompleteSearchParam = "keymgr";
+		}
+		autoCompleteSearchParam += "." + this.localName;
+		autoCompleteSearchParam += "." + aTargetElem.getAttribute("anonid");
+
+		aTargetElem.setAttribute("autocompletesearchparam", autoCompleteSearchParam);
+
+		]]>
+	        </body>
+	    </method>
+
+
+	    <method name="refresh">
+	        <body>
+		<![CDATA[
+		this.removeAllItemsFromList();
+		if (this.mTextValueListValueTextElem.value != "") {
+		    this.updateValueList();
+		}
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="removeAllItemsFromList">
+	        <body>
+		<![CDATA[
+		for (var i = (this.mTextValueListListElem.getRowCount() - 1); i >= 0; i--) {
+		    this.mTextValueListListElem.removeItemAt(i);
+		}
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="reset">
+	        <body>
+		<![CDATA[
+		// this.LogTrace("attrsyntaxvalueBinding.reset():......................Start.\n");
+
+		this.removeAllItemsFromList();
+
+		this.mNewValueElem.value = "";
+		this.mTextValueListValueTextElem.value = "";
+
+		// this.resetCertExtn(this.mTextValueListVBoxElem);
+		// this.mTextValueListVBoxElem.reset();
+
+		// this.LogTrace("attrsyntaxvalueBinding.reset():......................End.\n");
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="computeAttributeListValue">
+	        <body>
+		<![CDATA[
+                // this.LogTrace("attrsyntaxvalueBinding.computeAttributeListValue(): ...........................Start.\n"); 
+
+                // Format:  <value-1>|<value-2>|.........|<value-n>
+
+		const ASN1_LIST_VALUE_DELIM  = "|";
+		const ASN1_CHOICE_TYPE_VALUE_DELIM  = ":";
+
+                var attributeValueListText = "";
+                var rowCount = this.mTextValueListListElem.getRowCount();
+                // this.LogDebug("attrsyntaxvalueBinding.computeAttributeListValue(): rowCount: " + rowCount + "\n"); 
+                for (var i = 0; i < rowCount; i++) {
+    	            var rowItemElem = this.mTextValueListListElem.getItemAtIndex(i);
+		    if (i > 0) {
+    	            	attributeValueListText += ASN1_LIST_VALUE_DELIM;
+		    }
+	            attributeValueListText += rowItemElem.value;
+
+                }
+		// this.LogDebug("attrsyntaxvalueBinding.computeAttributeListValue(): attributeValueListText: " + attributeValueListText + "\n");
+
+                this.mTextValueListValueTextElem.value = attributeValueListText;
+
+                // this.LogTrace("attrsyntaxvalueBinding.computeAttributeListValue(): ...........................End.\n"); 
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="updateValueList">
+	        <body>
+		<![CDATA[
+                // this.LogDebug("attrsyntaxvalueBinding.updateValueList(): valueSeq: "  + this.mTextValueListValueTextElem.value + "\n");
+
+                var vomsValueSeq = this.mTextValueListValueTextElem.value.split("|");
+                if (vomsValueSeq.length <= 0) {
+    	            return;
+                }
+                // this.LogDebug("attrsyntaxvalueBinding.updateValueList(): vomsValueSeq.length: "  + vomsValueSeq.length + "\n");
+
+                for (var i = 0; i < vomsValueSeq.length; i++) {
+    	            var vomsValue = vomsValueSeq[i];
+	            if (vomsValue == "") {
+	                continue;
+	            }
+    	            var listItem = this.mTextValueListListElem.appendItem(vomsValue, vomsValue);
+		    listItem.setAttribute("tooltiptext", vomsValue);
+                }
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="addNewValueToList">
+		<parameter name="ev"/>
+	        <body>
+		<![CDATA[
+
+		const ASN1_LIST_VALUE_DELIM  = "|";
+		const ASN1_CHOICE_TYPE_VALUE_DELIM  = ":";
+
+		var newValue = this.trim(this.mNewValueElem.value);
+		if (newValue == "") {
+		    this.mNewValueElem.value = "";
+		    return;
+		}
+
+		var typedValue = this.mNewValueTypeMenuElem.value + ASN1_CHOICE_TYPE_VALUE_DELIM + newValue;
+
+                var listItem = this.mTextValueListListElem.appendItem(typedValue, typedValue);
+		listItem.setAttribute("tooltiptext", typedValue);
+
+		this.mTextValueListListElem.selectItem(listItem);
+		this.mTextValueListListElem.ensureElementIsVisible(listItem);
+
+                this.computeAttributeListValue();
+
+		this.autoCompleteAction(this.mNewValueElem);
+
+                return;
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="onValueTypeSelection">
+		<parameter name="aValueTypeMenuElem"/>
+		<parameter name="ev"/>
+	        <body>
+		<![CDATA[
+		this.mNewValueElem.focus();
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="deleteValueFromList">
+		<parameter name="ev"/>
+	        <body>
+		<![CDATA[
+                this.mTextValueListListElem.removeItemAt(this.mTextValueListListElem.selectedIndex);
+                this.mTextValueListListElem.selectedIndex = -1;
+                this.mTextValueListListElem.clearSelection();
+            
+                this.computeAttributeListValue();
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="toCertProps">
+		<parameter name="aCertProps"/>
+	        <body>
+		<![CDATA[
+		this.computeAttributeListValue();
+		this.certExtnToProps(this.mTextValueListVBoxElem, aCertProps);
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="updateCertProps">
+		<parameter name="aCertProps"/>
+	        <body>
+		<![CDATA[
+		this.updateCertExtnProps(this.mTextValueListVBoxElem, aCertProps);
+		this.refresh();
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="mergeCertProps">
+		<parameter name="aCertProps"/>
+	        <body>
+		<![CDATA[
+		this.updateCertExtnProps(this.mTextValueListVBoxElem, aCertProps, true);
+		this.refresh();
+		]]>
+	        </body>
+	    </method>
+	</implementation>
+    </binding>
+
+    <binding id="attrsyntaxBinding"
+	extends="chrome://keymanager/content/ExtnXBL/certextn.xml#certextnbaseBinding"
+        >
+        <!--
+        <resources>
+    	    <script type="application/x-javascript" src="chrome://keymanager/content/ExtnXBL/certextn2props.js"/>
+	    <stylesheet src="chrome://keymanager/skin/kmbindings.css"/>
+        </resources>
+        -->
+    	<!-- content, property, method and event descriptions go here -->
+    	<content>
+		<xul:grid anonid="attrcert.attrsyntaxtype" flex="1"
+		    > 
+                    <xul:columns>
+                    	<xul:column/>
+                    	<xul:column flex="1"/>
+                    </xul:columns>
+                    <xul:rows>
+                    	<xul:row
+			    align="center"
+			    >
+			    <xul:label value="Policy Authority"
+				xbl:inherits="value=palabel"
+			        />
+			    <xul:generalnamelistsimple anonid="attrcert.attrsyntaxtype.policy.authority"
+				xbl:inherits="type=patype,typetooltip=patypetooltip,typedisabled=patypedisabled,typehidden=patypehidden,valuetooltip=pavaluetooltip,valuedisabled=pavaluedisabled,addlabel=paaddlabel,addtooltip=paaddtooltip,removelabel=paremovelabel,removetooltip=paremovetooltip,listlabel=palistlabel,listtooltip=palisttooltip,rows=parows,certPropName=paCertPropName,newnamesearchparam=panewnamesearchparam"
+				type="uri"
+  	  	    		newnamesearchparam="attrcert.attrsyntaxtype.policy.authority"
+				valuetooltip="(OPTIONAL) Enter the ploicy authority"
+			        certPropName="policy-authority"
+    		    		onchange="getBindingParent(this).handlePolicyAuthorityChange(this, event)"
+			        />
+                  	</xul:row>
+                    	<xul:row
+			    align="center"
+			    >
+			    <xul:label value="Values"
+				xbl:inherits="value=valueslabel"
+				/>
+		            <xul:attrsyntaxvalue anonid="attrcert.attrsyntaxtype.values"
+		    		xbl:inherits="newvaluetooltip=valuesnewvaluetooltip,listlabel=valueslistlabel,listtooltip=valueslisttooltip,rows=valuesrows,addlabel=valuesaddlabel,addtooltip=valuesaddtooltip,removelabel=valuesremovelabel,removetooltip=valuesremovetooltip,textValues=valuestextValues,valuetype=valuestype,valuetypetooltip=valuestypetooltip,valuetypedisabled=valuestypedisabled,readonly,certPropName=valuesCertPropName,newvaluesearchparam=valuessearchparam"
+  	  	                newvaluesearchparam="attrcert.attrsyntaxtype.values.newvalue"
+		                valuetype="octets"
+				listtooltip="List of values"
+				addtooltip="Use this button to add a new item (on the left) to the list"
+				removetooltip="Use this button to remove the selected item from the list"
+			        certPropName="values"
+		            />
+                  	</xul:row>
+                    </xul:rows>
+                </xul:grid>
+    	</content>
+	<implementation>
+	    <field name="mBaseExtnElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "attrcert.attrsyntaxtype");
+	    </field>
+	    <field name="mPolicyAuthorityElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "attrcert.attrsyntaxtype.policy.authority");
+	    </field>
+	    <field name="mAttributeValueElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "attrcert.attrsyntaxtype.values");
+	    </field>
+
+	    <property name="readonly"
+	        onget="return this.mBaseExtnElem.readonly;"
+	    	onset="this.mBaseExtnElem.readonly = val;
+		       this.setReadonly(this.mBaseExtnElem, val);
+		       this.mPolicyAuthorityElem.readonly=val;
+		       this.mAttributeValueElem.readonly=val;
+		       if(!val) {this.refresh();}
+		       return val;"
+		/>
+	    <property name="disabled"
+	        onget="return this.mBaseExtnElem.disabled;"
+	    	onset="this.mBaseExtnElem.disabled = val;return val;"
+		/>
+
+	    <constructor>
+		<![CDATA[
+		// this.LogTrace("attrsyntaxtypeBinding.constructor():......................Start.\n");
+
+		this.refresh();
+
+		// this.LogTrace("attrsyntaxtypeBinding.constructor():......................End.\n");
+		]]>
+	    </constructor>
+
+	    <method name="refresh">
+	        <body>
+		<![CDATA[
+		]]>
+	        </body>
+	    </method>
+
+
+	    <method name="reset">
+	        <body>
+		<![CDATA[
+		this.mPolicyAuthorityElem.reset();
+		this.mAttributeValueElem.reset();
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="handlePolicyAuthorityChange">
+		<parameter name="targetElem"/>
+		<parameter name="ev"/>
+	        <body>
+		<![CDATA[
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="toCertProps">
+		<parameter name="aCertProps"/>
+	        <body>
+		<![CDATA[
+		this.certExtnToProps(this.mBaseExtnElem, aCertProps);
+		// this.dumpProperties(aCertProps);
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="updateCertProps">
+		<parameter name="aCertProps"/>
+	        <body>
+		<![CDATA[
+		this.LogTrace("attrsyntaxtypeBinding.updateCertProps():......................Start.\n");
+
+		this.reset();
+		this.updateCertExtnProps(this.mBaseExtnElem, aCertProps);
+		this.refresh();
+
+		this.LogTrace("attrsyntaxtypeBinding.updateCertProps():......................End.\n");
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="mergeCertProps">
+		<parameter name="aCertProps"/>
+	        <body>
+		<![CDATA[
+		this.updateCertExtnProps(this.mBaseExtnElem, aCertProps, true);
+		this.refresh();
+		]]>
+	        </body>
+	    </method>
+
+	</implementation>
+    </binding>
+
+</bindings>
+

@@ -1,0 +1,1540 @@
+<?xml version="1.0"?>
+<!-- @(#) $Id: x509certprofile.xml,v 1.19 2011/02/04 18:54:54 subrata Exp $ -->
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is Avaya Labs Research, Avaya Inc. Code.
+   -
+   - The Initial Developer of the Original Code is
+   - Subrata Mazumdar, Avaya Labs Research, Avaya Inc.
+   - Portions created by the Initial Developer are Copyright (C) 2007.
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Subrata Mazumdar (mazum@avaya.com)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+
+
+<bindings id="x509certprofileBindings"
+    xmlns="http://www.mozilla.org/xbl"
+    xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    xmlns:xbl="http://www.mozilla.org/xbl">
+
+    <binding id="x509certprofiletypeBinding">
+    	<content>
+	    <xul:menulist anonid="x509certprofile.data.profileMenu"
+		xbl:inherits="value,value=profile,hidden,disabled,tooltiptext"
+		tooltiptext="Select one of the the key usage criteria from the list - use the Advanced tab control for further customization."
+  		zoncommand="getBindingParent(this).handleCertExtensionProfileChanged(this, event)"
+	  	>
+	        <xul:menupopup>
+		    <xul:menuitem anonid="x509certprofile.data.noextensions"
+			      xbl:inherits="label=noextensionslabel"
+			      label="No Extensions"
+			      tooltiptext="Select this option if you do not want preset extensions or want to reset the forms for no extensions"
+			      certProfileFileName="NoExtnsProfileTemplate.xml"
+			      value="noextensions"
+			      />
+		    <xul:menuitem anonid="x509certprofile.data.basicconstraints"
+			      xbl:inherits="label=basicconstraintslabel"
+			      label="Basic Constraints Extension Only"
+			      tooltiptext="Select this option if you do want set basic constraints extensions only"
+			      certProfileFileName="BasicContraintsOnlyExtnProfile.xml"
+			      value="basicconstraints"
+			      />
+		    <xul:menuitem anonid="x509certprofile.data.digitalsig"
+			      xbl:inherits="label=digitalsiglabel"
+			      label="Digital Signature"
+			      tooltiptext="Select this option if you want the key just for digital signature"
+			      certProfileFileName="DigitalSigExtnProfile.xml"
+			      value="digitalsig"
+			      />
+		    <xul:menuitem anonid="x509certprofile.data.dataencipherment"
+			      xbl:inherits="label=dataenciphermentlabel"
+			      label="Data Encipherment"
+			      tooltiptext="Select this option if you want the key just for data encipherment"
+			      certProfileFileName="DataEnciphermentExtnProfile.xml"
+			      value="dataencipherment"
+			      />
+		    <xul:menuitem anonid="x509certprofile.data.sig_dataencipherment"
+			      xbl:inherits="label=sig_dataenciphermentlabel"
+			      label="Digital Signature and Data Encipherment"
+			      tooltiptext="Select this option if you want the key for both digital signature and data encipherment"
+			      zselected="true"
+			      certProfileFileName="SigDataEnciphermentExtnProfile.xml"
+			      value="sig_dataencipherment"
+			      />
+
+		    <xul:menuitem anonid="x509certprofile.data.genericserver"
+			      xbl:inherits="label=serverlabel"
+			      label="Generic Server Cert Profile"
+			      tooltiptext="Select this option to select Server Certificate profile."
+			      certProfileFileName="ServerCertExtnProfile.xml"
+			      value="genericserver"
+			      profileusertype="server"
+			      />
+		    <xul:menuitem anonid="x509certprofile.data.genericca"
+			      xbl:inherits="label=calabel"
+			      label="Generic CA Cert Profile"
+			      tooltiptext="Select this option to select CA Certificate profile."
+			      certProfileFileName="CACertExtnProfile.xml"
+			      value="genericca"
+			      profileusertype="ca"
+			      />
+
+		    <xul:menuitem anonid="x509certprofile.data.tbselfsignedsmime"
+			      xbl:inherits="label=tbselfsignedsmimelabel"
+			      label="TB Self-Signed Cert Profile"
+			      tooltiptext="Select this option to create cert based on Thunderbird self-signed Certificate profile."
+			      certProfileFileName="TBSelfSignedSMIMEProfile.xml"
+			      value="tbselfsignedsmime"
+			      />
+		    <xul:menuitem anonid="x509certprofile.data.pkilite"
+			      xbl:inherits="label=pkilitelabel"
+			      label="HE PKI-Lite Cert Profile"
+			      tooltiptext="Select this option to select HE PKI-Lite Certificate profile (http://middleware.internet2.edu/hepki-tag/pki-lite/hepki-tag-pkilite-profile-current.html)."
+			      certProfileFileName="PKILiteEndEntityCertExtnProfile.xml"
+			      value="pkilite"
+			      />
+
+		    <xul:menuitem anonid="x509certprofile.data.globusgridusercert"
+			      xbl:inherits="label=globusgridusercertlabel"
+			      label="Globus User Cert"
+			      tooltiptext="Select this option to create cert based on Globus Grid User Certificate profile."
+			      certProfileFileName="GlobusGridUserProfile.xml"
+			      value="globusgridusercert"
+			      />
+		    <xul:menuitem anonid="x509certprofile.data.globushostcert"
+			      xbl:inherits="label=globushostcertlabel"
+			      label="Globus Host Cert"
+			      tooltiptext="Select this option to create cert based on Globus Host Certificate profile."
+			      certProfileFileName="GlobusHostProfile.xml"
+			      value="globushostcert"
+			      profileusertype="server"
+			      />
+		    <xul:menuitem anonid="x509certprofile.data.globuscacert"
+			      xbl:inherits="label=globuscacertlabel"
+			      label="Globus CA Cert"
+			      tooltiptext="Select this option to create cert based on Globus CA Certificate profile."
+			      certProfileFileName="GlobusCAProfile.xml"
+			      value="globuscacert"
+			      profileusertype="ca"
+			      />
+
+		    <xul:menuitem anonid="x509certprofile.data.msiisca"
+			      xbl:inherits="label=msiiscalabel"
+			      label="MS IIS CA Cert Profile"
+			      tooltiptext="Select this option to select MS IIS Server CA Certificate profile."
+			      certProfileFileName="MS_IIS_CACertExtnProfile.xml"
+			      value="msiisca"
+			      profileusertype="ca"
+			      />
+		    <xul:menuitem anonid="x509certprofile.data.msiisserver"
+			      xbl:inherits="label=msiisserverlabel"
+			      label="MS IIS Server Cert Profile"
+			      tooltiptext="Select this option to select MS IIS Server Certificate profile."
+			      certProfileFileName="MS_IIS_CertExtnProfile.xml"
+			      value="msiisserver"
+			      profileusertype="server"
+			      />
+
+		    <children includes="menuitem"/>
+
+		    <xul:menuitem anonid="x509certprofile.data.proxycert"
+			      xbl:inherits="label=proxylabel,hidden=proxycerthidden"
+			      label="Proxy Cert Profile"
+			      tooltiptext="Select this option to select the proxy cert extension profile."
+			      certProfileFileName="ProxyCertExtnProfile.xml"
+			      hidden="true"
+			      value="proxycert"
+			      />
+		    <xul:menuitem anonid="x509certprofile.data.custom"
+			      xbl:inherits="label=customlabel"
+			      label="Custom Extension Profile"
+			      tooltiptext="Select this option to load key usage profile from a file - after loading, use the Advanced tab control for further customization."
+			      value="custom"
+			      />
+		    <xul:menuitem anonid="x509certprofile.data.certificate"
+			      xbl:inherits="label=certificatelabel"
+			      label="Copy profile from existing Cert"
+			      tooltiptext="Select this option to load certificate profile from an existing certificate - after loading, use the Advanced tab control for further customization."
+			      value="certificate"
+			      />
+			  <xul:menuitem anonid="x509certprofile.data.xmldoc"
+			      xbl:inherits="label=xmldoclabel"
+			      hidden="true"
+			      label="Copy profile from an XML document"
+			      tooltiptext="Use this option to specify profile data using XML document (instead of a file)"
+			      value="xmldoc"
+			      />
+	        </xul:menupopup>
+	    </xul:menulist>
+    	</content>
+	<implementation>
+	    <field name="mProfileTypeMenuElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "x509certprofile.data.profileMenu");
+	    </field>
+	    <property name="readonly"
+		onget="return this.hasAttribute('readonly');"
+		onset="if (val) this.setAttribute('readonly',true);
+		       else this.removeAttribute('readonly');
+		       return val;"
+		/>
+	    <property name="value"
+                onget="return this.mProfileTypeMenuElem.value;"
+	    	onset="this.mProfileTypeMenuElem.value=val; return val;"
+		/>
+	    <property name="profileType"
+                onget="return this.value;"
+	    	onset="this.value=val; return val;"
+		/>
+	    <property name="profileFileName" readonly="true"
+                onget="return this.mProfileTypeMenuElem.selectedItem.getAttribute('certProfileFileName');"
+		/>
+	    <property name="profileusertype" readonly="true"
+		onget="return this.mProfileTypeMenuElem.selectedItem.getAttribute('profileusertype');"
+		/>
+	</implementation>
+    </binding>
+
+
+    <binding id="x509certprofileBinding">
+	<resources>
+	    <stylesheet src="chrome://keymanager/skin/kmbindings.css"/>
+	</resources>
+
+
+    	<!-- content, property, method and event descriptions go here -->
+    	<content>
+  	    <xul:groupbox anonid="x509certprofile.data.vbox" xbl:inherits="hidden,flex">
+  	        <xul:hbox anonid="x509certprofile.data.profile" align="start">
+		    <xul:menulist anonid="x509certprofile.data.profileMenu"
+			xbl:inherits="value=profile,hidden=profilehidden,disabled=profiledisabled,tooltiptext=profiletooltip"
+			tooltiptext="Select one of the the key usage criteria from the list - use the Advanced tab control for further customization."
+  			oncommand="getBindingParent(this).handleCertExtensionProfileChanged(this, event)"
+		  	>
+		      <xul:menupopup>
+			  <xul:menuitem anonid="x509certprofile.data.noextensions"
+			      xbl:inherits="label=noextensionslabel"
+			      label="No Extensions"
+			      tooltiptext="Select this option if you do not want preset extensions or want to reset the forms for no extensions"
+			      certProfileFileName="NoExtnsProfileTemplate.xml"
+			      value="noextensions"
+			      />
+			  <xul:menuitem anonid="x509certprofile.data.basicconstraints"
+			      xbl:inherits="label=basicconstraintslabel"
+			      label="Basic Constraints Extension Only"
+			      tooltiptext="Select this option if you do want set basic constraints extensions only"
+			      certProfileFileName="BasicContraintsOnlyExtnProfile.xml"
+			      value="basicconstraints"
+			      />
+			  <xul:menuitem anonid="x509certprofile.data.digitalsig"
+			      xbl:inherits="label=digitalsiglabel"
+			      label="Digital Signature"
+			      tooltiptext="Select this option if you want the key just for digital signature"
+			      certProfileFileName="DigitalSigExtnProfile.xml"
+			      value="digitalsig"
+			      />
+			  <xul:menuitem anonid="x509certprofile.data.dataencipherment"
+			      xbl:inherits="label=dataenciphermentlabel"
+			      label="Data Encipherment"
+			      tooltiptext="Select this option if you want the key just for data encipherment"
+			      certProfileFileName="DataEnciphermentExtnProfile.xml"
+			      value="dataencipherment"
+			      />
+			  <xul:menuitem anonid="x509certprofile.data.sig_dataencipherment"
+			      xbl:inherits="label=sig_dataenciphermentlabel"
+			      label="Digital Signature and Data Encipherment"
+			      tooltiptext="Select this option if you want the key for both digital signature and data encipherment"
+			      zselected="true"
+			      certProfileFileName="SigDataEnciphermentExtnProfile.xml"
+			      value="sig_dataencipherment"
+			      />
+
+			  <xul:menuitem anonid="x509certprofile.data.genericserver"
+			      xbl:inherits="label=serverlabel"
+			      label="Generic Server Cert Profile"
+			      tooltiptext="Select this option to select Server Certificate profile."
+			      certProfileFileName="ServerCertExtnProfile.xml"
+			      value="genericserver"
+			      profileusertype="server"
+			      />
+			  <xul:menuitem anonid="x509certprofile.data.genericca"
+			      xbl:inherits="label=calabel"
+			      label="Generic CA Cert Profile"
+			      tooltiptext="Select this option to select CA Certificate profile."
+			      certProfileFileName="CACertExtnProfile.xml"
+			      value="genericca"
+			      profileusertype="ca"
+			      />
+
+		          <xul:menuitem anonid="x509certprofile.data.tbselfsignedsmime"
+			      xbl:inherits="label=tbselfsignedsmimelabel"
+			      label="TB Self-Signed Cert Profile"
+			      tooltiptext="Select this option to create a cert based on Thunderbird self-signed Certificate profile defined in Mozillazine article."
+			      certProfileFileName="TBSelfSignedSMIMEProfile.xml"
+			      value="tbselfsignedsmime"
+			      />
+			  <xul:menuitem anonid="x509certprofile.data.pkilite"
+			      xbl:inherits="label=pkilitelabel"
+			      label="HE PKI-Lite Cert Profile"
+			      tooltiptext="Select this option to select HE PKI-Lite Certificate profile (http://middleware.internet2.edu/hepki-tag/pki-lite/hepki-tag-pkilite-profile-current.html)."
+			      certProfileFileName="PKILiteEndEntityCertExtnProfile.xml"
+			      value="pkilite"
+			      />
+
+		          <xul:menuitem anonid="x509certprofile.data.globusgridusercert"
+			      xbl:inherits="label=globusgridusercertlabel"
+			      label="Globus Grid User Cert"
+			      tooltiptext="Select this option to create cert based on Globus Grid User Certificate profile."
+			      certProfileFileName="GlobusGridUserProfile.xml"
+			      value="globusgridusercert"
+			      />
+		    	<xul:menuitem anonid="x509certprofile.data.globushostcert"
+			      xbl:inherits="label=globushostcertlabel"
+			      label="Globus Host Cert"
+			      tooltiptext="Select this option to create cert based on Globus Host Certificate profile."
+			      certProfileFileName="GlobusHostProfile.xml"
+			      value="globushostcert"
+			      profileusertype="server"
+			      />
+		    	<xul:menuitem anonid="x509certprofile.data.globuscacert"
+			      xbl:inherits="label=globuscacertlabel"
+			      label="Globus CA Cert"
+			      tooltiptext="Select this option to create cert based on Globus CA Certificate profile."
+			      certProfileFileName="GlobusCAProfile.xml"
+			      value="globuscacert"
+			      profileusertype="ca"
+			      />
+			  <xul:menuitem anonid="x509certprofile.data.msiisserver"
+			      xbl:inherits="label=msiisserverlabel"
+			      label="MS IIS Server Cert Profile"
+			      tooltiptext="Select this option to select MS IIS Server Certificate profile."
+			      certProfileFileName="MS_IIS_CertExtnProfile.xml"
+			      value="msiisserver"
+			      profileusertype="server"
+			      />
+			  <xul:menuitem anonid="x509certprofile.data.msiisca"
+			      xbl:inherits="label=msiiscalabel"
+			      label="MS IIS CA Cert Profile"
+			      tooltiptext="Select this option to select MS IIS Server CA Certificate profile."
+			      certProfileFileName="MS_IIS_CACertExtnProfile.xml"
+			      value="msiisca"
+			      profileusertype="ca"
+			      />
+
+			  <children includes="menuitem"/>
+
+			  <xul:menuitem anonid="x509certprofile.data.proxycert"
+			      xbl:inherits="label=proxylabel,hidden=proxycerthidden"
+			      label="Proxy Cert Profile"
+			      tooltiptext="Select this option to select the proxy cert extension profile."
+			      certProfileFileName="ProxyCertExtnProfile.xml"
+			      hidden="true"
+			      value="proxycert"
+			      />
+			  <xul:menuitem anonid="x509certprofile.data.custom"
+			      xbl:inherits="label=customlabel"
+			      label="Custom Extension Profile"
+			      tooltiptext="Select this option to load key usage profile from a file - after loading, use the Advanced tab control for further customization."
+			      value="custom"
+			      />
+			  <xul:menuitem anonid="x509certprofile.data.certificate"
+			      xbl:inherits="label=certificatelabel"
+			      label="Copy profile from existing Cert"
+			      tooltiptext="Select this option to load certificate profile from an existing certificate - after loading, use the Advanced tab control for further customization."
+			      value="certificate"
+			      />
+			  <xul:menuitem anonid="x509certprofile.data.xmldoc"
+			      xbl:inherits="label=xmldoclabel"
+			      hidden="true"
+			      label="Copy profile from an XML document"
+			      tooltiptext="Use this option to specify profile data using XML document (instead of a file)"
+			      value="xmldoc"
+			      />
+		      </xul:menupopup>
+		    </xul:menulist>
+		    <xul:button anonid="x509certprofile.data.profile.view"
+	  		label="Show Profile Data"
+  		      	tooltiptext="Click this button to show the certificate profile data"
+	       		oncommand="getBindingParent(this).showCertExtnProfileData(event);"
+			/>
+		    <xul:spacer flex="1"/>
+  	        </xul:hbox>
+
+  	        <xul:hbox anonid="x509certprofile.data.custom.profile.params"
+		    xbl:inherits="flex"
+		    flex="1"
+		    hidden="true"
+		    >
+		    <xul:hbox flex="10"
+			xbl:inherits="flex"
+	       	    	onpopuphiding="getBindingParent(this).setCustomExtProfileFilePath(event.target, event);"
+	       	    	onchange="getBindingParent(this).setCustomExtProfileFilePath(event.target, event);"
+	       	    	oncommand="getBindingParent(this).setCustomExtProfileFilePath(event.target, event);"
+		        >
+		        <xul:fileselector anonid="x509certprofile.data.custom.profile.path"
+			    xbl:inherits="filetooltiptext=profilepathtooltip,browsetooltiptext=profilepathbrowsetooltip,filewidth=profilepathwidth,value=customprofilepath"
+			    flex="1"
+			    formathidden="true"
+			    ascii="true"
+  	  		    autocompletesearchparam="keymgr.x509certprofile.data.custom.profile.path"
+			    fileMode="open"
+			    fileDialogMsg="Choose XML File for cert profile"
+			    fileTypeMsg="XML File"
+			    fileTypeFilters="*.xml"
+  			    filetooltiptext="Enter the path to the XML file for cert profile."
+			    browselabel="Browse"
+			    browsetooltiptext="Click this button to select the XML file for cert profile."
+			    />
+	  	    </xul:hbox>
+		    <xul:button anonid="x509certprofile.data.custom.template.show"
+	  		label="Show Template"
+  		      	tooltiptext="Click this button to show certificate profile Template"
+	       		oncommand="getBindingParent(this).showCertExtnProfileTemplate(event);"
+			/>
+	  	</xul:hbox>
+  	        <xul:vbox anonid="x509certprofile.data.certificate.profile.params"
+		    hidden="true"
+		    >
+		    <xul:hbox align="start">
+	    	        <xul:certpicker anonid="x509certprofile.data.certificate.profile.nickname.menulist"
+			    xbl:inherits="menutooltiptext=certmenutooltiptext,value=certnickname,tokentype,tokentypehidden,certtype,certusage,certusagehidden,usagecaonly,usagenoncaonly,viewhidden=certviewhidden,viewtooltiptext=certviewtooltiptext,oncommand=certoncommand"
+  		            menutooltiptext="Select a cert from list."
+		  	    tokentypehidden="true"
+		  	    certtype="server"
+		  	    viewhidden="false"
+	  	  	    viewlabel="View Cert"
+  		  	    viewtooltiptext="Click this button to show the selected cert."
+	       	  	    oncommand="getBindingParent(this).profileCertPickerChanged(this, event);"
+	    	  	    >
+	    	    	</xul:certpicker>
+	  	    </xul:hbox>
+		    <xul:hbox align="start">
+			<xul:checkbox anonid="x509certprofile.data.certificate.profile.all"
+			    xbl:inherits="checked=profilecertall"
+			    label="All"
+			    value="all"
+			    tooltiptext="Select this option if you want to copy all the fileds of the cert."
+			    oncommand="getBindingParent(this).handleCertProfileAllChanged(this, event);"
+			    />
+		        <xul:hbox anonid="x509certprofile.data.certificate.profile.comps" align="start">
+			    <xul:checkbox anonid="x509certprofile.data.certificate.profile.subject"
+			    	xbl:inherits="checked=profilecertsubject"
+			        label="Subject"
+			        value="subject"
+			        tooltiptext="Select this option if you want to copy only the subject fileds of the cert."
+			        />
+			    <xul:checkbox anonid="x509certprofile.data.certificate.profile.spki"
+			    	xbl:inherits="checked=profilecertspki"
+			        label="SPKI"
+			        value="spki"
+				zchecked="true"
+			        tooltiptext="Select this option if you want to copy only key related fileds of the cert."
+			        />
+			    <xul:checkbox anonid="x509certprofile.data.certificate.profile.x509v3extns"
+			    	xbl:inherits="checked=profilecertx509v3extns"
+			        label="X509v3 Extensions"
+			        value="x509v3extns"
+				zchecked="true"
+			        tooltiptext="Select this option if you want to copy only the X509v3 extension related fileds of the cert."
+			        />
+			</xul:hbox>
+		    </xul:hbox>
+	  	</xul:vbox>
+  	    </xul:groupbox>
+    	</content>
+	<implementation>
+	    <field name="mKeyManager">
+	    	Components.classes["@avaya.com/pkm/keymanager;1"]
+	    		.getService(Components.interfaces.alrIKeyManager);
+	    </field>
+	    <field name="mIOService" readonly="true">
+    		Components.classes["@mozilla.org/network/io-service;1"]
+			          .getService(Components.interfaces.nsIIOService);
+	    </field>
+	    <field name="mBaseChromeURL" readonly="true">
+	    	"chrome://keymanager/content/CertProfiles/"
+	    </field>
+	    <field name="mExtProfileTemplateChromeURL">
+	    	mBaseChromeURL + "CertProfileTemplate.xml";
+	    </field>
+	    <field name="mMaxLogLevel">
+	    4
+	    </field>
+	    <field name="mLogDebugLevel">
+	    8
+	    </field>
+	    <field name="mLogTraceLevel">
+	    6
+	    </field>
+	    <field name="mLogErrorLevel">
+	    2
+	    </field>
+	    <field name="mLogLevel">
+	    4
+	    </field>
+	    <field name="mProfileMenuElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "x509certprofile.data.profileMenu");
+	    </field>
+	    <field name="mProfileMenuNoExtnElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "x509certprofile.data.noextensions");
+	    </field>
+	    <field name="mProfileMenuCertElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "x509certprofile.data.certificate");
+	    </field>
+	    <field name="mProfileViewElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "x509certprofile.data.profile.view");
+	    </field>
+	    <field name="mProxyCertProfileElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "x509certprofile.data.proxycert");
+	    </field>
+	    <field name="mCustomProfileParamsElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "x509certprofile.data.custom.profile.params");
+	    </field>
+	    <field name="mCustomProfileFilePickerElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "x509certprofile.data.custom.profile.path");
+	    </field>
+	    <field name="mCertProfileParamsElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "x509certprofile.data.certificate.profile.params");
+	    </field>
+	    <field name="mCertProfileCertPickerElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "x509certprofile.data.certificate.profile.nickname.menulist");
+	    </field>
+	    <field name="mCertProfileSelectAllOptionElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "x509certprofile.data.certificate.profile.all");
+	    </field>
+	    <field name="mCertProfileSelectCompsOptionElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "x509certprofile.data.certificate.profile.comps");
+	    </field>
+	    <field name="mCertProfileSubjectOptionElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "x509certprofile.data.certificate.profile.subject");
+	    </field>
+	    <field name="mCertProfileSPKIOptionElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "x509certprofile.data.certificate.profile.spki");
+	    </field>
+	    <field name="mCertProfileX509v3ExtnsOptionElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "x509certprofile.data.certificate.profile.x509v3extns");
+	    </field>
+
+	    <field name="mCurrExtnProfileURIStr" readonly="true"/>
+	    <field name="mCurrExtnProfileURI" readonly="true"/>
+	    <field name="mCurrExtnProfileProps" readonly="true"/>
+	    <field name="mExtnProfileXmlDoc"/>
+
+	    <property name="profileusertype" readonly="true"
+		onget="return this.mProfileMenuElem.selectedItem.getAttribute('profileusertype');"
+		/>
+
+	    <property name="profiletype">
+		<getter>
+		<![CDATA[
+		return this.mProfileMenuElem.value;
+		]]>
+		</getter>
+		<setter>
+		<![CDATA[
+		    if ("proxycert" != val) {
+		    	this.proxycerthidden = true;
+		    }
+		    else {
+		    	this.proxycerthidden = false;
+		    }
+		    this.mProfileMenuElem.value = val;
+
+    		    this.handleCertExtensionProfileChanged(this.mProfileMenuElem, null);
+		    this.setAttribute("profile", val);
+		    return val;
+		]]>
+		</setter>
+	    </property>
+
+	    <property name="profile"
+		onget="return this.profiletype;"
+		onset="this.profiletype=val;return val;"
+		/>
+
+	    <property name="profilepath">
+		<getter>
+		<![CDATA[
+		return this.mCustomProfileFilePickerElem.value;
+		]]>
+		</getter>
+		<setter>
+		<![CDATA[
+		    this.setAttribute('profilepath',val);
+		    this.mCustomProfileFilePickerElem.value = val;
+		    // this.setCustomExtProfileFilePath(this.mCustomProfileFilePickerElem);
+		    return val;
+		]]>
+		</setter>
+	    </property>
+
+	    <property name="profilecert">
+		<getter>
+		<![CDATA[
+		return this.mCertProfileCertPickerElem.selectedCert;
+		]]>
+		</getter>
+		<setter>
+		<![CDATA[
+		    this.mCertProfileCertPickerElem.selectedCert = val;
+		    this.profileCertPickerChanged(this.mCertProfileCertPickerElem);
+		    this.handleCertProfileAllChanged(this.mCertProfileSelectAllOptionElem);
+		    return val;
+		]]>
+		</setter>
+	    </property>
+
+	    <property name="profilexmldoc">
+		<getter>
+		<![CDATA[
+		return this.mExtnProfileXmlDoc;
+		]]>
+		</getter>
+		<setter>
+		<![CDATA[
+		this.mExtnProfileXmlDoc = val;
+		return val;
+		]]>
+		</setter>
+	    </property>
+
+	    <property name="profilexmldata">
+		<getter>
+		<![CDATA[
+		if (!this.mExtnProfileXmlDoc) {
+		    return null;
+		}
+    		var xmlSerializer = new XMLSerializer();
+		return xmlSerializer.serialize(this.mExtnProfileXmlDoc);
+		]]>
+		</getter>
+		<setter>
+		<![CDATA[
+		if (!val) {
+		    this.mExtnProfileXmlDoc = null;
+		    return val;
+		}
+		// dump("x509certprofile.profilexmldata.set(): val:\n" + val + "\n");
+		this.mExtnProfileXmlDoc = this.parseXmlData(val);
+		return val;
+		]]>
+		</setter>
+	    </property>
+
+
+	    <property name="proxycerthidden">
+		<getter>
+		<![CDATA[
+		return this.getAttribute('proxycerthidden')
+		]]>
+		</getter>
+		<setter>
+		<![CDATA[
+		if (val) {
+		    this.setAttribute('proxycerthidden',val);
+		}
+		else {
+		    this.removeAttribute('proxycerthidden');
+		}
+		this.mProxyCertProfileElem.hidden = val;
+		return val;
+		]]>
+		</setter>
+	    </property>
+
+	    <property name="disabled"
+		onget="return this.mProfileMenuElem.disabled;"
+		onset="this.mProfileMenuElem.disabled=val;
+		       return val;"
+		/>
+	    <property name="profiledisabled">
+		<getter>
+		<![CDATA[
+		return this.getAttribute('profiledisabled')
+		]]>
+		</getter>
+		<setter>
+		<![CDATA[
+		    if (val) {this.setAttribute('profiledisabled',val);}
+		    else {this.removeAttribute('profiledisabled');}
+		    this.mProfileMenuElem.disabled = val;
+		    return val;
+		]]>
+		</setter>
+	    </property>
+
+	    <constructor>
+		<![CDATA[
+		// this.mMaxLogLevel = 9;
+		this.LogTrace("x509certprofile.constructor():......................Start.");
+
+		if (!this.mKeyManager) {
+		    this.mProfileMenuCertElem.hidden = true;
+		}
+		if (this.mProfileMenuElem.selectedIndex < 0) {
+		    return;
+		}
+		this.handleCertExtensionProfileChanged(this.mProfileMenuElem, null);
+
+		this.LogTrace("x509certprofile.constructor():......................End.");
+		]]>
+	    </constructor>
+
+	    <method name="refresh">
+		<body>
+		<![CDATA[
+		this.handleCertExtensionProfileChanged(this.mProfileMenuElem);
+		]]>
+		</body>
+	    </method>
+	    <method name="reset">
+		<body>
+		<![CDATA[
+		]]>
+		</body>
+	    </method>
+
+	    <method name="setCustomExtProfileFilePath">
+		<parameter name="aCustomProfileFilePickerElem"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("x509certprofile.setCustomExtProfileFilePath():......................Start.");
+
+		/*
+		if (ev && (aCustomProfileFilePickerElem.filepath == aCustomProfileFilePickerElem.prevfilepath)) {
+		    return;
+		}
+		*/
+
+		if (aCustomProfileFilePickerElem.value == "") {
+		    if (ev) {
+		    	ev.stopPropagation();
+		    }
+		    return;
+		}
+		this.LogTrace("x509certprofile.setCustomExtProfileFilePath():......................10.");
+
+		var /* nsIFile */ customProfileFile = aCustomProfileFilePickerElem.file;
+		
+		if (customProfileFile == null) {
+		    if (ev) {
+		    	ev.stopPropagation();
+		    }
+		    return;
+		}
+
+		var /* nsIURI */ customProfileURI = this.mIOService.newFileURI(customProfileFile);
+		if (!customProfileURI) {
+		    if (ev) {
+		    	ev.stopPropagation();
+		    }
+		    return;
+		}
+
+		this.setCustomExtProfileURI(customProfileURI, ev);
+
+		this.LogTrace("x509certprofile.setCustomExtProfileFilePath():......................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="setCustomExtProfileURI">
+		<parameter name="aCustomProfileURI"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("x509certprofile.setCustomExtProfileURI():......................Start.");
+
+		this.mCurrExtnProfileURI = aCustomProfileURI;
+		this.mCurrExtnProfileURIStr = aCustomProfileURI.spec;
+		this.LogDebug("x509certprofile.setCustomExtProfileURI(): this.mCurrExtnProfileURIStr: " + this.mCurrExtnProfileURIStr + "");
+		this.getExtnProfileProps();
+
+		this.LogTrace("x509certprofile.setCustomExtProfileURI():......................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="handleCertExtensionProfileChanged">
+		<parameter name="aProfileMenuListElem"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("x509certprofile.handleCertExtensionProfileChanged():......................Start.");
+
+		this.mCurrExtnProfileURI = null;
+		this.mCurrExtnProfileURIStr = null;
+		this.mProfileViewElem.hidden = false;
+
+		var selectedItemElem = null;
+		if (ev) {
+		    selectedItemElem = ev.target;
+		}
+		else {
+		    selectedItemElem = aProfileMenuListElem.selectedItem;
+		}
+		this.setAttribute('profile', aProfileMenuListElem.value);
+		this.LogDebug("x509certprofile.handleCertExtensionProfileChanged(): selectedItemElem.value: " + selectedItemElem.value + "");
+		if (!selectedItemElem) {
+	   	    return;
+		}
+
+		if (selectedItemElem.value == "certificate") {
+		    this.handleCertProfileAllChanged(this.mCertProfileSelectAllOptionElem);
+
+		    this.mProfileViewElem.hidden = true;
+	   	    this.mCertProfileParamsElem.hidden = false;
+		    this.mCustomProfileParamsElem.hidden = true;
+
+		    this.getExtnProfilePropsByCert();
+	   	    return;
+		}
+
+
+		if (selectedItemElem.value == "custom") {
+	   	    this.mCustomProfileParamsElem.hidden = false;
+		    this.mCertProfileParamsElem.hidden = true;
+
+		    var currExtnProfilePath = this.mCustomProfileFilePickerElem.value;
+		    this.LogDebug("x509certprofile.handleCertExtensionProfileChanged(): currExtnProfilePath: " + currExtnProfilePath + "");
+
+		    // We need to re-initialize the file picker if we changed the 
+		    // custom file path programmatically, not through GUI events.
+		    this.mCustomProfileFilePickerElem.refresh();
+
+		    if (!this.mCustomProfileFilePickerElem.file) {
+			this.mCurrExtnProfileURIStr = null;
+			this.mCurrExtnProfileURI = null;
+			this.mCurrExtnProfileProps = null;
+			if (ev) {
+		    	    ev.stopPropagation();
+			}
+		    	this.LogTrace("x509certprofile.handleCertExtensionProfileChanged():......................End(1).");
+			return;
+		    }
+		    this.LogTrace("x509certprofile.handleCertExtensionProfileChanged():......................20.");
+
+		    this.setCustomExtProfileFilePath(this.mCustomProfileFilePickerElem);
+
+		    this.LogTrace("x509certprofile.handleCertExtensionProfileChanged():......................End(2).");
+	   	    return;
+		}
+		/*
+		else {
+		    // Reset the custom file path null string, so that we force 
+		    // ourselves to pick the custom profile file.
+		    this.mCustomProfileFilePickerElem.value = "";
+		}
+		*/
+
+		this.mCustomProfileParamsElem.hidden = true;
+		this.mCertProfileParamsElem.hidden = true;
+
+		if (selectedItemElem.value == "xmldoc") {
+		    // this.mProfileViewElem.hidden = true;
+	   	    return;
+		}
+
+		var certProfileURIStr = selectedItemElem.getAttribute("certProfileFileURI");
+		if (!certProfileURIStr || (certProfileURIStr == "")) {
+		    var certProfileFileName = selectedItemElem.getAttribute("certProfileFileName");
+		    if (!certProfileFileName) {
+		    	certProfileFileName = "NoExtnsProfileTemplate.xml";
+		    }
+	   	    certProfileURIStr = this.mBaseChromeURL + certProfileFileName;
+		}
+		this.LogDebug("x509certprofile.handleCertExtensionProfileChanged(): certProfileURIStr: " + certProfileURIStr + "");
+
+		this.mCurrExtnProfileURIStr = certProfileURIStr;
+		this.mCurrExtnProfileURI = this.mIOService.newURI(certProfileURIStr, null, null);
+
+		this.getExtnProfileProps();
+
+		this.LogTrace("x509certprofile.handleCertExtensionProfileChanged():......................End.");
+		return;
+
+		]]>
+		</body>
+	    </method>
+
+	    <method name="showCertExtnProfileData">
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("x509certprofile.showCertExtnProfileData():......................Start.");
+
+		if (ev) {
+    		    ev.stopPropagation();
+		}
+
+		if (this.mCurrExtnProfileURIStr) {
+    		    window.open(this.mCurrExtnProfileURIStr, "_blank",
+				    "resizable,toolbar=1,location=1,status=1,scrollbars=1,dialog=yes,width=700,height=400"
+				    );
+		    return;
+		}
+
+		]]>
+		</body>
+	    </method>
+
+	    <method name="showCertExtnProfileTemplate">
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("x509certprofile.showCertExtnProfileTemplate():......................Start.");
+
+		if (ev) {
+    		    ev.stopPropagation();
+		}
+
+		if (!this.mExtProfileTemplateChromeURL) {
+		    return;
+		}
+    		window.open(
+			this.mExtProfileTemplateChromeURL,
+			"_blank",
+			"resizable,toolbar=1,location=1,status=1,scrollbars=1,dialog=yes,width=700,height=400"
+			);
+
+		this.LogTrace("x509certprofile.showCertExtnProfileTemplate():......................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="profileCertPickerChanged">
+		<parameter name="aProfileCertPickerElem"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("x509certprofile.profileCertPickerChanged():......................Start.");
+		this.LogTrace("x509certprofile.profileCertPickerChanged():......................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="handleCertProfileAllChanged">
+		<parameter name="aCertProfileAllElem"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("x509certprofile.handleCertProfileAllChanged():......................Start.");
+		if (aCertProfileAllElem.checked) {
+		    this.mCertProfileSelectCompsOptionElem.hidden = true;
+		}
+		else {
+		    this.mCertProfileSelectCompsOptionElem.hidden = false;
+		    /*
+		    this.mCertProfileSubjectOptionElem.checked = false;
+		    // this.mCertProfileSubjectOptionElem.checked = true;
+		    this.mCertProfileSPKIOptionElem.checked = true;
+		    this.mCertProfileX509v3ExtnsOptionElem.checked = true;
+		    */
+		}
+		this.LogTrace("x509certprofile.handleCertProfileAllChanged():......................End.");
+		]]>
+		</body>
+	    </method>
+
+
+	    <method name="getNoExtnProfileProps">
+		<body>
+		<![CDATA[
+		this.LogTrace("x509certprofile.getNoExtnProfileProps():......................Start.");
+
+		var noExtnProfileURIStr = this.mProfileMenuNoExtnElem.getAttribute("certProfileFileURI");
+		if (!noExtnProfileURIStr || (noExtnProfileURIStr == "")) {
+		    var noExtnProfileFileName = this.mProfileMenuNoExtnElem.getAttribute("certProfileFileName");
+		    if (!noExtnProfileFileName) {
+		        noExtnProfileFileName = "NoExtnsProfileTemplate.xml";
+		    }
+	   	    noExtnProfileURIStr = this.mBaseChromeURL + noExtnProfileFileName;
+		}
+		this.LogDebug("x509certprofile.getNoExtnProfileProps(): noExtnProfileURIStr: " + noExtnProfileURIStr + "");
+
+		var noExtnProfileURI = this.mIOService.newURI(noExtnProfileURIStr, null, null);
+
+		this.mCurrExtnProfileProps = this.getExtnProfilePropsByURI(noExtnProfileURI);
+
+		this.LogTrace("x509certprofile.getNoExtnProfileProps():......................End.");
+		return this.mCurrExtnProfileProps;
+		]]>
+		</body>
+	    </method>
+
+
+	    <method name="getExtProfileURIStr">
+		<body>
+		<![CDATA[
+		this.LogTrace("x509certprofile.getExtnProfileURL():......................Start.");
+		return this.mCurrExtnProfileURIStr;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="getExtnProfilePropsByCert">
+		<body>
+		<![CDATA[
+		this.LogTrace("x509certprofile.getExtnProfilePropsByCert():......................Start.");
+
+                var /* nsIPersistentProperties */ certProps = this.getNoExtnProfileProps();
+		if (!certProps) {
+                    certProps = Components.classes["@mozilla.org/persistent-properties;1"]
+                                	.createInstance(Components.interfaces.nsIPersistentProperties);
+		}
+
+		var selectedCert = this.mCertProfileCertPickerElem.selectedCert;
+		if (!selectedCert) {
+		    this.mCurrExtnProfileProps = certProps;
+		    return this.mCurrExtnProfileProps;
+		}
+
+		if (this.mCertProfileSelectAllOptionElem.checked) {
+                    // certProps = this.mKeyManager.exportCertToPropertiesByX509Cert(selectedCert);
+                    this.mKeyManager.exportX509CertToProperties(selectedCert, certProps);
+		}
+		else {
+		    if (this.mCertProfileSubjectOptionElem.checked) {
+    		    	this.mKeyManager.exportX509CertSubjectToProperties(selectedCert, certProps);
+		    }
+		    if (this.mCertProfileSPKIOptionElem.checked) {
+    		    	this.mKeyManager.exportX509CertSPKIToProperties(selectedCert, certProps);
+		    }
+		    /*
+		    if (this.mCertProfileX509v1AttrOptionElem.checked) {
+    		    	this.mKeyManager.exportX509v1CertToProperties(selectedCert, certProps);
+		    }
+		    */
+		    if (this.mCertProfileX509v3ExtnsOptionElem.checked) {
+                    	this.mKeyManager.exportX509v3CertExtensionsToProperties(selectedCert, certProps);
+		    }
+		}
+
+		this.mCurrExtnProfileProps = certProps;
+
+		this.LogTrace("x509certprofile.getExtnProfilePropsByCert():......................End.");
+		return this.mCurrExtnProfileProps;
+		]]>
+		</body>
+	    </method>
+
+
+	    <method name="getBaseProfileURI">
+		<parameter name="aExtnProfileXmlDoc"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("x509certprofile.getBaseProfileURI():......................Start.");
+
+		var profileRootElem = aExtnProfileXmlDoc.documentElement;
+		var baseProfileType = profileRootElem.getAttribute("baseProfileType");
+		if (!baseProfileType) {
+		    this.LogTrace("x509certprofile.getBaseProfileURI():......................End(0).");
+		    return null;
+		}
+		this.LogDebug("x509certprofile.getBaseProfileURI(): baseProfileType: " + baseProfileType + "");
+
+		var /* nsIURI */ baseProfileURI = null;
+		if (baseProfileType == "custom") {
+		    var baseProfileFilePath = profileRootElem.getAttribute("baseProfileFilePath");
+		    if (!baseProfileFilePath) {
+		    	return null;
+		    }
+		    this.LogDebug("x509certprofile.getBaseProfileURI(): baseProfileFilePath: custom:" + baseProfileFilePath + "");
+
+    		    var /* nsIFile */ baseProfileFile = Components.classes["@mozilla.org/file/local;1"].
+		    				createInstance(Components.interfaces.nsILocalFile);
+    		    baseProfileFile.initWithPath(baseProfileFilePath);
+
+		    baseProfileURI = this.mIOService.newFileURI(baseProfileFile);
+		    if (!baseProfileURI) {
+		    	return null;
+		    }
+		    var baseProfileURIStr =  baseProfileURI.spec;
+		    this.LogDebug("x509certprofile.getBaseProfileURI(): baseProfileURIStr: custom:" + baseProfileURIStr + "");
+
+		    return baseProfileURI;
+		}
+		else if (baseProfileType == "customuri") {
+		    var baseProfileURIStr = profileRootElem.getAttribute("baseProfileURI");
+		    this.LogDebug("x509certprofile.getBaseProfileURI(): baseProfileURIStr: customuri:" + baseProfileURIStr + "");
+
+    		    baseProfileURI = this.mIOService.newURI(baseProfileURIStr, null, null);
+		    return baseProfileURI;
+		}
+		else if (baseProfileType == "certificate") {
+		    // TODO: not yet supported
+		    return null;
+		}
+		
+
+		var profileMenuItemList = this.mProfileMenuElem.getElementsByAttribute("value", baseProfileType);
+		if (!profileMenuItemList || (profileMenuItemList.length <= 0)) {
+		    return null;
+		}
+		var baseProfileMenuItem = profileMenuItemList.item(0);
+
+		var baseProfileURIStr = baseProfileMenuItem.getAttribute("certProfileFileURI");
+		this.LogTrace("x509certprofile.getBaseProfileURI(): baseProfileURIStr: " + baseProfileURIStr);
+		if (!baseProfileURIStr || (baseProfileURIStr == "")) {
+		    var baseProfileFileName = baseProfileMenuItem.getAttribute("certProfileFileName");
+		    this.LogTrace("x509certprofile.getBaseProfileURI(): baseProfileFileName: " + baseProfileFileName);
+		    if (baseProfileFileName) {
+	   	    	baseProfileURIStr = this.mBaseChromeURL + baseProfileFileName;
+		    }
+		}
+		this.LogDebug("x509certprofile.getBaseProfileURI(): baseProfileURIStr: " + baseProfileURIStr + "");
+		
+		if (!baseProfileURIStr || (baseProfileURIStr == "")) {
+		    return null;
+		}
+
+    		baseProfileURI = this.mIOService.newURI(baseProfileURIStr, null, null);
+
+		this.LogTrace("x509certprofile.getBaseProfileURI():......................End.");
+		return baseProfileURI;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="getExtnProfilePropsFromXmlDoc">
+		<parameter name="aExtnProfileXmlDoc"/>
+		<body>
+		<![CDATA[
+                this.LogTrace("x509certprofile.getExtnProfilePropsFromXmlDoc(): ......Start.");
+
+                var /* nsIPersistentProperties */ certProps = null;
+                certProps = Components.classes["@mozilla.org/persistent-properties;1"]
+		               .createInstance(Components.interfaces.nsIPersistentProperties);
+
+		if (!aExtnProfileXmlDoc) {
+		    return certProps;
+		}
+
+		var baseProfileURI = this.getBaseProfileURI(aExtnProfileXmlDoc);
+		this.LogDebug("x509certprofile.getExtnProfilePropsFromXmlDoc(): baseProfileURI: " + baseProfileURI + "");
+		if (baseProfileURI) {
+		    this.LogDebug("x509certprofile.getExtnProfilePropsFromXmlDoc(): baseProfileURI: " + baseProfileURI.spec + "");
+		    certProps = this.getExtnProfilePropsByURI(baseProfileURI);
+		}
+                // this.dumpCertProperties(certProps, "Base-CertProfile");
+
+                var /* NodeList */ extProfileItemList = aExtnProfileXmlDoc.getElementsByTagName("profileItem");
+                this.LogTrace("x509certprofile.getExtnProfilePropsFromXmlDoc(): length: " + extProfileItemList.length + " ......10.");
+                if (!extProfileItemList || (extProfileItemList.length <= 0)) {
+    	            return certProps;
+                }
+
+
+                var propKey;
+                var propValue;
+                var propOldValue;
+                var trueValue = "true";
+
+                for (var i = 0; i < extProfileItemList.length; i++) {
+	            var extProfileItem = extProfileItemList.item(i);
+	            propKey = extProfileItem.getAttribute("name");
+	            if ((propKey == null) || (propKey == "")) {
+	                continue;
+	            }
+	            propValue = extProfileItem.getAttribute("value");
+	            if ((propValue == null) || (propValue == "")) {
+	                continue;
+	            }
+	            propOldValue = certProps.setStringProperty(propKey, propValue);
+		}
+
+		var baseProfileType = aExtnProfileXmlDoc.documentElement.getAttribute("baseProfileType");
+		if (!baseProfileType) {
+		    propKey = "profilebasetype"; propValue = baseProfileType;
+	            propOldValue = certProps.setStringProperty(propKey, propValue);
+		    propKey = "baseProfileType"; propValue = baseProfileType;
+	            propOldValue = certProps.setStringProperty(propKey, propValue);
+		}
+		var profileUserType = this.profileusertype;
+		if (!profileUserType && (profileUserType != "")) {
+		    propKey = "profileusertype"; propValue = profileUserType;
+	            propOldValue = certProps.setStringProperty(propKey, propValue);
+		}
+
+               
+                // this.dumpCertProperties(certProps, "getExtnProfilePropsFromXmlDoc.CertProfile");
+          
+                this.LogTrace("x509certprofile.getExtnProfilePropsFromXmlDoc(): ..........End.");
+
+                return certProps;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="getExtnProfileXmlDocByURI">
+		<parameter name="aExtProfileURI"/>
+		<body>
+		<![CDATA[
+    		this.LogTrace("x509certprofile.getExtnProfileXmlDocByURI():................Start.");
+
+		if (!aExtProfileURI) {
+    		    return null;
+		}
+		this.LogDebug("x509certprofile.getExtnProfileXmlDocByURI(): aExtProfileURI: " + aExtProfileURI.spec + "");
+
+    		var extProfileXmlData = this.readDataFromURI(aExtProfileURI);
+    		if (!extProfileXmlData || (extProfileXmlData.length <= 0)) {
+    		    this.LogError("x509certprofile.getExtnProfileXmlDocByURI(): readDataFromURI() failed.");
+    		    return null;
+    		}
+		var xmlDoc = this.parseXmlData(extProfileXmlData);
+
+    		this.LogTrace("x509certprofile.getExtnProfileXmlDocByURI():................End.");
+		return xmlDoc;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="parseXmlData">
+		<parameter name="aXmlData"/>
+		<body>
+		<![CDATA[
+    		this.LogTrace("x509certprofile.parseXmlData():........................Start.");
+		if (!aXmlData) {
+		    return null;
+		}
+
+    		// var xmlSerializer = new XMLSerializer();
+    		var xmlParser = new DOMParser();
+
+    		var xmlDoc = null;
+    		try {
+    		    xmlDoc = xmlParser.parseFromString(aXmlData, "text/xml");
+    		} catch (ex) {
+    		    this.LogError("x509certprofile.parseXmlData(): xmlParser.parseFromString() failed - ex: " + ex + "");
+		    return null;
+    		}
+
+                var docElemTag = xmlDoc.documentElement;
+                if ((docElemTag.tagName == "parserError")
+                    || (docElemTag.namespaceURI == "http://www.mozilla.org/newlayout/xml/parsererror.xml")){
+                    this.LogError("x509certprofile.parseXmlData(): this.mXmlParser.parseFromString() failed - parserError");
+                    return null;
+                }
+
+    		this.LogTrace("x509certprofile.parseXmlData():........................End.");
+		return xmlDoc;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="getExtnProfilePropsByURI">
+		<parameter name="aExtProfileURI"/>
+		<body>
+		<![CDATA[
+    		this.LogTrace("x509certprofile.getExtnProfilePropsByURI(): ..........Start.");
+
+		var xmlDoc = this.getExtnProfileXmlDocByURI(aExtProfileURI);
+
+		var extnProfileProps =  this.getExtnProfilePropsFromXmlDoc(xmlDoc);
+
+    		this.LogTrace("x509certprofile.getExtnProfilePropsByURI(): ..........End.");
+		return extnProfileProps;
+		]]>
+		</body>
+	    </method>
+
+
+	    <method name="getExtnProfilePropsByURIStr">
+		<parameter name="extProfileURIStr"/>
+		<body>
+		<![CDATA[
+    		this.LogTrace("x509certprofile.getExtnProfilePropsByURIStr(): ..........Start.");
+		this.LogDebug("x509certprofile.getExtnProfilePropsByURIStr(): extProfileURIStr: " + extProfileURIStr + "");
+
+		var extnProfileProps = null;
+
+    		// create an nsIURI
+    		var extProfileURI = this.mIOService.newURI(extProfileURIStr, null, null);
+
+		if (extProfileURI) {
+		    extnProfileProps =  this.getExtnProfilePropsByURI(extProfileURI);
+		}
+		if (!extnProfileProps) {
+    		    extnProfileProps = Components.classes["@mozilla.org/persistent-properties;1"]
+                    			.createInstance(Components.interfaces.nsIPersistentProperties);
+		}
+
+    		this.LogTrace("x509certprofile.getExtnProfilePropsByURIStr(): ..........End.");
+		return extnProfileProps;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="getExtnProfileXmlDoc">
+		<body>
+		<![CDATA[
+		this.LogTrace("x509certprofile.getExtnProfileXmlDoc():......................Start.");
+
+		if (this.mProfileMenuElem.value == "certificate") {
+		    return null;
+		}
+		var xmlDoc = this.getExtnProfileXmlDocByURI(this.mCurrExtnProfileURI);
+
+		this.LogTrace("x509certprofile.getExtnProfileXmlDoc():......................End.");
+		return xmlDoc;
+		]]>
+		</body>
+	    </method>
+
+
+	    <method name="getExtnProfileProps">
+		<body>
+		<![CDATA[
+		this.LogTrace("x509certprofile.getExtnProfileProps():......................Start.");
+
+    		var defCertProps = Components.classes["@mozilla.org/persistent-properties;1"]
+                    			.createInstance(Components.interfaces.nsIPersistentProperties);
+
+		if (this.mProfileMenuElem.value == "certificate") {
+		    var certProps = this.getExtnProfilePropsByCert();
+		    if (!certProps) {
+		        certProps = defCertProps;
+		    }
+		    return certProps;
+		}
+		if (this.mProfileMenuElem.value == "xmldoc") {
+		    var certProps = this.getExtnProfilePropsFromXmlDoc(this.mExtnProfileXmlDoc);
+		    if (!certProps) {
+		        certProps = defCertProps;
+		    }
+		    return certProps;
+		}
+		if (this.mCurrExtnProfileURI) {
+		this.LogDebug("x509certprofile.getExtnProfileProps(): this.mCurrExtnProfileURI: " + this.mCurrExtnProfileURI.spec);
+		}
+
+		this.mCurrExtnProfileProps = this.getExtnProfilePropsByURI(this.mCurrExtnProfileURI);
+		if (!this.mCurrExtnProfileProps) {
+		    this.LogTrace("x509certprofile.getExtnProfileProps():......................90.");
+		    this.mCurrExtnProfileProps = defCertProps;
+		}
+
+		this.LogTrace("x509certprofile.getExtnProfileProps():......................End.");
+		return this.mCurrExtnProfileProps;
+		]]>
+		</body>
+	    </method>
+
+
+	    <method name="readDataFromURI">
+		<parameter name="dataURI"/>
+		<body>
+		<![CDATA[
+    		this.LogTrace("x509certprofile.readDataFromURI():................Start.");
+
+		if (!dataURI) {
+    		    this.LogDebug("x509certprofile.readDataFromURI(): NULL dataURI.");
+    		    return null;
+		}
+
+    		// get a channel for that nsIURI
+    		var channel = this.mIOService.newChannelFromURI(dataURI);
+    		if (!channel) {
+    		    this.LogError("x509certprofile.readDataFromURI(): mIOService.newChannelFromURI() failed.");
+    		    return null;
+    		}
+
+    		var channelIS = null;
+    		var jarChannel = null;
+		try {
+		    jarChannel = channel.QueryInterface(Components.interfaces.nsIJARChannel);
+		} catch(ex) { }
+    		if (jarChannel) {
+    		    channelIS = jarChannel.open();
+    		}
+    		else {
+    		    channelIS = channel.open();
+    		}
+    		if (!channelIS) {
+    		    this.LogError("x509certprofile.readDataFromURI(): channel.open() failed.");
+    		    return null;
+    		}
+		
+    		var siStream = Components.classes["@mozilla.org/scriptableinputstream;1"]
+			.createInstance(Components.interfaces.nsIScriptableInputStream);
+    		siStream.init(channelIS);
+
+    		var dataCnt = 0;
+    		try {
+    		    // dataCnt = jarChannelIS.available();
+    		    dataCnt = siStream.available();
+    		} catch (ex) {
+    		}
+    		if (dataCnt == 0) {
+    		    this.LogError("x509certprofile.readDataFromURI(): siStream.available() failed.");
+    		    return null;
+    		}
+
+    		var urlDataStr = "";
+    		var str = siStream.read(-1);
+    		while (str.length > 0) {
+		    urlDataStr += str;
+		    str = siStream.read(-1);
+    		}
+
+    		siStream.close();
+    		channelIS.close();
+
+    		this.LogTrace("x509certprofile.readDataFromURI():................End.");
+    		return urlDataStr;
+
+		]]>
+		</body>
+	    </method>
+
+	    <method name="readDataFromURIStr">
+		<parameter name="dataURIStr"/>
+		<body>
+		<![CDATA[
+    		this.LogTrace("x509certprofile.readDataFromURIStr(" + dataURIStr + "):................Start.");
+
+    		// create an nsIURI
+    		var /* nsIURI */ dataURI = this.mIOService.newURI(dataURIStr, null, null);
+		if (!dataURI) {
+		    return null;
+		}
+
+    		var dataStr =  this.readDataFromURI(dataURI);
+
+    		this.LogTrace("x509certprofile.readDataFromURIStr(" + dataURIStr + "):................End.");
+		
+    		return dataStr;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="dumpProperties">
+		<parameter name="aCertProps"/>
+		<parameter name="msg"/>
+	        <body>
+		<![CDATA[
+
+                if (msg) {dump(msg + " ");}
+		if (!aCertProps) {
+                    dump("Properties {}\n");
+		    return;
+		}
+		var propKeyList = [];
+                var propEnum = aCertProps.enumerate();
+                while (propEnum.hasMoreElements ()) {
+                    var propElem = propEnum.getNext ();
+                    var propItem = propElem.QueryInterface (Components.interfaces.nsIPropertyElement);
+                    var propKey = propItem.key;
+                    // var propValue = propItem.value;
+	            // this.LogDebug("    " + propKey + " = " + propValue + "\n");
+		    propKeyList[propKeyList.length] = propKey;
+                }
+		if (propKeyList.length <= 0) {
+                    dump("Properties {no elements.}\n");
+		    return;
+		}
+		// this.LogDebug("propKeyList.length: " + propKeyList.length + "\n");
+
+		propKeyList = propKeyList.sort();
+		// this.LogDebug("propKeyList.length(sorted): " + propKeyList.length + "");
+		dump("Properties {\n");
+		for (var i = 0; i < propKeyList.length; i++) {
+		    var propKey =  propKeyList[i];
+                    var propValue = null;
+		    try {
+		    	propValue = aCertProps.getStringProperty(propKey);
+		    } catch(ex) {}
+	            dump("    " + propKey + " = " + propValue + "\n");
+                }
+                dump("}\n\n");
+
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="dumpCertProperties">
+		<parameter name="aCertProps"/>
+		<parameter name="msg"/>
+		<body>
+		<![CDATA[
+		this.dumpProperties(aCertProps, msg);
+		]]>
+		</body>
+	    </method>
+
+	    <method name="Log">
+		<parameter name="level"/>
+		<parameter name="message"/>
+		<body>
+		<![CDATA[
+		if (level > this.mMaxLogLevel) {
+		    return;
+		}
+		dump("LOG(" + level + ") :  " + message + "\n");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="LogDebug">
+		<parameter name="message"/>
+		<body>
+		<![CDATA[
+		this.Log(this.mLogDebugLevel, message);
+		]]>
+		</body>
+	    </method>
+
+	    <method name="LogTrace">
+		<parameter name="message"/>
+		<body>
+		<![CDATA[
+		this.Log(this.mLogTraceLevel, message);
+		]]>
+		</body>
+	    </method>
+
+	    <method name="LogError">
+		<parameter name="message"/>
+		<body>
+		<![CDATA[
+		this.Log(this.mLogErrorLevel, message);
+		]]>
+		</body>
+	    </method>
+
+	</implementation>
+
+    </binding>
+
+
+</bindings>
+

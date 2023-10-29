@@ -1,0 +1,11 @@
+
+<!ENTITY keymgr.pkcs12.import.wizard.title		"PKCS#12 File Import Wizard">
+<!ENTITY keymgr.pkcs12.import.wizard.page.pkcs12file.label		"PKCS#12 File Page">
+<!ENTITY keymgr.pkcs12.import.pkcs12file.group.label		"PKCS#12 File Info">
+<!ENTITY keymgr.pkcs12.import.pkcs12file.label		"PKCS#12 File">
+<!ENTITY keymgr.pkcs12.import.pkcs12file.file.browse.label	"Browse">
+<!ENTITY keymgr.pkcs12.import.pkcs12file.file.browse.tooltip	"Click this button to select a PKCS#12 file">
+<!ENTITY keymgr.pkcs12.import.pkcs12file.next.label		"Import">
+
+<!ENTITY keymgr.pkcs12.import.wizard.page.final.label		"Final Page">
+<!ENTITY keymgr.pkcs12.import.wizard.page.error.label		"Error Page">

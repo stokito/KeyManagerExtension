@@ -1,0 +1,11 @@
+<?xml version="1.0"?> 
+
+<CertProfile
+    baseProfileType="sig_dataencipherment"
+    >
+
+    <profileItem name="basicConstraints" value="true"/>
+    <profileItem name="basicConstraints-cA-radio" value="true"/>
+
+</CertProfile>
+

@@ -1,0 +1,391 @@
+<?xml version="1.0"?>
+<!-- @(#) $Id: CertEnrollWizardOverlay.xul,v 1.12 2012/10/03 14:20:33 subrata Exp $ -->
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is Avaya Labs Research, Avaya Inc. Code.
+   -
+   - The Initial Developer of the Original Code is
+   - Subrata Mazumdar, Avaya Labs Research, Avaya Inc.
+   - Portions created by the Initial Developer are Copyright (C) 2007.
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Subrata Mazumdar (mazum@avaya.com)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+
+
+
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://keymanager/skin/kmbindings.css" type="text/css"?>
+
+<!DOCTYPE wizard SYSTEM "chrome://keymanager/locale/certenroll.dtd">
+
+<overlay id="keymgr.certenroll.wizard.overlay.pages" 
+    xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    >
+
+    <script type="application/x-javascript" src="chrome://global/content/strres.js"/>
+    <script type="application/x-javascript" src="chrome://keymanager/content/tools/certenroll/CertEnrollWizardOverlay.js"/>
+    <script type="application/x-javascript" src="chrome://keymanager/content/tools/certenroll/CertEnrollCAServer.js"/>
+
+    <wizardpage id="keymgr.certenroll.wizard.page.csr"
+	pageid="keymgr.certenroll.wizard.page.csr"
+	flex="1"
+	description="&keymgr.certenroll.wizard.page.csr.label;"
+	onpageshow="return CertEnrollWizardOverlay.generateSelfSignedCertPageShow(this);"
+	onpageadvanced="return CertEnrollWizardOverlay.generateSelfSignedCertPageAdvanced(this);"
+	next="keymgr.certenroll.wizard.page.issuer"
+	>
+	<vbox style="overflow:auto" flex="1"
+	    >
+	    <x509v3certificate id="keymgr.certenroll.wizard.csr.form"
+		certparamtag=""
+		selfsigncert="true"
+		selfsigncerthidden="true"
+		isproxysigning="false"
+		isproxysigninghidden="true"
+		profile="custom"
+		profilecerttype="user"
+		xdisabledx509v3certtags="x509certstdextenions, x509certnsextenions"
+		ydisabledx509v3certtags="x509certnsextenions"
+		xenabledx509v1certtags=""
+		xenabledx509v3stdexttags=""
+		xenabledx509v3nsexttags="nscerttype"
+		disabledx509v1certtags="subject,subjectpublickeyinfo"
+		xdisabledx509v3stdexttags=""
+		xdisabledx509v3nsexttags=""
+		/>
+	</vbox>
+    </wizardpage>
+
+    <wizardpage id="keymgr.certenroll.wizard.page.issuer"
+	pageid="keymgr.certenroll.wizard.page.issuer"
+	flex="1"
+	description="&keymgr.certenroll.wizard.page.issuer.label;"
+	onpageshow="return avpki.keymanager.CertEnrollWizardOverlay.loginToCAServerPageShow(this);"
+	onpageadvanced="return avpki.keymanager.CertEnrollWizardOverlay.loginToCAServerPageAdvanced(this);"
+	xnext="keymgr.certenroll.wizard.page.csrUpload"
+	next="keymgr.certenroll.wizard.page.certDownload"
+	>
+	<vbox>
+	    <grid> 
+		<columns>
+		    <column/>
+		    <column flex="1"/>
+		</columns>
+		<rows>
+		    <row>
+			<label value="User Certificate: "/>
+			<hbox
+			    pack="start" align="center"
+			    >
+			    <certitem id="keymgr.certenroll.wizard.page.issuer.usercert" />
+			</hbox>
+		    </row>
+		    <row id="keymgr.certenroll.form.csrFile">
+			<label control="keymgr.certenroll.form.csrFile.path"
+			    value="&keymgr.certenroll.form.csrFile.path.label;"/>
+			<filepicker id="keymgr.certenroll.form.csrFile.path" flex="2"
+			    ascii="true"
+			    formatlabel="&keymgr.certenroll.form.csrFile.format.label;"
+			    fileMode="save"
+			    fileDialogMsg="Choose PKCS#10 CSR File for User Key"
+			    fileTypeMsg="PKCS#10 CSR File"
+			    fileTypeFilters="*.csr; *.p10"
+			    browselabel="&keymgr.certenroll.wizard.file.browse.label;"
+			    browsetooltiptext="&keymgr.certenroll.wizard.file.browse.tooltip;"
+			    />
+		    </row>
+		    <row>
+			<label control="keymgr.certenroll.wizard.page.issuer.type"
+			    value="&keymgr.certenroll.issuer.server.type.label;"/>
+			<hbox>
+			    <radiogroup id="keymgr.certenroll.wizard.page.issuer.type" flex="1"
+				oncommand="avpki.keymanager.CertEnrollWizardOverlay.handleIssuerTypeChange(this, event)">
+				<hbox flex="1"
+				    pack="start" align="center"
+				    >
+				    <radio id="keymgr.certenroll.wizard.page.issuer.type.scep"
+					label="&keymgr.certenroll.issuer.server.type.scep;"
+					value="scep"
+					group="keymgr.certenroll.wizard.page.issuer.type"/>
+				    <radio id="keymgr.certenroll.wizard.page.issuer.type.simpleCA"
+					label="&keymgr.certenroll.issuer.server.type.simpleCA;"
+					selected="true"
+					value="simpleCA"
+					group="keymgr.certenroll.wizard.page.issuer.type"/>
+				    <radio id="keymgr.certenroll.wizard.page.issuer.type.pkcs10CA"
+					label="&keymgr.certenroll.issuer.server.type.pkcs10CA;"
+					selected="true"
+					value="pkcs10CA"
+					group="keymgr.certenroll.wizard.page.issuer.type"/>
+				    <radio id="keymgr.certenroll.wizard.page.issuer.type.msCertService"
+					label="&keymgr.certenroll.issuer.server.type.msCertService;"
+					value="msCertService"
+					group="keymgr.certenroll.wizard.page.issuer.type"/>
+				    <radio id="keymgr.certenroll.wizard.page.issuer.type.openCA"
+					label="&keymgr.certenroll.issuer.server.type.openCA;"
+					value="openCA"
+					disabled="true"
+					group="keymgr.certenroll.wizard.page.issuer.type"/>
+				    <radio id="keymgr.certenroll.wizard.page.issuer.type.ejbCA"
+					label="&keymgr.certenroll.issuer.server.type.ejbCA;"
+					value="ejbCA"
+					disabled="true"
+					group="keymgr.certenroll.wizard.page.issuer.type"/>
+				  </hbox>
+			    </radiogroup>
+			</hbox>
+		    </row>
+		    <row id="keymgr.certenroll.wizard.page.issuer.row">
+			<label control="keymgr.certenroll.wizard.page.issuer.serverURL"
+			    value="&keymgr.certenroll.form.issuer.server.url.label;"/>
+			<hbox id="keymgr.certenroll.wizard.page.issuer.hbox"
+			    pack="start" align="center"
+			    >
+			    <textbox id="keymgr.certenroll.wizard.page.issuer.serverURL" flex="1"
+				tooltiptext="&keymgr.certenroll.form.issuer.server.url.tooltip;"
+				type="autocomplete" 
+				autocompletesearch="form-history" 
+				enablehistory="true"
+				zcompletedefaultindex="true"
+				autocompletesearchparam="keymgr.certenroll.wizard.page.issuer.serverURL"
+				onchange="avpki.keymanager.CertEnrollWizardOverlay.handleCAServerURLChange(this, event)"
+				ontextentered="avpki.keymanager.CertEnrollWizardOverlay.handleCAServerURLChange(this)"
+				onkeyup="if (event.keyCode == 13)
+				    {avpki.keymanager.CertEnrollWizardOverlay.handleCAServerURLChange(this, event)};"
+				persist="value"
+				/>
+			    <button id="keymgr.certenroll.wizard.issuer.page.server.login"
+				label="&keymgr.certenroll.form.issuer.server.login.label;"
+				oncommand="avpki.keymanager.CertEnrollWizardOverlay.loginToWizardCAServer('AvProdCAServerLoginConsoleIFrame');"/> 
+			    <button id="keymgr.certenroll.wizard.issuer.page.server.getCACertChain"
+				label="&keymgr.certenroll.form.issuer.server.getCACertChain.label;"
+				oncommand="avpki.keymanager.CertEnrollWizardOverlay.getCACertChain('AvProdCAServerLoginConsoleIFrame');"/> 
+			    <hbox flex="0">
+			    </hbox>
+			</hbox>
+		    </row>
+			<row id="keymgr.certenroll.wizard.page.issuer.cert.row">
+			<label value="CA Certificate"/> 
+			<hbox flex="1"
+			    pack="start" align="center"
+			    >
+			    <certpicker id="keymgr.certenroll.wizard.page.issuer.certpicker"
+				menutooltiptext="Select the CA Cert from the list"
+				tokentypehidden="true"
+				certtype="ca"
+				certtypehidden="true"
+				certusagehidden="true"
+				certusagedisabled="true"
+				certusage="VerifyCA"
+				viewhidden="false"
+				includeTokenInfo="true"
+				persist="value"
+	 			oncommand="avpki.keymanager.CertEnrollWizardOverlay.handleCACertPickerChange(this, event);"
+				>
+			    </certpicker>
+			</hbox>
+		    </row>
+		</rows>
+	    </grid>
+	    <groupbox id="keymgr.certenroll.wizard.page.issuer.response"
+		flex="5"
+	    	style="border: 2px solid red"
+	    	>
+	    	<caption class="header" label="CA Server Response"/>
+	        <browser flex="5"
+		    id="AvProdCAServerLoginConsoleIFrame"
+		    name="AvProdCAServerLoginConsoleIFrame"
+		    style="border:none"
+		    width="400px" height="700px"
+		    src="about:blank"
+		    >
+	        </browser>
+	    </groupbox>
+	    <spacer flex="1"/>
+	</vbox>
+    </wizardpage>
+
+    <!--
+    <wizardpage id="keymgr.certenroll.wizard.page.csrUpload"
+	pageid="keymgr.certenroll.wizard.page.csrUpload"
+	flex="1"
+	description="&keymgr.certenroll.wizard.page.csrUpload.label;"
+	onpageshow="return avpki.keymanager.CertEnrollWizardOverlay.generateCSRAndUploadPageShow(this);"
+	onpageadvanced="return avpki.keymanager.CertEnrollWizardOverlay.generateCSRAndUploadPageAdvanced(this);"
+	next="keymgr.certenroll.wizard.page.certDownload"
+	>
+    </wizardpage>
+    -->
+
+    <wizardpage id="keymgr.certenroll.wizard.page.certDownload"
+	pageid="keymgr.certenroll.wizard.page.certDownload"
+	flex="1"
+	description="&keymgr.certenroll.wizard.page.csrDownload.label;"
+	onpageshow="return avpki.keymanager.CertEnrollWizardOverlay.downloadSignedCertPageShow(this);"
+	onpageadvanced="return avpki.keymanager.CertEnrollWizardOverlay.downloadSignedCertPageAdvanced(this);"
+	next="keymgr.certenroll.wizard.page.viewcert"
+	>
+	    <grid> 
+		<columns>
+		    <column/>
+		    <column flex="1"/>
+		</columns>
+		<rows>
+		    <row flex="1" collapsed="true">
+			<spacer/>
+			<vbox id="UploadCSRAndSignCertFormBox">
+			<html:form
+			    xmlns:html="http://www.w3.org/1999/xhtml"
+			    id="UploadCSRAndSignCertForm"
+			    name="UploadCSRAndSignCertForm"
+			    enctype="multipart/form-data"
+			    action="/dummy.jsp"
+			    method="post">
+			    <html:input id="issuerSubjectDN" type="hidden" name="issuerSubjectDN" value=""/>
+			    <html:input id="issuerAlias" type="hidden" name="issuerAlias" value=""/>
+			    <html:input id="Pkcs10CSRFile" type="file" name="Pkcs10CSRFile"/>
+			</html:form>
+			<html:form
+			    xmlns:html="http://www.w3.org/1999/xhtml"
+			    id="SimpleCAUploadCSRAndSignCertForm"
+			    name="SimpleCAUploadCSRAndSignCertForm"
+			    enctype="multipart/form-data"
+			    action="/dummy.jsp"
+			    method="post">
+			    <html:input id="issuerSubjectDN" type="hidden" name="issuerSubjectDN" value=""/>
+			    <html:input id="issuerAlias" type="hidden" name="issuerAlias" value=""/>
+			    <html:input id="alias" type="hidden" name="alias" value=""/>
+			    <html:input id="validity" type="hidden" name="validity" value=""/>
+			    <html:input id="CSRFile" type="file" name="CSRFile"/>
+			</html:form>
+			<html:form
+			    xmlns:html="http://www.w3.org/1999/xhtml"
+			    id="MSCryptoUploadCSRAndSignCertForm"
+			    name="MSCryptoUploadCSRAndSignCertForm"
+			    enctype="application/x-www-form-urlencoded"
+			    action="certfnsh.asp"
+			    method="post">
+			    <html:input type="hidden" id="Mode" name="Mode" value=""/>			<!-- used in request ('newreq'|'chkpnd') -->
+			    <html:input type="hidden" id="CertRequest" name="CertRequest" value=""/>		<!-- used in request -->
+			    <html:input type="hidden" id="CertAttrib" name="CertAttrib" value=""/>		<!-- used in request -->
+			    <html:input type="hidden" id="FriendlyType" name="FriendlyType" value=""/>	<!-- used in pending -->
+			    <html:input type="hidden" id="ThumbPrint" name="ThumbPrint" value=""/>		<!-- used in pending -->
+			    <html:input type="hidden" id="TargetStoreFlags" name="TargetStoreFlags" value=""/> <!-- used on install ('0'|CSSLM)-->
+			    <html:input type="hidden" id="SaveCert" name="SaveCert" value=""/>		<!-- used on install ('no'|'yes')-->
+			</html:form>
+			</vbox>
+		    </row>
+		    <row flex="1">
+			<spacer/>
+			<groupbox
+			    onclick="avpki.keymanager.CertEnrollWizardOverlay.handleCASignedCertImportEvent(this, event)"
+			    >
+			    <iframe flex="1"
+			        id="UploadCSRAndSignCertResultIFrame"
+			        name="UploadCSRAndSignCertResultIFrame"
+			        zstyle="border:none"
+				style="overflow:auto; height:400px; border: 2px solid brown"
+			        onclick="avpki.keymanager.CertEnrollWizardOverlay.handleCASignedCertImportEvent(this, event)"
+			        onload="avpki.keymanager.CertEnrollWizardOverlay.handleCASignedCertImportEvent(this, event)"
+			        oncommand="avpki.keymanager.CertEnrollWizardOverlay.handleCASignedCertImportEvent(this, event)"
+			        src="about:blank"
+			        />
+			</groupbox>
+		    </row>
+		</rows>
+	    </grid>
+	<!--
+	<groupbox id="keymgr.certenroll.form.issuerInfo" flex="1" collapsed="true">
+	    <caption class="header" label="&keymgr.certenroll.form.issuer.info.label;"/>
+	</groupbox>
+	<grid collapsed="true"> 
+	    <columns>
+		<column/>
+		<column flex="1"/>
+	    </columns>
+	    <rows>
+		<row flex="1" collapsed="true">
+		    <spacer/>
+		    <vbox id="WizardUploadCSRAndSignCertFormBox">
+		    <html:form
+			xmlns:html="http://www.w3.org/1999/xhtml"
+			id="WizardUploadCSRAndSignCertForm"
+			name="WizardUploadCSRAndSignCertForm"
+			enctype="multipart/form-data"
+			action="/dummy.jsp"
+			method="post"
+			>
+			<html:input id="issuerSubjectDN" type="hidden" name="issuerSubjectDN" value=""/>
+			<html:input id="issuerAlias" type="hidden" name="issuerAlias" value=""/>
+			<html:input id="Pkcs10CSRFile" type="file" name="Pkcs10CSRFile"/>
+		    </html:form>
+		    </vbox>
+		</row>
+		<row flex="1">
+		    <spacer/>
+		    <browser flex="1"
+			id="WizardUploadCSRAndSignCertResultIFrame"
+			name="WizardUploadCSRAndSignCertResultIFrame"
+			style="border:none"
+			width="400px" height="400px"
+			src="about:blank"
+			>
+		    </browser>
+		</row>
+	    </rows>
+	</grid>
+	-->
+    </wizardpage>
+
+    <wizardpage id="keymgr.certenroll.wizard.page.viewcert"
+	pageid="keymgr.certenroll.wizard.page.viewcert"
+	flex="1"
+	description="&keymgr.certenroll.wizard.page.csrUpload.label;"
+	onpageshow="return avpki.keymanager.CertEnrollWizardOverlay.viewCASignedCertPageShow(this);"
+	onpageadvanced="return avpki.keymanager.CertEnrollWizardOverlay.viewCASignedCertPageAdvanced(this);"
+	>
+	<certpicker id="keymgr.certenroll.wizard.page.viewcert.menulist"
+	    tokentypehidden="true"
+	    certtype="user_casigned"
+	    certtypedisabled="true"
+	    certtypehidden="false"
+	    certusagehidden="true"
+	    certusagedisabled="true"
+	    includeTokenInfo="true"
+	    viewhidden="false"
+	    oncommand="avpki.keymanager.CertEnrollWizardOverlay.handleCASignedCertListChange(this, event);"
+	    />
+	<!--
+	<certitem id="keymgr.certenroll.wizard.page.viewcert.signed.cert" />
+	-->
+    </wizardpage>
+
+</overlay>

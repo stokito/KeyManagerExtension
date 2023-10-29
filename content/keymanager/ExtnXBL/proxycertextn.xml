@@ -1,0 +1,601 @@
+<?xml version="1.0"?>
+<!-- @(#) $Id: proxycertextn.xml,v 1.15 2009/04/16 13:11:53 subrata Exp $ -->
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is Avaya Labs Research, Avaya Inc. Code.
+   -
+   - The Initial Developer of the Original Code is
+   - Subrata Mazumdar, Avaya Labs Research, Avaya Inc.
+   - Portions created by the Initial Developer are Copyright (C) 2007.
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Subrata Mazumdar (mazum@avaya.com)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+
+<!DOCTYPE bindings SYSTEM "chrome://keymanager/locale/keyManager.dtd">
+
+<bindings id="proxycertinfoextnBindings"
+    xmlns="http://www.mozilla.org/xbl"
+    xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    xmlns:xbl="http://www.mozilla.org/xbl">
+
+    <binding id="proxycertinfoextnBinding"
+	extends="chrome://keymanager/content/ExtnXBL/certextn.xml#certextnbaseBinding"
+        >
+        <!--
+        <resources>
+    	    <script type="application/x-javascript" src="chrome://keymanager/content/ExtnXBL/certextn2props.js"/>
+	    <stylesheet src="chrome://keymanager/skin/kmbindings.css"/>
+        </resources>
+        -->
+    	<!-- content, property, method and event descriptions go here -->
+    	<content>
+	    <xul:certextn anonid="certextn.stdx509extn.proxycertinfo"
+	        xbl:inherits="flex,captionlabel,active,activelabel,activetooltip,activePropName,critical,criticallabel,criticaltooltip,criticalPropName,mandatory,mandatorylabel,mandatorytooltip,mandatoryPropName,disabled,readonly"
+	        captionlabel="&keymgr.cert.csr.form.tab.stdx509ext.proxycertinfo.label;"
+		activePropName="proxyCertInfo"
+		criticalPropName="proxyCertInfo-crit"
+		mandatoryPropName="proxyCertInfo-mandatory"
+		oncommand="getBindingParent(this).handleExtensionControlChange(this, event)"
+		>
+		<xul:vbox>
+		<xul:hbox>
+                    <xul:checkbox anonid="certextn.stdx509extn.proxycertinfo.usepath"
+	            	xbl:inherits="label=usepathlabel,certPropName=usepathCertPropName,disabled,checked=usepath,tooltiptext=usepathtooltip"
+		        label="&keymgr.cert.csr.form.tab.stdx509ext.proxycertinfo_includepathlen.label;"
+		    	tooltiptext="&keymgr.cert.csr.form.tab.stdx509ext.proxycertinfo_includepathlen.tooltip;"
+		    	certPropName="proxyCertInfo-pcPathLengthConstraint"
+		  	oncommand="getBindingParent(this).usePathChanged(this, event)"
+			/>
+                    <xul:textbox anonid="certextn.stdx509extn.proxycertinfo.pathlen"
+	            	xbl:inherits="certPropName=pathlenprop,disabled,maxpathlen,value=pathlen,tooltiptext=pathlentooltip"
+		    	size="2" maxlength="32"
+			tooltiptext="&keymgr.cert.csr.form.tab.stdx509ext.basiconstraint_pathlen.tooltip;"
+		    	certPropName="proxyCertInfo-pcPathLengthConstraint-text"
+		    	onchange="getBindingParent(this).pathLenChanged(this, event);"
+			/>
+		    <xul:label anonid="certextn.stdx509extn.proxycertinfo.maxpathlen"
+	            	xbl:inherits="tooltiptext=maxpathlentooltip,maxpathlen"
+		        hidden="true"
+			tooltiptext="&keymgr.cert.csr.form.tab.stdx509ext.proxycertinfo_pathlen_max.tooltip;"
+			/>
+		</xul:hbox>
+		<xul:hbox flex="1" >
+		    <xul:label anonid="certextn.stdx509extn.proxycertinfo.policylang.label"
+	            	xbl:inherits="value=policylanglabel"
+			value="Policy: "
+			/>
+		    <xul:vbox xalign="start" flex="1">
+		        <xul:menulist anonid="certextn.stdx509extn.proxycertinfo.policyLanguage_menuList"
+	            	    xbl:inherits="tooltiptext=ppltooltip,certPropName=pplCertPropName,value"
+			    tooltiptext="&keymgr.cert.csr.form.tab.stdx509ext.proxycertinfo_policyLanguage.tooltip;"
+		    	    certPropName="proxyCertInfo-policyLanguage"
+			    onchange="getBindingParent(this).pplMenuListValueChanged(this, event.target)"
+		  	    oncommand="getBindingParent(this).pplMenuListChanged(this, event.target)"
+		  	    >
+                          <xul:menupopup>
+                            <xul:menuitem
+			       anonid="certextn.stdx509extn.proxycertinfo.policyLanguage_inheritAll"
+			       label="&keymgr.cert.csr.form.tab.stdx509ext.proxycertinfo_policyLanguage.inheritAll;"
+			       value="InheritAll"
+			       selected="true"
+			       />
+                            <xul:menuitem
+			       anonid="certextn.stdx509extn.proxycertinfo.policyLanguage_independent"
+			       label="&keymgr.cert.csr.form.tab.stdx509ext.proxycertinfo_policyLanguage.independent;"
+			       value="Independent"
+			       />
+                            <xul:menuitem
+			       anonid="certextn.stdx509extn.proxycertinfo.policyLanguage_anyLanguage"
+			       label="&keymgr.cert.csr.form.tab.stdx509ext.proxycertinfo_policyLanguage.anyLanguage;"
+			       value="AnyLanguage"
+			       />
+                          </xul:menupopup>
+                        </xul:menulist>
+                        <xul:textbox anonid="certextn.stdx509extn.proxycertinfo.proxypolicy"
+	            	    xbl:inherits="tooltiptext=ppolicytooltip,certPropName=ppolicyCertPropName,value=ppolicy"
+			    tooltiptext="&keymgr.cert.csr.form.tab.stdx509ext.proxycertinfo_policyLanguage.policy.tooltip;"
+		  	    hidden="true"
+		            maxlength="256"
+		    	    certPropName="proxyCertInfo-policy"
+			    />
+		    </xul:vbox>
+		</xul:hbox>
+		</xul:vbox>
+	    </xul:certextn>
+	    <xul:certextnutil  anonid="certextn.util"/>
+    	</content>
+	<implementation>
+	    <field name="mBaseExtnElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certextn.stdx509extn.proxycertinfo");
+	    </field>
+	    <field name="mUsePathElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certextn.stdx509extn.proxycertinfo.usepath");
+	    </field>
+	    <field name="mPathLenElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certextn.stdx509extn.proxycertinfo.pathlen");
+	    </field>
+	    <field name="mMaxPathLenElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certextn.stdx509extn.proxycertinfo.maxpathlen");
+	    </field>
+	    <field name="mPplMenuElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certextn.stdx509extn.proxycertinfo.policyLanguage_menuList");
+	    </field>
+	    <field name="pplPolicyElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certextn.stdx509extn.proxycertinfo.proxypolicy");
+	    </field>
+	    <field name="mMaxPathLen">
+	    	-1
+	    </field>
+	    <field name="mPrevPathLen">
+	    	-1
+	    </field>
+
+	    <property name="active"
+	        onget="return this.mBaseExtnElem.active;"
+	    	onset="this.mBaseExtnElem.active = val;return val;"
+		/>
+	    <property name="critical"
+	        onget="return this.mBaseExtnElem.critical;"
+	    	onset="this.mBaseExtnElem.critical = val;return val;"
+		/>
+	    <property name="mandatory"
+	        onget="return this.mBaseExtnElem.mandatory;"
+	    	onset="this.mBaseExtnElem.mandatory = val;return val;"
+		/>
+	    <property name="readonly"
+	        onget="return this.mBaseExtnElem.readonly;"
+	    	onset="this.mBaseExtnElem.readonly = val;
+		       this.setReadonly(this.mBaseExtnElem, val);
+		       if(!val) {this.refresh();}
+		       return val;"
+		/>
+	    <property name="disabled"
+	        onget="return this.mBaseExtnElem.disabled;"
+	    	onset="this.mBaseExtnElem.disabled = val;return val;"
+		/>
+
+	    <property name="usepath">
+	        <getter>
+		<![CDATA[
+	        // return this.getAttribute('usepath')
+	        return this.usePathLenElem.checked;
+		]]>
+	        </getter>
+	        <setter>
+		<![CDATA[
+	    	if (val) {
+		    this.setAttribute('usepath',true);
+		}
+                else  {
+		    this.removeAttribute('usepath');
+		}
+
+	        this.mUsePathElem.hidden = !val;
+	        this.mUsePathElem.checked = val;
+
+		this.usePathChanged(this.mUsePathElem);
+		return val;
+		]]>
+	        </setter>
+	    </property>
+
+	    <property name="pathlen">
+	        <getter>
+		<![CDATA[
+		return this.mPathLenElem.value;
+	        // return this.getAttribute('pathlen')
+		]]>
+	        </getter>
+	        <setter>
+		<![CDATA[
+		if (val) {
+		    this.setAttribute('pathlen',val);
+		    this.mPathLenElem.value = val;
+		}
+		else {
+		    this.removeAttribute('pathlen');
+		    this.mPathLenElem.value = "";
+		}
+		this.pathLenChanged(this.mPathLenElem);
+		return val;
+		]]>
+	        </setter>
+	    </property>
+
+	    <property name="maxpathlen">
+	        <getter>
+		<![CDATA[
+	        return this.mMaxPathLen;
+		]]>
+	        </getter>
+	        <setter>
+		<![CDATA[
+		if (!val || (val == "") || (val < 0)) {
+		    this.mMaxPathLen = -1;
+		    this.mMaxPathLenElem.value = "";
+		    this.removeAttribute("maxpathlen");
+		    return val;
+		}
+		this.mMaxPathLen = parseInt(val);
+		this.mMaxPathLenElem.value = " <= " + val;
+
+		this.maxPathLenChanged(this.mMaxPathLenElem);
+		this.setAttribute("maxpathlen", this.mMaxPathLen);
+
+		return val;
+		]]>
+	        </setter>
+	    </property>
+
+	    <property name="policylanguage">
+	        <getter>
+		<![CDATA[
+	        // return this.getAttribute('usepath')
+	        return this.mPplMenuElem.value;
+		]]>
+	        </getter>
+	        <setter>
+		<![CDATA[
+	        this.mPplMenuElem.value = val;
+		this.pplMenuListChanged(this.mPplMenuElem);
+		return val;
+		]]>
+	        </setter>
+	    </property>
+
+	    <property name="proxypolicy">
+	        <getter>
+		<![CDATA[
+	        return this.pplPolicyElem.value;
+		]]>
+	        </getter>
+	        <setter>
+		<![CDATA[
+	        this.pplPolicyElem.value = val;
+		// this.pplMenuListChanged(this.pplPolicyElem);
+		return val;
+		]]>
+	        </setter>
+	    </property>
+
+	    <constructor>
+		<![CDATA[
+		// this.LogTrace("proxycertinfoextnBinding.constructor():......................Start.\n");
+
+		var maxPathLenAttrValue = this.getAttribute("maxpathlen");
+		if (maxPathLenAttrValue && (maxPathLenAttrValue != "")) {
+		    maxPathLenAttrValue = parseInt(maxPathLenAttrValue);
+		    if (maxPathLenAttrValue >= 0) {
+			this.maxpathlen = maxPathLenAttrValue;
+		    }
+		}
+
+		this.refresh();
+
+		// this.LogTrace("proxycertinfoextnBinding.constructor():......................End.\n");
+		]]>
+	    </constructor>
+
+	    <method name="refresh">
+	        <body>
+		<![CDATA[
+
+		if (this.active && (this.mMaxPathLen >= 0)) {
+		    this.usepath = true;
+		    this.mUsePathElem.disabled = true;
+		}
+
+		this.pplMenuListChanged(this.mPplMenuElem);
+		this.maxPathLenChanged(this.mMaxPathLenElem);
+		this.usePathChanged(this.mUsePathElem);
+
+		this.mPrevPathLen = this.mMaxPathLen;
+
+		/*
+		this.LogTrace("proxycertinfoextnBinding.refresh(): this.mMaxPathLen: " + this.mMaxPathLen + " " +
+				"this.mPrevPathLen: " + this.mPrevPathLen + "\n");
+		*/
+		if (this.mandatory) {
+		    this.mBaseExtnElem.activateControl(false);
+		}
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="reset">
+	        <body>
+		<![CDATA[
+		// this.LogTrace("proxycertinfoextnBinding.reset():..........................Start.\n");
+	    	this.maxpathlen = "";
+
+		this.resetCertExtn(this.mBaseExtnElem);
+		// this.mBaseExtnElem.activateControl(true);
+		// this.mBaseExtnElem.reset();
+
+		this.refresh();
+
+		// this.LogTrace("proxycertinfoextnBinding.reset():..........................Start.\n");
+		]]>
+	        </body>
+	    </method>
+
+
+	    <method name="handleExtensionControlChange">
+		<parameter name="aExtensionControlElem"/>
+		<parameter name="ev"/>
+	        <body>
+		<![CDATA[
+		// this.LogTrace("proxycertinfoextnBinding.handleExtensionControlChange():..........................Start.\n");
+		if (ev) {
+		    ev.stopPropagation();
+		}
+		var cmdElem = ev.target;
+		var anonid = cmdElem.getAttribute("annonid");
+		if (!anonid) {
+		    return;
+		}
+		if (anonid != "certextn.active") {
+		    return;
+		}
+
+		this.refresh();
+
+		// this.LogTrace("proxycertinfoextnBinding.handleExtensionControlChange():..........................End.\n");
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="usePathChanged">
+		<parameter name="aUsePathElem"/>
+		<parameter name="ev"/>
+	        <body>
+		<![CDATA[
+		// this.LogTrace("proxycertinfoextnBinding.usePathChanged():..........................Start.\n");
+		if (ev) {
+		    ev.stopPropagation();
+		}
+		// this.LogTrace("proxycertinfoextnBinding.usePathChanged(): aUsePathElem.checked: " + aUsePathElem.checked + "\n");
+
+		this.mPathLenElem.hidden = !aUsePathElem.checked;
+		this.mMaxPathLenElem.hidden = !aUsePathElem.checked;
+	    	if (aUsePathElem.checked) {
+		    if (this.mMaxPathLen >= 0) {
+		    	// this.mPathLenElem.value = this.mMaxPathLen;
+			if ((this.mPathLenElem.value == "") || (this.mPathLenElem.value > this.mMaxPathLen)) {
+		    	    this.mPathLenElem.value = this.mMaxPathLen;
+		    	    this.pathLenChanged(this.mPathLenElem);
+			}
+		    }
+		}
+		else {
+		    this.mPathLenElem.value = "";
+		    // this.pathLenChanged(this.mPathLenElem);
+		}
+		/*
+		this.LogTrace("proxycertinfoextnBinding.usePathChanged(): this.mMaxPathLen: " + this.mMaxPathLen + " " +
+				"this.mPrevPathLen: " + this.mPrevPathLen +  " " + 
+				"this.mPathLenElem.value: " + this.mPathLenElem.value + "\n");
+		*/
+
+		// this.LogTrace("proxycertinfoextnBinding.usePathChanged():..........................End.\n");
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="pathLenChanged">
+		<parameter name="aPathLenElem"/>
+		<parameter name="ev"/>
+	        <body>
+		<![CDATA[
+		// this.LogTrace("proxycertinfoextnBinding.pathLenChanged():..........................Start.\n");
+		if (this.mMaxPathLen < 0) {
+		    return;
+		}
+
+		var newVal = -1;
+		if (aPathLenElem.value != "") {
+		    newVal = parseInt(aPathLenElem.value);
+		}
+		/*
+		this.LogTrace("proxycertinfoextnBinding.pathLenChanged(): this.mMaxPathLen: " + this.mMaxPathLen + " " +
+				"aPathLenElem.value: " + aPathLenElem.value + " " + 
+				"newVal: " + newVal + "\n"
+				);
+		*/
+
+		if (this.mUsePathElem.checked && ((newVal < 0) || (newVal > this.mMaxPathLen))) {
+	    	    alert("You cannot assign path length more than MAX value: " +
+		    	this.mMaxPathLen + ".\n" + 
+	    		"Blank spaces means highest postive integer.\n" +
+			"\n");
+		    aPathLenElem.value = this.mPrevPathLen;
+		    return;
+		}
+
+		if ((this.mMaxPathLen < 0) && (aPathLenElem.value != "")) {
+		    if (!this.mUsePathElem.checked) {
+	    	        this.mUsePathElem.checked = true;
+		    }
+		}
+
+		if ((this.mMaxPathLen < 0) && (aPathLenElem.value == "")) {
+		    if (this.mUsePathElem.checked) {
+	    	        this.mUsePathElem.checked = false;
+		    }
+		}
+
+		this.mPrevPathLen = newVal;
+		this.setAttribute('pathlen', newVal);
+
+		// this.LogTrace("pathLenChanged():..........................End.\n");
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="maxPathLenChanged">
+		<parameter name="aMaxPathLenElem"/>
+		<parameter name="ev"/>
+	        <body>
+		<![CDATA[
+		// this.LogTrace("maxPathLenChanged():..........................Start.\n");
+
+		if (ev) {
+		    ev.stopPropagation();
+		}
+
+		// this.LogDebug("maxPathLenChanged(): this.mMaxPathLen: " + this.mMaxPathLen + "\n");
+		if (this.mMaxPathLen >= 0) {
+		    aMaxPathLenElem.hidden = false;
+
+		    this.mUsePathElem.hidden = false;
+		    this.mUsePathElem.disabled = true;
+		    this.usepath = true;
+
+		    this.mandatory = true;
+		    // this.mBaseExtnElem.activateControl(false);
+		}
+		else {
+		    aMaxPathLenElem.hidden = true;
+
+		    this.mUsePathElem.removeAttribute("disabled");
+		    this.usePathChanged(this.mUsePathElem);
+
+		    // this.mBaseExtnElem.activateControl(true);
+		    // this.mandatory = false;
+		}
+		// this.LogTrace("maxPathLenChanged():..........................End.\n");
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="pplMenuListChanged">
+		<parameter name="menuListElem"/>
+		<parameter name="ev"/>
+	        <body>
+		<![CDATA[
+                // this.LogTrace("pplMenuListChanged():.................Start.\n");
+                if ((menuListElem.value == "InheritAll") || (menuListElem.value == "Independent")) {
+	            this.pplPolicyElem.hidden = true;
+	            this.pplPolicyElem.value = "";
+                }
+                else {
+    	            this.pplPolicyElem.removeAttribute("hidden");
+                }
+                // this.LogTrace("pplMenuListChanged():.................End.\n");
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="pplMenuListValueChanged">
+		<parameter name="menuListElem"/>
+		<parameter name="ev"/>
+	        <body>
+		<![CDATA[
+                this.LogTrace("proxycertinfoextnBinding.pplMenuListValueChanged():.................Start/End.\n");
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="toCertProps">
+		<parameter name="aCertProps"/>
+	        <body>
+		<![CDATA[
+
+		if (!this.active) {
+		    return;
+		}
+
+		this.certExtnToProps(this.mBaseExtnElem, aCertProps);
+
+		// this.dumpProperties(aCertProps);
+
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="updateCertProps">
+		<parameter name="aCertProps"/>
+	        <body>
+		<![CDATA[
+                this.LogTrace("proxycertinfoextnBinding.updateCertProps():.................Start.\n");
+		if (! this.containsAnyProperty(this.mBaseExtnElem, aCertProps)) {
+		    return;
+		}
+
+		this.reset();
+                this.LogTrace("proxycertinfoextnBinding.updateCertProps():.................10.\n");
+
+		this.updateCertExtnProps(this.mBaseExtnElem, aCertProps);
+
+		var maxPathLen = null;
+		try {
+		    maxPathLen = aCertProps.getStringProperty("proxyCertInfo-pcPathLengthConstraint-maxpathlen");
+		} catch (ex) {}
+                // this.LogDebug("proxycertinfoextnBinding.updateCertProps(): maxPathLen: " + maxPathLen + "\n");
+		if (maxPathLen) {
+		    this.maxpathlen = maxPathLen;
+		}
+                // this.LogDebug("proxycertinfoextnBinding.updateCertProps(): this.maxpathlen: " + this.maxpathlen + "\n");
+
+		this.refresh();
+
+                this.LogTrace("proxycertinfoextnBinding.updateCertProps():.................End.\n");
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="mergeCertProps">
+		<parameter name="aCertProps"/>
+	        <body>
+		<![CDATA[
+		if (! this.containsAnyProperty(this.mBaseExtnElem, aCertProps)) {
+		    return;
+		}
+
+		this.updateCertExtnProps(this.mBaseExtnElem, aCertProps, true);
+
+		var maxPathLen = null;
+		try {
+		    maxPathLen = aCertProps.getStringProperty("proxyCertInfo-pcPathLengthConstraint-maxpathlen");
+		} catch (ex) {}
+		if (maxPathLen) {
+		    this.maxpathlen = maxPathLen;
+		}
+		this.refresh();
+		]]>
+	        </body>
+	    </method>
+
+	</implementation>
+    </binding>
+
+</bindings>
+

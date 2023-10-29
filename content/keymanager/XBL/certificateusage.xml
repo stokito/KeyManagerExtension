@@ -1,0 +1,273 @@
+<?xml version="1.0"?>
+<!-- @(#) $Id: certificateusage.xml,v 1.6 2008/03/17 04:25:37 subrata Exp $ -->
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is Avaya Labs Research, Avaya Inc. Code.
+   -
+   - The Initial Developer of the Original Code is
+   - Subrata Mazumdar, Avaya Labs Research, Avaya Inc.
+   - Portions created by the Initial Developer are Copyright (C) 2007.
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Subrata Mazumdar (mazum@avaya.com)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+
+
+<bindings id="certificateusagelistBindings"
+    xmlns="http://www.mozilla.org/xbl"
+    xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    xmlns:xbl="http://www.mozilla.org/xbl">
+
+    <binding id="certificateusagelistBinding">
+	<!--
+        <resources>
+        </resources>
+	-->
+    	<!-- content, property, method and event descriptions go here -->
+    	<content>
+	    <xul:hbox>
+	        <xul:listbox anonid="certificateusagelist.usage.listbox"
+		    xbl:inherits="value,hidden,disabled,tooltiptext,seltype,certusage,caonly,noncaonly"
+		    seltype="multiple"
+		    rows="2"
+		    onselect="getBindingParent(this).handleUsageChange(this, event)"
+		    ondeselect="getBindingParent(this).handleUsageChange(this, event)"
+		    >
+		    <xul:listitem anonid="certificateusagelist.usage.Any"
+		        xbl:inherits="label=AnyUsagelabel"
+			label="Any Usage"
+			value="-1"
+			/>
+		    <xul:listitem anonid="certificateusagelist.usage.CheckAll"
+		        xbl:inherits="label=CheckAllUsageslabel"
+			label="CheckAllUsages"
+			value="0"
+			/>
+		    <xul:listitem anonid="certificateusagelist.usage.SSLClient"
+		        xbl:inherits="label=SSLClientlabel,hidden=caonly"
+			label="SSLClient"
+			value="1"
+			/>
+		    <xul:listitem anonid="certificateusagelist.usage.SSLServer"
+		    	xbl:inherits="label=SSLServerlabel,hidden=caonly"
+			label="SSLServer"
+			value="2"
+			/>
+		    <xul:listitem anonid="certificateusagelist.usage.SSLServerWithStepUp"
+		    	xbl:inherits="label=SSLServerWithStepUplabel,hidden=caonly"
+			label="SSLServerWithStepUp"
+			value="4"
+			/>
+                    <xul:listitem anonid="certificateusagelist.usage.SSLCA"
+		    	xbl:inherits="label=SSLCAlabel,hidden=noncaonly"
+			label="SSLCA"
+			value="8"
+			/>
+		    <xul:listitem anonid="certificateusagelist.usage.EmailSigner"
+		    	xbl:inherits="label=EmailSignerlabel,hidden=caonly"
+			label="EmailSigner"
+			value="16"
+			/>
+		    <xul:listitem anonid="certificateusagelist.usage.EmailRecipient"
+		    	xbl:inherits="label=EmailRecipientlabel,hidden=caonly"
+			selected="true"
+			label="EmailRecipient"
+			value="32"
+			/>
+		    <xul:listitem anonid="certificateusagelist.usage.ObjectSigner"
+		    	xbl:inherits="label=ObjectSignerlabel,hidden=caonly"
+			label="ObjectSigner"
+			value="64"
+			/>
+		    <xul:listitem anonid="certificateusagelist.usage.UserCertImport"
+		    	xbl:inherits="label=UserCertImportlabel,hidden=caonly"
+			label="UserCertImport"
+			value="128"
+			/>
+		    <xul:listitem anonid="certificateusagelist.usage.VerifyCA"
+		    	xbl:inherits="label=VerifyCAlabel,hidden=noncaonly"
+			label="VerifyCA"
+			value="256"
+			/>
+		    <xul:listitem anonid="certificateusagelist.usage.ProtectedObjectSigner"
+		    	xbl:inherits="label=ProtectedObjectSignerlabel,hidden=caonly"
+			label="ProtectedObjectSigner"
+			value="512"
+			/>
+		    <xul:listitem anonid="certificateusagelist.usage.StatusResponder"
+		    	xbl:inherits="label=StatusResponderlabel,hidden=noncaonly"
+			label="StatusResponder"
+			value="1024"
+			/>
+		    <xul:listitem anonid="certificateusagelist.usage.AnyCA"
+		    	xbl:inherits="label=AnyCAlabel,hidden=noncaonly"
+			label="AnyCA"
+			value="2048" 
+			/>
+                    </xul:listbox>
+	    </xul:hbox>
+    	</content>
+
+	<implementation>
+	    <field name="mCertUsageListElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certificateusagelist.usage.listbox");
+	    </field>
+	    <field name="mCertificateUsage" readonly="true">
+		-1
+	    </field>
+	    <property name="certusage"
+	        onget="this.computeCertUsageValue(); return this.mCertificateUsage;"
+	        onset="this.initCertUsage(usage); return val;"
+		/>
+	    <property name="certificateusage"
+	        onget="return this.certificateUsage;"
+	        onset="this.certificateUsage=val;return val;"
+		/>
+	    <property name="value"
+	        onget="return this.certusage;"
+	        onset="this.certusage=val;return val;"
+		/>
+	    <constructor>
+		<![CDATA[
+		this.refresh();
+		]]>
+	    </constructor>
+
+	    <method name="refresh">
+	        <body>
+		<![CDATA[
+		var usage = this.getAttribute("certusage");
+		if (!usage) {
+		    usage = this.getAttribute("value");
+		}
+		if (usage) {
+		    var usageIntVal = parseInt(usage);
+		    this.initCertUsage(usageIntVal);
+		}
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="initCertUsage">
+		<parameter name="aCertUsageIntVal"/>
+	        <body>
+		<![CDATA[
+		this.mCertUsageListElem.selectedIndex = -1;
+		this.mCertificateUsage = -1;
+		if (aCertUsageIntVal < 0) {
+		    return;
+		}
+
+		var /* NodeList */ certUsageItemList = this.mCertUsageListElem.getElementsByTagName("listitem");
+		if (certUsageItemList.length <= 0) {
+		    certUsageItemList = this.mCertUsageListElem.getElementsByTagName("xul:listitem");
+		}
+		if (certUsageItemList.length <= 0) {
+		    retrun;
+		}
+
+		this.mCertificateUsage = aCertUsageIntVal;
+
+		for (var i = 0; i < certUsageItemList.length; i++) {
+		    var certUsageItemElem = certUsageItemList.item(i);
+		    var certUsageItemTag = certUsageItemElem.getAttribute("label");
+		    var certUsageItemValue = certUsageItemElem.getAttribute("value");
+		    if (!certUsageItemValue) {
+			continue;
+		    }
+		    var certUsageItemIntValue = parseInt(certUsageItemValue); 
+		    if (certUsageItemIntValue & aCertUsageIntVal) {
+		    	certUsageItemElem.selected = true;
+		    }
+		}
+
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="handleUsageChange">
+		<parameter name="aCertUsageListElem"/>
+		<parameter name="ev"/>
+	        <body>
+		<![CDATA[
+		this.computeCertUsageValue();
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="computeCertUsageValue">
+	        <body>
+		<![CDATA[
+		if (this.mCertUsageListElem.selectedIndex < 0) {
+		    this.mCertificateUsage = -1;
+		    retrun -1;
+		}
+		var /* NodeList */ certUsageItemList = this.mCertUsageListElem.getElementsByAttribute("selected", "true");
+		if (certUsageItemList.length <= 0) {
+		    this.mCertificateUsage = -1;
+		    retrun -1;
+		}
+
+		var certUsageIntVal = 0;
+		for (var i = 0; i < certUsageItemList.length; i++) {
+		    var certUsageItemElem = certUsageItemList.item(i);
+
+		    var certUsageItemTag = certUsageItemElem.getAttribute("label");
+		    var certUsageItemValue = certUsageItemElem.getAttribute("value");
+		    if (!certUsageItemValue) {
+			continue;
+		    }
+		    dump("certificateusagelistBinding.computeCertUsageValue(): " + " " + 
+		    		"tagName: " + certUsageItemTag + " " + 
+		    		"certUsageItemValue: " + certUsageItemValue + " " + 
+		    		" certUsageItemElem.hidden: " + certUsageItemElem.hidden + " " +
+				"\n"
+				);
+		    if (certUsageItemElem.hidden) {
+			continue;
+		    }
+		    if (!certUsageItemElem.selected) {
+			continue;
+		    }
+		    var certUsageItemIntValue = parseInt(certUsageItemValue); 
+		    certUsageIntVal |= certUsageItemIntValue;
+		}
+		this.mCertificateUsage = certUsageIntVal;
+
+		dump("certificateusagelistBinding.computeCertUsageValue(): " + " " + 
+				" this.mCertificateUsage: " + this.mCertificateUsage + "\n");
+		return this.mCertificateUsage;
+		]]>
+	        </body>
+	    </method>
+	</implementation>
+    </binding>
+
+</bindings>

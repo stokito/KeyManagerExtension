@@ -1,0 +1,301 @@
+<?xml version="1.0"?>
+<!-- @(#) $Id: extkeyusageextn.xml,v 1.15 2009/12/02 07:09:50 subrata Exp $ -->
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is Avaya Labs Research, Avaya Inc. Code.
+   -
+   - The Initial Developer of the Original Code is
+   - Subrata Mazumdar, Avaya Labs Research, Avaya Inc.
+   - Portions created by the Initial Developer are Copyright (C) 2007.
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Subrata Mazumdar (mazum@avaya.com)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+
+<!DOCTYPE bindings SYSTEM "chrome://keymanager/locale/keyManager.dtd">
+
+<bindings id="extkeyusageextnBindings"
+    xmlns="http://www.mozilla.org/xbl"
+    xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    xmlns:xbl="http://www.mozilla.org/xbl">
+
+    <binding id="extkeyusageextnBinding"
+	extends="chrome://keymanager/content/ExtnXBL/certextn.xml#certextnbaseBinding"
+        >
+	<!--
+	<resources>
+    	    <script type="application/x-javascript" src="chrome://keymanager/content/ExtnXBL/certextn2props.js"/>
+	    <stylesheet src="chrome://keymanager/skin/kmbindings.css"/>
+	</resources>
+	-->
+    	<!-- content, property, method and event descriptions go here -->
+    	<content>
+	    <xul:certextn anonid="certextn.stdx509extn.extkeyusage"
+	        xbl:inherits="flex,captionlabel,active,activelabel,activetooltip,activePropName,mandatory,critical,criticallabel,criticaltooltip,criticalPropName,disabled,readonly"
+		captionlabel="&keymgr.cert.csr.form.tab.stdx509ext.extkeyusage.label;"
+		activePropName="extKeyUsage"
+		criticalPropName="extKeyUsage-crit"
+		mandatoryPropName="extKeyUsage-mandatory"
+		>
+		<xul:grid anonid="certextn.stdx509extn.extkeyusage.grid"
+		    xstyle="overflow:auto; height:200px;"
+		    >
+		    <xul:rows>
+		        <xul:row/>
+		        <xul:row/>
+		    </xul:rows>
+		    <xul:columns>
+		        <xul:column anonid="certextn.stdx509extn.extkeyusage.group1">
+		            <xul:checkbox anonid="certextn.stdx509extn.extkeyusage.serverauth"
+		                xbl:inherits="checked=serverauth,label=serverauthlabel,tooltiptext=serverauthtooltip"
+		                label="&keymgr.cert.csr.form.tab.stdx509ext.serverauth.label;"
+		                certPropName="extKeyUsage-serverAuth"
+		                /> 
+		            <xul:checkbox anonid="certextn.stdx509extn.extkeyusage.clientauth"
+		                xbl:inherits="checked=clientauth,label=clientauthlabel,tooltiptext=clientauthtooltip"
+		                label="&keymgr.cert.csr.form.tab.stdx509ext.clientauth.label;"
+		                certPropName="extKeyUsage-clientAuth"
+		                /> 
+		            <xul:checkbox anonid="certextn.stdx509extn.extkeyusage.codesigning"
+		                xbl:inherits="checked=codesigning,label=codesigninglabel,tooltiptext=codesigningtooltip"
+		                label="&keymgr.cert.csr.form.tab.stdx509ext.codesigning.label;"
+		                certPropName="extKeyUsage-codeSign"
+		                /> 
+		            <xul:checkbox anonid="certextn.stdx509extn.extkeyusage.emailprotection"
+		                xbl:inherits="checked=emailprotection,label=emailprotectionlabel,tooltiptext=emailprotectiontooltip"
+		                label="&keymgr.cert.csr.form.tab.stdx509ext.emailprotection.label;"
+		                certPropName="extKeyUsage-emailProtect"
+		                /> 
+		            <xul:checkbox anonid="certextn.stdx509extn.extkeyusage.ipsec.endsystem"
+		                xbl:inherits="checked=ipsecendsystem,label=ipsecendsystemlabel,tooltiptext=ipsecendsystemtooltip"
+		                label="&keymgr.cert.csr.form.tab.stdx509ext.ipsec.endsystem.label;"
+		                certPropName="extKeyUsage-ipsec-endsystem"
+		                /> 
+
+		            <xul:checkbox anonid="certextn.stdx509extn.extkeyusage.pivcontentsigning"
+		                xbl:inherits="checked=pivcontentsigning,label=pivcontentsigninglabel,tooltiptext=pivcontentsigningtooltip"
+		                label="&keymgr.cert.csr.form.tab.stdx509ext.pivcontentsigning.label;"
+		                certPropName="extKeyUsage-usdodpiv-content-signing"
+		                /> 
+		            <xul:checkbox anonid="certextn.stdx509extn.extkeyusage.eapoverppp"
+		                xbl:inherits="checked=eapoverppp,label=eapoverppplabel,tooltiptext=eapoverppptooltip"
+		                label="&keymgr.cert.csr.form.tab.stdx509ext.eapoverppp.label;"
+		                certPropName="extKeyUsage-pkix-eapoverppp"
+		                /> 
+		            <xul:checkbox anonid="certextn.stdx509extn.extkeyusage.mssclogon"
+		                xbl:inherits="checked=mssclogon,label=mssclogonlabel,tooltiptext=mssclogontooltip"
+		                label="&keymgr.cert.csr.form.tab.stdx509ext.mssclogon.label;"
+		                certPropName="extKeyUsage-mscrypto-smartcard-logon"
+		                /> 
+		            <xul:checkbox anonid="certextn.stdx509extn.extkeyusage.mstrustlistsigning"
+		                xbl:inherits="checked=mstrustlistsigning,label=mstrustlistsigninglabel,tooltiptext=mstrustlistsigningtooltip"
+		                label="&keymgr.cert.csr.form.tab.stdx509ext.mstrustlistsigning.label;"
+		                certPropName="extKeyUsage-mscrypto-trust-list-signing"
+		                /> 
+		            <xul:checkbox anonid="certextn.stdx509extn.extkeyusage.msdocsigning"
+		                xbl:inherits="checked=msdocsigning,label=msdocsigninglabel,tooltiptext=msdocsigningtooltip"
+		                label="&keymgr.cert.csr.form.tab.stdx509ext.msdocsigning.label;"
+		                certPropName="extKeyUsage-mscrypto-doc-signing"
+		                /> 
+		            <xul:checkbox anonid="certextn.stdx509extn.extkeyusage.mssmimeencpref"
+		                xbl:inherits="checked=mssmimeencpref,label=mssmimeencpreflabel,tooltiptext=mssmimeencpreftooltip"
+		                label="&keymgr.cert.csr.form.tab.stdx509ext.mssmimeencpref.label;"
+		                certPropName="extKeyUsage-mscrypto-smime-enc-key-pref"
+		                /> 
+		        </xul:column>
+		        <xul:column anonid="certextn.stdx509extn.extkeyusage.group2">
+		            <xul:checkbox anonid="certextn.stdx509extn.extkeyusage.timestamp"
+		                xbl:inherits="checked=timestamp,label=timestamplabel,tooltiptext=timestamptooltip"
+		                label="&keymgr.cert.csr.form.tab.stdx509ext.timestamp.label;"
+		                certPropName="extKeyUsage-timeStamp"
+		                /> 
+		            <xul:checkbox anonid="certextn.stdx509extn.extkeyusage.ocspresponder"
+		                xbl:inherits="checked=ocspresponder,label=ocspresponderlabel,tooltiptext=ocsprespondertooltip"
+		                label="&keymgr.cert.csr.form.tab.stdx509ext.ocspresponder.label;"
+		                certPropName="extKeyUsage-ocspResponder"
+		                /> 
+		            <xul:checkbox anonid="certextn.stdx509extn.extkeyusage.nsGovtApproved"
+		                xbl:inherits="checked=nsGovtApproved,label=nsGovtApprovedlabel,tooltiptext=nsGovtApprovedtooltip"
+		                label="&keymgr.cert.csr.form.tab.stdx509ext.nsGovtApproved.label;"
+		                tooltiptext="&keymgr.cert.csr.form.tab.stdx509ext.nsGovtApproved.tooltip;"
+		                certPropName="extKeyUsage-NS-govtApproved"
+		                /> 
+			    <!--
+		            <xul:spacer/>
+			    -->
+		            <xul:checkbox anonid="certextn.stdx509extn.extkeyusage.ipsec.tunnel"
+		                xbl:inherits="checked=ipsectunnel,ipsectunnellabel=label,tooltiptext=ipsectunneltooltip"
+		                label="&keymgr.cert.csr.form.tab.stdx509ext.ipsec.tunnel.label;"
+		                certPropName="extKeyUsage-ipsec-tunnel"
+		                /> 
+		            <xul:checkbox anonid="certextn.stdx509extn.extkeyusage.ipsec.user"
+		                xbl:inherits="checked=ipsecuser,ipsecuserlabel=label,tooltiptext=ipsecusertooltip"
+		                label="&keymgr.cert.csr.form.tab.stdx509ext.ipsec.user.label;"
+		                certPropName="extKeyUsage-ipsec-user"
+		                /> 
+		            <xul:checkbox anonid="certextn.stdx509extn.extkeyusage.pivcardauth"
+		                xbl:inherits="checked=pivcardauth,label=pivcardauthlabel,tooltiptext=pivcardauthtooltip"
+		                label="&keymgr.cert.csr.form.tab.stdx509ext.pivcardauth.label;"
+		                certPropName="extKeyUsage-usdodpiv-card-auth"
+		                /> 
+		            <xul:checkbox anonid="certextn.stdx509extn.extkeyusage.eapoverlan"
+		                xbl:inherits="checked=eapoverlan,label=eapoverlanlabel,tooltiptext=eapoverlantooltip"
+		                label="&keymgr.cert.csr.form.tab.stdx509ext.eapoverlan.label;"
+		                certPropName="extKeyUsage-pkix-eapoverlan"
+		                /> 
+		            <xul:checkbox anonid="certextn.stdx509extn.extkeyusage.mskeyrecovery"
+		                xbl:inherits="checked=mskeyrecovery,label=mskeyrecoverylabel,tooltiptext=mskeyrecoverytooltip"
+		                label="&keymgr.cert.csr.form.tab.stdx509ext.mskeyrecovery.label;"
+		                certPropName="extKeyUsage-mscrypto-keyrecovery"
+		                /> 
+		            <xul:checkbox anonid="certextn.stdx509extn.extkeyusage.mstimestampsigning"
+		                xbl:inherits="checked=mstimestampsigning,label=mstimestampsigninglabel,tooltiptext=mstimestampsigningtooltip"
+		                label="&keymgr.cert.csr.form.tab.stdx509ext.mstimestampsigning.label;"
+		                certPropName="extKeyUsage-mscrypto-time-stamp-signing"
+		                /> 
+		            <xul:checkbox anonid="certextn.stdx509extn.extkeyusage.msencryptingfs"
+		                xbl:inherits="checked=msencryptingfs,label=msencryptingfslabel,tooltiptext=msencryptingfstooltip"
+		                label="&keymgr.cert.csr.form.tab.stdx509ext.msencryptingfs.label;"
+		                certPropName="extKeyUsage-mscrypto-enrypting-fs"
+		                /> 
+		            <xul:checkbox anonid="certextn.stdx509extn.extkeyusage.mssgc"
+		                xbl:inherits="checked=mssgc,label=mssgclabel,tooltiptext=mssgctooltip"
+		                label="&keymgr.cert.csr.form.tab.stdx509ext.mssgc.label;"
+		                certPropName="extKeyUsage-mscrypto-server-gated-crypto"
+		                /> 
+		        </xul:column>
+		    </xul:columns>
+		</xul:grid>
+	    </xul:certextn>
+    	</content>
+	<implementation>
+	    <field name="mBaseExtnElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certextn.stdx509extn.extkeyusage");
+	    </field>
+
+	    <property name="active"
+	        onget="return this.mBaseExtnElem.active;"
+	    	onset="this.mBaseExtnElem.active = val;return val;"
+		/>
+	    <property name="critical"
+	        onget="return this.mBaseExtnElem.critical;"
+	    	onset="this.mBaseExtnElem.critical = val;return val;"
+		/>
+	    <property name="mandatory"
+	        onget="return this.mBaseExtnElem.mandatory;"
+	    	onset="this.mBaseExtnElem.mandatory = val;return val;"
+		/>
+	    <property name="readonly"
+	        onget="return this.mBaseExtnElem.readonly;"
+	    	onset="this.mBaseExtnElem.readonly = val;
+		       this.setReadonly(this.mBaseExtnElem, val);
+		       if(!val) {this.refresh();}
+		       return val;"
+		/>
+	    <property name="disabled"
+	        onget="return this.mBaseExtnElem.disabled;"
+	    	onset="this.mBaseExtnElem.disabled = val;return val;"
+		/>
+
+
+	    <constructor>
+		<![CDATA[
+		// this.LogTrace("extkeyusageextnBinding.constructor():......................Start.\n");
+		this.refresh();
+		]]>
+	    </constructor>
+
+	    <method name="refresh">
+	        <body>
+		<![CDATA[
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="reset">
+		<body>
+		<![CDATA[
+		this.resetCertExtn(this.mBaseExtnElem);
+		this.mBaseExtnElem.reset();
+		]]>
+		</body>
+	    </method>
+
+	    <method name="toCertProps">
+		<parameter name="aCertProps"/>
+	        <body>
+		<![CDATA[
+
+		if (!this.active) {
+		    return;
+		}
+
+		this.certExtnToProps(this.mBaseExtnElem, aCertProps);
+
+		// this.dumpProperties(aCertProps);
+
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="updateCertProps">
+		<parameter name="aCertProps"/>
+	        <body>
+		<![CDATA[
+		// this.LogTrace("extkeyusageextnBinding.updateCertProps():..........................Start.\n");
+
+		if (! this.containsAnyProperty(this.mBaseExtnElem, aCertProps)) {
+		    return;
+		}
+
+		this.reset();
+		this.updateCertExtnProps(this.mBaseExtnElem, aCertProps);
+		this.refresh();
+
+		// this.LogTrace("extkeyusageextnBinding.updateCertProps():..........................End.\n");
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="mergeCertProps">
+		<parameter name="aCertProps"/>
+	        <body>
+		<![CDATA[
+		this.updateCertExtnProps(this.mBaseExtnElem, aCertProps, true);
+		this.refresh();
+		]]>
+	        </body>
+	    </method>
+
+	</implementation>
+    </binding>
+
+</bindings>
+

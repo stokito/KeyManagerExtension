@@ -1,0 +1,540 @@
+<?xml version="1.0"?>
+<!-- @(#) $Id: generalnameitem.xml,v 1.8 2009/04/16 13:11:53 subrata Exp $ -->
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is Avaya Labs Research, Avaya Inc. Code.
+   -
+   - The Initial Developer of the Original Code is
+   - Subrata Mazumdar, Avaya Labs Research, Avaya Inc.
+   - Portions created by the Initial Developer are Copyright (C) 2007.
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Subrata Mazumdar (mazum@avaya.com)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+<!DOCTYPE bindings
+    	[
+	<!ENTITY % certManager.dtd SYSTEM "chrome://pippki/locale/certManager.dtd">
+	%certManager.dtd;
+	<!ENTITY % keyManager.dtd SYSTEM "chrome://keymanager/locale/keyManager.dtd">
+	%keyManager.dtd;
+	]>
+
+<bindings id="generalnameitemBindings"
+    xmlns="http://www.mozilla.org/xbl"
+    xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    xmlns:xbl="http://www.mozilla.org/xbl">
+
+    <script type="application/x-javascript" src="chrome://keymanager/content/GeneralNameItem.js"/>
+
+    <binding id="generalnameitemBinding"
+	extends="chrome://keymanager/content/ExtnXBL/certextn.xml#certextnbaseBinding"
+        >
+        <!--
+        <resources>
+    	    <script type="application/x-javascript" src="chrome://keymanager/content/GeneralNameItem.js"/>
+        </resources>
+        -->
+    	<!-- content, property, method and event descriptions go here -->
+    	<content>
+	    <xul:groupbox>
+            <xul:grid flex="1" anonid="certextn.stdx509extn.generalname.items.grid"> 
+                <xul:columns>
+                    <xul:column/>
+                    <xul:column flex="1"/>
+                </xul:columns>
+                <xul:rows>
+          	    <xul:row>
+                        <xul:label value="&keymgr.create.generalName.item.nameType.label;"/> 
+          	        <xul:hbox>
+          	            <xul:generalnametype anonid="certextn.stdx509extn.generalname.item.nameType"
+			        xbl:inherits="type=nametype,typetooltip=typetooltip,typedisabled"
+          	      	        oncommand="getBindingParent(this).onListItemSelection(this, event)"
+			    	/>
+              	            <xul:spacer flex="5"/>
+          	        </xul:hbox>
+                    </xul:row>
+          	    <!--
+                    <xul:row anonid="certextn.stdx509extn.generalname.item.oid.row" collapsed="true">
+          	    -->
+                    <xul:row anonid="certextn.stdx509extn.generalname.item.oid.row">
+                        <xul:label value="&keymgr.create.generalName.item.oid.label;"/> 
+			<xul:hbox pack="start">
+                            <xul:textbox anonid="certextn.stdx509extn.generalname.item.oid"
+			        xbl:inherits="value=oid,tooltiptext=oidtooltip,disabled=oiddisabled"
+	    			style="overflow:auto;"
+          		        tooltiptext="&keymgr.create.generalName.item.oid.tooltip;"
+          		        />
+			</xul:hbox>
+                    </xul:row>
+                    <xul:row>
+		        <xul:label value="&keymgr.create.generalName.item.name.label;"/> 
+          	        <xul:hbox align="center">
+                            <xul:textbox anonid="certextn.stdx509extn.generalname.item.name.value" flex="1"
+			        xbl:inherits="value=namevalue,tooltiptext=valuetooltip,disabled=valuedisabled"
+	    			style="overflow:auto;"
+          		        tooltiptext="&keymgr.create.generalName.item.name.tooltip;"
+				/>
+                            <xul:checkbox anonid="certextn.stdx509extn.generalname.item.name.value.binary" 
+			        xbl:inherits="checked=binary,tooltiptext=binarytooltip,disabled=binarydisabled"
+          		        label="&keymgr.create.generalName.item.name.binary.label;"
+          		        tooltiptext="&keymgr.create.generalName.item.name.binary.tooltip;"
+				/>
+          	        </xul:hbox>
+                    </xul:row>
+                </xul:rows>
+            </xul:grid>
+	    </xul:groupbox>
+    	</content>
+	<implementation>
+	    <field name="mBaseExtnElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certextn.stdx509extn.generalname.items.grid");
+	    </field>
+	    <field name="mGeneralNameTypeMenuElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certextn.stdx509extn.generalname.item.nameType");
+	    </field>
+	    <field name="mGeneralNameOidRowElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certextn.stdx509extn.generalname.item.oid.row");
+	    </field>
+	    <field name="mGeneralNameItemOidElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certextn.stdx509extn.generalname.item.oid");
+	    </field>
+	    <field name="mGeneralNameItemValueElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certextn.stdx509extn.generalname.item.name.value");
+	    </field>
+	    <field name="mGeneralNameItemValueBinaryElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certextn.stdx509extn.generalname.item.name.value.binary");
+	    </field>
+
+	    <field name="mOrderedNameValueStr"/>
+	    <field name="mTypedNameValueStr"/>
+
+	    <property name="type"
+	        onget="return this.mGeneralNameTypeMenuElem.value;"
+	        onset="this.mGeneralNameTypeMenuElem.value=val; return val;"
+		/>
+	    <property name="typenum" readonly="true"
+	        onget="return this.mGeneralNameTypeMenuElem.typenum;"
+		/>
+	    <property name="namevalue"
+	        onget="return this.mGeneralNameItemValueElem.value;"
+	        onset="this.mGeneralNameItemValueElem.value=val; return val;"
+		/>
+	    <property name="oid"
+	        onget="return this.mGeneralNameItemOidElem.value;"
+	        onset="this.mGeneralNameItemOidElem.value=val; return val;"
+		/>
+	    <property name="binary"
+	        onget="return this.mGeneralNameItemValueBinaryElem.checked;"
+	        onset="this.mGeneralNameItemValueBinaryElem.checked=(val?true:false); return val;"
+		/>
+	    <property name="orderedvalue">
+	        <getter>
+		<![CDATA[
+		this.computeFormattedGeneralName();
+		return this.mOrderedNameValueStr;
+		]]>
+	        </getter>
+
+	        <setter>
+		<![CDATA[
+		]]>
+	        </setter>
+	    </property>
+
+	    <property name="typedvalue">
+	        <getter>
+		<![CDATA[
+		this.computeFormattedGeneralName();
+		return this.mTypedNameValueStr;
+		]]>
+	        </getter>
+	        <setter>
+		<![CDATA[
+		this.updateTypedGeneralNameItem(val);
+		return val;
+		]]>
+	        </setter>
+	    </property>
+
+	    <property name="value"
+	        onget="return this.typedvalue;"
+	        onset="this.typedvalue=val; return val;"
+		/>
+
+	    <property name="readonly"
+	        onget="return this.mBaseExtnElem.readonly;"
+	    	onset="this.mBaseExtnElem.readonly = val;
+		       this.setReadonly(this.mBaseExtnElem, val);
+	    	       if (val) {
+		       	this.setAttribute('readonly',true);
+		       }
+                       else {
+		       	this.removeAttribute('readonly');
+		       	this.refresh();
+		       }
+			this.mGeneralNameTypeMenuElem.readonly = val;
+			this.mGeneralNameItemOidElem.disabled = val;
+			this.mGeneralNameItemValueElem.disabled = val;
+			this.mGeneralNameItemValueBinaryElem.disabled = val;
+		       	return val;"
+		/>
+
+	    <constructor>
+		<![CDATA[
+		// this.LogTrace("generalnameitemBinding.constructor():......................Start.\n");
+
+		this.reset();
+
+		// this.LogTrace("generalnameitemBinding.constructor():......................End.\n");
+		]]>
+	    </constructor>
+
+	    <method name="refresh">
+	        <body>
+		<![CDATA[
+		this.onListItemSelection(this.mGeneralNameTypeMenuElem);
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="reset">
+	        <body>
+		<![CDATA[
+		this.mGeneralNameTypeMenuElem.reset();
+		this.mGeneralNameItemValueElem.value = "";
+
+		var typedValue = this.getAttribute("typedvalue");
+		if (typedValue) {
+		    this.updateTypedGeneralNameItem(typedValue);
+		}
+		else {
+		    var type = this.getAttribute("type");
+		    var namevalue = this.getAttribute("namevalue");
+		    if (type) {
+		    	this.type = type;
+		    }
+		    if (namevalue) {
+		    	this.namevalue = namevalue;
+		    }
+		}
+		this.refresh();
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="mapGeneralNameTypeToValue">
+		<parameter name="itemType"/>
+	        <body>
+		<![CDATA[
+		return this.mGeneralNameTypeMenuElem.mapGeneralNameTypeToValue(itemType);
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="createTypedGeneralNameItem">
+		<parameter name="nameType"/>
+		<parameter name="itemNameValue"/>
+		<parameter name="nameOid"/>
+		<parameter name="isBinary"/>
+	        <body>
+		<![CDATA[
+                // typedGeneralNameItem Format:
+                //  <name-type>:{<oid>,<name>[,binary]}, for other name
+                //  <name-type>:<value>}
+
+                var typedGeneralNameItem;
+                if (nameOid) {
+                    typedGeneralNameItem = nameType + ":"
+    	            typedGeneralNameItem += nameOid;
+	            typedGeneralNameItem += "," + itemNameValue;
+    	            if (isBinary) {
+	                typedGeneralNameItem += ",binary";
+    	            }
+                }
+                else {
+    	            typedGeneralNameItem = nameType + ":" + itemNameValue;
+                }
+                return typedGeneralNameItem;
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="createOrderedGeneralNameItem">
+		<parameter name="nameType"/>
+		<parameter name="itemNameValue"/>
+		<parameter name="nameOid"/>
+		<parameter name="isBinary"/>
+	        <body>
+		<![CDATA[
+                // orderedGeneralNameItemStr Format:
+                //  <name>-<name-type-idx>
+                //  <name>-<oid>[-<binary>]-<name-type-idx>
+                //  <name>-<oid>[1|0]<0-8>
+                // name format is "<name-value> + <(name-type):[0-9]>" | "<name-value> + <oid> + [(bin):1|0] + <(name-type):[0-9]>" 
+                var orderedGeneralNameItemStr = "";
+                orderedGeneralNameItemStr = itemNameValue;
+                if (nameOid) {
+    	            orderedGeneralNameItemStr += " - " + nameOid;
+                    if (isBinary) {
+    	                orderedGeneralNameItemStr += " - " + "1";
+                    }
+	            else {
+    	                orderedGeneralNameItemStr += " - " + "0";
+	            }
+                }
+                var nameItemTypeValue = this.mapGeneralNameTypeToValue(nameType);
+                orderedGeneralNameItemStr += " - " + nameItemTypeValue;
+            
+                return orderedGeneralNameItemStr;
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="updateTypedGeneralNameItem">
+		<parameter name="aTypedGeneralNameItemStr"/>
+	        <body>
+		<![CDATA[
+                var nameType = null;
+                var itemNameValue = null;
+                var nameOid = null;
+                var isBinary = false;
+
+		// parse name in format:  <name-type>:{<oid>,<name>[,binary]} format to 
+
+                var generalNameItemNVP = aTypedGeneralNameItemStr.split(":");
+                switch(generalNameItemNVP.length) {
+    	            case 0:
+	                break;
+    	            case 1:
+	                nameType = generalNameItemNVP[0];
+	                itemNameValue = "";
+	                break;
+    	            default:
+	                nameType = generalNameItemNVP[0];
+	                itemNameValue = aTypedGeneralNameItemStr.substr((nameType.length+1));
+	                break;
+                }
+                if (!nameType) {
+    	            return;
+                }
+                if (itemNameValue != "") {
+		    var binIdx = itemNameValue.indexOf(itemNameValue, ",binary");
+		    if (binIdx > 0) {
+			isBinary = true;
+		    	itemNameValue = itemNameValue.substr(0, binIdx);
+		    }
+    	            var itemNameValueCompList = itemNameValue.split(",");
+                    this.LogDebug("generalnameitemBinding.updateTypedGeneralNameItem(): itemNameValueCompList.length: " + itemNameValueCompList.length + "\n");
+    	            switch(itemNameValueCompList.length) {
+		        case 0:
+	    	            break;
+		        case 1:
+		            itemNameValue = itemNameValueCompList[0];
+	    	            break;
+		        case 2:
+    		        default:
+		            nameOid = itemNameValueCompList[0];
+	                    itemNameValue = aTypedGeneralNameItemStr.substr((nameOid.length+1));
+	    	            break;
+			    /*
+		            nameOid = itemNameValueCompList[0];
+		            itemNameValue = itemNameValueCompList[1];
+		            var isBinaryStr = itemNameValueCompList[2];
+		            if (isBinaryStr == "binary") {
+		    	    	isBinary = true;
+		            }
+	    	            break;
+			    */
+	            }
+                }
+                this.LogDebug("generalnameitemBinding.updateTypedGeneralNameItem(): " +
+				"nameType: " + nameType + " " +
+				"itemNameValue: " + itemNameValue + " " +
+				"nameOid: " + nameOid + " " +
+				"isBinary: " + isBinary + " " +
+				"\n");
+	    	this.mGeneralNameTypeMenuElem.type = nameType;
+	    	this.mGeneralNameItemOidElem.value = nameOid;
+	    	this.mGeneralNameItemValueElem.value = itemNameValue;
+	    	this.mGeneralNameItemValueBinaryElem.checked = isBinary;
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="mapTypedGeneralNameItem">
+		<parameter name="aTypedGeneralNameItemStr"/>
+	        <body>
+		<![CDATA[
+
+		this.updateTypedGeneralNameItem(aTypedGeneralNameItemStr);
+
+                var generalNameItemStr = this.orderedvalue;
+                this.LogDebug("generalnameitemBinding.mapTypedGeneralNameItem(): " +
+				aTypedGeneralNameItemStr + " ==> " + generalNameItemStr + "\n");
+                return generalNameItemStr;
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="onListItemSelection">
+		<parameter name="aNameTypeMenuListElem"/>
+		<parameter name="ev"/>
+	        <body>
+		<![CDATA[
+                // this.LogTrace("generalnameitemBinding.onListItemSelection():............................Start.\n");
+
+		var otherName = false;
+                if (aNameTypeMenuListElem.value == "otherName") {
+		    otherName = true;
+    	            this.mGeneralNameOidRowElem.removeAttribute("collapsed");
+                }
+                else {
+    	            this.mGeneralNameOidRowElem.collapsed = true;
+                }
+
+                this.mGeneralNameItemValueBinaryElem.checked = false;
+                if (!otherName) {
+                    if ((aNameTypeMenuListElem.value == "x400")
+    	                || (aNameTypeMenuListElem.value == "x400")) {
+                    	this.mGeneralNameItemValueBinaryElem.hidden = false;
+	                this.mGeneralNameItemValueBinaryElem.checked = true;
+                    	this.mGeneralNameItemValueBinaryElem.disabled = true;
+                    }
+		    else {
+                    	this.mGeneralNameItemValueBinaryElem.hidden = true;
+		    }
+                }
+		else {
+                    this.mGeneralNameItemValueBinaryElem.hidden = false;
+                    this.mGeneralNameItemValueBinaryElem.disabled = false;
+	            this.mGeneralNameItemValueBinaryElem.checked = false;
+		}
+
+		this.mGeneralNameItemValueElem.focus();
+
+                // this.LogTrace("generalnameitemBinding.onListItemSelection()............................End.\n");
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="computeFormattedGeneralName">
+	        <body>
+		<![CDATA[
+                if (this.mGeneralNameTypeMenuElem.selectedIndex < 0) {
+	            alert("Select a name type from list.");
+    	            return false;
+                }
+		var otherName = false;
+                if (this.mGeneralNameTypeMenuElem.value == "otherName") {
+		    otherName = true;
+		}
+
+		if (otherName) {
+	            if (this.mGeneralNameItemOidElem.value == "") {
+	                alert("The other name selection must have an OID.");
+	                return false;
+	            }
+                }
+
+		if (otherName) {
+    	            this.mTypedNameValueStr = this.createTypedGeneralNameItem(
+					            this.mGeneralNameTypeMenuElem.value,
+					            this.mGeneralNameItemValueElem.value, 
+					            this.mGeneralNameItemOidElem.value,
+					            this.mGeneralNameItemValueBinaryElem.checked
+					            );
+                }
+                else {
+    	            this.mTypedNameValueStr = this.createTypedGeneralNameItem(
+					            this.mGeneralNameTypeMenuElem.value,
+					            this.mGeneralNameItemValueElem.value
+					            );
+                }
+                this.LogDebug("computeFormattedGeneralName(): this.mTypedNameValueStr : " + this.mTypedNameValueStr + "\n");
+
+
+		if (otherName) {
+    	            this.mOrderedNameValueStr = this.createOrderedGeneralNameItem(
+					            this.mGeneralNameTypeMenuElem.value,
+					            this.mGeneralNameItemValueElem.value, 
+					            this.mGeneralNameItemOidElem.value,
+					            this.mGeneralNameItemValueBinaryElem.checked
+					            );
+                }
+                else {
+    	            this.mOrderedNameValueStr = this.createOrderedGeneralNameItem(
+					            this.mGeneralNameTypeMenuElem.value,
+					            this.mGeneralNameItemValueElem.value
+					            );
+                }
+                this.LogDebug("computeFormattedGeneralName(): this.mOrderedNameValueStr: " + this.mOrderedNameValueStr + "\n");
+
+                return true;
+		]]>
+	        </body>
+	    </method>
+
+
+	    <method name="toCertProps">
+		<parameter name="aCertProps"/>
+	        <body>
+		<![CDATA[
+		this.computeFormattedGeneralName();
+		this.certExtnToProps(this.mBaseExtnElem, aCertProps);
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="updateCertProps">
+		<parameter name="aCertProps"/>
+	        <body>
+		<![CDATA[
+		this.updateCertExtnProps(this.mBaseExtnElem, aCertProps);
+		this.refresh();
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="mergeCertProps">
+		<parameter name="aCertProps"/>
+	        <body>
+		<![CDATA[
+		this.updateCertExtnProps(this.mBaseExtnElem, aCertProps, true);
+		this.refresh();
+		]]>
+	        </body>
+	    </method>
+
+
+	</implementation>
+    </binding>
+
+</bindings>
+

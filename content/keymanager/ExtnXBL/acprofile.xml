@@ -1,0 +1,814 @@
+<?xml version="1.0"?>
+<!-- @(#) $Id: acprofile.xml,v 1.11 2011/02/04 18:54:53 subrata Exp $ -->
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is Avaya Labs Research, Avaya Inc. Code.
+   -
+   - The Initial Developer of the Original Code is
+   - Subrata Mazumdar, Avaya Labs Research, Avaya Inc.
+   - Portions created by the Initial Developer are Copyright (C) 2007.
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Subrata Mazumdar (mazum@avaya.com)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+
+
+<bindings id="acprofileBindings"
+    xmlns="http://www.mozilla.org/xbl"
+    xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    xmlns:xbl="http://www.mozilla.org/xbl">
+
+    <binding id="acprofileBinding"
+	extends="chrome://keymanager/content/ExtnXBL/certextn.xml#certextnbaseBinding"
+	>
+	<resources>
+	    <stylesheet src="chrome://keymanager/skin/kmbindings.css"/>
+	</resources>
+	<!--
+	-->
+    	<!-- content, property, method and event descriptions go here -->
+    	<content>
+  	    <xul:groupbox anonid="acprofile.data.vbox" xbl:inherits="hidden,flex">
+  	        <xul:hbox anonid="acprofile.data.profile" align="start">
+		    <xul:menulist anonid="acprofile.data.profileMenu"
+			xbl:inherits="value=profile,hidden=profilehidden,disabled=profiledisabled,tooltiptext=profiletooltip"
+			value="reset"
+			tooltiptext="Select one of the the key usage criteria from the list - use the Advanced tab control for further customization."
+  			oncommand="getBindingParent(this).handleACProfileItemChanged(this, event)"
+		  	>
+		      <xul:menupopup>
+			  <xul:menuitem anonid="acprofile.data.reset"
+			      xbl:inherits="label=resetlabel"
+			      label="None"
+			      tooltiptext="Select this option if you do want to preset extensions and attributes or want reset the form "
+			      extProfileFileName="ResetProfile.xml"
+			      value="reset"
+			      />
+			  <xul:menuitem anonid="acprofile.data.demoprofile"
+			      xbl:inherits="label=demoprofilelabel,hidden=demoprofilehidden"
+			      label="Demo Profile"
+			      tooltiptext="Select this option if you do want to preset extensions and attributes or want reset the form "
+			      extProfileFileName="ACDemoProfile.xml"
+			      value="demoprofile"
+			      />
+			  <xul:menuitem anonid="acprofile.data.custom"
+			      xbl:inherits="label=customlabel"
+			      label="Custom AC Profile"
+			      tooltiptext="Select this option to load AC profile from a file - after loading, use the Advanced tab control for further customization."
+			      value="custom"
+			      />
+			  <xul:menuitem anonid="acprofile.data.attrcert"
+			      xbl:inherits="label=certificatelabel"
+			      label="Copy from existing AC"
+			      tooltiptext="Select this option to load profile from an existing AC - after loading, use the Advanced tab control for further customization."
+			      value="attrcert"
+			      />
+		      </xul:menupopup>
+		    </xul:menulist>
+		    <xul:button anonid="acprofile.data.profile.view"
+	  		label="Show Profile"
+  		      	tooltiptext="Click this button to show the extension profile "
+	       		oncommand="getBindingParent(this).showACProfileData(event);"
+			/>
+		    <xul:spacer flex="1"/>
+  	        </xul:hbox>
+
+  	        <xul:hbox anonid="acprofile.data.custom.profile.params"
+		    xbl:inherits="flex"
+		    flex="1"
+		    hidden="true"
+		    >
+		    <xul:hbox flex="10"
+			xbl:inherits="flex"
+	       	    	onpopuphiding="getBindingParent(this).setCustomProfileURI(event.target, event);"
+	       	    	onchange="getBindingParent(this).setCustomProfileURI(event.target, event);"
+	       	    	oncommand="getBindingParent(this).setCustomProfileURI(event.target, event);"
+		        >
+		        <xul:fileselector anonid="acprofile.data.custom.profile.path"
+			    xbl:inherits="filetooltiptext=customprofilepathtooltip,browsetooltiptext=customprofilepathbrowsetooltip,filewidth=customprofilepathwidth,value=customprofilepath"
+			    flex="1"
+			    formathidden="true"
+			    ascii="true"
+			    autocompletesearchparam="keymgr.attrcert.acprofile.data.custom.profile.path"
+			    fileMode="open"
+			    fileDialogMsg="Choose XML File for AC profile"
+			    fileTypeMsg="XML File"
+			    fileTypeFilters="*.xml"
+  			    filetooltiptext="Enter the path to the XML file for AC profile."
+			    browselabel="Browse"
+			    browsetooltiptext="Click this button to select the XML file for AC profile."
+			    />
+	  	    </xul:hbox>
+		    <xul:button anonid="acprofile.data.custom.template.show"
+	  		label="Show Template"
+  		      	tooltiptext="Click this button to show AC profile Template"
+	       		oncommand="getBindingParent(this).showCertProfileDataTemplate(event);"
+			/>
+	  	</xul:hbox>
+  	        <xul:vbox anonid="acprofile.data.attrcert.profile.params"
+		    hidden="true"
+		    >
+		    <xul:groupbox
+		        align="start" orient="horizontal" pack="start"
+			>
+			<xul:checkbox anonid="acprofile.data.attrcert.profile.all"
+			    xbl:inherits="checked=acprofileall"
+			    label="All"
+			    value="all"
+			    tooltiptext="Select this option if you want to copy all the fileds of the cert."
+			    oncommand="getBindingParent(this).handleACPathProfileAllChanged(this, event);"
+			    />
+		        <xul:hbox anonid="acprofile.data.attrcert.profile.comps"
+			    align="start" pack="start"
+			    >
+			    <xul:checkbox anonid="acprofile.data.attrcert.profile.basic"
+			    	xbl:inherits="checked=acprofilebasic"
+			        label="basic"
+			        value="basic"
+			        tooltiptext="Select this option if you want to copy only the cert related data."
+			        />
+			    <xul:checkbox anonid="acprofile.data.attrcert.profile.attributes"
+			    	xbl:inherits="checked=acprofileattributes"
+			        label="Attributes"
+			        value="attributes"
+				checked="true"
+			        tooltiptext="Select this option if you want to copy only attributes related data of the cert."
+			        />
+			    <xul:checkbox anonid="acprofile.data.attrcert.profile.acextensions"
+			    	xbl:inherits="checked=acprofileextensions"
+			        label="X509v3 Extensions"
+			        value="acextensions"
+				checked="true"
+			        tooltiptext="Select this option if you want to copy only the extensions related data of the cert."
+			        />
+			</xul:hbox>
+		    </xul:groupbox>
+		    <xul:hbox flex="1"
+			xbl:inherits="flex"
+		        align="start"
+	       	    	onpopuphiding="getBindingParent(this).setACPathProfileURI(event.target, event);"
+	       	    	onchange="getBindingParent(this).setACPathProfileURI(event.target, event);"
+	       	    	oncommand="getBindingParent(this).setACPathProfileURI(event.target, event);"
+			>
+		        <xul:fileselector anonid="acprofile.data.attrcert.profile.acfile.path"
+			    xbl:inherits="filetooltiptext=acprofilepathtooltip,browsetooltiptext=acprofilepathbrowsetooltip,filewidth=acprofilepathwidth,value=acprofilepath"
+			    flex="1"
+			    ascii="true"
+			    formatlabel="Base64"
+			    autocompletesearchparam="keymgr.attrcert.acprofile.data.acfile.path"
+			    fileMode="open"
+			    fileDialogMsg="Choose Attribute CERT File"
+			    fileTypeMsg="Attribute Cert File"
+			    fileTypeFilters="*.acr; *.pem; *.crt"
+  			    filetooltiptext="Enter the path to the Attribute Certificate file."
+			    browselabel="Browse"
+			    browsetooltiptext="Click this button to select the Attribute Certificate file."
+			    />
+	  	    </xul:hbox>
+	  	</xul:vbox>
+  	    </xul:groupbox>
+    	</content>
+	<implementation>
+	    <field name="mAttrCertFactory">
+	    	/* alrIAttributeCertFactory */
+		Components.classes["@avaya.com/pkm/attrcertfactory;1"]
+			.getService(Components.interfaces.alrIAttributeCertFactory);
+	    </field>
+	    <field name="mIOService" readonly="true">
+    		Components.classes["@mozilla.org/network/io-service;1"]
+			          .getService(Components.interfaces.nsIIOService);
+	    </field>
+	    <field name="mBaseChromeURL" readonly="true">
+	    	"chrome://keymanager/content/AttrCertProfiles/"
+	    </field>
+	    <field name="mExtProfileTemplateChromeURL">
+	    	mBaseChromeURL + "ACProfileTemplate.xml";
+	    </field>
+	    <field name="mNoDataProfileFileName">
+	    	"ResetProfile.xml";
+	    </field>
+	    <field name="mProfileMenuElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "acprofile.data.profileMenu");
+	    </field>
+	    <field name="mProfileMenuItemResetElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "acprofile.data.reset");
+	    </field>
+	    <field name="mProfileMenuItemACPathElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "acprofile.data.attrcert");
+	    </field>
+	    <field name="mProfileViewElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "acprofile.data.profile.view");
+	    </field>
+	    <field name="mCustomProfileParamsElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "acprofile.data.custom.profile.params");
+	    </field>
+	    <field name="mCustomProfileFilePickerElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "acprofile.data.custom.profile.path");
+	    </field>
+	    <field name="mACPathProfileParamsElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "acprofile.data.attrcert.profile.params");
+	    </field>
+	    <field name="mACPathProfileFilePickerElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "acprofile.data.attrcert.profile.acfile.path");
+	    </field>
+	    <field name="mACPathProfileSelectAllOptionElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "acprofile.data.attrcert.profile.all");
+	    </field>
+	    <field name="mACPathProfileSelectCompsOptionElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "acprofile.data.attrcert.profile.comps");
+	    </field>
+	    <field name="mACPathProfileBasicOptionElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "acprofile.data.attrcert.profile.basic");
+	    </field>
+	    <field name="mACPathProfileAttributesOptionElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "acprofile.data.attrcert.profile.attributes");
+	    </field>
+	    <field name="mACPathProfileX509v3ExtnsOptionElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "acprofile.data.attrcert.profile.acextensions");
+	    </field>
+
+	    <field name="mCurrProfileDataURIStr" readonly="true"/>
+	    <field name="mCurrProfileDataURI" readonly="true"/>
+	    <field name="mCurrProfileDataProps" readonly="true"/>
+
+	    <property name="profiletype" readonly="true"
+		onget="return this.mProfileMenuElem.selectedItem.getAttribute('profiletype');"
+		/>
+	    <property name="profile">
+		<getter>
+		<![CDATA[
+		return this.mProfileMenuElem.value;
+		]]>
+		</getter>
+		<setter>
+		<![CDATA[
+		    this.mProfileMenuElem.value = val;
+    		    this.handleACProfileItemChanged(this.mProfileMenuElem, null);
+		    return val;
+		]]>
+		</setter>
+	    </property>
+
+	    <property name="customprofilepath">
+		<getter>
+		<![CDATA[
+		return this.mCustomProfileFilePickerElem.value;
+		]]>
+		</getter>
+		<setter>
+		<![CDATA[
+		// this.setAttribute('customprofilepath',val);
+		this.mCustomProfileFilePickerElem.value = val;
+		return val;
+		]]>
+		</setter>
+	    </property>
+
+	    <property name="acprofilepath">
+		<getter>
+		<![CDATA[
+		return this.mACPathProfileFilePickerElem.value;
+		]]>
+		</getter>
+		<setter>
+		<![CDATA[
+		// this.setAttribute('acprofilepath',val);
+		this.mACPathProfileFilePickerElem.value = val;
+		return val;
+		]]>
+		</setter>
+	    </property>
+
+	    <property name="disabled"
+		onget="return this.mProfileMenuElem.disabled;"
+		onset="this.mProfileMenuElem.disabled=val;
+		       return val;"
+		/>
+	    <property name="profiledisabled">
+		<getter>
+		<![CDATA[
+		return this.getAttribute('profiledisabled')
+		]]>
+		</getter>
+		<setter>
+		<![CDATA[
+		    if (val) {this.setAttribute('profiledisabled',val);}
+		    else {this.removeAttribute('profiledisabled');}
+		    this.mProfileMenuElem.disabled = val;
+		    return val;
+		]]>
+		</setter>
+	    </property>
+
+	    <constructor>
+		<![CDATA[
+		this.LogTrace("acprofile.constructor():......................Start.");
+
+		this.mProfileMenuElem.selectedIndex = 0;
+		this.handleACProfileItemChanged(this.mProfileMenuElem, null);
+
+		this.LogTrace("acprofile.constructor():......................End.");
+		]]>
+	    </constructor>
+
+	    <method name="reset">
+		<body>
+		<![CDATA[
+		this.LogTrace("acprofile.reset():......................Start.");
+
+		this.customprofilepath = "";
+		this.acprofilepath = "";
+	    	this.mCurrProfileDataURIStr = null;
+	    	this.mCurrProfileDataURI = null;
+	    	this.mCurrProfileDataProps = null;
+
+		this.LogTrace("acprofile.reset():......................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="setCustomProfileURI">
+		<parameter name="aCustomProfileFilePickerElem"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("acprofile.setCustomProfileURI():......................Start.");
+
+		if (aCustomProfileFilePickerElem.value == "") {
+		    if (ev) {
+		    	ev.stopPropagation();
+		    }
+		    return;
+		}
+		this.LogTrace("acprofile.setCustomProfileURI():......................10.");
+
+		var /* nsIFile */ customProfileFile = aCustomProfileFilePickerElem.file;
+		
+		if (customProfileFile == null) {
+		    if (ev) {
+		    	ev.stopPropagation();
+		    }
+		    return;
+		}
+
+		var /* nsIURI */ customProfileURI = this.mIOService.newFileURI(customProfileFile);
+
+		this.mCurrProfileDataURI = customProfileURI;
+		this.mCurrProfileDataURIStr = customProfileURI.spec;
+		this.LogDebug("acprofile.setCustomProfileURI(): this.mCurrProfileDataURIStr: " + this.mCurrProfileDataURIStr + "");
+		this.getProfileDataProps();
+
+		this.LogTrace("acprofile.setCustomProfileURI():......................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="handleACProfileItemChanged">
+		<parameter name="aProfileMenuListElem"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("acprofile.handleACProfileItemChanged():......................Start.");
+
+		this.mCurrProfileDataURI = null;
+		this.mCurrProfileDataURIStr = null;
+		this.mProfileViewElem.hidden = false;
+
+		var selectedItemElem = null;
+		if (ev) {
+		    selectedItemElem = ev.target;
+		}
+		else {
+		    selectedItemElem = aProfileMenuListElem.selectedItem;
+		}
+		this.setAttribute('profile', aProfileMenuListElem.value);
+		// this.LogDebug("acprofile.handleACProfileItemChanged(): selectedItemElem.value: " + selectedItemElem.value + "");
+		if (selectedItemElem.value == "attrcert") {
+		    this.mProfileViewElem.hidden = true;
+	   	    this.mACPathProfileParamsElem.hidden = false;
+		    this.mCustomProfileParamsElem.hidden = true;
+
+		    this.getACProfilePropsByACPath();
+	   	    return;
+		}
+
+		if (selectedItemElem.value == "custom") {
+	   	    this.mCustomProfileParamsElem.hidden = false;
+		    this.mACPathProfileParamsElem.hidden = true;
+
+		    var currProfileDataPath = this.mCustomProfileFilePickerElem.value;
+		    // this.LogDebug("acprofile.handleACProfileItemChanged(): currProfileDataPath: " + currProfileDataPath + "");
+		    // We need to re-initialize the file picker if we changed the 
+		    // custom file path programmatically, not through GUI events.
+		    this.mCustomProfileFilePickerElem.refresh();
+
+		    if (!this.mCustomProfileFilePickerElem.file) {
+			this.mCurrProfileDataURIStr = null;
+			this.mCurrProfileDataURI = null;
+			this.mCurrProfileDataProps = null;
+			if (ev) {
+		    	    ev.stopPropagation();
+			}
+		    	// this.LogTrace("acprofile.handleACProfileItemChanged():......................End(1).");
+			return;
+		    }
+		    // this.LogTrace("acprofile.handleACProfileItemChanged():......................20.");
+
+		    this.setCustomProfileURI(this.mCustomProfileFilePickerElem);
+
+		    // this.LogTrace("acprofile.handleACProfileItemChanged():......................End(2).");
+	   	    return;
+		}
+		/*
+		else {
+		    // Reset the custom file path null string, so that we force 
+		    // ourselves to pick the custom profile file.
+		    this.mCustomProfileFilePickerElem.value = "";
+		}
+		*/
+
+		this.mCustomProfileParamsElem.hidden = true;
+		this.mACPathProfileParamsElem.hidden = true;
+
+		var extnProfileURIStr = null;
+		var extProfileFileName = selectedItemElem.getAttribute("extProfileFileName");
+		if (!extProfileFileName) {
+		    extProfileFileName = this.mNoDataProfileFileName;
+		}
+	   	extnProfileURIStr = this.mBaseChromeURL + extProfileFileName;
+		// this.LogDebug("handleACProfileItemChanged(): extnProfileURIStr: " + extnProfileURIStr + "");
+
+		this.mCurrProfileDataURIStr = extnProfileURIStr;
+		this.mCurrProfileDataURI = this.mIOService.newURI(extnProfileURIStr, null, null);
+
+		this.getProfileDataProps();
+
+		this.LogTrace("acprofile.handleACProfileItemChanged():......................End.");
+		return;
+
+		]]>
+		</body>
+	    </method>
+
+	    <method name="showACProfileData">
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		// this.LogTrace("acprofile.showACProfileData():......................Start.");
+
+		if (!this.mCurrProfileDataURIStr) {
+		    return;
+		}
+    		window.open(this.mCurrProfileDataURIStr, "_blank",
+				    "resizable,toolbar=1,location=1,status=1,scrollbars=1,dialog=yes,width=700,height=400"
+				    );
+    		ev.stopPropagation();
+		]]>
+		</body>
+	    </method>
+
+	    <method name="showCertProfileDataTemplate">
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		// this.LogTrace("acprofile.showCertProfileDataTemplate():......................Start.");
+
+		if (!this.mExtProfileTemplateChromeURL) {
+		    return;
+		}
+    		window.open(this.mExtProfileTemplateChromeURL, "_blank",
+				    "resizable,toolbar=1,location=1,status=1,scrollbars=1,dialog=yes,width=700,height=400"
+				    );
+    		ev.stopPropagation();
+		]]>
+		</body>
+	    </method>
+
+	    <method name="setACPathProfileURI">
+		<parameter name="aACPathProfileFilePickerElem"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("acprofile.setACPathProfileURI():......................Start.");
+
+		if (aACPathProfileFilePickerElem.value == "") {
+		    if (ev) {
+		    	ev.stopPropagation();
+		    }
+		    return;
+		}
+		this.LogTrace("acprofile.setACPathProfileURI():......................10.");
+
+		var /* nsIFile */ customProfileFile = aACPathProfileFilePickerElem.file;
+		
+		if (customProfileFile == null) {
+		    if (ev) {
+		    	ev.stopPropagation();
+		    }
+		    return;
+		}
+
+		/*
+		var customProfileURI = this.mIOService.newFileURI(customProfileFile);
+
+		this.mCurrProfileDataURI = customProfileURI;
+		this.mCurrProfileDataURIStr = customProfileURI.spec;
+		this.LogDebug("acprofile.setACPathProfileURI(): this.mCurrProfileDataURIStr: " + this.mCurrProfileDataURIStr + "");
+		*/
+		this.getACProfilePropsByACPath();
+
+		this.LogTrace("acprofile.setACPathProfileURI():......................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="handleACPathProfileAllChanged">
+		<parameter name="aACPathProfileAllElem"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		// this.LogTrace("acprofile.handleACPathProfileAllChanged():......................Start.");
+		if (aACPathProfileAllElem.checked) {
+		    this.mACPathProfileSelectCompsOptionElem.hidden = true;
+		}
+		else {
+		    this.mACPathProfileSelectCompsOptionElem.hidden = false;
+		    /*
+		    this.mACPathProfileBasicOptionElem.checked = false;
+		    // this.mACPathProfileBasicOptionElem.checked = true;
+		    this.mACPathProfileAttributesOptionElem.checked = true;
+		    this.mACPathProfileX509v3ExtnsOptionElem.checked = true;
+		    */
+		}
+		// this.LogTrace("acprofile.handleACPathProfileAllChanged():......................End.");
+		]]>
+		</body>
+	    </method>
+
+
+	    <method name="getResetProfileDataProps">
+		<body>
+		<![CDATA[
+		// this.LogTrace("acprofile.getResetProfileDataProps():......................Start.");
+
+		var resetProfileDataFileName = this.mProfileMenuItemResetElem.getAttribute("extProfileFileName");
+		if (!resetProfileDataFileName) {
+		    resetProfileDataFileName = this.mNoDataProfileFileName;
+		}
+	   	var resetProfileDataURIStr = this.mBaseChromeURL + resetProfileDataFileName;
+		// this.LogTrace("acprofile.getResetProfileDataProps(): resetProfileDataURIStr: " + resetProfileDataURIStr + "");
+
+		var resetProfileDataURI = this.mIOService.newURI(resetProfileDataURIStr, null, null);
+
+		var currProfileDataProps = this.getProfileDataPropsByURI(resetProfileDataURI);
+
+		// this.LogTrace("acprofile.getResetProfileDataProps():......................End.");
+		return currProfileDataProps;
+		]]>
+		</body>
+	    </method>
+
+
+	    <method name="getExtProfileURIStr">
+		<body>
+		<![CDATA[
+		// this.LogTrace("acprofile.getProfileDataURL():......................Start.");
+		return this.mCurrProfileDataURIStr;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="getACProfilePropsByACPath">
+		<body>
+		<![CDATA[
+		this.LogTrace("acprofile.getACProfilePropsByACPath():......................Start.");
+
+		if (!this.mAttrCertFactory) {
+	            this.LogError("acprofile.getACProfilePropsByACPath(): NULL this.mAttrCertFactory.");
+		    return null;
+		}
+                var attrCertFile = this.mACPathProfileFilePickerElem.file;
+                if (attrCertFile == null) {
+	            this.LogError("acprofile.getACProfilePropsByACPath(): File path for the attribute cert is missing.");
+                    return null;
+                }
+
+                if (attrCertFile.fileSize <= 0) {
+	            this.LogError("acprofile.getACProfilePropsByACPath(): Zero length attribute cert file - select another one.");
+	            this.mACPathProfileFilePickerElem.focus();
+                    return null;
+                }
+
+                var /* alrIAttributeCert */ attributeCert = null;
+                try {
+    	            attributeCert = this.mAttrCertFactory.loadAttributeCertificateFromFile(
+			            this.mACPathProfileFilePickerElem.file,
+			            this.mACPathProfileFilePickerElem.ascii
+                	            );
+                } catch (ex) {
+	            this.LogError("acprofile.getACProfilePropsByACPath(): failed to load the AC file - " + ex);
+	            return null;
+                }
+                dump("attrcert_loadAttrCertFile(): attributeCert: " + attributeCert + "\n");
+                if (!attributeCert) {
+	            this.LogError("attrcert_loadAttrCertFile(): failed to load the selected file - " + ex);
+    	            return null;
+                }
+                this.mACPathProfileFilePickerElem.attributeCert = attributeCert; // cache it for future use.
+            
+
+		var acProfileProps =  this.getACProfilePropsByAC(attributeCert);
+
+		this.LogTrace("acprofile.getACProfilePropsByACPath():......................End.");
+		return acProfileProps;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="getACProfilePropsByAC">
+		<parameter name="aAttributeCert"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("acprofile.getACProfilePropsByACPath():......................Start.");
+
+                var /* nsIPersistentProperties */ certProps = null;
+		if (!aAttributeCert) {
+                    certProps = Components.classes["@mozilla.org/persistent-properties;1"].
+                                createInstance(Components.interfaces.nsIPersistentProperties);
+		    this.mCurrProfileDataProps = certProps;
+		    return this.mCurrProfileDataProps;
+		}
+
+		if (this.mACPathProfileSelectAllOptionElem.checked) {
+                    certProps = aAttributeCert.exportToProperties();
+		    if (!certProps) {
+                        certProps = Components.classes["@mozilla.org/persistent-properties;1"].
+                                createInstance(Components.interfaces.nsIPersistentProperties);
+		    }
+		}
+		else {
+                    certProps = Components.classes["@mozilla.org/persistent-properties;1"].
+                                createInstance(Components.interfaces.nsIPersistentProperties);
+		    if (this.mACPathProfileBasicOptionElem.checked) {
+    		    	aAttributeCert.exportBasicDataToProperties(certProps);
+		    }
+		    if (this.mACPathProfileAttributesOptionElem.checked) {
+    		    	aAttributeCert.exportAttributesToProperties(certProps);
+		    }
+		    if (this.mACPathProfileX509v3ExtnsOptionElem.checked) {
+                    	aAttributeCert.exportExtensionsToProperties(certProps);
+		    }
+		}
+
+		this.mCurrProfileDataProps = certProps;
+
+		this.LogTrace("acprofile.getACProfilePropsByACPath():......................End.");
+		return this.mCurrProfileDataProps;
+		]]>
+		</body>
+	    </method>
+
+
+	    <method name="exportProfileXmlDocToProps">
+		<parameter name="aProfileDataXmlDoc"/>
+		<body>
+		<![CDATA[
+                this.LogTrace("exportProfileXmlDocToProps(): ......Start.");
+
+                var /* nsIPersistentProperties */ aCertProps = null;
+                aCertProps = Components.classes["@mozilla.org/persistent-properties;1"].
+		               createInstance(Components.interfaces.nsIPersistentProperties);
+
+		if (!aProfileDataXmlDoc) {
+		    return aCertProps;
+		}
+                var propKey;
+                var propValue;
+                var propOldValue;
+                var trueValue = "true";
+
+                var /* NodeList */ extProfileItemList = aProfileDataXmlDoc.getElementsByTagName("profileItem");
+                if (extProfileItemList == null) {
+    	            return aCertProps;
+                }
+                // this.LogTrace("exportProfileXmlDocToProps(): length: " + extProfileItemList.length + " ......10.");
+
+                for (var i = 0; i < extProfileItemList.length; i++) {
+	            var extProfileItem = extProfileItemList.item(i);
+	            propKey = extProfileItem.getAttribute("name");
+	            if ((propKey == null) || (propKey == "")) {
+	                continue;
+	            }
+	            propValue = extProfileItem.getAttribute("value");
+	            if ((propValue == null) || (propValue == "")) {
+	                continue;
+	            }
+	            propOldValue = aCertProps.setStringProperty(propKey, propValue);
+		}
+               
+                // this.dumpProperties(aCertProps, "ProfileData");
+           
+                this.LogTrace("exportProfileXmlDocToProps(): ..........End.");
+
+                return aCertProps;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="getProfileDataPropsByURI">
+		<parameter name="aExtProfileURI"/>
+		<body>
+		<![CDATA[
+    		this.LogTrace("getProfileDataPropsByURI(): ..........Start.");
+
+		var xmlDoc = this.parseXmlDocByURI(aExtProfileURI);
+
+		var extnProfileProps =  this.exportProfileXmlDocToProps(xmlDoc);
+
+    		this.LogTrace("getProfileDataPropsByURI(): ..........End.");
+		return extnProfileProps;
+		]]>
+		</body>
+	    </method>
+
+
+	    <method name="getProfileDataXmlDoc">
+		<body>
+		<![CDATA[
+		this.LogTrace("acprofile.getProfileDataXmlDoc():......................Start.");
+		if (this.mProfileMenuElem.value == "attrcert") {
+		    return null;
+		}
+		var xmlDoc = this.parseXmlDocByURI(this.mCurrProfileDataURI);
+		this.LogTrace("acprofile.getProfileDataXmlDoc():......................End.");
+		return xmlDoc;
+		]]>
+		</body>
+	    </method>
+
+
+	    <method name="getProfileDataProps">
+		<body>
+		<![CDATA[
+		this.LogTrace("acprofile.getProfileDataProps():......................Start.");
+
+    		var defCertProps = Components.classes["@mozilla.org/persistent-properties;1"].
+                    		createInstance(Components.interfaces.nsIPersistentProperties);
+
+		if (this.mProfileMenuElem.value == "attrcert") {
+		    var certProps = this.getACProfilePropsByACPath();
+		    if (!certProps) {
+		        certProps = defCertProps;
+		    }
+		    this.mCurrProfileDataProps = certProps;
+                    // this.dumpProperties(certProps, "Attrcert Profile");
+		    return certProps;
+		}
+
+		this.mCurrProfileDataProps = this.getProfileDataPropsByURI(this.mCurrProfileDataURI);
+		if (!this.mCurrProfileDataProps) {
+		    this.mCurrProfileDataProps = defCertProps;
+		}
+
+                // this.dumpProperties(this.mCurrProfileDataProps, "Attrcert Profile");
+
+		this.LogTrace("acprofile.getProfileDataProps():......................End.");
+		return this.mCurrProfileDataProps;
+		]]>
+		</body>
+	    </method>
+
+	</implementation>
+
+    </binding>
+
+
+</bindings>
+

@@ -1,0 +1,118 @@
+<?xml version="1.0"?>
+<!-- @(#) $Id: signCertByCATool.xul,v 1.5 2009/04/20 02:07:27 subrata Exp $ -->
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is Avaya Labs Research, Avaya Inc. Code.
+   -
+   - The Initial Developer of the Original Code is
+   - Subrata Mazumdar, Avaya Labs Research, Avaya Inc.
+   - Portions created by the Initial Developer are Copyright (C) 2007.
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Subrata Mazumdar (mazum@avaya.com)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+
+
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://keymanager/skin/kmbindings.css" type="text/css"?>
+
+<!DOCTYPE window SYSTEM "chrome://keymanager/locale/keyManager.dtd">
+
+<window id="signUserCertByCAToolWin" 
+  windowtype="avaya:signcertasca"
+  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+  title="&keymgr.signCert.form.win.ca.title;"
+  persist="width height screenX screenY"
+  orient="vertical"
+  autostretch="always"
+  onload="onLoadInitSignCertByCAForm();">
+
+  <script type="application/x-javascript" src="chrome://global/content/strres.js"/>
+  <script type="application/x-javascript" src="chrome://keymanager/content/tools/signcerttool/signProxyCertTool.js"/>
+
+<keyset id="keys">
+  <key id="esc-key"    keycode="VK_ESCAPE" oncommand="window.close()"/>
+</keyset>
+
+  <vbox style="overflow:auto" flex="1">
+	<x509v3certificate id="keymgr.signCert.ca.form"
+	    certparamtag=""
+	    selfsigncert="false"
+	    selfsigncerthidden="true"
+	    isproxysigning="false"
+	    isproxysigninghidden="true"
+	    xiscacert="false"
+	    xiscacerthidden="true"
+	    xprofile="server"
+	    xdisabledx509v3certtags="x509certstdextenions,x509certnsextenions,x509certproxyextensions"
+	    disabledx509v1certtags="subject,subjectpublickeyinfo"
+	    xdisabledx509v3stdexttags=""
+	    xdisabledx509v3proxyexttags=""
+	    xdisabledx509v3nsexttags=""
+	    xenabledx509v1certtags=""
+	    xenabledx509v3stdexttags=""
+	    xenabledx509v3proxyexttags=""
+	    xenabledx509v3nsexttags="nscerttype"
+
+	    />
+  </vbox>
+
+  <spacer flex="1"/>
+
+  <grid>
+    <column flex="1"/>
+    <rows>
+      <row>
+        <separator class="thin"/>
+      </row>
+      <row>
+          <hbox align="right" flex="1">
+            <button id="SignCSRButton"
+                  label="&keymgr.signCert.cmd.sign.label;" 
+                  oncommand="signCertUsingCSR();"/>
+            <button id="CloseCSRButton"
+                  label="&keymgr.cmd.close.label;" 
+                  accesskey="&keymgr.cmd.closeWindowAccessKey;"
+		  hidden="true"
+                  oncommand="closeCSR();"/>
+            <button id="HelpButton"
+                  label="&keymgr.cmd.help.label;" 
+                  accesskey="&keymgr.cmd.helpButtonAccessKey;"
+                  oncommand="openHelp('sign_cert');"/>
+            <button id="CancelButton"
+	          label="&keymgr.cmd.cancel.label;"
+                  oncommand="cancelSignCSR();"/>
+          </hbox>
+	<vbox>
+	</vbox>
+      </row>
+    </rows>
+  </grid>
+</window>

@@ -1,0 +1,257 @@
+<?xml version="1.0"?>
+<!-- @(#) $Id: privatekeyusageperiodextn.xml,v 1.12 2009/04/16 13:11:53 subrata Exp $ -->
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is Avaya Labs Research, Avaya Inc. Code.
+   -
+   - The Initial Developer of the Original Code is
+   - Subrata Mazumdar, Avaya Labs Research, Avaya Inc.
+   - Portions created by the Initial Developer are Copyright (C) 2007.
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Subrata Mazumdar (mazum@avaya.com)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+
+<!DOCTYPE bindings SYSTEM "chrome://keymanager/locale/keyManager.dtd">
+
+<bindings id="privatekeyusageperiodextnBindings"
+    xmlns="http://www.mozilla.org/xbl"
+    xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    xmlns:xbl="http://www.mozilla.org/xbl">
+
+    <binding id="privatekeyusageperiodextnBinding"
+	extends="chrome://keymanager/content/ExtnXBL/certextn.xml#certextnbaseBinding"
+        >
+        <!--
+        <resources>
+    	    <script type="application/x-javascript" src="chrome://keymanager/content/ExtnXBL/certextn2props.js"/>
+	    <stylesheet src="chrome://keymanager/skin/kmbindings.css"/>
+        </resources>
+        -->
+    	<!-- content, property, method and event descriptions go here -->
+    	<content>
+	    <xul:certextn anonid="certextn.stdx509ext.privatekeyusageperiodextn"
+	        xbl:inherits="flex,captionlabel,active,activelabel,activetooltip,activePropName,critical,criticallabel,criticaltooltip,criticalPropName,mandatory,mandatorylabel,mandatorytooltip,mandatoryPropName"
+	        captionlabel="&keymgr.cert.csr.form.tab.stdx509ext.privatekeyusageperiod.label;"
+		activePropName="privKeyUsagePeriod"
+		criticalPropName="privKeyUsagePeriod-crit"
+		mandatoryPropName="privKeyUsagePeriod-mandatory"
+		>
+		<xul:vbox>
+		<xul:hbox>
+		    <xul:label value="Use:"/>
+                    <xul:radiogroup anonid="certextn.stdx509ext.privatekeyusageperiodextn.type" flex="1"
+		        xbl:inherits="certPropName=privKeyUsagePeriodCertPropName"
+		        certPropName="privKeyUsagePeriod-radio"
+		        >
+	                <xul:hbox pack="start">
+                            <xul:radio anonid="certextn.stdx509ext.privatekeyusageperiodextn.type.notBefore"
+			        label="&certextn.stdx509ext.privatekeyusageperiodextn.type.notBefore.label;"
+		                value="notBefore"
+  		      	        selected="true"
+		    	        certPropName="privKeyUsagePeriod-type-notBefore"
+		    	        onclick="getBindingParent(this).handlePrivKeyUsagePeriodTypeChange(this, event);"
+		                group="certextn.stdx509ext.privatekeyusageperiodextn.type"
+			        />
+                            <xul:radio anonid="certextn.stdx509ext.privatekeyusageperiodextn.type.notAfter"
+			        label="&certextn.stdx509ext.privatekeyusageperiodextn.type.notAfter.label;"
+		                value="notAfter"
+  		      	        selected="true"
+		    	        certPropName="privKeyUsagePeriod-type-notAfter"
+		    	        onclick="getBindingParent(this).handlePrivKeyUsagePeriodTypeChange(this, event);"
+		                group="certextn.stdx509ext.privatekeyusageperiodextn.type"
+			        />
+                            <xul:radio anonid="certextn.stdx509ext.privatekeyusageperiodextn.type.both"
+			        label="&certextn.stdx509ext.privatekeyusageperiodextn.type.both.label;"
+		                value="both"
+  		      	        selected="true"
+		    	        certPropName="privKeyUsagePeriod-type-both"
+		    	        onclick="getBindingParent(this).handlePrivKeyUsagePeriodTypeChange(this, event);"
+		                group="certextn.stdx509ext.privatekeyusageperiodextn.type"
+			        />
+			</xul:hbox>
+                    </xul:radiogroup>
+		  </xul:hbox>
+		  <xul:vbox>
+		        <xul:label value="Not to be used to sign before:"/>
+                            <xul:radiogroup anonid="certextn.stdx509ext.privatekeyusageperiod.notBefore.type" flex="1"
+		                xbl:inherits="certPropName=privKeyUsagePeriodNotBeforeCertPropName"
+		                certPropName="privKeyUsagePeriod-notBefore-radio"
+		                >
+	                        <xul:hbox pack="start">
+                                    <xul:radio anonid="certextn.stdx509ext.privatekeyusageperiodextn.notBefore.type.auto"
+			                label="&certextn.stdx509ext.privatekeyusageperiodextn.notBefore.type.auto.label;"
+		                        value="auto"
+  		      	                selected="true"
+		    	                certPropName="privKeyUsagePeriod-notBefore-auto"
+		    	                onclick="getBindingParent(this).handlePrivKeyUsagePeriodNotBeforeTypeChange(this, event);"
+		                        group="certextn.stdx509ext.privatekeyusageperiod.notBefore.type"
+			                />
+                                    <xul:radio anonid="certextn.stdx509ext.privatekeyusageperiodextn.notBefore.type.manual"
+			                label="&certextn.stdx509ext.privatekeyusageperiodextn.notBefore.type.manual.label;"
+		                        value="manual"
+  		      	                selected="true"
+		    	                certPropName="privKeyUsagePeriod-notBefore-manual"
+		    	                onclick="getBindingParent(this).handlePrivKeyUsagePeriodNotBeforeTypeChange(this, event);"
+		                        group="certextn.stdx509ext.privatekeyusageperiod.notBefore.type"
+			                />
+		        	</xul:hbox>
+			    </xul:radiogroup>
+		        <xul:hbox pack="start">
+			    <xul:textbox size="4" maxlength="4" tooltiptext="YYYY (Year)" certPropName="privKeyUsagePeriod-notBefore-year"/>
+			    <xul:textbox size="2" maxlength="2" tooltiptext="MM (Month)" certPropName="privKeyUsagePeriod-notBefore-month"/>
+			    <xul:textbox size="2" maxlength="2" tooltiptext="DD (Day)" certPropName="privKeyUsagePeriod-notBefore-day"/>
+			    <xul:textbox size="2" maxlength="2" tooltiptext="HH (Hour)" certPropName="privKeyUsagePeriod-notBefore-hour"/>
+			    <xul:textbox size="2" maxlength="2" tooltiptext="MM (Minute)" certPropName="privKeyUsagePeriod-notBefore-minute"/>
+			    <xul:textbox size="2" maxlength="2" tooltiptext="SS (seconds)" certPropName="privKeyUsagePeriod-notBefore-second"/>
+		        </xul:hbox>
+		  </xul:vbox>
+		  <xul:vbox>
+		        <xul:label value="Not to be used to sign after:"/>
+		        <xul:hbox pack="start">
+			    <xul:textbox size="4" maxlength="4" tooltiptext="YYYY (Year)" certPropName="privKeyUsagePeriod-notAfter-year"/>
+			    <xul:textbox size="2" maxlength="2" tooltiptext="MM (Month)" certPropName="privKeyUsagePeriod-notAfter-month"/>
+			    <xul:textbox size="2" maxlength="2" tooltiptext="DD (Day)" certPropName="privKeyUsagePeriod-notAfter-day"/>
+			    <xul:textbox size="2" maxlength="2" tooltiptext="HH (Hour)" certPropName="privKeyUsagePeriod-notAfter-hour"/>
+			    <xul:textbox size="2" maxlength="2" tooltiptext="MM (Minute)" certPropName="privKeyUsagePeriod-notAfter-minute"/>
+			    <xul:textbox size="2" maxlength="2" tooltiptext="SS (seconds)" certPropName="privKeyUsagePeriod-notAfter-second"/>
+		        </xul:hbox>
+		  </xul:vbox>
+		</xul:vbox>
+	    </xul:certextn>
+    	</content>
+	<implementation>
+	    <field name="mBaseExtnElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certextn.stdx509ext.privatekeyusageperiodextn");
+	    </field>
+	    <property name="active"
+	        onget="return this.mBaseExtnElem.active;"
+	    	onset="this.mBaseExtnElem.active = val;return val;"
+		/>
+	    <property name="critical"
+	        onget="return this.mBaseExtnElem.critical;"
+	    	onset="this.mBaseExtnElem.critical = val;return val;"
+		/>
+	    <property name="mandatory"
+	        onget="return this.mBaseExtnElem.mandatory;"
+	    	onset="this.mBaseExtnElem.mandatory = val;return val;"
+		/>
+	    <property name="readonly"
+	        onget="return this.mBaseExtnElem.readonly;"
+	    	onset="this.mBaseExtnElem.readonly = val;
+		       this.setReadonly(this.mBaseExtnElem, val);
+		       if(!val) {this.refresh();}
+		       return val;"
+		/>
+	    <property name="disabled"
+	        onget="return this.mBaseExtnElem.disabled;"
+	    	onset="this.mBaseExtnElem.disabled = val;return val;"
+		/>
+
+	    <constructor>
+		<![CDATA[
+		// this.LogTrace("privatekeyusageperiodextnBinding.constructor():......................Start.\n");
+
+
+		this.refresh();
+
+		// this.LogTrace("privatekeyusageperiodextnBinding.constructor():......................End.\n");
+		]]>
+	    </constructor>
+
+	    <method name="refresh">
+	        <body>
+		<![CDATA[
+		// TODO: Enable this extension after we complete the implementation.
+		this.readonly = true;
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="reset">
+	        <body>
+		<![CDATA[
+		this.resetCertExtn(this.mBaseExtnElem);
+		this.mBaseExtnElem.reset();
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="toCertProps">
+		<parameter name="aCertProps"/>
+	        <body>
+		<![CDATA[
+
+		if (!this.active) {
+		    return;
+		}
+
+		this.certExtnToProps(this.mBaseExtnElem, aCertProps);
+
+		// this.dumpProperties(aCertProps);
+
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="updateCertProps">
+		<parameter name="aCertProps"/>
+	        <body>
+		<![CDATA[
+		if (! this.containsAnyProperty(this.mBaseExtnElem, aCertProps)) {
+		    return;
+		}
+
+		this.reset();
+		this.updateCertExtnProps(this.mBaseExtnElem, aCertProps);
+		this.refresh();
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="mergeCertProps">
+		<parameter name="aCertProps"/>
+	        <body>
+		<![CDATA[
+		if (! this.containsAnyProperty(this.mBaseExtnElem, aCertProps)) {
+		    return;
+		}
+
+		this.updateCertExtnProps(this.mBaseExtnElem, aCertProps, true);
+		this.refresh();
+		]]>
+	        </body>
+	    </method>
+
+	</implementation>
+    </binding>
+
+</bindings>
+

@@ -1,0 +1,264 @@
+<?xml version="1.0"?>
+<!-- @(#) $Id: keymanagerToolOptionsOverlay.xul,v 1.15 2012/10/07 17:19:41 subrata Exp $ -->
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is Avaya Labs Research, Avaya Inc. Code.
+   -
+   - The Initial Developer of the Original Code is
+   - Subrata Mazumdar, Avaya Labs Research, Avaya Inc.
+   - Portions created by the Initial Developer are Copyright (C) 2007.
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Subrata Mazumdar (mazum@avaya.com)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+
+
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+
+<!DOCTYPE overlay
+    	[
+	<!ENTITY % certManager.dtd SYSTEM "chrome://pippki/locale/certManager.dtd">
+	%certManager.dtd;
+	<!ENTITY % keyManager.dtd SYSTEM "chrome://keymanager/locale/keyManager.dtd">
+	%keyManager.dtd;
+	]>
+
+<overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    id="keymgr.options.win.overlay.tool"
+    >
+
+<script type="application/x-javascript">
+<![CDATA[
+
+var KeyManagerToolsOptions = {
+
+    init : function () 
+    {
+	KeyManagerOptions.log("KeyManagerToolsOptions.init():................Start.");
+
+	/*
+	var isLinux = (navigator.userAgent.indexOf("Linux") != -1);
+	var isMac = (navigator.userAgent.indexOf("Mac") != -1);
+	*/
+
+	var isWin = (navigator.userAgent.indexOf("Win") != -1);
+	KeyManagerOptions.log("KeyManagerToolsOptions.init(): isWin: " + isWin + "");
+
+	/*
+	if (isWin) {
+	    return;
+	}
+	*/
+
+	KeyManagerOptions.log("KeyManagerToolsOptions.init():................End.");
+    },
+
+    lastMethod : function () 
+    {
+    }
+}
+
+]]>
+
+</script>
+
+
+
+    <prefpane id="keymgr.options.tabpanel.overlay.tool" label="Tools Options"
+	onpaneload="KeyManagerToolsOptions.init();"
+    	>
+        <preferences>
+            <preference
+      	        id="keymgr.eximcerts.overlay.show.buttons.pref"
+      	        name="extensions.avpki.eximcerts.import.tempcerts.enabled"
+	        type="bool"
+		/>
+	    <!--
+            <preference
+      	        id="keymgr.eximcerts.overlay.show.export.pref"
+      	        name="keymgr.eximcerts.overlay.show.export"
+	        type="bool"
+		/>
+	    -->
+            <preference
+      	        id="keymgr.crltool.enabled.pref"
+      	        name="extensions.avpki.crltool.enabled"
+	        type="bool"
+		/>
+            <preference
+      	        id="keymgr.jksmanagecert.enabled.pref.x"
+      	        name="extensions.avpki.jksmanagecert.enabled"
+	        type="bool"
+		/>
+            <preference
+      	        id="keymgr.certenroll.enabled.pref"
+      	        name="extensions.avpki.certenroll.enabled"
+	        type="bool"
+		/>
+            <preference
+      	        id="keymgr.softtokendbmgr.enabled.pref"
+      	        name="extensions.avpki.softtokendbmgr.enabled"
+	        type="bool"
+		/>
+            <preference
+      	        id="keymgr.softtokendbmgr.dbinfolist.pref"
+      	        name="extensions.avpki.softtokendbmgr.dbinfolist"
+	        type="string"
+		/>
+            <preference
+      	        id="keymgr.changepw.fips.compatible.details.pref"
+      	        name="extensions.avpki.changepw.fips.compatible.details"
+	        type="bool"
+		/>
+            <preference
+      	        id="keymgr.genkeycsr.useOldVersion.pref"
+      	        name="extensions.avpki.genkeycsr.useOldVersion"
+	        type="bool"
+		/>
+    	</preferences>
+
+        <groupbox> 
+            <grid>
+	        <columns>
+		    <column/>
+                    <column flex="1"/>
+                </columns>
+                <rows>
+                    <row
+		    	align="center"
+		    	>
+                        <label control="keymgr.options.tab.tool.eximcerts.overlay.show.buttons"
+	    	            value="&keymgr.options.tab.tool.eximcerts.overlay.show.buttons.label;"
+			    />
+	                <hbox pack="start">
+  	                    <checkbox id="keymgr.options.tab.tool.eximcerts.overlay.show.buttons"
+	    	            	tooltiptext="&keymgr.options.tab.tool.eximcerts.overlay.show.buttons.tooltip;"
+		                preference="keymgr.eximcerts.overlay.show.buttons.pref"
+				/>
+	                </hbox>
+                    </row>
+		    <!--
+                    <row
+		    	align="center"
+	                hidden="true"
+	                >
+                        <label control="keymgr.options.tab.tool.eximcerts.overlay.show.export"
+	    	            value="&keymgr.options.tab.tool.eximcerts.overlay.show.export.label;"
+			    />
+	                <hbox pack="start">
+  	                    <checkbox id="keymgr.options.tab.tool.eximcerts.overlay.show.export"
+		                preference="keymgr.eximcerts.overlay.show.export.pref"
+				/>
+	                </hbox>
+                    </row>
+		    -->
+            
+                    <row
+		    	align="center"
+		    	>
+                        <label control="keymgr.options.tab.tool.crltool.enabled"
+	    	            value="&keymgr.options.tab.tool.crltool.enabled.label;"/>
+	                <hbox pack="start">
+  	                    <checkbox id="keymgr.options.tab.tool.crltool.enabled"
+				tooltiptext="&keymgr.options.tab.tool.crltool.enabled.tooltip;"
+		                preference="keymgr.crltool.enabled.pref"/>
+	                </hbox>
+                    </row>
+            
+                    <row
+		    	align="center"
+		    	>
+                        <label control="keymgr.options.tab.tool.jksmanagecert.enabled"
+	    	            value="&keymgr.options.tab.tool.jksmanagecert.enabled.label;"/>
+	                <hbox pack="start">
+  	                    <checkbox id="keymgr.options.tab.tool.jksmanagecert.enabled"
+				tooltiptext="&keymgr.options.tab.tool.jksmanagecert.enabled.tooltip;"
+		                preference="keymgr.jksmanagecert.enabled.pref.x"/>
+	                </hbox>
+                    </row>
+            
+                    <row
+		    	align="center"
+		    	>
+                        <label control="keymgr.options.tab.tool.certenroll.enabled"
+	    	            value="&keymgr.options.tab.tool.certenroll.enabled.label;"
+			    />
+	                <hbox pack="start">
+  	                    <checkbox id="keymgr.options.tab.tool.certenroll.enabled"
+				tooltiptext="&keymgr.options.tab.tool.certenroll.enabled.tooltip;"
+		                preference="keymgr.certenroll.enabled.pref"
+				/>
+	                </hbox>
+                    </row>
+            
+                    <row
+		    	align="center"
+		    	>
+                        <label control="keymgr.options.tab.tool.softtokendbmgr.enabled"
+	    	            value="&keymgr.options.tab.tool.softtokendbmgr.enabled.label;"/>
+	                <hbox pack="start">
+  	                    <checkbox id="keymgr.options.tab.tool.softtokendbmgr.enabled"
+				tooltiptext="&keymgr.options.tab.tool.softtokendbmgr.enabled.tooltip;"
+		                preference="keymgr.softtokendbmgr.enabled.pref"/>
+	                </hbox>
+                    </row>
+                    <row
+		    	align="center"
+		    	>
+                        <label control="keymgr.options.tab.tool.softtokendbmgr.dbinfolist"
+	    	            value="&keymgr.options.tab.tool.softtokendbmgr.dbinfolist.label;"
+			    />
+  	                <textbox id="keymgr.options.tab.tool.softtokendbmgr.dbinfolist"
+		            tooltiptext="&keymgr.options.tab.tool.softtokendbmgr.dbinfolist.tooltip;"
+		            style="overflow:auto"
+		            preference="keymgr.softtokendbmgr.dbinfolist.pref"
+			    />
+                    </row>
+
+                    <row
+		    	align="center"
+		    	>
+                        <label control="keymgr.options.tab.tool.fips.compatible.details"
+	    	            value="&keymgr.options.tab.tool.fips.compatible.details.label;"
+			    />
+	                <hbox pack="start">
+  	                    <checkbox id="keymgr.options.tab.tool.fips.compatible.details"
+		                preference="keymgr.changepw.fips.compatible.details.pref"
+				/>
+	                </hbox>
+                    </row>
+
+                </rows>
+            </grid>
+        </groupbox> 
+
+  </prefpane>
+</overlay>
+

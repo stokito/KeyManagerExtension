@@ -1,0 +1,532 @@
+<?xml version="1.0"?>
+<!-- @(#) $Id: certvaliditycal.xml,v 1.4 2010/08/25 05:47:58 subrata Exp $ -->
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is Avaya Labs Research, Avaya Inc. Code.
+   -
+   - The Initial Developer of the Original Code is
+   - Subrata Mazumdar, Avaya Labs Research, Avaya Inc.
+   - Portions created by the Initial Developer are Copyright (C) 2007.
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Subrata Mazumdar (mazum@avaya.com)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+
+<!DOCTYPE bindings SYSTEM "chrome://keymanager/locale/keyManager.dtd">
+
+<bindings id="certvaliditycalBindings"
+    xmlns="http://www.mozilla.org/xbl"
+    xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    xmlns:xbl="http://www.mozilla.org/xbl">
+
+    <binding id="certvaliditycalBinding"
+	extends="chrome://keymanager/content/ExtnXBL/certextn.xml#certextnbaseBinding"
+	>
+	<resources>
+	    <!--
+	    <script type="application/x-javascript" src="chrome://keymanager/content/ExtnXBL/certextn2props.js"/>
+	    -->
+	    <stylesheet src="chrome://keymanager/skin/kmbindings.css"/>
+	</resources>
+	<!-- content, property, method and event descriptions go here -->
+	<content>
+            <xul:groupbox anonid="certmgr.certdetail.validity" flex="1" 
+	        pack="start"
+		>
+                <xul:radiogroup anonid="certmgr.certdetail.validityGroup"
+	            xbl:inherits="disabled=readonly,value=validity"
+  		    onclick="getBindingParent(this).handleValidityChange(this, event)"
+	            certPropName="validity"
+	            >
+		    <xul:grid flex="1">
+		        <xul:columns>
+		    	    <xul:column/>
+			    <xul:column flex="1"/>
+		        </xul:columns>
+		        <xul:rows flex="1">
+		    	    <xul:row flex="1" align="center">
+                                <xul:radio anonid="certmgr.certdetail.validityAutoGen"
+	            		    xbl:inherits="disabled=readonly,selected=validity_auto"
+		    	            label="&certmgr.certdetail.validityAutoGen.label;"
+	      	                    tooltiptext="&certmgr.certdetail.validityAutoGen.tooltip;"
+  		                    zselected="true"
+  		                    value="auto"
+	        	            certPropName="validity_auto"
+  		                    group="certmgr.certdetail.validityGroup"/>
+		                <xul:groupbox
+			    	    pack="start" align="center"
+				    orient="horizontal"
+			    	    >
+		                    <xul:label value="&certmgr.certdetail.validity.duration.label;"/>
+                                    <xul:textbox anonid="certmgr.certdetail.validity.duration"
+	        	    	        xbl:inherits="disabled,readonly,value=validityDuration"
+		    	                size="4" maxlength="4" value="36"
+	        	                certPropName="validityDuration"
+	      	                        tooltiptext="&certmgr.certdetail.validity.duration.tooltip;"
+			                />
+                                    <xul:radio anonid="certmgr.certdetail.validityInMonths"
+	            		        xbl:inherits="disabled=readonly,selected=validity_months"
+		    	                label="&certmgr.certdetail.validityInMonths.label;"
+	      	                        tooltiptext="&certmgr.certdetail.validityInMonths.tooltip;"
+  		                        value="months"
+  		                        defaultvalue="36"
+	        	                certPropName="validity_months"
+  		                        group="certmgr.certdetail.validityGroup"/>
+                                    <xul:radio anonid="certmgr.certdetail.validityInDays"
+	            		        xbl:inherits="disabled=readonly,selected=validity_days"
+		    	                label="&certmgr.certdetail.validityInDays.label;"
+	      	                        tooltiptext="&certmgr.certdetail.validityInDays.tooltip;"
+  		                        value="days"
+  		                        defaultvalue="7"
+	        	                certPropName="validity_days"
+  		                        group="certmgr.certdetail.validityGroup"/>
+                                    <xul:radio anonid="certmgr.certdetail.validityInHours"
+	            		        xbl:inherits="disabled=readonly,selected=validity_hours"
+		    	                label="&certmgr.certdetail.validityInHours.label;"
+	      	                        tooltiptext="&certmgr.certdetail.validityInHours.tooltip;"
+  		                        value="hours"
+  		                        defaultvalue="12"
+	        	                certPropName="validity_hours"
+  		                        group="certmgr.certdetail.validityGroup"/>
+		                </xul:groupbox>
+			    </xul:row>
+
+		    	    <xul:row flex="1" align="center">
+                                <xul:radio anonid="certmgr.certdetail.validityInput"
+	            		    xbl:inherits="disabled=readonly,selected=validity_input"
+		                    label="&certmgr.certdetail.validityInput.label;"
+	      	                    tooltiptext="&certmgr.certdetail.validityInput.tooltip;"
+  		                    value="input"
+	        	            certPropName="validity_input"
+  		                    group="certmgr.certdetail.validityGroup"/>
+  	      	                <xul:groupbox anonid="certmgr.certdetail.validityInputVbox" flex="1">
+	                            <xul:grid flex="1"
+				        > 
+	                                <xul:columns>
+		                            <xul:column/>
+		                            <xul:column flex="1"/>
+	                                </xul:columns>
+	                                <xul:rows flex="1"
+  		    			    xoncommand="getBindingParent(this).handleValidityDateChange(event.target, event)"
+  		    			    onchange="getBindingParent(this).handleValidityDateChange(event.target, event)"
+				    	    >
+  			                    <xul:row flex="1"
+					        align="center"
+					        >
+                        	                <xul:label value="&certmgr.certdetail.validityNotBefore.label;"/> 
+                        	                <xul:certdatetimepicker anonid="certmgr.certdetail.validityNotBefore"
+	        	    	    		    xbl:inherits="disabled,readonly,value=notBefore,format=dateformat,type=datetype"
+		    			    	    type="popup"
+		    			    	    xformat="utctime"
+	        		                    certPropName="notBefore"
+  		    				    oncommand="getBindingParent(this).handleValidityNotBeforeChange(this, event)"
+		    			    	    />
+          		                    </xul:row>
+          		                    <xul:row flex="1" 
+					        align="center"
+					        >
+                        	                <xul:label value="&certmgr.certdetail.validityNotAfter.label;"/> 
+                        	                <xul:certdatetimepicker anonid="certmgr.certdetail.validityNotAfter"
+	        	    	    		    xbl:inherits="disabled,readonly,value=notAfter,format=dateformat,type=datetype"
+		    			    	    type="popup"
+		    			    	    zformat="utctime"
+	        		                    certPropName="notAfter"
+  		    				    oncommand="getBindingParent(this).handleValidityNotAfterChange(this, event)"
+		    			    	    />
+          		                    </xul:row>
+	                                </xul:rows>
+      	                            </xul:grid>
+  	      	                </xul:groupbox>
+			    </xul:row>
+			</xul:rows>
+		    </xul:grid>
+		    <!--
+  	            <xul:vbox>
+  	                <xul:hbox align="center">
+		            <xul:spacer flex="1"/>
+  	          	</xul:hbox>
+  	                <xul:hbox flex="1">
+  	                </xul:hbox>
+  	            </xul:vbox>
+		    -->
+                </xul:radiogroup>
+            </xul:groupbox>
+	</content>
+	<implementation>
+	    <field name="mBaseExtnElem">
+	        document.getAnonymousElementByAttribute(this, "anonid", "certmgr.certdetail.validity");
+	    </field>
+	    <field name="mValidityOptionsGroupElem">
+	        document.getAnonymousElementByAttribute(this, "anonid", "certmgr.certdetail.validityGroup");
+	    </field>
+	    <field name="mValidityDurationElem">
+	        document.getAnonymousElementByAttribute(this, "anonid", "certmgr.certdetail.validity.duration");
+	    </field>
+	    <field name="mValidityInputVboxElem">
+	        document.getAnonymousElementByAttribute(this, "anonid", "certmgr.certdetail.validityInputVbox");
+	    </field>
+	    <field name="mValidityNotBeforeElem">
+	        document.getAnonymousElementByAttribute(this, "anonid", "certmgr.certdetail.validityNotBefore");
+	    </field>
+	    <field name="mValidityNotAfterElem">
+	        document.getAnonymousElementByAttribute(this, "anonid", "certmgr.certdetail.validityNotAfter");
+	    </field>
+	    <property name="readonly"
+		onget="return this.hasAttribute('readonly');"
+		onset="if (val) {
+			this.setAttribute('readonly',true);
+		        this.mValidityNotBeforeElem.setAttribute('readonly',true);
+		        this.mValidityNotAfterElem.setAttribute('readonly',true);
+
+		       	this.mValidityNotBeforeElem.removeAttribute('valuehidden');
+		       	this.mValidityNotAfterElem.removeAttribute('valuehidden');
+		       } 
+		       else {
+		       	this.removeAttribute('readonly');
+		       	this.mValidityNotBeforeElem.removeAttribute('readonly');
+		       	this.mValidityNotAfterElem.removeAttribute('readonly');
+
+		        this.mValidityNotAfterElem.setAttribute('valuehidden',true);
+		        this.mValidityNotAfterElem.setAttribute('valuehidden',true);
+		       }
+		       this.setReadonly(this.mBaseExtnElem, val);
+		       if(!val) {this.refresh();}
+		       return val;"
+		/>
+	    <property name="validity"
+		onget="var type = this.getAttribute('validity');
+			if (!type) {
+			    type = this.mValidityOptionsGroupElem.selectedItem.value;
+			}
+			return type;"
+		onset="var type = val;
+			if (!val) {
+			    type = 'auto';
+			}
+			this.setAttribute('validity', type);
+			this.refresh();
+			return type;"
+		/>
+
+	    <constructor>
+		<![CDATA[
+		// this.mMaxLogLevel = 9;
+		this.LogTrace("certvaliditycalBinding.constructor():......................Start.");
+		this.LogTrace("certvaliditycalBinding.constructor():......................End.");
+		]]>
+	    </constructor>
+
+	    <method name="refresh">
+		<body>
+		<![CDATA[
+		this.LogTrace("certvaliditycalBinding.refresh():......................Start.");
+
+		this.mValidityNotBeforeElem.refresh();
+		this.mValidityNotAfterElem.refresh();
+
+		/*
+		var validityType = this.getAttribute("validity");
+		if (!validityType) {
+		    validityType = "auto";
+		    if (this.mValidityOptionsGroupElem.selectedItem) {
+		    	validityType = this.mValidityOptionsGroupElem.selectedItem.value;
+		    }
+		    this.setAttribute("validity", "auto");
+
+		    var validityItem = "validity_auto";
+		    this.setAttribute("validity_auto", "true");
+		}
+		this.LogDebug("certvaliditycalBinding.refresh(): validityType: " + validityType);
+
+		var notBeforeDate = this.getAttribute("notBefore");
+		var notAfterDate = this.getAttribute("notAfter");
+		this.LogDebug("certvaliditycalBinding.refresh(): notBeforeDate: " + notBeforeDate);
+		this.LogDebug("certvaliditycalBinding.refresh(): notAfterDate: " + notAfterDate);
+		if (validityType) {
+		    switch(validityType) {
+		    	case "auto" : 
+			    break;
+		    	case "months" : 
+			    break;
+		    	case "days" : 
+			    break;
+		    	case "hours" : 
+			    break;
+		    	case "input" : 
+		    	default : 
+			    if (notAfterDate) {
+			    	break;
+			    }
+			    var validityInputInDays = this.getAttribute("validityInputInDays");
+			    if (!validityInputInDays) {
+		    	    	validityInputInDays = "" + (5 * 365); // 5 Years
+			    }
+			    this.LogDebug("certvaliditycalBinding.refresh(): validityInputInDays: " + validityInputInDays);
+			    this.mValidityNotAfterElem.dateValue = this.mValidityNotBeforeElem.dateValue;
+			    this.mValidityNotAfterElem.addDays(parseInt(validityInputInDays));
+			    break;
+		    }
+		}
+		*/
+
+
+		this.handleValidityChange(this.mValidityOptionsGroupElem);
+
+		this.LogTrace("certvaliditycalBinding.refresh():......................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="handleValidityChange">
+		<parameter name="aValidityOptionsGroupElem"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("certvaliditycalBinding.handleValidityChange():......................Start.");
+
+		if (ev) {
+		    ev.stopPropagation();
+		    this.LogDebug("ev.type: " + ev.type + " " + "ev.keyCode: " + ev.keyCode);
+		}
+
+		var validityOptionElem = aValidityOptionsGroupElem.selectedItem;
+		if (!validityOptionElem) {
+		    this.LogTrace("certvaliditycalBinding.handleValidityChange():......................End(0).");
+		    return;
+		}
+
+
+		var validityType = validityOptionElem.value;
+		if (validityOptionElem.value == "input") {
+		    this.mValidityInputVboxElem.hidden = false;
+		    this.mValidityNotBeforeElem.removeAttribute('readonly');
+		    this.mValidityNotAfterElem.removeAttribute('readonly');
+
+		    this.mValidityNotBeforeElem.removeAttribute('disabled');
+		    this.mValidityNotAfterElem.removeAttribute('disabled');
+
+		    this.mValidityNotBeforeElem.removeAttribute('valuehidden');
+		    this.mValidityNotAfterElem.removeAttribute('valuehidden');
+
+		    this.mValidityDurationElem.setAttribute("readonly", true);
+		    this.mValidityDurationElem.value = "";
+
+		    /*
+		    var notBeforeDate = this.getAttribute("notBefore");
+		    var notAfterDate = this.getAttribute("notAfter");
+		    if (!notBeforeDate) {
+		    	var notBeforeDate = new Date();
+		    	this.mValidityNotBeforeElem.dateValue = notBeforeDate;
+		    	this.handleValidityDateChange(this.mValidityNotBeforeElem);
+		    }
+		    if (!notAfterDate) {
+			var validityInputInDays = this.getAttribute("validityInputInDays");
+			if (!validityInputInDays) {
+		    	    validityInputInDays = "" + (5 * 365); // 5 Years
+			}
+		    	this.mValidityNotAfterElem.dateValue = this.mValidityNotBeforeElem.dateValue;
+			this.mValidityNotAfterElem.addDays(parseInt(validityInputInDays));
+		    	this.handleValidityDateChange(this.mValidityNotAfterElem);
+		    }
+		    */
+		}
+		else {
+		    var notBeforeDate = new Date();
+		    var validityInSecs = (5 * 365 * (24 * 60 * 60));
+
+		    this.mValidityInputVboxElem.hidden = true;
+		    this.mValidityNotBeforeElem.setAttribute('disabled',true);
+		    this.mValidityNotAfterElem.setAttribute('disabled',true);
+
+		    if (validityOptionElem.value == "auto") {
+		    	this.mValidityDurationElem.setAttribute("readonly", true);
+		    	this.mValidityDurationElem.value = "";
+		    }
+		    else {
+		    	this.mValidityDurationElem.removeAttribute("readonly");
+		        var defaultValue = validityOptionElem.getAttribute("defaultvalue");
+			if (defaultValue) {
+			    this.mValidityDurationElem.value = defaultValue;
+			}
+			/*
+		        if (validityOptionElem.value == "months") {
+			    validityInSecs = (
+		        }
+		        else if (validityOptionElem.value == "days") {
+		        }
+		        else if (validityOptionElem.value == "hours") {
+		        }
+			*/
+		    }
+		    /*
+		    this.mValidityNotBeforeElem.dateValue = notBeforeDate;
+		    this.handleValidityDateChange(this.mValidityNotBeforeElem);
+
+		    this.mValidityNotAfterElem.dateValue = notBeforeDate;
+		    this.mValidityNotAfterElem.addSeconds(validityInSecs);
+		    this.handleValidityDateChange(this.mValidityNotAfterElem);
+		    */
+		}
+
+
+		var certProps = Components.classes["@mozilla.org/persistent-properties;1"].
+				createInstance(Components.interfaces.nsIPersistentProperties);
+		this.toCertProps(certProps);
+		// this.dumpProperties(certProps, "Validity Props:");
+
+		this.LogTrace("certvaliditycalBinding.handleValidityChange():......................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="handleValidityDateChange">
+		<parameter name="aValidityDateElem"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("certvaliditycalBinding.handleValidityDateChange():......................Start.");
+
+		if (ev) {
+		    ev.stopPropagation();
+		}
+
+		var certPropName = aValidityDateElem.getAttribute("certPropName");
+		if (!certPropName) {
+		    this.LogTrace("certvaliditycalBinding.handleValidityDateChange():......................End(0).");
+		    return;
+		}
+
+
+		var notBeforeDatValue = this.mValidityNotBeforeElem.dateValue;
+		var notAfterDatValue = this.mValidityNotAfterElem.dateValue;
+
+		var notBeforeTime = notBeforeDatValue.getTime();
+		var notAfterTime = notAfterDatValue.getTime();
+		this.LogDebug("certvaliditycalBinding.handleValidityDateChange(): notBeforeTime: " + notBeforeTime);
+		this.LogDebug("certvaliditycalBinding.handleValidityDateChange(): notAfterTime: " + notAfterTime);
+		if (notBeforeTime <= notAfterTime) {
+		    this.LogTrace("certvaliditycalBinding.handleValidityDateChange():......................End(1).");
+		    return;
+		}
+
+		var isNotAfterElem = ((certPropName == "notAfter") ? true : false);
+		if (isNotAfterElem) {
+		    this.mValidityNotBeforeElem.dateValue = notAfterDatValue;
+		}
+		else {
+		    this.mValidityNotAfterElem.dateValue = notBeforeDatValue;
+		}
+
+		this.LogTrace("certvaliditycalBinding.handleValidityDateChange():......................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="handleValidityNotBeforeChange">
+		<parameter name="aValidityNotBeforeElem"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		if (ev) {
+		    ev.stopPropagation();
+		}
+		]]>
+		</body>
+	    </method>
+
+	    <method name="handleValidityNotAfterChange">
+		<parameter name="aValidityNotAfterElem"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		if (ev) {
+		    ev.stopPropagation();
+		}
+		]]>
+		</body>
+	    </method>
+
+	    <method name="reset">
+		<body>
+		<![CDATA[
+		this.resetCertExtn(this.mBaseExtnElem);
+		]]>
+		</body>
+	    </method>
+
+	    <method name="toCertProps">
+		<parameter name="aCertProps"/>
+	        <body>
+		<![CDATA[
+		this.certExtnToProps(this.mBaseExtnElem, aCertProps);
+		var validityOptionElem = this.mValidityOptionsGroupElem.selectedItem;
+		if (validityOptionElem.value != "input") {
+		    aCertProps.setStringProperty("notBefore", "");
+		    aCertProps.setStringProperty("notAfter", "");
+		}
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="updateCertProps">
+		<parameter name="aCertProps"/>
+	        <body>
+		<![CDATA[
+
+		if (! this.containsAnyProperty(this.mBaseExtnElem, aCertProps)) {
+		    return;
+		}
+
+		this.reset();
+		this.updateCertExtnProps(this.mBaseExtnElem, aCertProps);
+		this.refresh();
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="mergeCertProps">
+		<parameter name="aCertProps"/>
+	        <body>
+		<![CDATA[
+
+		if (! this.containsAnyProperty(this.mBaseExtnElem, aCertProps)) {
+		    return;
+		}
+		this.updateCertExtnProps(this.mBaseExtnElem, aCertProps, true);
+		this.refresh();
+		]]>
+	        </body>
+	    </method>
+
+	</implementation>
+    </binding>
+
+</bindings>
+

@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/global.css"  type="text/css"?>
+
+<!DOCTYPE overlay SYSTEM "chrome://keymanager/locale/certenroll.dtd">
+
+<overlay id="keymanager.toolbar.tool.overlay"
+    xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    >
+
+    <script type="application/x-javascript" src="chrome://keymanager/content/tools/certenroll/scep/EjbCACertEnrollOverlay.js"/>
+    <script type="application/x-javascript" src="chrome://keymanager/content/tools/certenroll/scep/EjbCAEditUserForm.js"/>
+    <script type="application/x-javascript" src="chrome://keymanager/content/tools/certenroll/scep/EjbCASCEPCertEnroll.js"/>
+    <script type="application/x-javascript" src="chrome://keymanager/content/tools/certenroll/scep/EjbCAViewCertForm.js"/>
+    <script type="application/x-javascript" src="chrome://keymanager/content/tools/certenroll/scep/CertUtil.js"/>
+    <script type="application/x-javascript" src="chrome://keymanager/content/tools/certenroll/scep/MSCAGenPKCS10CSR.js"/>
+
+<script>  
+
+<![CDATA[
+
+try {
+    if (Components.interfaces.alrIKeyManager) {
+	if (gBrowser) {
+            window.addEventListener('load',function() {
+	    	gBrowser.addEventListener("load", function(ev) {
+	    	    avpki.keymanager.EjbCACertEnrollOverlay.initOnLoad(ev);
+	        }, true);
+	    	gBrowser.addEventListener("unload", function(ev) {
+	            avpki.keymanager.EjbCACertEnrollOverlay.initOnUnload(ev);
+	        }, true);
+	    },false);
+	    if (gBrowser.tabContainer) {
+	    	gBrowser.tabContainer.addEventListener("TabSelect", function(ev) {
+		    avpki.keymanager.EjbCACertEnrollOverlay.handleBrowserTabSelect(ev);
+		}, false);
+	    	gBrowser.tabContainer.addEventListener("TabClose", function(ev) {
+		    avpki.keymanager.EjbCACertEnrollOverlay.handleBrowserTabSelect(ev);
+		}, false);
+	    }
+	}
+    }
+    else {
+    	dump("EjbCACertEnrollOverlay.xul: " +
+		"Couldn't find alrIKeyManager interface - ejbCACertEnroll  failed to initialize." + 
+		"\n");
+    }
+} catch (ex) {
+    	dump("EjbCACertEnrollOverlay.xul: failed - ex: " + ex + "\n");
+}
+
+]]>
+</script>
+
+    <popup id="contentAreaContextMenu" >
+	<!--
+        <menuitem id="clicktodial" label="Click to Dial... " accesskey="D" disabled="true"
+            insertafter="context-stop" oncommand="clickToDial(event)"
+	    />
+	-->
+    </popup>
+
+
+</overlay>

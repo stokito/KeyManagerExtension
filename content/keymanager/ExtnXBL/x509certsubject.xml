@@ -1,0 +1,1641 @@
+<?xml version="1.0"?>
+<!-- @(#) $Id: x509certsubject.xml,v 1.8 2012/10/03 23:09:41 subrata Exp $ -->
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is Avaya Labs Research, Avaya Inc. Code.
+   -
+   - The Initial Developer of the Original Code is
+   - Subrata Mazumdar, Avaya Labs Research, Avaya Inc.
+   - Portions created by the Initial Developer are Copyright (C) 2007.
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Subrata Mazumdar (mazum@avaya.com)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+
+<!DOCTYPE bindings SYSTEM "chrome://keymanager/locale/keyManager.dtd">
+
+<bindings id="x509certsubjectBindings"
+    xmlns="http://www.mozilla.org/xbl"
+    xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    xmlns:xbl="http://www.mozilla.org/xbl">
+
+
+    <binding id="svrdnBinding"
+	extends="chrome://keymanager/content/ExtnXBL/certextn.xml#certextnbaseBinding"
+	>
+	<!--
+	<resources>
+	</resources>
+	-->
+	<!-- content, property, method and event descriptions go here -->
+	    <!--
+	    <xul:vbox anonid="certmgr.certdetail.rdn"
+	        xbl:inherits="flex,hidden,disabled"
+	        >
+		<xul:hbox anonid="certmgr.certdetail.rdn.items"
+	            xbl:inherits="flex,tooltiptext"
+		    onchange="getBindingParent(this).modifyRDN(this, event)"
+		    >
+		    <xul:textbox anonid="certmgr.certdetail.rdn.item.0"
+			xbl:inherits="readonly,disabled"
+			flex="1"
+		    	/>
+		    <xul:textbox anonid="certmgr.certdetail.rdn.item.1"
+			xbl:inherits="readonly,disabled"
+			flex="1"
+		    	/>
+		</xul:hbox>
+	    </xul:vbox>
+	    -->
+	<content>
+	    <xul:hbox
+	        xbl:inherits="flex,hidden"
+		flex="1"
+	        >
+		<xul:textbox anonid="certmgr.certdetail.svrdn.value"
+	            xbl:inherits="flex,readonly,disabled,value=rdnvalue,type,autocompletesearch,autocompletesearchparam,completeselectedindex,tooltiptext,certPropName=rdnCertPropName,x500PropName"
+		    flex="1"
+  	  	    type="autocomplete" 
+  	  	    autocompletesearch="form-history" 
+  	  	    zautocompletesearchparam="keymgr.certdetail.rdn"
+		    tooltiptext="&certmgr.certdetail.subject.tooltip;"
+		    onchange="getBindingParent(this).modifyRDN(this, event)"
+  	  	    onkeyup="if (event.keyCode == 13)
+  	  	        	{getBindingParent(this).formFieldAutoCompleteAction(this, event)};"
+		    />
+	    </xul:hbox>
+	</content>
+	<implementation>
+	    <field name="mBaseExtnElem">
+	        document.getAnonymousElementByAttribute(this, "anonid", "certmgr.certdetail.rdn");
+	    </field>
+	    <!--
+	    <field name="mRDNItemsElem">
+	        document.getAnonymousElementByAttribute(this, "anonid", "certmgr.certdetail.rdn.items");
+	    </field>
+	    -->
+	    <field name="mRDNValueElem">
+	        document.getAnonymousElementByAttribute(this, "anonid", "certmgr.certdetail.svrdn.value");
+	    </field>
+	    <field name="mRDNValue"/>
+
+	    <property name="readonly"
+		onget="return this.hasAttribute('readonly');"
+		onset="if (val) this.setAttribute('readonly',true);
+		       else this.removeAttribute('readonly');
+		       if(!val) {this.refresh();}
+		       return val;"
+		/>
+
+	    <property name="value"
+		onget="return this.mRDNValue;"
+		onset="var rdnValList = val.split('='); 
+		       this.mRDNValueElem.value=rdnValList[1];
+		       this.modifyRDN(this.mRDNValue);
+		       return val;"
+		/>
+	    <property name="rdnvalue"
+		onget="return this.mRDNValueElem.value;"
+		onset="this.mRDNValueElem.value=val;
+		       this.modifyRDN(this.mRDNValue);
+		       return val;"
+		/>
+	    <property name="rdn"
+		onget="return this.value;"
+		onset="this.value=val;
+		       return val;"
+		/>
+
+	    <constructor>
+		<![CDATA[
+		// this.mMaxLogLevel = 9;
+		this.LogTrace("svrdnBinding.constructor():......................Start.");
+
+		this.mRDNValue = "";
+
+		if (false) {
+		    this.test1();
+		}
+
+		this.LogTrace("svrdnBinding.constructor():......................End.");
+		]]>
+	    </constructor>
+
+	    <method name="refresh">
+		<body>
+		<![CDATA[
+		this.LogTrace("svrdnBinding.refresh():......................Start.");
+
+
+		if (this.getAttribute("readonly")) {
+		    return;
+		}
+
+		this.modifyRDN(this.mRDNValueElem);
+
+		this.LogTrace("svrdnBinding.refresh():......................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="reset">
+		<body>
+		<![CDATA[
+		this.LogTrace("svrdnBinding.reset():......................Start.");
+
+		// this.resetCertExtn(this.mBaseExtnElem);
+
+		this.mRDNValueElem.value = "";
+		this.modifyRDN(this.mRDNValueElem);
+
+		this.LogTrace("svrdnBinding.reset():......................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="formFieldAutoCompleteAction">
+		<parameter name="aSrcTextBoxElem"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		this.autoCompleteAction(aSrcTextBoxElem, ev);
+		]]>
+		</body>
+	    </method>
+
+
+	    <method name="modifyRDN">
+		<parameter name="aRDNValueElem"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("svrdnBinding.modifyRDN():......................Start.");
+
+		if (ev) {
+		    aRDNValueElem.value = this.trim(aRDNValueElem.value);
+		    this.formFieldAutoCompleteAction(aRDNValueElem, ev);
+		}
+
+	        var certPropBaseName = this.getAttribute("rdnCertPropName");
+	        var x500PropName = this.getAttribute("x500PropName");
+
+		this.mRDNValue = "";
+	        if (certPropBaseName == "email") {
+		    if (aRDNValueElem.value == "") {
+		    	return;
+	            }
+	            if (aRDNValueElem.value == "(no email address)") {
+		    	return;
+	            }
+	        }
+
+		var rdnValue = "";
+		if (aRDNValueElem.value != "") {
+		    rdnValue = (x500PropName + "=" + aRDNValueElem.value);
+		}
+		this.mRDNValue = rdnValue;
+
+		if (false) {
+		    var certProps = Components.classes["@mozilla.org/persistent-properties;1"]
+					.createInstance(Components.interfaces.nsIPersistentProperties);
+		    this.toCertProps(certProps);
+		    // this.dumpProperties(certProps, "rdn-certProps");
+		    this.LogTrace("svrdnBinding.modifyRDN(): this.rdn: " + this.rdn);
+		}
+
+		this.LogTrace("svrdnBinding.modifyRDN():......................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="toCertProps">
+		<parameter name="aCertProps"/>
+	        <body>
+		<![CDATA[
+		this.LogTrace("svrdnBinding.toCertProps():......................Start.");
+
+		if (this.mRDNValueElem.value == "") {
+		    return;
+		}
+
+	        var certPropBaseName = this.getAttribute("rdnCertPropName");
+	        var x500PropName = this.getAttribute("x500PropName");
+
+                var propKey = null;
+                var propValue = null;
+                var propOldValue = null;
+		    propKey = certPropBaseName;
+		    propValue = this.mRDNValueElem.value;
+	            propOldValue = aCertProps.setStringProperty(propKey, propValue);
+
+		this.LogTrace("svrdnBinding.toCertProps():......................End.");
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="updateCertProps">
+		<parameter name="aCertProps"/>
+	        <body>
+		<![CDATA[
+		// this.mMaxLogLevel = 9;
+		this.LogTrace("svrdnBinding.updateCertProps():......................Start.");
+
+		/*
+		if (! this.containsAnyProperty(this.mBaseExtnElem, aCertProps)) {
+		    return;
+		}
+		*/
+
+		// this.dumpProperties(aCertProps, "rdn-updateCertProps");
+
+	        var certPropBaseName = this.getAttribute("rdnCertPropName");
+	        var x500PropName = this.getAttribute("x500PropName");
+
+	        var rdnItemElem = this.mRDNValueElem;
+
+		var propKey = certPropBaseName;
+		var propValue = null;
+		try {
+		    propValue = aCertProps.getStringProperty(propKey);
+		} catch(ex) {}
+
+		if (!propValue) {
+		    return;
+		}
+
+		this.reset();
+
+		this.mRDNValueElem.value = propValue;
+		this.modifyRDN(this.mRDNValueElem);
+		this.refresh();
+
+		this.LogDebug("svrdnBinding.updateCertProps(): propKey: " + propKey + " rdn: " + this.rdn);
+		this.LogTrace("svrdnBinding.updateCertProps():......................End.");
+		// this.mMaxLogLevel = 4;
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="mergeCertProps">
+		<parameter name="aCertProps"/>
+	        <body>
+		<![CDATA[
+		this.LogTrace("svrdnBinding.mergeCertProps():......................Start.");
+
+		this.updateCertProps(aCertProps);
+
+		this.LogTrace("svrdnBinding.mergeCertProps():......................End.");
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="test1">
+		<parameter name="aCertProps"/>
+	        <body>
+		<![CDATA[
+		this.LogTrace("svrdnBinding.test1():......................Start.");
+		var certProps = Components.classes["@mozilla.org/persistent-properties;1"]
+					.createInstance(Components.interfaces.nsIPersistentProperties);
+
+                var propKey = null;
+                var propValue = null;
+                var propOldValue = null;
+
+	        var certPropBaseName = this.getAttribute("rdnCertPropName");
+	        var x500PropName = this.getAttribute("x500PropName");
+                for (var i = 0; i < 1; i++) {
+		    propKey = certPropBaseName;
+		    if (i != 0) {
+		    	propKey = certPropBaseName + "." + i;
+		    }
+		    propValue = "val_" + i;
+		    this.LogDebug("svrdnBinding.test1(): i: " + i + " propKey: " + propKey + " propValue: " + propValue);
+	            propOldValue = certProps.setStringProperty(propKey, propValue);
+		}
+
+		this.updateCertProps(certProps);
+
+		// this.dumpProperties(aCertProps, "rdn-certProps");
+
+		this.LogTrace("svrdnBinding.test1():......................End.");
+		]]>
+	        </body>
+	    </method>
+
+	</implementation>
+    </binding>
+
+
+    <binding id="mvrdnBinding"
+	extends="chrome://keymanager/content/ExtnXBL/certextn.xml#certextnbaseBinding"
+	>
+	<!--
+	<resources>
+	</resources>
+	-->
+	<!-- content, property, method and event descriptions go here -->
+	<content>
+	    <xul:vbox anonid="certmgr.certdetail.rdn"
+	        xbl:inherits="flex,hidden,disabled"
+		flex="1"
+	        >
+		<xul:hbox anonid="certmgr.certdetail.rdn.items"
+	            xbl:inherits="tooltiptext"
+		    onchange="getBindingParent(this).modifyRDN(this, event)"
+		    flex="1"
+		    >
+		    <xul:textbox anonid="certmgr.certdetail.rdn.item.0"
+			xbl:inherits="readonly,disabled,type,autocompletesearch,autocompletesearchparam,completeselectedindex,value=rdnvalue,x509PropName"
+			flex="2"
+  	  	        type="autocomplete" 
+  	  	        autocompletesearch="form-history" 
+  	  	        zautocompletesearchparam="keymgr.certdetail.rdn"
+		    	/>
+		    <xul:textbox anonid="certmgr.certdetail.rdn.item.1"
+			xbl:inherits="readonly,disabled,type,autocompletesearch,autocompletesearchparam,completeselectedindex,x509PropName"
+			flex="1"
+  	  	        type="autocomplete" 
+  	  	        autocompletesearch="form-history" 
+		    	/>
+		    <xul:textbox anonid="certmgr.certdetail.rdn.item.2"
+			xbl:inherits="readonly,disabled,type,autocompletesearch,autocompletesearchparam,completeselectedindex,x509PropName"
+			flex="1"
+  	  	        type="autocomplete" 
+  	  	        autocompletesearch="form-history" 
+		    	/>
+		    <xul:textbox anonid="certmgr.certdetail.rdn.item.3"
+			xbl:inherits="readonly,disabled,type,autocompletesearch,autocompletesearchparam,completeselectedindex,x509PropName"
+			flex="1"
+  	  	        type="autocomplete" 
+  	  	        autocompletesearch="form-history" 
+		    	/>
+		    <xul:textbox anonid="certmgr.certdetail.rdn.item.4"
+			xbl:inherits="readonly,disabled,type,autocompletesearch,autocompletesearchparam,completeselectedindex,x509PropName"
+			flex="1"
+  	  	        type="autocomplete" 
+  	  	        autocompletesearch="form-history" 
+		    	/>
+		</xul:hbox>
+		<xul:textbox anonid="certmgr.certdetail.rdn.value"
+	            xbl:inherits="flex,value,tooltiptext"
+		    readonly="true"
+		    hidden="true"
+		    tooltiptext="&certmgr.certdetail.subject.tooltip;"
+		    />
+	    </xul:vbox>
+	</content>
+	<implementation>
+	    <field name="mBaseExtnElem">
+	        document.getAnonymousElementByAttribute(this, "anonid", "certmgr.certdetail.rdn");
+	    </field>
+	    <field name="mRDNItem0Elem">
+	        document.getAnonymousElementByAttribute(this, "anonid", "certmgr.certdetail.rdn.item.0");
+	    </field>
+	    <field name="mRDNItemsElem">
+	        document.getAnonymousElementByAttribute(this, "anonid", "certmgr.certdetail.rdn.items");
+	    </field>
+	    <field name="mRDNValueElem">
+	        document.getAnonymousElementByAttribute(this, "anonid", "certmgr.certdetail.rdn.value");
+	    </field>
+
+	    <property name="readonly"
+		onget="return this.hasAttribute('readonly');"
+		onset="if (val) this.setAttribute('readonly',true);
+		       else this.removeAttribute('readonly');
+		       this.setReadonly(this.mBaseExtnElem, val);
+		       if(!val) {this.refresh();}
+		       this.showRDNFileds();
+		       return val;"
+		/>
+
+	    <property name="value"
+		onget="return this.mRDNValueElem.value;"
+		onset="this.mRDNValueElem.value=val;
+		       return val;"
+		/>
+	    <property name="rdn"
+		onget="return this.value;"
+		onset="this.value=val;
+		       return val;"
+		/>
+
+	    <property name="rdnvalue"
+		onget="return this.mRDNItem0Elem.value;"
+		onset="this.mRDNItem0Elem.value=val;
+		       this.modifyRDN(this.mRDNItemsElem);
+		       return val;"
+		/>
+
+	    <constructor>
+		<![CDATA[
+		// this.mMaxLogLevel = 9;
+		this.LogTrace("mvrdnBinding.constructor():......................Start.");
+
+	        var certPropBaseName = this.getAttribute("rdnCertPropName");
+	        var x500PropName = this.getAttribute("x500PropName");
+
+                var /* NodeList */ rdnItemElemList = this.mRDNItemsElem.getElementsByTagName("xul:textbox");
+		if (rdnItemElemList.length <= 0) {
+                    rdnItemElemList = this.mRDNItemsElem.getElementsByTagName("textbox");
+		}
+		this.LogDebug("mvrdnBinding.refresh(): certPropBaseName: " + certPropBaseName + " rdnItemElemList.length: " + rdnItemElemList.length + "");
+
+                for (var i = 0; i < rdnItemElemList.length; i++) {
+	            var rdnItemElem = rdnItemElemList.item(i);
+
+		    var certPropName = certPropBaseName;
+		    if (i != 0) {
+		    	certPropName = certPropBaseName + "." + i;
+		    }
+		    rdnItemElem.setAttribute("certPropName", certPropName);
+		    // rdnItemElem.setAttribute("x500PropName", x509PropName);
+		}
+
+		if (false) {
+		    this.test1();
+		}
+
+		this.LogTrace("mvrdnBinding.constructor():......................End.");
+		// this.mMaxLogLevel = 4;
+		]]>
+	    </constructor>
+
+	    <method name="refresh">
+		<body>
+		<![CDATA[
+		this.LogTrace("mvrdnBinding.refresh():......................Start.");
+
+		if (this.getAttribute("readonly")) {
+		    this.showRDNFileds();
+		    return;
+		}
+
+		this.modifyRDN(this.mRDNItemsElem);
+
+		this.LogTrace("mvrdnBinding.refresh():......................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="reset">
+		<body>
+		<![CDATA[
+		this.LogTrace("mvrdnBinding.reset():......................Start.");
+
+		this.resetCertExtn(this.mBaseExtnElem);
+
+		this.modifyRDN(this.mRDNItemsElem);
+
+		this.LogTrace("mvrdnBinding.reset():......................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="showRDNFileds">
+		<body>
+		<![CDATA[
+		this.LogTrace("mvrdnBinding.showRDNFileds():......................Start.");
+
+                var /* NodeList */ rdnItemElemList = this.mRDNItemsElem.getElementsByTagName("xul:textbox");
+		if (rdnItemElemList.length <= 0) {
+                    rdnItemElemList = this.mRDNItemsElem.getElementsByTagName("textbox");
+		}
+
+		var readonly = this.getAttribute("readonly");
+                for (var i = 0; i < rdnItemElemList.length; i++) {
+	            var rdnItemElem = rdnItemElemList.item(i);
+		    // If the rdnItemElem has a value, show it
+		    if (rdnItemElem.value != "") {
+			rdnItemElem.hidden = false;
+		    	continue;
+		    }
+
+		    // If the field is empty, then hide the field by default.
+		    rdnItemElem.hidden = true;
+
+		    if (i == 0) {
+			// If the first item is always shown if the not fields are not readonly
+			rdnItemElem.hidden = false;
+		    	continue;
+		    }
+
+		    if (readonly) {
+			// If it subject is readonly hide the empty fields
+		    	continue;
+		    }
+
+	            var rdnItemPrevElem = rdnItemElemList.item(i-1);
+		    if (rdnItemPrevElem.value != "") {
+			// If the previous item has value and not-readonly, show this item.
+			rdnItemElem.hidden = false;
+		    	continue;
+		    }
+		}
+
+		this.LogTrace("mvrdnBinding.showRDNFileds():......................End.");
+		]]>
+		</body>
+	    </method>
+
+
+	    <method name="computeRDN">
+		<body>
+		<![CDATA[
+		this.LogTrace("mvrdnBinding.computeRDN():......................Start.");
+
+	        var certPropBaseName = this.getAttribute("rdnCertPropName");
+	        var x500PropName = this.getAttribute("x500PropName");
+
+                var /* NodeList */ rdnItemElemList = this.mRDNItemsElem.getElementsByTagName("xul:textbox");
+		if (rdnItemElemList.length <= 0) {
+                    rdnItemElemList = this.mRDNItemsElem.getElementsByTagName("textbox");
+		}
+		this.LogDebug("rdnItemElemList.length: " + rdnItemElemList.length + "");
+
+		var rdnValue = "";
+                for (var i = 0; i < rdnItemElemList.length; i++) {
+	            var rdnItemElem = rdnItemElemList.item(i);
+		    if (rdnItemElem.value != "") {
+			if (rdnValue != "") {
+			    rdnValue += ",";
+			}
+		    	rdnValue += (x500PropName + "=" + rdnItemElem.value);
+		    }
+		}
+		this.mRDNValueElem.value = rdnValue;
+
+		this.LogTrace("mvrdnBinding.computeRDN():......................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="modifyRDN">
+		<parameter name="aRDNItemsElem"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("mvrdnBinding.modifyRDN():......................Start.");
+
+		if (ev) {
+		    var rdnItemElem = ev.originalTarget;
+		    rdnItemElem.value = this.trim(rdnItemElem.value);
+		    this.autoCompleteAction(rdnItemElem, ev);
+		}
+
+		this.computeRDN();
+		this.showRDNFileds();
+
+		this.LogTrace("mvrdnBinding.modifyRDN():......................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="toCertProps">
+		<parameter name="aCertProps"/>
+	        <body>
+		<![CDATA[
+		this.LogTrace("mvrdnBinding.toCertProps():......................Start.");
+
+		this.certExtnToProps(this.mRDNItemsElem, aCertProps);
+
+		this.LogTrace("mvrdnBinding.toCertProps():......................End.");
+		]]>
+	        </body>
+	    </method>
+
+
+	    <method name="toCertPropsX">
+		<parameter name="aCertProps"/>
+	        <body>
+		<![CDATA[
+		this.LogTrace("mvrdnBinding.toCertProps():......................Start.");
+
+		// this.certExtnToProps(this.mRDNItemsElem, aCertProps);
+
+                var /* NodeList */ rdnItemElemList = this.mRDNItemsElem.getElementsByTagName("xul:textbox");
+		if (rdnItemElemList.length <= 0) {
+                    rdnItemElemList = this.mRDNItemsElem.getElementsByTagName("textbox");
+		}
+		this.LogDebug("rdnItemElemList.length: " + rdnItemElemList.length + "");
+
+                var propKey = null;
+                var propValue = null;
+                var propOldValue = null;
+
+	        var certPropBaseName = this.getAttribute("rdnCertPropName");
+	        var x500PropName = this.getAttribute("x500PropName");
+
+                for (var i = 0; i < rdnItemElemList.length; i++) {
+	            var rdnItemElem = rdnItemElemList.item(i);
+		    propValue = rdnItemElem.value;
+		    if (propValue == "") {
+		        continue;
+		    }
+		    propKey = certPropBaseName;
+		    if (i != 0) {
+		    	propKey = certPropBaseName + "." + i;
+		    }
+		    this.LogDebug("mvrdnBinding.toCertProps(): i: " + i + " propKey: " + propKey + " propValue: " + propValue);
+	            propOldValue = aCertProps.setStringProperty(propKey, propValue);
+		}
+
+		this.LogTrace("mvrdnBinding.toCertProps():......................End.");
+		]]>
+	        </body>
+	    </method>
+
+
+	    <method name="updateCertProps">
+		<parameter name="aCertProps"/>
+	        <body>
+		<![CDATA[
+		// this.mMaxLogLevel = 9;
+		this.LogTrace("mvrdnBinding.updateCertProps():......................Start.");
+
+		// this.dumpProperties(aCertProps, "rdn-updateCertProps");
+
+		if ((! this.containsAnyProperty(this.mBaseExtnElem, aCertProps))
+			&& (! this.containsAnyProperty(this.mBaseExtnElem, aCertProps, "rdnCertPropName"))) {
+		    this.LogTrace("mvrdnBinding.updateCertProps():......................End(0).");
+		    // this.mMaxLogLevel = 4;
+		    return;
+		}
+
+		this.reset();
+
+	        var certPropBaseName = this.getAttribute("rdnCertPropName");
+	        var certPropName = this.getAttribute("certPropName");
+		this.LogDebug("mvrdnBinding.updateCertProps(): rdn: " + this.rdn);
+
+		this.updateCertExtnProps(this.mRDNItemsElem, aCertProps);
+		this.computeRDN();
+
+		this.refresh();
+		this.LogDebug("mvrdnBinding.updateCertProps(): certPropBaseName: " + certPropBaseName + " certPropName: " + certPropName + " rdn: " + this.rdn);
+
+		this.LogTrace("mvrdnBinding.updateCertProps():......................End.");
+		// this.mMaxLogLevel = 4;
+		]]>
+	        </body>
+	    </method>
+
+
+	    <method name="updateCertPropsX">
+		<parameter name="aCertProps"/>
+	        <body>
+		<![CDATA[
+		// this.mMaxLogLevel = 9;
+		this.LogTrace("mvrdnBinding.updateCertProps():......................Start.");
+
+		if (! this.containsAnyProperty(this.mBaseExtnElem, aCertProps)) {
+		    return;
+		}
+
+		// this.dumpProperties(aCertProps, "rdn-updateCertProps");
+
+		this.reset();
+		this.LogDebug("mvrdnBinding.updateCertProps(): subjectDN: " + this.subjectDN);
+
+		// this.updateCertExtnProps(this.mRDNItemsElem, aCertProps);
+
+                var /* NodeList */ rdnItemElemList = this.mRDNItemsElem.getElementsByTagName("xul:textbox");
+		if (rdnItemElemList.length <= 0) {
+                    rdnItemElemList = this.mRDNItemsElem.getElementsByTagName("textbox");
+		}
+		this.LogDebug("mvrdnBinding.updateCertProps(): rdnItemElemList.length: " + rdnItemElemList.length + "");
+
+	        var certPropBaseName = this.getAttribute("rdnCertPropName");
+	        var x500PropName = this.getAttribute("x500PropName");
+
+		var foundItem = false;
+                for (var i = 0; i < rdnItemElemList.length; i++) {
+	            var rdnItemElem = rdnItemElemList.item(i);
+		    var propKey = certPropBaseName;
+		    if (i != 0) {
+		    	propKey = certPropBaseName + "." + i;
+		    }
+		    var propValue = null;
+		    try {
+		    	propValue = aCertProps.getStringProperty(propKey);
+		    } catch(ex) {}
+		    if (propValue) {
+		    	rdnItemElem.value = propValue;
+			foundItem = true;
+		    }
+		}
+
+		this.refresh();
+		this.LogDebug("mvrdnBinding.updateCertProps(): rdn: " + this.rdn);
+
+		this.LogTrace("mvrdnBinding.updateCertProps():......................End.");
+		// this.mMaxLogLevel = 4;
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="mergeCertProps">
+		<parameter name="aCertProps"/>
+	        <body>
+		<![CDATA[
+		this.LogTrace("mvrdnBinding.mergeCertProps():......................Start.");
+
+		this.updateCertProps(aCertProps);
+
+		this.LogTrace("mvrdnBinding.mergeCertProps():......................End.");
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="test1">
+		<parameter name="aCertProps"/>
+	        <body>
+		<![CDATA[
+		this.LogTrace("mvrdnBinding.test1():......................Start.");
+		var certProps = Components.classes["@mozilla.org/persistent-properties;1"]
+					.createInstance(Components.interfaces.nsIPersistentProperties);
+
+                var propKey = null;
+                var propValue = null;
+                var propOldValue = null;
+
+	        var certPropBaseName = this.getAttribute("rdnCertPropName");
+	        var x500PropName = this.getAttribute("x500PropName");
+                for (var i = 0; i < 2; i++) {
+		    propKey = certPropBaseName;
+		    if (i != 0) {
+		    	propKey = certPropBaseName + "." + i;
+		    }
+		    propValue = propKey + "_val_" + i;
+		    this.LogDebug("mvrdnBinding.test1(): i: " + i + " propKey: " + propKey + " propValue: " + propValue);
+	            propOldValue = certProps.setStringProperty(propKey, propValue);
+		}
+
+		this.updateCertProps(certProps);
+
+		// this.dumpProperties(aCertProps, "rdn-certProps");
+
+		this.LogTrace("mvrdnBinding.test1():......................End.");
+		]]>
+	        </body>
+	    </method>
+
+	</implementation>
+    </binding>
+
+
+
+    <binding id="x509certsubjectBinding"
+	extends="chrome://keymanager/content/ExtnXBL/certextn.xml#certextnbaseBinding"
+	>
+	<!--
+	<resources>
+	    <script type="application/x-javascript" src="chrome://keymanager/content/ExtnXBL/certextn2props.js"/>
+	    <stylesheet src="chrome://keymanager/skin/kmbindings.css"/>
+	</resources>
+	-->
+	<!-- content, property, method and event descriptions go here -->
+	<content>
+	    <xul:grid anonid="certmgr.certdetail.subject.info" flex="1"> 
+	        <xul:columns>
+		    <xul:column/>
+		    <xul:column flex="1"/>
+	        </xul:columns>
+	        <xul:rows flex="1">
+		    <xul:row 
+	        	xbl:inherits="hidden=hiderowcontrol"
+			hidden="true"
+		        >
+			<xul:spacer/>
+			<xul:hbox
+    			    oncommand="getBindingParent(this).applyRowControl(this, event)"
+			    >
+			    <xul:checkbox
+	        		xbl:inherits="checked=xxhidefirstname"
+				label="First name"
+				hideattr="hidefirstname"
+			    	/>
+			    <xul:checkbox
+				label="Common Name"
+				hideattr="hidecommonname"
+			    	/>
+			    <xul:checkbox
+				label="E-mail"
+				hideattr="hideemail"
+			    	/>
+			    <xul:checkbox
+				label="UID"
+				hideattr="hideuid"
+			    	/>
+			</xul:hbox>
+		    </xul:row>
+
+		    <xul:row 
+	        	xbl:inherits="hidden=hidefirstname"
+		        >
+			<xul:label control="certmgr.certdetail.firstName" value="&certmgr.certdetail.firstName.label;"/> 
+  	                <xul:rdn anonid="certmgr.certdetail.firstName" value=""
+	        	    xbl:inherits="disabled,readonly,rdnvalue=firstName"
+			    class="singlevalued"
+  	  	            autocompletesearchparam="keymgr.certdetail.firstName"
+  		            tooltiptext="&certmgr.certdetail.firstName.tooltip;"
+			    rdnCertPropName="firstName"
+			    x500PropName="fn"
+    			    onchange="getBindingParent(this).modifySubjectCommonName(this, 'fn', event)"
+  		            />
+		    </xul:row>
+		    <xul:row 
+	        	xbl:inherits="hidden=hidelastname"
+		        >
+			<xul:label control="certmgr.certdetail.lastName" value="&certmgr.certdetail.lastName.label;"/> 
+  	                <xul:rdn anonid="certmgr.certdetail.lastName" value=""
+	        	    xbl:inherits="disabled,readonly,value=lastName"
+			    class="singlevalued"
+  	  	            autocompletesearchparam="keymgr.certdetail.lastName"
+  		            tooltiptext="&certmgr.certdetail.lastName.tooltip;"
+			    rdnCertPropName="lastName"
+			    x500PropName="sn"
+    			    onchange="getBindingParent(this).modifySubjectCommonName(this, 'sn', event)"
+  		            />
+		    </xul:row>
+
+		    <xul:row 
+	        	xbl:inherits="hidden=hidecommonname"
+		        >
+			<xul:label control="certmgr.certdetail.commonName" value="&certmgr.certdetail.commonName.label;"/> 
+  	                <xul:rdn anonid="certmgr.certdetail.commonName" value=""
+	        	    xbl:inherits="disabled,readonly,value=commonName"
+			    class="multivalued"
+  	  	            autocompletesearchparam="keymgr.certdetail.commonName"
+  		            tooltiptext="&certmgr.certdetail.commonName.tooltip;"
+			    rdnCertPropName="name"
+			    x500PropName="cn"
+			    onchange="getBindingParent(this).modifySubject(this, 'cn', event)"
+  		            />
+		    </xul:row>
+
+		    <xul:row 
+	        	xbl:inherits="hidden=hideemail"
+		        >
+			<xul:label control="certmgr.certdetail.email" value="&certmgr.certdetail.email.label;"/> 
+  	                <xul:hbox flex="1" align="start">
+			    <xul:checkbox anonid="certmgr.certdetail.email.subjaltname"
+	        	    	xbl:inherits="disabled=readonly,checked=email_subjaltname"
+			        label="&certmgr.certdetail.email.subjaltname.label;"
+			        tooltiptext="&certmgr.certdetail.email.subjaltname.tooltip;"
+			        certPropName="email_subjaltname"
+			        hidden="true"
+			        />
+			    <xul:radiogroup anonid="certmgr.certdetail.email.type"
+	        	        xbl:inherits="disabled=readonly,value=email_type"
+			        certPropName="email_type"
+			        >
+  	                        <xul:hbox>
+				    <xul:radio anonid="certmgr.certdetail.email.type.rfc1274"
+	        	        	xbl:inherits="disabled=readonly"
+				        label="&certmgr.certdetail.email.type.rfc1274.label;"
+				        tooltiptext="&certmgr.certdetail.email.type.rfc1274.tooltip;"
+  		                        selected="true"
+  		                        value="rfc1274"
+				        x500PropName="mail"
+			                oncommand="getBindingParent(this).modifyEMailType(this, 'mail', event)"
+  		                        group="certmgr.certdetail.email.type"/>
+				    <xul:radio anonid="certmgr.certdetail.email.type.pkcs9"
+	        	        	xbl:inherits="disabled=readonly"
+				        label="&certmgr.certdetail.email.type.pkcs9.label;"
+				        tooltiptext="&certmgr.certdetail.email.type.pkcs9.tooltip;"
+  		                        value="pkcs9"
+				        x500PropName="e"
+			                oncommand="getBindingParent(this).modifyEMailType(this, 'e', event)"
+  		                        group="certmgr.certdetail.email.type"/>
+  	                        </xul:hbox>
+			    </xul:radiogroup>
+  	                    <xul:rdn anonid="certmgr.certdetail.email" value="" flex="1"
+	        	    	xbl:inherits="disabled,readonly,value=email"
+			    	class="singlevalued"
+  	  	                autocompletesearchparam="keymgr.certdetail.email"
+  		                tooltiptext="&certmgr.certdetail.email.tooltip;"
+			        rdnCertPropName="email"
+			        x500PropName="email"
+			        onchange="getBindingParent(this).modifySubject(this, 'email', event); getBindingParent(this).handleEmailChange(this)"
+  		                />
+  	                </xul:hbox>
+		    </xul:row>
+		    <xul:row 
+	        	xbl:inherits="hidden=hideuid"
+		        >
+			<xul:label control="certmgr.certdetail.uid" value="&certmgr.certdetail.uid.label;"/> 
+  	    	        <xul:rdn anonid="certmgr.certdetail.uid" value=""
+	        	    xbl:inherits="disabled,readonly,value=uid"
+			    class="singlevalued"
+  	  	            autocompletesearchparam="certmgr.certdetail.uid"
+			    rdnCertPropName="uid"
+			    x500PropName="uid"
+  		            tooltiptext="&certmgr.certdetail.uid.tooltip;"
+			    onchange="getBindingParent(this).modifySubject(this, 'uid', event)"
+  		            />
+		    </xul:row>
+		    <xul:row 
+	        	xbl:inherits="hidden=hideorgunit"
+		        >
+			<xul:label control="certmgr.certdetail.orgUnit" value="&certmgr.certdetail.orgUnit.label;"/> 
+			<xul:rdn anonid="certmgr.certdetail.orgUnit"
+	        	    xbl:inherits="disabled,readonly,value=org_unit"
+			    flex="1"
+			    class="multivalued"
+  	  	            autocompletesearchparam="certmgr.certdetail.orgUnit"
+			    rdnCertPropName="org_unit"
+			    x500PropName="ou"
+			    tooltiptext="&certmgr.certdetail.orgUnit.tooltip;"
+			    onchange="getBindingParent(this).modifySubject(this, 'ou', event)"
+			    />
+
+		    </xul:row>
+		    <xul:row 
+	        	xbl:inherits="hidden=hideorg"
+		        >
+			<xul:label control="certmgr.certdetail.org" value="&certmgr.certdetail.org.label;"/> 
+			<xul:rdn anonid="certmgr.certdetail.org" value="" 
+	        	    xbl:inherits="disabled,readonly,value=org"
+			    class="multivalued"
+  	  	            autocompletesearchparam="certmgr.certdetail.org"
+			    rdnCertPropName="org"
+			    x500PropName="o"
+			    tooltiptext="&certmgr.certdetail.org.tooltip;"
+		    	    onchange="getBindingParent(this).modifySubject(this, 'o', event)" 
+			    />
+		    </xul:row>
+		    <xul:row 
+	        	xbl:inherits="hidden=hidelocality"
+		        >
+			<xul:label control="certmgr.certdetail.locality" value="&certmgr.certdetail.locality.label;"/> 
+			<xul:rdn anonid="certmgr.certdetail.locality" value="" 
+	        	    xbl:inherits="disabled,readonly,value=locality"
+			    class="singlevalued"
+  	  	            autocompletesearchparam="certmgr.certdetail.locality"
+			    tooltiptext="&certmgr.certdetail.locality.tooltip;"
+			    rdnCertPropName="locality"
+			    x500PropName="l"
+		    	    onchange="getBindingParent(this).modifySubject(this, 'l', event)" 
+			    />
+		    </xul:row>
+		    <xul:row 
+	        	xbl:inherits="hidden=hidestate"
+		        >
+			<xul:label control="certmgr.certdetail.state" value="&certmgr.certdetail.state.label;"/> 
+			<xul:rdn anonid="certmgr.certdetail.state" value="" 
+	        	    xbl:inherits="disabled,readonly,value=state"
+			    class="singlevalued"
+  	  	            autocompletesearchparam="certmgr.certdetail.state"
+			    rdnCertPropName="state"
+			    x500PropName="st"
+			    tooltiptext="&certmgr.certdetail.state.tooltip;"
+		    	    onchange="getBindingParent(this).modifySubject(this, 'st', event)" 
+			    />
+		    </xul:row>
+		    <xul:row 
+	        	xbl:inherits="hidden=hidecountry"
+		        >
+			<xul:label control="certmgr.certdetail.country" value="&certmgr.certdetail.country.label;"/> 
+			<xul:rdn anonid="certmgr.certdetail.country" value="" 
+	        	    xbl:inherits="disabled,readonly,value=country"
+			    class="singlevalued"
+  	  	            autocompletesearchparam="certmgr.certdetail.country"
+			    rdnCertPropName="country"
+			    x500PropName="c"
+			    tooltiptext="&certmgr.certdetail.country.tooltip;"
+		    	    onchange="getBindingParent(this).modifySubject(this, 'c', event)" 
+		    	    />
+		    </xul:row>
+		    <xul:row 
+	        	xbl:inherits="hidden=hidedc"
+		        >
+			<xul:label control="certmgr.certdetail.dc" value="&certmgr.certdetail.dc.label;"/> 
+			<xul:rdn anonid="certmgr.certdetail.dc" value="" 
+	        	    xbl:inherits="disabled,readonly,value=dc"
+			    class="multivalued"
+  	  	            autocompletesearchparam="certmgr.certdetail.dc"
+			    rdnCertPropName="dc"
+			    x500PropName="dc"
+			    tooltiptext="&certmgr.certdetail.dc.tooltip;"
+		    	    onchange="getBindingParent(this).modifySubject(this, 'dc', event)" 
+			    />
+		    </xul:row>
+		    <xul:row 
+	        	xbl:inherits="hidden=hidesubjdnsuffix"
+		        >
+			<xul:label control="certmgr.certdetail.subjdnsuffix" value="&certmgr.certdetail.subjdnsuffix.label;"/> 
+			<xul:textbox anonid="certmgr.certdetail.subjdnsuffix" value="" 
+	        	    xbl:inherits="disabled,readonly,value=subjdnsuffix"
+			    certPropName="subjdnsuffix"
+			    tooltiptext="&certmgr.certdetail.subjdnsuffix.tooltip;"
+		    	    onchange="getBindingParent(this).modifySubject(this, '', event)" 
+		    	    />
+		    </xul:row>
+		    <xul:row 
+	        	xbl:inherits="hidden=hidesubject"
+		        >
+			<xul:label value="&certmgr.certdetail.subject.label;"/> 
+			<xul:textbox anonid="certmgr.certdetail.subject"
+	        	    xbl:inherits="disabled,readonly,value=subject,tooltiptext=subjecttooltip"
+		    	    value=""
+			    readonly="true"
+			    certPropName="subject"
+			    x500PropName="dn"
+			    tooltiptext="&certmgr.certdetail.subject.tooltip;"
+			    />
+		    </xul:row>
+		    <xul:row 
+	        	xbl:inherits="hidden=hidealias"
+		        >
+			<xul:label control="certmgr.certdetail.alias" value="&certmgr.certdetail.alias.label;"/> 
+  	    	        <xul:hbox align="start">
+	                    <xul:textbox anonid="certmgr.certdetail.alias" value="" onchange="doAliasChange(this)"
+	        	    	xbl:inherits="disabled,readonly,value=nickName"
+			        size="40" maxlength="40"
+	                        tooltiptext="&certmgr.certdetail.alias.tooltip;"
+			        certPropName="nickName"
+	                        />
+	                    <xul:spacer flex="1"/>
+  	                </xul:hbox>
+		    </xul:row>
+		    <children includes="row"/>
+	        </xul:rows>
+      	    </xul:grid>
+	</content>
+	<implementation>
+	    <field name="mKeyManager">
+		Components.classes["@avaya.com/pkm/keymanager;1"].getService(Components.interfaces.alrIKeyManager);
+	    </field>
+	    <field name="mBaseExtnElem">
+	        document.getAnonymousElementByAttribute(this, "anonid", "certmgr.certdetail.subject.info");
+	    </field>
+	    <field name="mUIDElem">
+	        document.getAnonymousElementByAttribute(this, "anonid", "certmgr.certdetail.uid");
+	    </field>
+	    <field name="mCommonNameElem">
+	        document.getAnonymousElementByAttribute(this, "anonid", "certmgr.certdetail.commonName");
+	    </field>
+	    <field name="mSubjectDNSuffixElem">
+	        document.getAnonymousElementByAttribute(this, "anonid", "certmgr.certdetail.subjdnsuffix");
+	    </field>
+	    <field name="mSubjectElem">
+	        document.getAnonymousElementByAttribute(this, "anonid", "certmgr.certdetail.subject");
+	    </field>
+	    <field name="mAliasElem">
+	        document.getAnonymousElementByAttribute(this, "anonid", "certmgr.certdetail.alias");
+	    </field>
+	    <field name="mSubjEmailTypeElem">
+	        document.getAnonymousElementByAttribute(this, "anonid", "certmgr.certdetail.email.type");
+	    </field>
+	    <field name="mSubjEmailRDNElem">
+	        document.getAnonymousElementByAttribute(this, "anonid", "certmgr.certdetail.email");
+	    </field>
+
+	    <property name="readonly"
+		onget="return this.hasAttribute('readonly');"
+		>
+		<setter>
+		<![CDATA[
+		this.LogTrace("x509certsubjectBinding.readonly.set():......................Start.");
+		if (val) {
+		    this.setAttribute('readonly',true);
+		}
+		else {
+		    this.removeAttribute('readonly');
+		}
+		this.setReadonly(this.mBaseExtnElem, val);
+
+                var rdnElemList = this.mBaseExtnElem.getElementsByTagName('xul:rdn');
+                for (var i = 0; i < rdnElemList.length; i++) {
+		    var rdnElem = rdnElemList.item(i);
+		    rdnElem.readonly = val;
+		}
+		if(!val) {
+		    this.refresh();
+		}
+		this.LogTrace("x509certsubjectBinding.readonly.set():......................End.");
+		return val;
+		]]>
+		</setter>
+	    </property>
+
+	    <property name="alias"
+		onget="return this.mAliasElem.value;"
+		onset="this.mAliasElem.value=val;
+		       return val;"
+		/>
+	    <property name="uid"
+		onget="return this.mUIDElem.rdnvalue;"
+		onset="this.mUIDElem.rdnvalue=val;
+		       this.modifySubject(this.mUIDElem, 'uid');
+		       return val;"
+		/>
+	    <property name="commonName"
+		onget="return this.mCommonNameElem.rdnvalue;"
+		onset="this.mCommonNameElem.rdnvalue=val;
+		       this.modifySubject(this.mCommonNameElem, 'cn');
+		       return val;"
+		/>
+	    <property name="subjectDNSuffix"
+		onget="return this.mSubjectDNSuffixElem.value;"
+		onset="this.mSubjectDNSuffixElem.value=val;
+		       return val;"
+		/>
+	    <property name="subjectDN"
+		onget="return this.mSubjectElem.value;"
+		onset="this.mSubjectElem.value=val;
+		       this.updateSubjectDN(val);
+		       return val;"
+		/>
+	    <property name="subject"
+		onget="return this.subjectDN;"
+		onset="this.subjectDN=val;
+		       return val;"
+		/>
+
+	    <constructor>
+		<![CDATA[
+		// this.mMaxLogLevel = 9;
+		this.LogTrace("x509certsubjectBinding.constructor():......................Start.");
+
+		this.LogTrace("x509certsubjectBinding.constructor():......................End.");
+		]]>
+	    </constructor>
+
+	    <method name="refresh">
+		<body>
+		<![CDATA[
+		this.LogTrace("x509certsubjectBinding.refresh():......................Start.");
+
+                var /* NodeList */ rdnElemList = this.mBaseExtnElem.getElementsByTagName("xul:rdn");
+		if (rdnElemList.length <= 0) {
+                    rdnElemList = this.mBaseExtnElem.getElementsByTagName("rdn");
+		}
+                for (var i = 0; i < rdnElemList.length; i++) {
+	            var rdnElem = rdnElemList.item(i);
+		    rdnElem.refresh();
+		}
+
+		this.LogDebug("x509certsubjectBinding.refresh(" + this.getAttribute("anonid") + "): readonly: " + this.getAttribute("readonly") + "");
+		if (this.getAttribute("readonly")) {
+		    this.LogTrace("x509certsubjectBinding.refresh():......................End(0).");
+		    return;
+		}
+
+		/*
+		this.LogDebug("x509certsubjectBinding.refresh(): this.mCommonNameElem.value: |" + this.mCommonNameElem.value + "|");
+		this.LogDebug("x509certsubjectBinding.refresh(): this.mSubjectElem.value: |" + this.mSubjectElem.value + "|");
+
+		if (this.mCommonNameElem.value == "") {
+                    var firstNameElem = document.getAnonymousElementByAttribute(this, "anonid", "certmgr.certdetail.firstName");
+		    this.modifySubjectCommonName(firstNameElem, "fn");
+		}
+
+		this.LogDebug("x509certsubjectBinding.refresh(): this.mSubjectElem.value: |" + this.mSubjectElem.value + "|");
+		if (this.mSubjectElem.value == "") {
+		}
+		*/
+
+		this.modifySubject(this.mCommonNameElem, 'cn');
+
+		this.LogDebug("x509certsubjectBinding.refresh(): this.mSubjectElem.value: |" + this.mSubjectElem.value + "|");
+
+		this.LogTrace("x509certsubjectBinding.refresh():......................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="activateSubjectItemElem">
+		<parameter name="aCertPropName"/>
+		<parameter name="aStatusFalg"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("activateSubjectItemElem(): aCertPropName: " + aCertPropName + " aStatusFalg: " + aStatusFalg + "");
+                var /* NodeList */ subjItemElemList = this.mBaseExtnElem.getElementsByAttribute("certPropName", aCertPropName);
+		this.LogDebug("subjItemElemList.length: " + subjItemElemList.length + "");
+                for (var i = 0; i < subjItemElemList.length; i++) {
+	            var certPropElem = subjItemElemList.item(i);
+	            if (certPropElem == null) {
+	                continue;
+		    }
+		    this.LogDebug("certPropElem: " + certPropElem.getAttribute("anonid") + "");
+		    certPropElem.disabled = !aStatusFalg;
+		    certPropElem.readonly = !aStatusFalg;
+		    break;
+		}
+
+                var /* NodeList */ rdnElemList = this.mBaseExtnElem.getElementsByTagName("xul:rdn");
+		if (rdnElemList.length <= 0) {
+                    rdnElemList = this.mBaseExtnElem.getElementsByTagName("rdn");
+		}
+                for (var i = 0; i < rdnElemList.length; i++) {
+	            var rdnElem = rdnElemList.item(i);
+		    rdnElem.readonly = !aStatusFalg;
+		}
+
+		]]>
+		</body>
+	    </method>
+
+	    <method name="handleEmailChange">
+		<parameter name="aEmailElem"/>
+		<body>
+		<![CDATA[
+                this.LogTrace("x509certsubjectBinding.handleEmailChange():.......................Start.");
+
+    	        var emailSubjAltNameElem = document.getAnonymousElementByAttribute(this, "anonid", "certmgr.certdetail.email.subjaltname");
+		var emailValue = aEmailElem.rdnvalue;
+                if ((emailValue == "") || (emailValue == "(no email address)")) {
+    	            emailSubjAltNameElem.hidden = true;
+	            return;
+                }
+                emailSubjAltNameElem.hidden = false;
+            
+                this.LogTrace("x509certsubjectBinding.handleEmailChange():.......................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="modifyEMailType">
+		<parameter name="aEmailTypeItemElem"/>
+		<parameter name="aSubjItemDirAttrName"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("x509certsubjectBinding.modifyEMailType():......................Start.");
+
+		var x500PropName = aEmailTypeItemElem.getAttribute("x500PropName");
+		this.mSubjEmailRDNElem.setAttribute("x500PropName", x500PropName);
+		this.mSubjEmailRDNElem.refresh();
+
+		this.modifySubject(this.mSubjEmailRDNElem, 'email');
+		this.handleEmailChange(this.mSubjEmailRDNElem);
+
+                this.LogTrace("x509certsubjectBinding.modifyEMailType():.......................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="applyRowControl">
+		<parameter name="aRowControlRowElem"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("x509certsubjectBinding.applyRowControl():......................Start.");
+
+		var checkBoxElem = ev.originalTarget;
+
+		var hideattr = checkBoxElem.getAttribute("hideattr");
+		if (!hideattr) {
+		    return;
+		}
+
+		if (checkBoxElem.checked) {
+		    this.removeAttribute(hideattr);
+		}
+		else {
+		    this.setAttribute(hideattr, true);
+		}
+
+                this.LogTrace("x509certsubjectBinding.applyRowControl():.......................End.");
+		]]>
+		</body>
+	    </method>
+
+
+	    <method name="modifySubjectCommonName">
+		<parameter name="aSubjItemElem"/>
+		<parameter name="aSubjItemDirAttrName"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("x509certsubjectBinding.modifySubjectCommonName():......................Start.");
+
+                var firstNameElem = document.getAnonymousElementByAttribute(this, "anonid", "certmgr.certdetail.firstName");
+                var lastNameElem = document.getAnonymousElementByAttribute(this, "anonid", "certmgr.certdetail.lastName");
+
+                var firstName = firstNameElem.rdnvalue;
+                var lastName = lastNameElem.rdnvalue;
+		if ((firstName == "") && (lastName == "")) {
+		    if (ev) {
+		    	this.commonName = "";
+		    }
+		    else {
+		    	this.mCommonNameElem.rdnvalue = "";
+		    }
+		    return;
+		}
+
+                var formFiledValue = "";
+                if (firstName != "") {
+    	            formFiledValue = firstName;
+                }
+                if (lastName != "") {
+	            if (formFiledValue != "") {
+    	                formFiledValue += " ";
+	            }
+	            formFiledValue += lastName;
+                }
+
+		if (ev) {
+		    this.commonName = formFiledValue;
+		}
+		else {
+		    this.mCommonNameElem.rdnvalue = formFiledValue;
+		}
+
+		this.LogTrace("x509certsubjectBinding.modifySubjectCommonName():......................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="modifySubject">
+		<parameter name="aSubjItemElem"/>
+		<parameter name="aSubjItemDirAttrName"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("x509certsubjectBinding.modifySubject():......................Start.");
+		this.LogDebug("x509certsubjectBinding.modifySubject(): this.mSubjectElem.value: |" + this.mSubjectElem.value + "|");
+
+		/*
+		if (ev) {
+		    ev.stopPropagation();
+		}
+		*/
+    	        var aliasElem = document.getAnonymousElementByAttribute(this, "anonid", "certmgr.certdetail.alias");
+
+	        var subjRDNElemUINameList = new Array('email', 'commonName', 'uid', 'orgUnit', 'org', 'locality', 'state', 'country', 'dc');
+	        var subjRDNElemIdList     = new Array('mail',  'CN',         'uid', 'OU',      'O',   'L',        'ST',    'C',       'DC');
+
+	        var subjElem = null;
+	        var totSubjRDNElem = 0;
+
+	        var subjRDNElemIdPrefix = "certmgr.certdetail.";
+	        var subjectDNValue = "";
+	        for (var i = 0; i < subjRDNElemUINameList.length; i++) {
+    	            var subjRDNElemName = subjRDNElemUINameList[i];
+	            var subjRDNElemId = subjRDNElemIdPrefix + subjRDNElemName;
+		    // this.LogDebug("x509certsubjectBinding.modifySubject(): subjRDNElemId: " + subjRDNElemId);
+		    
+    	            var subjRDNElem = document.getAnonymousElementByAttribute(this, "anonid", subjRDNElemId);
+	            if (!subjRDNElem) {
+			this.LogDebug("x509certsubjectBinding.modifySubject(): document.getAnonymousElementByAttribute() failed for " + subjRDNElemId + "");
+	                continue;
+	            }
+
+		    var subjRDNElemValue = subjRDNElem.rdn;
+		    if (subjRDNElemValue == "") {
+			this.LogDebug("x509certsubjectBinding.modifySubject(): subjRDNElemValue is null for " + subjRDNElemId + "(" + subjRDNElemName + ")");
+		    	continue;
+		    }
+		    this.LogDebug("x509certsubjectBinding.modifySubject(): subjRDNElemId: " + subjRDNElemId + "(" + subjRDNElemName + ") ==> subjRDNElemValue: " + subjRDNElemValue);
+
+    	            var subjRDNElemAVAValue = subjRDNElem.rdnvalue;
+	            if (subjRDNElemAVAValue && (subjRDNElemAVAValue != "")) {
+		        // Compute the value of alias element
+	                if (subjRDNElemName == "commonName") {
+	                    if (aliasElem && (aliasElem.value == "")) {
+			        var cnList = subjRDNElemAVAValue.split(" "); // get the first word from common name 
+				var cn = cnList[0];
+				var cnItemList = cn.split(".");
+
+			        aliasElem.value = cnItemList[0];
+	                    }
+	                }
+	                if (subjRDNElemName == "uid") {
+	                    if (aliasElem && (aliasElem.value == "")) {
+		    	        if (this.commonName == "") {
+			            aliasElem.value = subjRDNElemAVAValue;
+			        }
+			    }
+		        }
+	            }
+	    
+	            if (subjectDNValue != "") {
+	                subjectDNValue = subjectDNValue + ",";
+	            }
+	            subjectDNValue = subjectDNValue + subjRDNElemValue;
+
+	            totSubjRDNElem++;
+	        }
+
+		var subjectDNSuffix = this.trim(this.mSubjectDNSuffixElem.value);
+		if (subjectDNSuffix != "") {
+		    if (totSubjRDNElem > 0) {
+	                subjectDNValue = subjectDNValue + ",";
+		    }
+		    subjectDNValue = subjectDNValue + subjectDNSuffix;
+		}
+	    
+	        this.mSubjectElem.value = subjectDNValue;
+
+		this.LogDebug("x509certsubjectBinding.modifySubject(): this.mSubjectElem.value: |" + this.mSubjectElem.value + "|");
+		if (false) {
+		    var certProps = Components.classes["@mozilla.org/persistent-properties;1"]
+					.createInstance(Components.interfaces.nsIPersistentProperties);
+		    this.toCertProps(certProps);
+		    // this.dumpProperties(certProps, "subject-certProps");
+		    this.LogTrace("x509certsubjectBinding.modifySubject(): this.subject: " + this.mSubjectElem.value);
+		}
+
+		this.LogTrace("x509certsubjectBinding.modifySubject():......................End.");
+	        return;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="certFormFieldAutoCompleteAction">
+		<parameter name="aSrcTextBoxElem"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		this.autoCompleteAction(aSrcTextBoxElem, ev);
+		]]>
+		</body>
+	    </method>
+
+
+	    <method name="doAliasChange">
+		<parameter name="aAliasElem"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("x509certsubjectBinding.doAliasChange():......................Start.");
+		/*
+		if (ev) {
+		    ev.stopPropagation();
+		}
+		*/
+		this.LogTrace("x509certsubjectBinding.doAliasChange():......................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="reset">
+		<body>
+		<![CDATA[
+		this.LogTrace("x509certsubjectBinding.reset():......................Start.");
+
+		this.resetCertExtn(this.mBaseExtnElem);
+
+                var /* NodeList */ rdnElemList = this.mBaseExtnElem.getElementsByTagName("xul:rdn");
+		if (rdnElemList.length <= 0) {
+                    rdnElemList = this.mBaseExtnElem.getElementsByTagName("rdn");
+		}
+                for (var i = 0; i < rdnElemList.length; i++) {
+	            var rdnElem = rdnElemList.item(i);
+		    rdnElem.reset();
+		}
+
+		this.LogTrace("x509certsubjectBinding.reset():......................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="toCertProps">
+		<parameter name="aCertProps"/>
+	        <body>
+		<![CDATA[
+		// this.mMaxLogLevel = 9;
+		this.LogTrace("x509certsubjectBinding.toCertProps():......................Start.");
+		this.LogDebug("x509certsubjectBinding.toCertProps(): subjectDN: " + this.subjectDN);
+
+		this.certExtnToProps(this.mBaseExtnElem, aCertProps);
+
+                var /* NodeList */ rdnElemList = this.mBaseExtnElem.getElementsByTagName("xul:rdn");
+		if (rdnElemList.length <= 0) {
+                    rdnElemList = this.mBaseExtnElem.getElementsByTagName("rdn");
+		}
+                for (var i = 0; i < rdnElemList.length; i++) {
+	            var rdnElem = rdnElemList.item(i);
+		    rdnElem.toCertProps(aCertProps);
+		}
+
+		this.LogTrace("x509certsubjectBinding.toCertProps():......................End.");
+		// this.mMaxLogLevel = 4;
+		]]>
+	        </body>
+	    </method>
+
+
+	    <method name="updateCertProps">
+		<parameter name="aCertProps"/>
+		<parameter name="aMergeOption"/>
+	        <body>
+		<![CDATA[
+		// this.mMaxLogLevel = 9;
+		this.LogTrace("x509certsubjectBinding.updateCertProps():......................Start.");
+
+		// this.dumpProperties(aCertProps, "Subject-updateCertProps");
+		this.LogDebug("x509certsubjectBinding.updateCertProps(): subjectDN: " + this.subjectDN);
+
+		if ((! this.containsAnyProperty(this.mBaseExtnElem, aCertProps))
+			&& (! this.containsAnyProperty(this.mBaseExtnElem, aCertProps, "rdnCertPropName"))) {
+		    this.LogTrace("x509certsubjectBinding.updateCertProps():......................End(0).");
+		    return;
+		}
+
+		if (!aMergeOption) {
+		    this.reset();
+		}
+		this.LogDebug("x509certsubjectBinding.updateCertProps(): subjectDN: " + this.subjectDN);
+
+
+                var /* NodeList */ rdnElemList = this.mBaseExtnElem.getElementsByTagName("xul:rdn");
+		if (rdnElemList.length <= 0) {
+                    rdnElemList = this.mBaseExtnElem.getElementsByTagName("rdn");
+		}
+                for (var i = 0; i < rdnElemList.length; i++) {
+	            var rdnElem = rdnElemList.item(i);
+		    rdnElem.updateCertProps(aCertProps);
+		}
+		this.LogDebug("x509certsubjectBinding.updateCertProps(): subjectDN: " + this.subjectDN);
+
+		this.updateCertExtnProps(this.mBaseExtnElem, aCertProps);
+
+		this.refresh();
+		this.LogDebug("x509certsubjectBinding.updateCertProps(): subjectDN: " + this.subjectDN);
+
+		this.LogTrace("x509certsubjectBinding.updateCertProps():......................End.");
+		// this.mMaxLogLevel = 4;
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="mergeCertProps">
+		<parameter name="aCertProps"/>
+	        <body>
+		<![CDATA[
+		// this.mMaxLogLevel = 9;
+		this.LogTrace("x509certsubjectBinding.mergeCertProps():......................Start.");
+
+		/*
+		if ((! this.containsAnyProperty(this.mBaseExtnElem, aCertProps))
+			&& (! this.containsAnyProperty(this.mBaseExtnElem, aCertProps, "rdnCertPropName"))) {
+		    return;
+		}
+		*/
+
+		this.updateCertProps(aCertProps, true);
+
+		this.LogTrace("x509certsubjectBinding.mergeCertProps():......................End.");
+		// this.mMaxLogLevel = 4;
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="updateSubjectDN">
+		<parameter name="aSubjectDN"/>
+		<body>
+		<![CDATA[
+		// this.mMaxLogLevel = 9;
+		this.LogTrace("x509certsubjectBinding.updateSubjectDN():......................Start.");
+		if (!aSubjectDN || aSubjectDN == "") {
+		    this.reset();
+		    return;
+		}
+		var subjectDNProps = Components.classes["@mozilla.org/persistent-properties;1"]
+					.createInstance(Components.interfaces.nsIPersistentProperties);
+		this.mKeyManager.exportSubjectDNToProperties(aSubjectDN, subjectDNProps);
+		this.updateCertProps(subjectDNProps);
+
+		this.LogTrace("x509certsubjectBinding.updateSubjectDN():......................End.");
+		// this.mMaxLogLevel = 4;
+		]]>
+		</body>
+	    </method>
+
+	</implementation>
+    </binding>
+
+
+</bindings>
+

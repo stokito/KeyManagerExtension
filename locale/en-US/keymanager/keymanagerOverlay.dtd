@@ -1,0 +1,151 @@
+<!-- @(#) $Id: keymanagerOverlay.dtd,v 1.80 2013/05/23 22:42:59 subrata Exp $ -->
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is Avaya Labs Research, Avaya Inc. Code.
+   -
+   - The Initial Developer of the Original Code is
+   - Subrata Mazumdar, Avaya Labs Research, Avaya Inc.
+   - Portions created by the Initial Developer are Copyright (C) 2007.
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Subrata Mazumdar (mazum@avaya.com)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+<!ENTITY keymanager.title				"Key Manager">
+<!ENTITY keymanager.version				"0.1.240.20130821">
+
+<!ENTITY keymanager.options.title			"Key Manager Preferences">
+<!ENTITY keymanager.browser.overlay.title		"Key Manager">
+<!ENTITY keymanager.attrcertext.form.overlay.title	"Attribute Certificate Signing Tool (Form-based)">
+<!ENTITY keymanagerattrcertext.wizard.overlay.title	"Attribute Certificate Signing Tool (Wizard-based)">
+
+<!ENTITY keymanager.cmd.toolbar.tool.label			"Key Manager">
+<!ENTITY keymanager.cmd.toolbar.tool.tooltip			"Key Manager Tool - use this tool to create, sign, enroll, export, import, delete and revoke certificates.">
+
+<!ENTITY keymanager.cmd.toolbar.certmgmt.menu.label		"Cert Mgmt">
+<!ENTITY keymanager.cmd.toolbar.certmgmt.menu.tooltip		"Create, sign, enroll, and revoke cert">
+<!ENTITY keymanager.cmd.toolbar.genselfsigned.cert.label	"Create Self-Signed Cert">
+<!ENTITY keymanager.cmd.toolbar.genselfsigned.cert.tooltip	"Generate key-pair and create self-signed certificate for public key with custom certificate extension. The custome cert extension can be chosen based on pre-defined certificate profile. ">
+<!ENTITY keymanager.cmd.toolbar.genkeycsr.label			"Create PKCS#10 CSR">
+<!ENTITY keymanager.cmd.toolbar.genkeycsr.tooltip		"Create PKCS#10 CSR for existing keys/cert or generate new keys/certs ">
+<!ENTITY keymanager.cmd.toolbar.genkeycsr.wizard.label		"Generate PKCS#10 CSR Wizard">
+<!ENTITY keymanager.cmd.toolbar.genkeycsr.wizard.tooltip	"Generate PKCS#10 CSR using external Keys/Certs (OSSL-EPK, PKCS#8, PKCS#12) or NSS Soft-token DB.">
+<!ENTITY keymanager.cmd.toolbar.scepclient.label		"SCEP Client Wizard (Advanced)">
+<!ENTITY keymanager.cmd.toolbar.scepclient.tooltip		"Use SCEP Client to enroll or renew a certificate. You must have the private key of the public key in the certificate DB.">
+<!ENTITY keymanager.cmd.toolbar.scepclient.basic.label		"SCEP Client (Enrollment Only - No Polling)">
+<!ENTITY keymanager.cmd.toolbar.scepclient.basic.tooltip	"Use SCEP Client to enroll a new certificate. It does not support PENDING status in response for SCEP enrollment request. Convinient for SCEP server that immedialy returns a signed cert in response for enrollment request. Polling of pending results is not supported.">
+<!ENTITY keymanager.cmd.toolbar.scepclient.param.label		"SCEP Client - Parameters">
+<!ENTITY keymanager.cmd.toolbar.scepclient.param.tooltip	"SCEP Client - Parameters">
+<!ENTITY keymanager.cmd.toolbar.signcert.label			"Sign (Proxy) Cert">
+<!ENTITY keymanager.cmd.toolbar.signcert.asca.label		"Sign Cert As CA">
+<!ENTITY keymanager.cmd.toolbar.signcert.asca.tooltip		"Sign Cert As CA">
+<!ENTITY keymanager.cmd.toolbar.signcert.proxy.label		"Sign Proxy Cert">
+<!ENTITY keymanager.cmd.toolbar.signcert.proxy.tooltip		"Sign Proxy Cert">
+<!ENTITY keymanager.cmd.toolbar.signcert.crlmanager.label	"CRL Manager">
+<!ENTITY keymanager.cmd.toolbar.signcert.crlmanager.tooltip	"CRL Manager">
+<!ENTITY keymanager.cmd.toolbar.certenroll.label		"Certificate Enrollment Wizard">
+<!ENTITY keymanager.cmd.toolbar.certenroll.tooltip		"Certificate Enrollment Wizard">
+<!ENTITY keymanager.cmd.toolbar.certenroll.scep.label		"Create and Enroll Cert with SCEP">
+<!ENTITY keymanager.cmd.toolbar.certenroll.scep.tooltip		"Create and Enroll Cert with SCEP - Povides a string based interface for specifying cert info.">
+<!ENTITY keymanager.cmd.toolbar.jksmanagecert.label			"Manage Certs in Java key store">
+<!ENTITY keymanager.cmd.toolbar.jksmanagecert.tooltip			"Manage Certs in Java key store. Only supported on OSes (Linux and MacOSX) with command line shell script - like bash, ksh, perl etc. Modify the preference to enable it and specifiy JAVA_HOME path and shell command path.">
+<!ENTITY keymanager.cmd.toolbar.pkcsfilemgr.menu.label			"Security Devices">
+<!ENTITY keymanager.cmd.toolbar.pkcsfilemgr.menu.tooltip		"Manage Security Devices - internal/external soft tokens, hard tokens/Smart-card, OpenSSSL files, Java key stores ">
+<!ENTITY keymanager.cmd.toolbar.pkcsfilemgr.devicemanager.label		"Device Manager">
+<!ENTITY keymanager.cmd.toolbar.pkcsfilemgr.devicemanager.tooltip	"Open the Mozilla PSM's Device Manager. You can use this tool to load/unload PKCS11 modules as well as mount external PKCS#11 based soft-tokens, PKCS#12 and PKCS#8 files.">
+<!ENTITY keymanager.cmd.toolbar.pkcsfilemgr.conf.label			"OpenSSL Key Configurator">
+<!ENTITY keymanager.cmd.toolbar.pkcsfilemgr.conf.tooltip		"OpenSSL Configuration file managemnet tool. Use this tool to export keys/certs for OpenSSL based applications. You can use this tool to export keys/certs for Globus grid users.">
+<!ENTITY keymanager.cmd.toolbar.pkcsfilemgr.sync.label			"OpenSSL Key/Cert Synchronization Tool">
+<!ENTITY keymanager.cmd.toolbar.pkcsfilemgr.sync.tooltip		"Bi-directional OpenSSL key/certificate schronization tool. Use this tool to backup or synchronization your OpenSSL keys/certificates to browser's key/certificate database and vice-versa.">
+<!ENTITY keymanager.cmd.toolbar.attrcertext.label			"Attribute Cert">
+<!ENTITY keymanager.cmd.toolbar.attrcertext.tooltip			"Create and sign Attribute Certificate">
+<!ENTITY keymanager.cmd.toolbar.certops.menu.label			"Cert Operations">
+<!ENTITY keymanager.cmd.toolbar.certops.menu.tooltip			"Cert Operations">
+<!ENTITY keymanager.cmd.toolbar.misctools.menu.label			"Other Tools">
+<!ENTITY keymanager.cmd.toolbar.misctools.menu.tooltip			"Other Tools">
+<!ENTITY keymanager.cmd.toolbar.sshclient.label				"OpenSSH Client">
+<!ENTITY keymanager.cmd.toolbar.sshclient.tooltip			"Launch OpenSSH Terminal using key from browser's cert-DB.">
+<!ENTITY keymanager.cmd.toolbar.help.menu.label		"Help">
+<!ENTITY keymanager.cmd.toolbar.help.menu.tooltip	"Help">
+<!ENTITY keymanager.cmd.toolbar.usagedoc.label		"Show Key Manager Usage Doc">
+<!ENTITY keymanager.cmd.toolbar.usagedoc.tooltip	"Show Key Manager Usage Document">
+<!ENTITY keymanager.cmd.toolbar.personalca.label	"Personal CA Usage Doc">
+<!ENTITY keymanager.cmd.toolbar.personalca.tooltip	"How to Use KeyManager as Personal CA">
+<!ENTITY keymanager.cmd.toolbar.options.label		"Preferences">
+<!ENTITY keymanager.cmd.toolbar.options.tooltip		"Preferences">
+<!ENTITY keymanager.cmd.toolbar.signtext.label		"SMIME - Sign/Verify Text (Demo - Incomplete)">
+<!ENTITY keymanager.cmd.toolbar.signtext.tooltip	"SMIME - Sign/Verify Text (Demo - Incomplete)">
+<!ENTITY xpsigntoolext.toolbar.cmd.label	"Archive File (XPI) Signing Tool">
+<!ENTITY keymanager.cmd.toolbar.xpsigntoolext.label	"XPI Signing Tool">
+<!ENTITY keymanager.cmd.toolbar.xpsigntoolext.tooltip	"XPI Signing Tool">
+
+<!ENTITY keymanager.toolbox.menu.title			"Key Manager Tool Box">
+<!ENTITY keymanager.toolbox.menu.keymanager.label	"Key Manager">
+<!ENTITY keymanager.toolbox.menu.keymanager.tooltip	"Open Key Manager dialog window for displaying Certs assocaited with your keys.">
+<!ENTITY keymanager.toolbox.menu.usagedoc.label		"Key Manager Usage Document">
+<!ENTITY keymanager.toolbox.menu.usagedoc.tooltip	"Key Manager Usage Document">
+<!ENTITY keymanager.toolbox.menu.signtext.label		"SMIME - Sign/Verify Text (Demo - Incomplete)">
+<!ENTITY keymanager.toolbox.menu.signtext.tooltip	"SMIME - Sign/Verify Text (Demo - Incomplete)">
+<!ENTITY keymanager.toolbox.menu.certenroll.label	"Certificate Enrollment Wizard">
+<!ENTITY keymanager.toolbox.menu.certenroll.tooltip	"Certificate Enrollment Wizard">
+<!ENTITY keymanager.toolbox.menu.signcert.label 	"(Proxy) Certificate Signing Tool">
+<!ENTITY keymanager.toolbox.menu.jksmanagecert.label	"Manage Certs in Java Key Store">
+<!ENTITY keymanager.toolbox.menu.jksmanagecert.tooltip	"Manage Certs in Java Key Store">
+<!ENTITY keymanager.toolbox.menu.xpsigntool.form.label	"Archive File (XPI) Signing Tool (Form-based)">
+<!ENTITY keymanager.toolbox.menu.xpsigntool.form.tooltip	"Archive File (XPI) Signing Tool (Form-based)">
+<!ENTITY keymanager.toolbox.menu.xpsigntool.wizard.label	"Archive File (XPI) Signing Tool (Wizard-based)">
+<!ENTITY keymanager.toolbox.menu.genkeycsr.selfsigned.label	"Create Self-Signed Cert">
+<!ENTITY keymanager.toolbox.menu.genkeycsr.selfsigned.tooltip	"Create Self-Signed Cert">
+<!ENTITY keymanager.toolbox.menu.genkeycsr.selfsigned.enroll.label	"Create Self-Signed Cert and Enroll with CA">
+<!ENTITY keymanager.toolbox.menu.genkeycsr.selfsigned.wizard.label	"Generate PKCS#10 CSR Wizard">
+<!ENTITY keymanager.toolbox.menu.sshclient.dialog.label		"Launch OpenSSH Terminal">
+<!ENTITY keymanager.toolbox.menu.scepclient.basic.label	"SCEP Client Tool (Enrollment Only)">
+<!ENTITY keymanager.toolbox.menu.scepclient.wizard.label "SCEP Client Tool (Wizard-based)">
+<!ENTITY keymanager.toolbox.menu.osslkeyconf.label		"OpenSSL Key Configurator">
+<!ENTITY keymanager.toolbox.menu.osslsynctool.label	"OpenSSL Key/Cert Sync Tool">
+<!ENTITY keymanager.toolbox.menu.attrcert.label	"Attribute Certificate Signing Tool (Form-based)">
+
+<!ENTITY keymanager.doc.overlay.title			"Key Manager Usage Document">
+<!ENTITY keymanager.genkeycsr.overlay.title		"Create Self-Signed Cert and Enroll with CA">
+<!ENTITY keymanager.genkeycsr.selfsigned.overlay.title	"Create Self-Signed Cert">
+<!ENTITY keymanager.genkeycsr.selfsigned.overlay.tooltip	"Create Self-Signed Cert">
+<!ENTITY keymanager.genkeycsr.selfsigned.enroll.overlay.title	"Create Self-Signed Cert and Enroll with CA">
+<!ENTITY keymanager.genkeycsr.gencsr.wizard.overlay.title	"Generate PKCS#10 CSR Wizard">
+<!ENTITY keymanager.genkeycsr.gencsr.wizard.overlay.tooltip	"Generate PKCS#10 CSR Wizard with keys/certs in internal and external security tokens.">
+<!ENTITY keymanager.scep.client.basic.overlay.title	"SCEP Client Tool (Enrollment Only)">
+<!ENTITY keymanager.scep.client.gui.overlay.title	"SCEP Client Tool (Single Page Form-based)">
+<!ENTITY keymanager.scep.client.gui.wizard.overlay.title "SCEP Client Tool (Wizard-based)">
+<!ENTITY keymanager.osslkeyconf.overlay.title		"OpenSSL Key Configurator">
+<!ENTITY keymanager.osslkeycertsynctool.overlay.title	"OpenSSL Key/Cert Sync Tool">
+<!ENTITY keymanager.signcert.tool.win.title 		"(Proxy) Certificate Signing Tool">
+<!ENTITY keymanager.certenroll.overlay.title		"Certificate Enrollment Wizard">
+<!ENTITY keymanager.sshclient.dialog.overlay.title	"Launch OpenSSH Terminal">
+<!ENTITY keymanager.jksmanagecert.overlay.title		"Manage Certs in Java Key Store">
+
+

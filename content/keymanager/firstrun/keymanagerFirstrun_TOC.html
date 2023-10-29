@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" >
+
+<head>
+
+<SCRIPT LANGUAGE="JavaScript">
+
+function showAppInfoDialog(aDialogWinURL)
+{
+    if (window && window.open) {
+    var sfWindow = window.open(
+        		aDialogWinURL,
+        		"AppInfo",
+        		"scrollbars=yes,status=yes,resizable=yes,status=yes"
+			);
+    }
+    else {
+    }
+}
+
+</script>
+
+<title>Key Manager Tool</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+
+<body bgcolor="#FFFFFF"  onload="javascript:showAppInfoDialog('keymanagerInfo.html')">
+
+<OL>
+    <LI>
+    	<A href="javascript:showAppInfoDialog('../about.xul')">About</A>
+    </LI>
+    <LI>
+    	<A href="javascript:showAppInfoDialog('keymanagerInfo.html')">Tool Usage Information</A>
+    </LI>
+
+</OL>
+
+</body>
+</html>
+

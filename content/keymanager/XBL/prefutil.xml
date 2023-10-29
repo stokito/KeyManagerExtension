@@ -1,0 +1,291 @@
+<?xml version="1.0"?>
+<!-- @(#) $Id: prefutil.xml,v 1.5 2011/02/04 18:54:54 subrata Exp $ -->
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is Avaya Labs Research, Avaya Inc. Code.
+   -
+   - The Initial Developer of the Original Code is
+   - Subrata Mazumdar, Avaya Labs Research, Avaya Inc.
+   - Portions created by the Initial Developer are Copyright (C) 2007.
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Subrata Mazumdar (mazum@avaya.com)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+
+
+<bindings id="prefutilBindings"
+    xmlns="http://www.mozilla.org/xbl"
+    xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    xmlns:xbl="http://www.mozilla.org/xbl">
+
+    <binding id="prefutilBinding">
+    	<!-- content, property, method and event descriptions go here -->
+    	<content>
+	   <xul:hbox collapsed="true"/>
+    	</content>
+	<implementation>
+
+	    <field name="prefService"/>
+	    <field name="rootPrefBranch"/>
+
+	    <constructor>
+		<![CDATA[
+
+    		// dump("prefutil.constructor():......................Start.\n");
+
+    		this.prefService = Components.classes["@mozilla.org/preferences-service;1"].
+                        getService(Components.interfaces.nsIPrefService);
+
+    		// Get the root branch
+    		this.rootPrefBranch = Components.classes["@mozilla.org/preferences-service;1"].
+                    getService(Components.interfaces.nsIPrefBranch);
+
+    		/*
+    		dump("prefutil.constructor(): " + 
+    				" prefService: " + this.prefService +
+				" rootPrefBranch: " + this.rootPrefBranch +
+				"\n");
+    		*/
+
+    		// dump("prefutil.constructor():......................End.\n");
+		]]>
+	    </constructor>
+
+	    <method name="getPrefBranch">
+		<parameter name="prefBranchName"/>
+	        <body>
+		<![CDATA[
+
+    		this.prefService = Components.classes["@mozilla.org/preferences-service;1"].
+                        getService(Components.interfaces.nsIPrefService);
+    		/*
+    		dump("prefutil.getPrefBranch(): " + 
+    				" prefService: " + this.prefService +
+				"\n");
+    		*/
+    		var prefBranch = this.prefService.getBranch(prefBranchName);
+    		return prefBranch;
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="getPrefValueByBranch">
+		<parameter name="prefBranchName"/>
+		<parameter name="prefName"/>
+		<parameter name="valType"/>
+	        <body>
+		<![CDATA[
+    		/*
+    		alert("prefBranchName: " + prefBranchName + " " + 
+    			" prefName: " + prefName + " " + 
+			" valType: " + valType);
+    		*/
+
+    		var prefBranchNode = this.getPrefBranch(prefBranchName);
+    		if (prefBranchNode == null) {
+    		    return null;
+    		}
+
+    		var prefValue = null;
+    		switch(valType) {
+		    case "String" :
+	    		try {
+			    prefValue = prefBranchNode.getCharPref(prefName);
+	    		} catch (ex) {}
+	    		break;
+		    case "boolean" :
+	    		try {
+			    prefValue = prefBranchNode.getBoolPref(prefName);
+	    		} catch (ex) {prefValue = false;}
+	    		break;
+    		}
+
+    		// alert("getPrefValue(" + prefName + "): " + prefValue);
+
+    		return prefValue;
+		]]>
+	        </body>
+	    </method>
+
+
+	    <method name="splitPrefNamePath">
+		<parameter name="prefNamePath"/>
+	        <body>
+		<![CDATA[
+    		var prefNamePathItemList = prefNamePath.split(".");
+
+    		var prefName= prefNamePathItemList[prefNamePathItemList.length -1];
+
+    		var prefBranch = "";
+    		for (var i = 0; i < (prefNamePathItemList.length -1); i++) {
+    		    prefBranch += prefNamePathItemList[i];
+    		    prefBranch += ".";
+    		}
+    		// alert("prefBranchName: " + prefBranch + " " + " prefName: " + prefName);
+
+    		var prefScopedName = new Array(2);
+    		prefScopedName[0] = prefBranch;
+    		prefScopedName[1] = prefName;
+
+   
+    		return prefScopedName;
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="getPrefValue">
+		<parameter name="prefName"/>
+		<parameter name="valType"/>
+	        <body>
+		<![CDATA[
+    		// alert("getPrefValue(" + prefName + "):...............Start.");
+
+    		var prefItemList = this.splitPrefNamePath(prefName);
+
+    		var prefBranchNodeNames = prefItemList[0];
+    		var prefLeafNodeName = prefItemList[1];
+
+    		var prefValue = this.getPrefValueByBranch(prefItemList[0], prefItemList[1], valType);
+
+    		// alert("getPrefValue(" + prefName + "):...............End.");
+    		return prefValue;
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="getPrefBoolValue">
+		<parameter name="prefName"/>
+	        <body>
+		<![CDATA[
+    		var boolVal = this.getPrefValue(prefName, "boolean");
+    		if (boolVal == null) {
+    		    return false;
+    		}
+    		return boolVal;
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="getPrefStringValue">
+		<parameter name="prefName"/>
+	        <body>
+		<![CDATA[
+    		return this.getPrefValue(prefName, "String");
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="setPrefValueByBranch">
+		<parameter name="prefBranchName"/>
+		<parameter name="prefName"/>
+		<parameter name="valType"/>
+		<parameter name="prefValue"/>
+	        <body>
+		<![CDATA[
+    		// dump("setPrefValueByBranch(" + prefName + "):...............Start.\n");
+    		if ((prefValue ==  null) || (prefValue == "")) {
+    			return;
+    		}
+
+    		var tmpPrefBranchNode = "";
+    		var tmpPrefName = prefBranchName + "." + prefName;
+
+    		var prefBranchNode = this.getPrefBranch(prefBranchName);
+    		if (prefBranchNode == null) {
+			alert("setPrefValueByBranch(): couldn't find prefBranchName: " + prefBranchName);
+    			return;
+    		}
+
+    		// dump("setPrefValueByBranch(" + prefName + "):...............1.\n");
+
+    		switch (valType) {
+		    case "String" :
+	    		try {
+    	    		    prefBranchNode.setCharPref(prefName, prefValue);
+	    		} catch (ex) {alert("prefBranchNode.setCharPref() failed.");}
+	    		break;
+		    case "boolean" :
+	    		try {
+    	    		    prefBranchNode.setBoolPref(prefName, prefValue);
+	    		} catch (ex) {alert("prefBranchNode.setCharPref() failed.");}
+	    		break;
+    		    default:
+	    		alert("Unknown preference value type: " + valType);
+	    		break;
+    		}
+    		// dump("setPrefValueByBranch(" + prefName + "):...............End.\n");
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="setPrefValue">
+		<parameter name="prefName"/>
+		<parameter name="valType"/>
+		<parameter name="prefValue"/>
+	        <body>
+		<![CDATA[
+    		// dump("setPrefValue(" + prefName + "):...............Start.\n");
+    		var prefItemList = this.splitPrefNamePath(prefName);
+
+    		var prefBranchNodeNames = prefItemList[0];
+    		var prefLeafNodeName = prefItemList[1];
+
+    		this.setPrefValueByBranch(prefItemList[0], prefItemList[1], valType, prefValue);
+
+    		// dump("setPrefValue(" + prefName + "):...............End.\n");
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="setPrefBoolValue">
+		<parameter name="prefName"/>
+		<parameter name="prefValue"/>
+	        <body>
+		<![CDATA[
+    		this.setPrefValue(prefName, "boolean", prefValue);
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="setPrefStringValue">
+		<parameter name="prefName"/>
+		<parameter name="prefValue"/>
+	        <body>
+		<![CDATA[
+    		this.setPrefValue(prefName, "String", prefValue);
+		]]>
+	        </body>
+	    </method>
+
+	</implementation>
+    </binding>
+
+</bindings>
+

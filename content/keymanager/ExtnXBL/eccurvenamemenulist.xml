@@ -1,0 +1,207 @@
+<?xml version="1.0"?>
+<!-- @(#) $Id: eccurvenamemenulist.xml,v 1.5 2009/04/16 13:11:53 subrata Exp $ -->
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is Avaya Labs Research, Avaya Inc. Code.
+   -
+   - The Initial Developer of the Original Code is
+   - Subrata Mazumdar, Avaya Labs Research, Avaya Inc.
+   - Portions created by the Initial Developer are Copyright (C) 2007.
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Subrata Mazumdar (mazum@avaya.com)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+
+<!DOCTYPE bindings SYSTEM "chrome://keymanager/locale/keyManager.dtd">
+
+<bindings id="eccurvenamemenulistBindings"
+    xmlns="http://www.mozilla.org/xbl"
+    xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    xmlns:xbl="http://www.mozilla.org/xbl">
+
+
+
+    <binding id="eccurvenamemenulistBinding">
+        <!--
+        <resources>
+    	    <script type="application/x-javascript" src="chrome://keymanager/content/ExtnXBL/certextn2props.js"/>
+	    <stylesheet src="chrome://keymanager/skin/kmbindings.css"/>
+        </resources>
+        -->
+    	<!-- content, property, method and event descriptions go here -->
+    	<content>
+            <xul:menulist anonid="certmgr.certdetail.keyType.ec.curve.menulist"
+	        flex="1"
+	        xbl:inherits="flex,tooltiptext,value,disabled"
+		tooltiptext="&certmgr.certdetail.keyType.ec.curve.menulist.tooltip;"
+		certPropName="ecCurveName"
+		oncommand="getBindingParent(this).ecCurveMenuListChanged(this, event)"
+		>
+                <xul:menupopup>
+                </xul:menupopup>
+            </xul:menulist>
+    	</content>
+		    <!--
+                    <menuitem anonid="certmgr.certdetail.key.ec.curve.sect163k1"
+			label="&certmgr.certdetail.key.ec.curve.sect163k1.label;"
+			selected="true"
+		        tooltiptext="&certmgr.certdetail.sigAlgName.tooltip;"
+			value="sect163k1"
+			/>
+		    -->
+	<implementation>
+	    <field name="mECCurveMenuInitialized">
+	    false
+	    </field>
+	    <field name="mECCurveMenuListElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certmgr.certdetail.keyType.ec.curve.menulist");
+	    </field>
+
+	    <property name="value"
+                onget="return this.mECCurveMenuListElem.value;"
+	    	onset="this.mECCurveMenuListElem.value=val;
+                       return val;"
+		/>
+	    <property name="readonly"
+		onget="return this.hasAttribute('readonly');"
+		onset="if (val) this.setAttribute('readonly',true);
+		       else this.removeAttribute('readonly');
+		       this.mECCurveMenuListElem.disabled=val;
+		       if(!val) {this.refresh();}
+		       return val;"
+		/>
+
+	    <constructor>
+		<![CDATA[
+		this.initECCurveMenuList();
+		this.refresh();
+		]]>
+	    </constructor>
+
+	    <method name="refresh">
+	        <body>
+		<![CDATA[
+		this.ecCurveMenuListChanged(this.mECCurveMenuListElem);
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="ecCurveMenuListChanged">
+		<parameter name="aECCurveMenuListElem"/>
+		<parameter name="ev"/>
+	        <body>
+		<![CDATA[
+		/*
+		if (ev) {
+		    ev.stopPropagation();
+		}
+		*/
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="initECCurveMenuList">
+	        <body>
+		<![CDATA[
+/*
+ For more info : 
+ 	1. http://www.ietf.org/rfc/rfc4492.txt
+	2. http://dev.experimentalstuff.com:8082/
+	3. .../mozilla/security/nss/cmd/lib/secutil.[ch]
+ */
+
+const ECC_CurveNameList = [
+   "sect163k1", "nistk163", "sect163r1", "sect163r2", 
+   "nistb163", "sect193r1", "sect193r2", "sect233k1", 
+   "nistk233", "sect233r1", "nistb233", "sect239k1", 
+   "sect283k1", "nistk283", "sect283r1", "nistb283", 
+   "sect409k1", "nistk409", "sect409r1", "nistb409", 
+   "sect571k1", "nistk571", "sect571r1", "nistb571", 
+   "secp160k1", "secp160r1", "secp160r2", "secp192k1", 
+   "secp192r1", "nistp192", "secp224k1", "secp224r1", 
+   "nistp224", "secp256k1", "secp256r1", "nistp256", 
+   "secp384r1", "nistp384", "secp521r1", "nistp521", 
+
+   "prime192v1",  "prime192v2",  "prime192v3",  "prime239v1",  
+   "prime239v2",  "prime239v3",  
+   "c2pnb163v1",  "c2pnb163v2",  "c2pnb163v3",  "c2pnb176v1",  
+   "c2tnb191v1",  "c2tnb191v2",  "c2tnb191v3",  "c2onb191v4",  
+   "c2onb191v5",  "c2pnb208w1",  "c2tnb239v1",  "c2tnb239v2",  
+   "c2tnb239v3",  "c2onb239v4",  "c2onb239v5",  "c2pnb272w1",  
+   "c2pnb304w1",  "c2tnb359v1",  "c2pnb368w1",  "c2tnb431r1",  
+
+   "secp112r1", "secp112r2", "secp128r1", "secp128r2", 
+
+   "sect113r1", "sect113r2", "sect131r1", "sect131r2"
+	];
+const ECC_CurveNameList_DEFAULT_ITEM = "secp384r1";
+
+                // this.LogTrace("initECCurveMenuList():.......................Start.\n");
+
+                if (this.mECCurveMenuInitialized) {
+    	            return;
+                }
+                // dump("initECCurveMenuList():ECC_CurveNameList.length: " + ECC_CurveNameList.length + ".\n");
+
+                var defaultItem = ECC_CurveNameList_DEFAULT_ITEM;
+
+                var selectedIndex = 0;
+                var selectedItem = 0;
+                for (var i = 0; i < ECC_CurveNameList.length; i++) {
+	            var menuItemName = ECC_CurveNameList[i];
+	            var menuItemNode = this.mECCurveMenuListElem.appendItem(menuItemName, menuItemName);
+	            // var menuItemNode = document.createElementNS(this.namespace, "menuitem");
+		    // this.mECCurveMenuListElem.xxx(menuItemNode);
+	            if (menuItemName == defaultItem) {
+	                selectedIndex = i;
+	                selectedItem = menuItemNode;
+	            }
+                }
+                this.mECCurveMenuListElem.selectedIndex = selectedIndex;
+                this.mECCurveMenuInitialized = true;
+                // dump("initECCurveMenuList():selectedIndex: " + selectedIndex + ".\n");
+
+                // dump("initECCurveMenuList():.......................End.\n");
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="reset">
+	        <body>
+		<![CDATA[
+		]]>
+	        </body>
+	    </method>
+
+	</implementation>
+    </binding>
+
+</bindings>
+

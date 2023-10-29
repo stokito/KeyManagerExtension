@@ -1,0 +1,2277 @@
+<?xml version="1.0"?>
+<!-- @(#) $Id: fileselector.xml,v 1.35 2012/10/07 17:19:57 subrata Exp $ -->
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is Avaya Labs Research, Avaya Inc. Code.
+   -
+   - The Initial Developer of the Original Code is
+   - Subrata Mazumdar, Avaya Labs Research, Avaya Inc.
+   - Portions created by the Initial Developer are Copyright (C) 2007.
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Subrata Mazumdar (mazum@avaya.com)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+
+
+<bindings id="fileselectorBindings"
+    xmlns="http://www.mozilla.org/xbl"
+    xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    xmlns:xbl="http://www.mozilla.org/xbl">
+
+    <binding id="fileselectorBinding"
+	extends="x509certbase.xml#x509certbase"
+	>
+        <resources>
+	<!--
+	    <stylesheet src="../../skin/kmbindings.css"/>
+	-->
+        </resources>
+    	<!-- content, property, method and event descriptions go here -->
+    	<content>
+	    <xul:hbox align="start" anonid="fileselector.file.hbox"
+		xbl:inherits="hidden"
+	        flex="1"
+	        >
+	        <xul:checkbox anonid="fileselector.file.format.pem"
+			xbl:inherits="label=formatlabel,hidden=formathidden,checked=ascii,disabled,tooltiptext=formattooltiptext"
+                        label="text"
+               		oncommand="getBindingParent(this).setFileFormat(this, event);"
+                        />
+	        <xul:textbox anonid="fileselector.file.path" flex="1"
+			xbl:inherits="value,type,maxlength,disabled,size,readonly,tabindex,accesskey,tooltiptext=filetooltiptext,autocompletesearch,completeselectedindex,autocompletesearchparam,width=filewidth,preference"
+  			tooltiptext="Enter File Path"
+  	  		type="autocomplete" 
+  	  		xautocompletesearch="file" 
+  	  		xautocompletesearchparam="fileselector.file.path"
+			xontextentered="getBindingParent(this).handleFilePathChange(this, event)"
+  	  		autocompletesearch="form-history" 
+  	  		completeselectedindex="true"
+			onpopuphiding="getBindingParent(this).handleFilePathChange(this, event)"
+    			onchange="getBindingParent(this).handleFilePathChange(this, event)"
+  	  		onkeyup="if (event.keyCode == 13)
+  	  			{getBindingParent(this).autoCompleteAction(this, event)};"
+		        />
+	        <xul:button anonid="fileselector.file.browse"
+			xbl:inherits="label=browselabel,tooltiptext=browsetooltiptext,hidden=browsehidden,disabled"
+	  		label="Browse"
+  			tooltiptext="Browse"
+               		oncommand="getBindingParent(this).selectFile(this, event);"
+			/>
+	        <xul:button anonid="fileselector.file.view"
+			xbl:inherits="label=viewlabel,tooltiptext=viewtooltiptext,hidden=viewhidden,disabled,oncommand=oncommandview"
+	  		label="View"
+			hidden="true"
+  			tooltiptext="View"
+               		oncommand="getBindingParent(this).viewFile(this, event);"
+			/>
+	        <xul:prefutil anonid="fileselector.file.prefutil"/>
+	    </xul:hbox>
+    	</content>
+	    <!--
+	    <xul:button anonid="fileselector.file.save"
+			xbl:inherits="label=savelabel,tooltiptext=savetooltiptext"
+			hidden="true"
+	  		label="View"
+  			tooltiptext="View"
+               		oncommand="getBindingParent(this).saveFile(this);"
+			/>
+	    <hbox flex="1">
+	    </hbox>
+	    -->
+	<implementation>
+	    <field name="mIOService">
+    	        Components.classes["@mozilla.org/network/io-service;1"]
+			.getService(Components.interfaces.nsIIOService);
+	    </field>
+	    <field name="mDirService">
+                Components.classes["@mozilla.org/file/directory_service;1"]
+			.getService(Components.interfaces.nsIProperties)
+	    </field>
+	    <field name="mTempDir">
+                Components.classes["@mozilla.org/file/directory_service;1"]
+			.getService(Components.interfaces.nsIProperties)
+			.get("TmpD", Components.interfaces.nsIFile);
+	    </field>
+	    <field name="mProfileDir">
+                Components.classes["@mozilla.org/file/directory_service;1"]
+			.getService(Components.interfaces.nsIProperties)
+			.get("ProfD", Components.interfaces.nsIFile);
+	    </field>
+	    <field name="mHomeDir">
+                Components.classes["@mozilla.org/file/directory_service;1"]
+			.getService(Components.interfaces.nsIProperties)
+			.get("Home", Components.interfaces.nsIFile);
+	    </field>
+	    <field name="mUserInfo">
+	    	Components.classes["@mozilla.org/userinfo;1"]
+			.getService(Components.interfaces.nsIUserInfo);
+	    </field>
+
+	    <field name="mFileSelectorHBoxElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "fileselector.file.hbox");
+	    </field>
+	    <field name="mFileFormatElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "fileselector.file.format.pem");
+	    </field>
+	    <field name="mFilePathElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "fileselector.file.path");
+	    </field>
+	    <field name="mFileBrowseElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "fileselector.file.browse");
+	    </field>
+	    <field name="mFileViewElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "fileselector.file.view");
+	    </field>
+	    <field name="mPrefUtil">
+		document.getAnonymousElementByAttribute(this, "anonid", "fileselector.file.prefutil");
+	    </field>
+	    <field name="mAutoSelectedFile">
+	        false
+	    </field>
+	    <field name="mDisplayDirFile"/>
+	    <field name="mFileRef"/>
+	    <field name="mFilePicker"/>
+
+            <property name="disabled"
+                onget="return this.hasAttribute('disabled');"
+	    	onset="if (val == true) this.setAttribute('disabled',true);
+                       else this.removeAttribute('disabled');
+		       this.updateDisplayView();
+                       return val;"
+		       />
+	    <property name="readonly"
+                onget="return this.getAttribute('readonly');"
+	    	onset="if (val) this.setAttribute('readonly', true);
+                       else this.removeAttribute('readonly');
+                       return val;"
+		/>
+	    <property name="hidden"
+                onget="return this.mFileSelectorHBoxElem.hidden;"
+	    	onset="if (val) this.mFileSelectorHBoxElem.hidden=true;
+                       else this.mFileSelectorHBoxElem.hidden=false;
+                       return val;"
+		/>
+
+	    <property name="id"
+	        onget="return this.getAttribute('id');"
+		onset="return this.setAttribute('id',val);"
+		/>
+	    <property name="fileMode"
+	        onget="return this.getAttribute('fileMode');"
+		onset="return this.setAttribute('fileMode',val);"
+		/>
+	    <property name="fileDialogMsg"
+	        onget="return this.getAttribute('fileDialogMsg');"
+		onset="return this.setAttribute('fileDialogMsg',val);"
+		/>
+	    <property name="fileTypeMsg"
+	        onget="return this.getAttribute('fileTypeMsg');"
+		onset="return this.setAttribute('fileTypeMsg',val);"
+		/>
+	    <property name="fileTypeFilters"
+	        onget="return this.getAttribute('fileTypeFilters');"
+		onset="return this.setAttribute('fileTypeFilters',val);"
+		/>
+	    <property name="displayDirFile"
+	        onget="return this.mDisplayDirFile;"
+		onset="this.mDisplayDirFile = val;
+		      if (val) {
+			var filePath = this.mDisplayDirFile.path;
+		      	this.setAttribute('fileDisplayDirPath', filePath);
+		      }
+		      else {
+		      	this.removeAttribute('fileDisplayDirPath');
+		      }
+		      this.reinitFilePicker();
+		      return val;"
+		/>
+
+	    <property name="fileDisplayDirPath"
+	        onget="return this.getAttribute('fileDisplayDirPath');"
+		onset="if (val) {
+			this.displayDirFile = this.getLocalFile(val);
+		       }
+		       else {
+		       	this.displayDirFile = null;
+		       }
+		       return val;"
+		/>
+	    <property name="defaultFileName"
+	        onget="return this.getAttribute('defaultFileName');"
+		onset="return this.setAttribute('defaultFileName',val);"
+		/>
+	    <property name="tmpDirSuffix"
+	        onget="return this.getAttribute('tmpDirSuffix');"
+		onset="return this.setAttribute('tmpDirSuffix',val);"
+		/>
+	    <property name="tmpDirPath"
+	        onget="return this.getAttribute('tmpDirPath');"
+		onset="return this.setAttribute('tmpDirPath',val);"
+		/>
+
+	    <property name="value"
+	        onget="return this.mFilePathElem.value;"
+		onset="this.initWithFilePath(val);return val;"
+		/>
+	    <property name="filepath"
+	        onget="return this.value;"
+		onset="this.value=val;return val;"
+		/>
+
+	    <property name="file">
+	        <getter>
+		  <![CDATA[
+		    return this.mFileRef;
+		  ]]>
+	        </getter>
+	        <setter>
+		  <![CDATA[
+		    var filePath = "";
+		    if (val) {
+		    	filePath = val.path;
+		    }
+		    this.filepath = filePath;
+		    return val;
+		  ]]>
+	        </setter>
+	    </property>
+
+	    <property name="ascii"
+                onget="return this.hasAttribute('ascii');"
+	    	onset="if (val == true) this.setAttribute('ascii',true);
+                       else this.removeAttribute('ascii');
+		       this.updateDisplayView();
+                       return val;"
+		/>
+
+	    <property name="fileNameSuffix" readonly="true">
+		<getter>
+		<![CDATA[
+		if (!this.mFileRef) {
+		    return "";
+		}
+		var fileName = this.mFileRef.leafName;
+		var fileNameItemList = fileName.split(".");
+		if (fileNameItemList.length <= 1) {
+		    return "";
+		}
+		var fileNameSuffix = fileNameItemList[fileNameItemList.length - 1];
+    		return fileNameSuffix;
+		]]>
+		</getter>
+	    </property>
+
+	    <property name="uri" readonly="true">
+		<getter>
+		<![CDATA[
+		if (!this.mFileRef) {
+		    return null;
+		}
+    	       	var /* nsIFileURI */ fileURI = this.mIOService.newFileURI(this.mFileRef);
+    		return fileURI;
+		]]>
+		</getter>
+	    </property>
+
+	    <property name="fileuri" readonly="true">
+		<getter>
+		<![CDATA[
+		if (!this.mFileRef) {
+		    return "";
+		}
+    	       	var /* nsIFileURI */ fileURI = this.mIOService.newFileURI(this.mFileRef);
+    		return fileURI.spec;
+		]]>
+		</getter>
+	    </property>
+
+	    <property name="savepath"
+                onget="return this.hasAttribute('savepath');"
+	    	onset="if (val == true) this.setAttribute('savepath',true);
+                       else this.removeAttribute('savepath');
+                       return val;"
+		/>
+
+	    <constructor>
+		<![CDATA[
+		// this.mMaxLogLevel = 9;
+                this.LogTrace("fileselectorBinding.constructor(id: " + this.id + "):...............Start.");
+
+		this.mTempDir		= this.mDirService.get("TmpD", Components.interfaces.nsIFile);
+		this.mProfileDir	= this.mDirService.get("ProfD", Components.interfaces.nsIFile);
+		this.mHomeDir		= this.mDirService.get("Home", Components.interfaces.nsIFile);
+
+		this.mFileRef = null;
+		this.mAutoSelectedFile = false;
+
+		var autoCompleteSearchParamOld = this.mFilePathElem.getAttribute("autocompletesearchparam");
+		this.setAutoCompleteSearchParam(
+				this.mFilePathElem,
+				getBindingParent(this)
+				);
+		var autoCompleteSearchParam = this.mFilePathElem.getAttribute("autocompletesearchparam");
+                this.LogDebug("fileselectorBinding.constructor():\t" + autoCompleteSearchParamOld + "\t==> " + autoCompleteSearchParam + "");
+		var fileMode = this.getAttribute('fileMode');
+                if (!fileMode || (fileMode == "")) {
+	            this.setAttribute('fileMode','open');
+                }
+            
+                if (this.savepath) {
+	            var filePathPrefId = "extensions." + autoCompleteSearchParam + ".value";
+    	            var filePath = this.mPrefUtil.getPrefStringValue(filePathPrefId);
+	            if (filePath) {
+	                this.value = filePath;
+	            }
+    	            this.LogDebug("fileselectorBinding.constructor(): filePathPrefId: " + filePathPrefId + " prefFilePath: " +  filePath + "");
+                }
+            
+                /*
+                if ((this.defaultFileName == null) || (this.defaultFileName == "")) {
+	            this.setAttribute('defaultFileName','dummy.txt');
+                }
+                this.LogDebug("fileselectorBinding.constructor(): " +  "\n" + 
+    			            "  fileMode: " + this.fileMode  + "\n" + 
+    			            "  fileDialogMsg: " + this.fileDialogMsg  + "\n" + 
+    			            "  fileTypeMsg: " + this.fileTypeMsg  + "\n" + 
+    			            "  fileTypeFilters: " + this.fileTypeFilters  + "\n" + 
+    			            "  fileDisplayDirPath: " + this.fileDisplayDirPath  +
+			            ".\n");
+                */
+            
+
+		/*
+		if (!this.mFilePicker) {
+		    var fp = this.createInitFilePicker();
+		    this.mFilePicker = fp;
+		}
+		*/
+
+                this.handleFilePathChange(this.mFilePathElem);
+
+                this.LogTrace("fileselectorBinding.constructor(id: " + this.id + "):...............End.\n");
+                return;
+		]]>
+	    </constructor>
+
+	    <destructor>
+		<![CDATA[
+                this.LogTrace("fileselectorBinding.destructor(id: " + this.id + "):...............Start.\n");
+		if ((this.value != "") && this.mFileRef &&
+		    this.mDisplayDirFile && this.mDisplayDirFile.path &&
+		    (this.mDisplayDirFile.path != "")) {
+		    var autoCompleteSearchParam = this.mFilePathElem.getAttribute("autocompletesearchparam");
+		    if (autoCompleteSearchParam) {
+	            	var prefDisplayDirectoryId = "extensions." + autoCompleteSearchParam + ".dir";
+    		    	this.mPrefUtil.setPrefStringValue(prefDisplayDirectoryId, this.mDisplayDirFile.path);
+		    }
+		}
+		this.removeOrphanFile();
+                this.LogTrace("fileselectorBinding.destructor(id: " + this.id + "):...............End.\n");
+		]]>
+	    </destructor>
+
+	    <method name="createFilePicker">
+	        <body>
+		<![CDATA[
+		if (this.mFilePicker) {
+		    return this.mFilePicker;
+		}
+
+		var fp = Components.classes["@mozilla.org/filepicker;1"]
+		    		.createInstance(Components.interfaces.nsIFilePicker);
+		this.mFilePicker = fp;
+		return fp;
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="reinitFilePicker">
+		<parameter name="aFilePicker"/>
+	        <body>
+		<![CDATA[
+                this.LogTrace("fileselectorBinding.reinitFilePicker():...............Start.");
+
+		var fp = aFilePicker;
+		if (!fp) {
+		    if (!this.mFilePicker) {
+		    	return;
+		    }
+		    fp = this.mFilePicker;
+		}
+
+                if (!this.fileMode || (this.fileMode == "")) {
+	            this.setAttribute('fileMode','open');
+                }
+            
+                if (!this.fileDialogMsg || (this.fileDialogMsg == "")) {
+	            this.setAttribute('fileDialogMsg','Select a file');
+                }
+
+                if (!this.fileTypeMsg || (this.fileTypeMsg == "")) {
+	            this.setAttribute('fileTypeMsg','Text Files');
+                }
+                if (!this.fileTypeFilters || (this.fileTypeFilters == "")) {
+	            this.setAttribute('fileTypeFilters','*.txt');
+                }
+                this.LogTrace("fileselectorBinding.reinitFilePicker():...............10.");
+            
+                var displayDirectory = this.getLocalFile(this.fileDisplayDirPath);
+                if (!displayDirectory || (displayDirectory.exists() == false)) {
+		    var autoCompleteSearchParam = this.mFilePathElem.getAttribute("autocompletesearchparam");
+    	            this.LogDebug("fileselectorBinding.reinitFilePicker(): autoCompleteSearchParam: " + autoCompleteSearchParam);
+		    if (autoCompleteSearchParam) {
+	            	var prefDisplayDirectoryId = "extensions." + autoCompleteSearchParam + ".dir";
+    	            	var fileDisplayDirPathPref = this.mPrefUtil.getPrefStringValue(prefDisplayDirectoryId);
+    	            	this.LogDebug("fileselectorBinding.constructor(): prefDisplayDirectoryId: " + prefDisplayDirectoryId);
+    	            	this.LogDebug("fileselectorBinding.reinitFilePicker(): fileDisplayDirPathPref: " + fileDisplayDirPathPref);
+    	            	displayDirectory = this.getLocalFile(fileDisplayDirPathPref);
+		    }
+                    this.LogTrace("fileselectorBinding.reinitFilePicker(): displayDirectory: " + displayDirectory);
+                    if (!displayDirectory || (displayDirectory.exists() == false)) {
+                        // displayDirectory = this.getHomeDir();
+	                displayDirectory = this.getTempDir();
+	            }
+                }
+		this.mDisplayDirFile = displayDirectory;
+
+                var filePickMode = Components.interfaces.nsIFilePicker.modeOpen;
+                if (this.fileMode == "open") {
+    	            filePickMode = Components.interfaces.nsIFilePicker.modeOpen;
+                }
+                else if (this.fileMode == "save") {
+    	            filePickMode = Components.interfaces.nsIFilePicker.modeSave;
+                }
+                else if (this.fileMode == "folder") {
+    	            filePickMode = Components.interfaces.nsIFilePicker.modeGetFolder;
+                }
+                this.LogTrace("fileselectorBinding.reinitFilePicker():...............40.");
+
+                fp.init(window, this.fileDialogMsg, filePickMode);
+                if (this.mDisplayDirFile) {
+    	            fp.displayDirectory = this.mDisplayDirFile;
+                }
+
+                if (this.defaultFileName) {
+    	            fp.defaultString = this.defaultFileName;
+                }
+                this.LogTrace("fileselectorBinding.reinitFilePicker():...............60.");
+                
+		var fileTypeFilters = this.fileTypeFilters;
+                if (fileTypeFilters && (fileTypeFilters != "")) {
+                    fp.appendFilter(
+		            this.fileTypeMsg,
+		            fileTypeFilters
+		            );
+                }
+                fp.appendFilters(Components.interfaces.nsIFilePicker.filterAll);
+
+                this.LogTrace("fileselectorBinding.reinitFilePicker():...............End.");
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="createInitFilePicker">
+	        <body>
+		<![CDATA[
+                this.LogTrace("fileselectorBinding.createInitFilePicker():...............Start.");
+
+		if (this.mFilePicker) {
+		    return this.mFilePicker;
+		}
+
+		var fp = Components.classes["@mozilla.org/filepicker;1"]
+		    		.createInstance(Components.interfaces.nsIFilePicker);
+		this.mFilePicker = fp;
+		if (!fp) {
+                    this.LogTrace("fileselectorBinding.createInitFilePicker():...............End(1).");
+		    return null;
+		}
+
+		try {
+		this.reinitFilePicker(fp);
+		} catch (ex) {
+		    this.LogError("fileselectorBinding.createInitFilePicker(): this.reinitFilePicker() failed - ex: " + ex);
+		}
+
+                this.LogTrace("fileselectorBinding.createInitFilePicker():...............End.");
+		return fp;
+		]]>
+	        </body>
+	    </method>
+
+
+	    <method name="setAutoCompleteSearchParam">
+		<parameter name="aTargetElem"/>
+		<parameter name="aBindingParent"/>
+	        <body>
+		<![CDATA[
+		/*
+		this.LogDebug("fileselectorBinding.setAutoCompleteSearchParam(): this.localName: " + this.localName + " " +
+					"aBindingParentTag: " + aBindingParent.localName +
+					"");
+		*/
+
+		/*
+		 * Our goal is to derive a unique name for the aTargetElem. 
+		 * I do not like the scheme currently implemeted.
+		 * Hopefully, I will come up with a better scheme. 
+		 */
+
+		// If the autoCompleteSearchParam attribute is specieifed, then use it.
+		var autoCompleteSearchParam = aTargetElem.getAttribute("autocompletesearchparam");
+		if (autoCompleteSearchParam) {
+		    return;
+		}
+
+		// If the autoCompleteSearchParam attribute is not specified but this element 
+		// has an id, then use that id as autoCompleteSearchParam attribute.
+		if (this.id) {
+		    autoCompleteSearchParam = this.id;
+		    aTargetElem.setAttribute("autocompletesearchparam", autoCompleteSearchParam);
+		    return;
+		}
+		// Otherwise, if the binding parent has an id, then use that id and the tag name 
+		// of this elements.
+		if (aBindingParent && aBindingParent.id) {
+		    autoCompleteSearchParam = aBindingParent.id;
+		    autoCompleteSearchParam += "." + this.localName;
+		    aTargetElem.setAttribute("autocompletesearchparam", autoCompleteSearchParam);
+		    return;
+		}
+
+		// Otherwise, if the aBindingParent exists, use its tag name as 
+		// prefix for autoCompleteSearchParam. Otherwise, use the "keymgr" 
+		// as prefix. Finally, append the tag name of this element and the 
+		// anonid of the target element to the prefix.
+		if (aBindingParent) {
+		    autoCompleteSearchParam = aBindingParent.localName;
+		}
+		else {
+		    autoCompleteSearchParam = "keymgr";
+		}
+		autoCompleteSearchParam += "." + this.localName;
+		autoCompleteSearchParam += "." + aTargetElem.getAttribute("anonid");
+
+		aTargetElem.setAttribute("autocompletesearchparam", autoCompleteSearchParam);
+
+		]]>
+	        </body>
+	    </method>
+
+
+	    <method name="removeOrphanFile">
+	        <body>
+		<![CDATA[
+		this.LogTrace("fileselectorBinding.removeOrphanFile():........Start.");
+
+		if (this.mAutoSelectedFile == false) {
+		    return;
+		}
+    		if (this.fileMode != "save") {
+		    return;
+		}
+		if (!this.mFileRef) {
+		    return;
+		}
+		if (!this.mFileRef.exists()) {
+		    return;
+		}
+		
+
+		// This is a HACK to update the file size
+        	this.mFileRef.initWithPath(this.value);
+
+		if (this.file.fileSize > 0) {
+		    return;
+		}
+
+		// this.LogDebug("fileselectorBinding.removeOrphanFile(): Removing orphan file: " + this.value + "");
+		this.mFileRef.remove(false);
+
+		this.mFileRef = null;
+		this.mAutoSelectedFile = false;
+
+		this.LogTrace("fileselectorBinding.removeOrphanFile():........End.");
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="reset">
+	        <body>
+		<![CDATA[
+   		this.initWithFile(null);
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="refresh">
+	        <body>
+		<![CDATA[
+		this.initWithFilePath(this.value);
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="initWithFile">
+		<parameter name="aParamFile"/>
+	        <body>
+		<![CDATA[
+		this.LogTrace("fileselectorBinding.initWithFile():..............Start.");
+
+		var filePath = "";
+		if (aParamFile) {
+		    filePath = aParamFile.path;
+		}
+		this.value = filePath;
+
+		this.LogTrace("fileselectorBinding.initWithFile():..............End.");
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="initWithFilePath">
+		<parameter name="aFilePath"/>
+	        <body>
+		<![CDATA[
+		this.LogTrace("fileselectorBinding.initWithFilePath(" + aFilePath + "):..............Start.");
+
+
+		// this.LogDebug("fileselectorBinding.initWithFilePath(): anonid: " + this.getAttribute("anonid") + "");
+
+		this.removeOrphanFile();
+
+    		this.mFilePathElem.value = aFilePath;
+    	        this.handleFilePathChange(this.mFilePathElem);
+
+		this.LogTrace("fileselectorBinding.initWithFilePath():..............End.");
+		]]>
+	        </body>
+	    </method>
+
+
+	    <method name="updateDisplayView">
+	        <body>
+		<![CDATA[
+		// this.mMaxLogLevel = 9;
+                this.LogTrace("fileselectorBinding.updateDisplayView():...............Start.");
+
+                this.mFilePathElem.readonly = true;
+                this.mFileViewElem.hidden = true;
+
+		/*
+                this.LogDebug("fileselectorBinding.updateDisplayView(): " + 
+			"this.fileMode : " + this.fileMode + " " + 
+			"this.mFileFormatElem.checked : " + this.mFileFormatElem.checked + " " + 
+			"this.mFilePathElem.value : " + this.mFilePathElem.value + " " + 
+			"");
+		*/
+
+		var fileMode = this.fileMode;
+                if (!fileMode || (fileMode == "open")) {
+	            if (this.mFileFormatElem.checked) {
+	                if ((this.mFilePathElem.value != "") && (this.mFileRef) && (this.mFileRef.exists() == true)) {
+	                    this.mFileViewElem.hidden = false;
+	                }
+	            }
+                }
+                else if (fileMode == "save") {
+    	            if (this.disabled != true) {
+	                this.mFilePathElem.readonly = false;
+	                this.mFilePathElem.removeAttribute("readonly");
+	            }
+	            if (this.mFileFormatElem.checked) {
+	                if ((this.mFilePathElem.value != "") &&
+		    	    (this.mFileRef) &&
+			    (this.mFileRef.exists() == true) && (this.mFileRef.fileSize > 0)) {
+	                    this.mFileViewElem.hidden = false;
+	                }
+	            }
+                }
+                else if (fileMode == "folder") {
+	            this.mFileFormatElem.hidden = true;
+                }
+            
+                var autoCompleteSearchParam = this.mFilePathElem.getAttribute("autocompletesearchparam");
+                this.LogDebug("fileselectorBinding.updateDisplayView(): autoCompleteSearchParam: " + autoCompleteSearchParam);
+		if (autoCompleteSearchParam) {
+                    if (this.mDisplayDirFile) {
+	                var prefDisplayDirectoryId = "extensions." + autoCompleteSearchParam + ".dir";
+    	                this.mPrefUtil.setPrefStringValue(prefDisplayDirectoryId, this.mDisplayDirFile.path);
+                    }
+                    if (this.savepath) {
+	                var filePathPrefId = "extensions." + autoCompleteSearchParam + ".value";
+    	                this.mPrefUtil.setPrefStringValue(filePathPrefId, this.value);
+                    }
+		}
+            
+                this.LogTrace("fileselectorBinding.updateDisplayView():...............End.");
+		// this.mMaxLogLevel = 4;
+                return;
+		]]>
+	        </body>
+	    </method>
+
+
+	    <method name="setFileFormat">
+		<parameter name="aTargetElem"/>
+		<parameter name="ev"/>
+	        <body>
+		<![CDATA[
+                // http://books.mozdev.org/html/mozilla-chp-5-sect-3.html#mozilla-CHP-5-SECT-3.1
+                if (ev) {
+    	            // ev.stopPropagation();
+
+	            // this.ascii = aTargetElem.checked;
+	            if (aTargetElem.checked == true) {
+	    	        this.setAttribute('ascii',true);
+	            }
+	            else {
+		        this.removeAttribute('ascii');
+	            }
+	            this.updateDisplayView();
+	            return;
+                }
+	        return;
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="fileselector_disable">
+		<parameter name="val"/>
+	        <body>
+		<![CDATA[
+    		if (val == "true") {
+		    this.setAttribute('disabled', val);
+    		}
+    		else {
+		    this.removeAttribute('disabled');
+    		}
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="viewFile">
+		<parameter name="aTargetElem"/>
+		<parameter name="ev"/>
+	        <body>
+		<![CDATA[
+    		// http://books.mozdev.org/html/mozilla-chp-5-sect-3.html#mozilla-CHP-5-SECT-3.1
+    		if (ev) {
+    		    ev.stopPropagation();
+    		}
+    	        if (this.mFileRef.exists() == false ) {
+    		    this.LogError("fileselectorBinding.viewFile(): File: " + this.value + " does not exist.");
+		    return;
+    	        }
+
+    	       	var /* nsIFileURL */ fileURL = this.mIOService.newFileURI(this.mFileRef);
+    		var fileURLStr = fileURL.spec;
+    		window.open(fileURLStr, "_blank", "resizable,toolbar=0,location=1,status=0,scrollbars=1,width=700,height=400");
+
+		// var viewSrcFileURLStr = "view-source:" + fileURLStr;
+    		// window.open(viewSrcFileURLStr, "_blank", "resizable,toolbar=1,location=1,status=1,scrollbars=1,width=700,height=400");
+		return;
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="fileContainsAsciiPatern">
+		<parameter name="aAsciiPattern"/>
+		<parameter name="aMaxBytesToRead"/>
+	        <body>
+		<![CDATA[
+		// this.mMaxLogLevel = 9;
+    		this.LogTrace("fileselectorBinding.fileContainsAsciiPatern().......................Start.");
+
+                var /* nsIFile */ localFile = this.mFileRef;
+		if (!localFile) {
+    	            // this.LogError("fileselectorBinding.fileContainsAsciiPatern(): NULL file.");
+	            return false;
+		}
+                if (localFile.exists() == false ) {
+    	            // this.LogError("fileselector.fileContainsAsciiPatern(): File: " + localFile.path + " does not exist.");
+	            return false;
+                }
+                // this.LogDebug("fileselectorBinding.fileContainsAsciiPatern(): this.filepath: " + this.filepath + "");
+
+                var fiStream = Components.classes["@mozilla.org/network/file-input-stream;1"]
+		        		.createInstance(Components.interfaces.nsIFileInputStream);
+                fiStream.init(localFile, 1, 0, false);
+
+                var siStream = Components.classes["@mozilla.org/scriptableinputstream;1"]
+		        		.createInstance(Components.interfaces.nsIScriptableInputStream);
+                siStream.init(fiStream);
+
+                // var dataCnt = siStream.available();
+
+		var containsAsciiPattern = false;
+
+		var totCnt = 0;
+		var readStepCnt = ((!aMaxBytesToRead || (aMaxBytesToRead < 0) || (aMaxBytesToRead > 100)) ? 100 : aMaxBytesToRead);
+		/*
+                this.LogDebug("fileselectorBinding.fileContainsAsciiPatern(): aAsciiPattern: " + aAsciiPattern + "");
+                this.LogDebug("fileselectorBinding.fileContainsAsciiPatern(): readStepCnt: " + readStepCnt + "");
+                this.LogDebug("fileselectorBinding.fileContainsAsciiPatern(): aMaxBytesToRead: " + aMaxBytesToRead + "");
+		*/
+
+                var fileDataStr = "";
+                var str = siStream.read(readStepCnt);
+                while (str.length > 0) {
+	            fileDataStr += str;
+                    // this.LogDebug("fileselectorBinding.fileContainsAsciiPatern(): str: " + str + "");
+
+		    // We always check for the pattern from the beginig of the string.
+		    if (fileDataStr.indexOf(aAsciiPattern) >= 0) {
+			containsAsciiPattern = true;
+		    	break;
+		    }
+		    totCnt = fileDataStr.length;
+		    if ((aMaxBytesToRead >= 0) && (totCnt >= aMaxBytesToRead)) {
+		    	break;
+		    }
+
+	            str = siStream.read(readStepCnt);
+                }
+                siStream.close();
+                fiStream.close();
+
+    		this.LogTrace("fileselectorBinding.fileContainsAsciiPatern().......................End.");
+		// this.mMaxLogLevel = 4;
+                return containsAsciiPattern;
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="readData">
+	        <body>
+		<![CDATA[
+    		this.LogTrace("fileselectorBinding.readData().......................Start.");
+
+                var /* nsIFile */ localFile = this.mFileRef;
+		if (!localFile) {
+		    return null;
+		}
+
+                if (localFile.exists() == false ) {
+    	            alert("fileselector.xml(): File: " + localFile.path + " does not exist.");
+	            return null;
+                }
+                // this.LogDebug("fileselectorBinding.readData():this.mFileRef.path: " + this.mFileRef.path + "");
+
+                var fiStream = Components.classes["@mozilla.org/network/file-input-stream;1"]
+		        		.createInstance(Components.interfaces.nsIFileInputStream);
+                fiStream.init(localFile, 1, 0, false);
+
+                var siStream = Components.classes["@mozilla.org/scriptableinputstream;1"]
+		        		.createInstance(Components.interfaces.nsIScriptableInputStream);
+                siStream.init(fiStream);
+
+                // var dataCnt = siStream.available();
+
+                var fileDataStr = "";
+                var str = siStream.read(-1);
+                while (str.length > 0) {
+	            fileDataStr += str;
+	            str = siStream.read(-1);
+                }
+                siStream.close();
+                fiStream.close();
+
+    		this.LogTrace("fileselectorBinding.readData().......................End.");
+                return fileDataStr;
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="readFile">
+	        <body>
+		<![CDATA[
+		return this.readData();
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="getBytes">
+	        <body>
+		<![CDATA[
+    		this.LogTrace("fileselectorBinding.getBytes().......................Start.");
+
+                var /* nsIFile */ localFile = this.mFileRef;
+                if (!this.mFileRef || this.mFileRef.exists() == false ) {
+    	            alert("fileselector.xml.getBytes(): File: " + this.filepath + " does not exist.");
+	            return null;
+                }
+
+		var binData = null;
+		try {
+        	    var fiStream = Components.classes["@mozilla.org/network/file-input-stream;1"]
+				.createInstance(Components.interfaces.nsIFileInputStream);
+		    fiStream.init(this.mFileRef, 1, 0, false);
+        	    var biStream = Components.classes["@mozilla.org/binaryinputstream;1"]
+		        	.createInstance(Components.interfaces.nsIBinaryInputStream);
+        	    biStream.setInputStream(fiStream);
+        	    binData = biStream.readByteArray(biStream.available());
+        	    biStream.close();
+		    fiStream.close();
+		} catch (ex) {
+    		    this.LogError("fileselectorBinding.getBytes(): failed to read file - ex: " + ex + "");
+		    binData = null;
+		}
+
+    		this.LogTrace("fileselectorBinding.getBytes().......................End.");
+		return binData;
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="removeBase64Envelope">
+		<parameter name="target"/>
+	        <body>
+		<![CDATA[
+                // var beginPattern = "^-+[ ]*BEGIN[ ]*.+[ ]*-+[ ]*";
+                var beginPattern = "^-+[ ]*BEGIN[ ]*.+\n";
+
+                // var endPattern = "^-+[ ]*END[ ]*.+[ ]*-+[ ]*";
+                var endPattern = "-+[ ]*.+\n";
+
+                var result = target;
+                var beginRegExp = new RegExp(beginPattern, "g");
+                result = result.replace(beginRegExp, "");
+                // alert("result: " + result + "(" + result.length + ") (pattern was: " + endPattern + ")");
+    
+                var endRegExp = new RegExp(endPattern, "g");
+                result = result.replace(endRegExp, "");
+
+                var regExp = new RegExp("\n");
+                // result = result.replace("^[ ]*\n", "");
+
+                // alert("result:\n" + result + "(" + result.length + ") (pattern was: " + endPattern + ")");
+                return result;
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="readBase64Data">
+		<parameter name="keepBase64Envelope"/>
+	        <body>
+		<![CDATA[
+                this.LogTrace("fileselectorBinding.readBase64Data():...............Start.");
+
+                var base64EnvelopedData = this.readFile();
+                if ((keepBase64Envelope == null) || (keepBase64Envelope == true)) {
+    	            return base64EnvelopedData;
+                }
+
+                var base64Data = this.removeBase64Envelope(base64EnvelopedData);
+            
+                this.LogTrace("fileselectorBinding.readBase64Data():...............End.");
+                return base64Data;
+		]]>
+	        </body>
+	    </method>
+
+
+	    <method name="saveData">
+		<parameter name="fileData"/>
+	        <body>
+		<![CDATA[
+                var outFile = this.mFileRef;
+                if (!outFile) {
+	            alert("saveFile(): this.file == NULL");
+	            return;
+                }
+                if (!fileData || (fileData.length <= 0)) {
+	            alert("saveFile(): fileData == NULL");
+	            return;
+                }
+		// dump("fileselectorBinding.saveFile():\n" + fileData + "\n");
+
+                var foStream = Components.classes["@mozilla.org/network/file-output-stream;1"].
+		            createInstance(Components.interfaces.nsIFileOutputStream);
+                foStream.QueryInterface(Components.interfaces.nsIOutputStream);
+                foStream.QueryInterface(Components.interfaces.nsISeekableStream);
+
+                foStream.init(outFile, 0x02 | 0x08 | 0x20, 0664, 0); // write, create, truncate
+
+                var count = foStream.write(fileData, fileData.length);
+
+                foStream.flush();
+                foStream.close();
+
+                // This is a HACK to update the file size
+                this.mFileRef.initWithPath(this.value);
+                return;
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="saveFile">
+		<parameter name="fileData"/>
+	        <body>
+		<![CDATA[
+		this.saveData(fileData);
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="saveBinData">
+		<parameter name="fileData"/>
+	        <body>
+		<![CDATA[
+                var outFile = this.mFileRef;
+                if (!outFile) {
+	            alert("saveFile(): this.file == NULL");
+	            return;
+                }
+                if (!fileData || (fileData.length <= 0)) {
+	            alert("saveFile(): fileData == NULL");
+	            return;
+                }
+
+                var foStream = Components.classes["@mozilla.org/network/file-output-stream;1"].
+		            createInstance(Components.interfaces.nsIFileOutputStream);
+                foStream.init(outFile, 0x02 | 0x08 | 0x20, 0664, 0); // write, create, truncate
+
+                foStream.QueryInterface(Components.interfaces.nsIOutputStream);
+                // foStream.QueryInterface(Components.interfaces.nsISeekableStream);
+
+    		var bos = Components.classes["@mozilla.org/binaryoutputstream;1"]
+		        	.createInstance(Components.interfaces.nsIBinaryOutputStream);
+    		bos.setOutputStream(foStream);
+                bos.writeByteArray(fileData, fileData.length);
+
+                foStream.flush();
+                foStream.close();
+
+                // This is a HACK to update the file size
+                this.mFileRef.initWithPath(this.value);
+                return;
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="readXMLDocFromString">
+		<parameter name="aXmlDocDataStr"/>
+		<body>
+		<![CDATA[
+		var xmlDoc = null;
+		try {
+	    	    var xmlParser = new DOMParser();
+		    xmlDoc = xmlParser.parseFromString(aXmlDocDataStr, "text/xml");
+		} catch (ex) {
+		    this.LogError("readXMLDocFromString(): xmlParser.parseFromString() failed - ex: " + ex);
+		    return null;
+		}
+
+		var docElemTag = xmlDoc.documentElement;
+		if ((docElemTag.tagName == "parserError")
+		    || (docElemTag.namespaceURI == "http://www.mozilla.org/newlayout/xml/parsererror.xml")){
+		    this.LogError("readXMLDocFromString(): xmlParser.parseFromString() failed - parserError");
+		    return null;
+		}
+		return xmlDoc;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="saveXMLDocToString">
+		<parameter name="aXmlDoc"/>
+		<body>
+		<![CDATA[
+		if (!this.mXmlSerializer) {
+		    this.mXmlSerializer = new XMLSerializer();
+		}
+		var xmlDocDataStr = null;
+		if (!aXmlDoc) {
+		    return xmlDocDataStr;
+		}
+		xmlDocStr = this.mXmlSerializer.serializeToString(aXmlDoc);
+		// this.LogDebug( "serialize(): xmlDocStr:\n" + xmlDocStr + "");
+		return xmlDocStr;
+		]]>
+		</body>
+	    </method>
+
+
+	    <method name="readXMLDocFromFile">
+		<body>
+		<![CDATA[
+		this.LogTrace("readXMLDocFromFile():................Start.");
+                var xmlDocFile = this.mFileRef;
+		if (!xmlDocFile) {
+		    this.LogError("readXMLDocFromFile(): NULL parameters.");
+		    return null;
+		}
+
+		var xmlDocData = this.readData();
+		if (!xmlDocData) {
+		    this.LogError("readXMLDocFromFile(): failed to read file.");
+		    return null;
+		}
+		var xmlDoc = this.readXMLDocFromString(xmlDocData);
+
+		this.LogTrace("readXMLDocFromFile():................End.");
+		return xmlDoc;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="readXMLDoc">
+		<body>
+		<![CDATA[
+		this.LogTrace("readXMLDoc():................Start.");
+		var xmlDoc = null;
+
+		try {
+	    	    var xmlParser = new DOMParser();
+		    var xmlDocDataStr = this.readData();
+		    xmlDoc = xmlParser.parseFromString(xmlDocDataStr, "text/xml");
+		} catch (ex) {
+		    this.LogError("readXMLDoc(): this.xmlParser.parseFromString() failed - ex: " + ex);
+		    return null;
+		}
+
+		var docElemTag = xmlDoc.documentElement;
+		if ((docElemTag.tagName == "parserError")
+		    || (docElemTag.namespaceURI == "http://www.mozilla.org/newlayout/xml/parsererror.xml")){
+		    this.LogError("readXMLDoc(): xmlParser.parseFromString() failed - parserError");
+		    return null;
+		}
+
+		this.LogTrace("readXMLDoc():................End.");
+		return xmlDoc;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="saveXMLDocToFile">
+		<parameter name="aXmlDoc"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("saveXMLDocToFile():................Start.");
+                var xmlDocFile = this.mFileRef;
+		if (!xmlDocFile) {
+		    this.LogError("saveXMLDocToFile(): NULL parameters.");
+		    return null;
+		}
+
+		var xmlDocStr = this.saveXMLDocToString(aXmlDoc);
+		this.saveData(xmlDocStr);
+
+		this.LogTrace("saveXMLDocToFile():................End.");
+		return;
+		]]>
+		</body>
+	    </method>
+
+	    <!--
+	    <method name="saveXMLDocToTmpFile">
+		<parameter name="aXmlDoc"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("saveXMLDocToTmpFile():................Start.");
+
+		var outXMLDocFile = this.getTmpFile("XMLDSigTool/anyxmlfile.xml");
+		if (!outXMLDocFile) {
+		    this.LogError("saveXMLDocToTmpFile(): NULL parameters.");
+		    return null;
+		}
+
+		this.saveXMLDocToFile(aXmlDoc, outXMLDocFile);
+
+		this.LogTrace("saveXMLDocToTmpFile():................End.");
+		return outXMLDocFile;
+		]]>
+		</body>
+	    </method>
+	    -->
+
+
+	    <method name="browse">
+	        <body>
+		<![CDATA[
+                return this.selectFile(this.mFileBrowseElem);
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="getHomeDir">
+	        <body>
+		<![CDATA[
+		// return this.mHomeDir;
+
+                var homeDir = null;
+		if (this.mHomeDir) {
+		    homeDir = this.mTempDir.clone();
+		}
+		else {
+                    // To create a temporary file, use nsIFile.createUnique():
+                    // Source: http://kb.mozillazine.org/File_IO#Creating_temporary_files
+                    homeDir = Components.classes["@mozilla.org/file/directory_service;1"]
+		    			.getService(Components.interfaces.nsIProperties)
+					.get("Home", Components.interfaces.nsIFile);
+		}
+                return homeDir;
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="getUserLoginName">
+	        <body>
+		<![CDATA[
+		var userLoginName = null;
+		if (this.mUserInfo) {
+		    userLoginName = this.mUserInfo.username;
+		}
+
+		/*
+		try {
+                    var homeDirFile = null;
+                    homeDirFile = Components.classes["@mozilla.org/file/directory_service;1"].
+	                        getService(Components.interfaces.nsIProperties).
+	                        get("Home", Components.interfaces.nsIFile);
+		    var homeDirPath = homeDirFile.path;
+		    var homeDirPathItemList = homeDirPath.split("/");
+		    if (homeDirPathItemList.length > 0) {
+		    	userLoginName =  homeDirPathItemList[homeDirPathItemList.length -1];
+		    }
+		} catch (ex) { }
+		*/
+
+		if (!userLoginName) {
+		    userLoginName = "UnknownUser";
+		}
+		return userLoginName;
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="getTmpDir">
+		<parameter name="aSubDirPath"/>
+		<parameter name="aFileMode"/>
+	        <body>
+		<![CDATA[
+		return this.getTempDir(aSubDirPath, aFileMode);
+		]]>
+	        </body>
+	    </method>
+
+
+	    <method name="getTempDir">
+		<parameter name="aSubDirPath"/>
+		<parameter name="aFileMode"/>
+	        <body>
+		<![CDATA[
+
+                // this.LogDebug("fileselectorBinding.getTempDir(): aSubDirPath: " + aSubDirPath + "");
+
+                var /* nsIFile */ tmpDirFile = null;
+		if (this.mTempDir) {
+		    tmpDirFile = this.mTempDir.clone();
+		}
+		else {
+                    tmpDirFile = Components.classes["@mozilla.org/file/directory_service;1"]
+		    		.getService(Components.interfaces.nsIProperties)
+				.get("TmpD", Components.interfaces.nsIFile);
+		}
+
+                if (!aSubDirPath || (aSubDirPath == "")) {
+    	            return tmpDirFile;
+                }
+
+		var useUserNameInTempSubDir = this.getAttribute("useusernameintempdir");
+		if (useUserNameInTempSubDir && (useUserNameInTempSubDir == "true")) {
+		    var tmpUserSubDirName = null;
+		    try {
+		        if (this.mUserInfo) {
+		    	    tmpUserSubDirName = this.mUserInfo.username;
+    	            	    tmpDirFile.append(tmpUserSubDirName);
+		        }
+		        if (this.mProfileDir) {
+    	            	    tmpDirFile.append(this.mProfileDir.leafName);
+		        }
+		    } catch (ex) {}
+		}
+
+
+		var fileMode = aFileMode;
+		if (!fileMode) {
+		    fileMode = 0755;
+		}
+
+                var subDirItems = aSubDirPath.split("/");
+                for (var i = 0; i < subDirItems.length; i++) {
+	            var subDirItem = subDirItems[i];
+	            if (subDirItem == "") {
+	                continue;
+	            }
+
+	            // this.LogDebug("fileselectorBinding.getTempDir(): subDirItem: " + subDirItem + "");
+    	            tmpDirFile.append(subDirItem);
+
+		    if (!tmpDirFile.exists()) {
+			try {
+                    	    tmpDirFile.create(Components.interfaces.nsIFile.DIRECTORY_TYPE, fileMode);
+			} catch (ex) {
+			    return this.getTempDir();
+			}
+		    }
+		    else {
+		    	if (!tmpDirFile.isWritable) {
+			    return this.getTempDir();
+			}
+		    }
+                }
+                return tmpDirFile;
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="getTmpFile">
+		<parameter name="aRelativeFilePath"/>
+		<parameter name="aFileMode"/>
+	        <body>
+		<![CDATA[
+                // To create a temporary file, use nsIFile.createUnique():
+                // Source: http://kb.mozillazine.org/File_IO#Creating_temporary_files
+
+                // this.LogDebug("fileselectorBinding.getTmpFile(): aRelativeFilePath: " + aRelativeFilePath + "");
+
+                if ((aRelativeFilePath == null) || (aRelativeFilePath == "")) {
+		    return null;
+                }
+
+		var fileMode = aFileMode;
+		if (!fileMode) {
+		    fileMode = 0664;
+		}
+
+                var /* nsIFile*/ tmpLocalFile = null;
+		if (this.mTempDir) {
+		    tmpLocalFile = this.mTempDir.clone();
+		}
+		else {
+                    tmpLocalFile = Components.classes["@mozilla.org/file/directory_service;1"]
+		    			.getService(Components.interfaces.nsIProperties)
+					.get("TmpD", Components.interfaces.nsIFile);
+		}
+            
+                var subDirItems = aRelativeFilePath.split("/");
+                for (var i = 0; i < subDirItems.length; i++) {
+	            var subDirItem = subDirItems[i];
+	            if (subDirItem == "") {
+	                continue;
+	            }
+	            // this.LogDebug("getTmpFile(): subDirItem: " + subDirItem + "");
+    	            tmpLocalFile.append(subDirItem);
+
+		    if ((i < (subDirItems.length -1)) && !tmpLocalFile.exists()) {
+                    	tmpLocalFile.create(Components.interfaces.nsIFile.DIRECTORY_TYPE, 0755);
+		    }
+                }
+
+                tmpLocalFile.createUnique(Components.interfaces.nsIFile.NORMAL_FILE_TYPE, fileMode);
+
+                return tmpLocalFile;
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="getLocalFile">
+		<parameter name="localFilePath"/>
+	        <body>
+		<![CDATA[
+                if ((localFilePath == null) || (localFilePath == "")) {
+    	            return null;
+                }
+                var /* nsIFile */ localFile = null;
+                try {
+                    localFile = Components.classes["@mozilla.org/file/local;1"]
+		                     .createInstance(Components.interfaces.nsILocalFile);
+                    localFile.initWithPath(localFilePath);
+                } catch (ex) {localFile = null;}
+                return localFile;
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="autoSelectTempFile">
+		<parameter name="paramSubDirPath"/>
+		<parameter name="paramFileName"/>
+	        <body>
+		<![CDATA[
+		var tmpDirFile = this.getTempDir(paramSubDirPath);
+		if (!tmpDirFile) {
+		    return null;
+		}
+		return this.autoSelectFile(tmpDirFile, paramFileName);
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="autoSelectFile">
+		<parameter name="paramDisplayDirFile"/>
+		<parameter name="paramFileName"/>
+	        <body>
+		<![CDATA[
+                this.LogTrace("fileselectorBinding.autoSelectFile():...............Start.");
+
+                if (this.fileMode != "save") {
+    	            this.LogError("fileselectorBinding.autoSelectFile() file is only allowed for 'save' mode.");
+    	            return null;
+                }
+            
+		this.removeOrphanFile();
+
+                if (!paramDisplayDirFile) {
+                    if (!this.mDisplayDirFile) {
+    	                this.mDisplayDirFile = this.getLocalFile(this.fileDisplayDirPath);
+	                if (this.mDisplayDirFile == null) {
+	                    this.mDisplayDirFile = this.getTempDir();
+	                }
+                    }
+                }
+                else {
+	            this.mDisplayDirFile = paramDisplayDirFile;
+                }
+
+		if (!this.mDisplayDirFile || !this.mDisplayDirFile.exists() || !this.mDisplayDirFile.isWritable()) {
+		    this.mDisplayDirFile = this.getTempDir();
+		}
+            
+                var tmpDefaultFileName = paramFileName;
+                if (!tmpDefaultFileName) {
+	            tmpDefaultFileName = this.defaultFileName;
+	            if (!tmpDefaultFileName || (tmpDefaultFileName == "")) {
+	                tmpDefaultFileName = "temp.dat";
+	            }
+                }
+                // this.LogDebug("autoSelectFile(): tmpDefaultFileName: " + tmpDefaultFileName + "");
+            
+                var /* nsIFile */ tmpFile = this.mDisplayDirFile.clone();
+                tmpFile.append(tmpDefaultFileName);
+		try { 
+                    tmpFile.createUnique(Components.interfaces.nsIFile.NORMAL_FILE_TYPE, 0664);
+		} catch (ex) {
+		    this.LogError("fileselectorBinding.autoSelectFile(): failed to create temporary file.");
+                    return null;
+		}
+
+            
+                this.initWithFile(tmpFile);
+            
+                this.mAutoSelectedFile = true;
+            
+                this.LogTrace("fileselectorBinding.autoSelectFile():...............End.");
+                return tmpFile;
+		]]>
+	        </body>
+	    </method>
+
+
+	    <method name="selectFileByName">
+		<parameter name="paramDisplayDirFile"/>
+		<parameter name="paramFileName"/>
+	        <body>
+		<![CDATA[
+                this.LogTrace("fileselectorBinding.selectFileByName():.........................Start.");
+                if (paramDisplayDirFile){
+	            this.mDisplayDirFile = paramDisplayDirFile;
+                }
+
+                const nsIFilePicker = Components.interfaces.nsIFilePicker;
+
+                this.mAutoSelectedFile = false;
+
+		var fp = this.mFilePicker;
+		if (!fp) {
+		    fp = this.createInitFilePicker();
+		    this.mFilePicker = fp;
+		}
+
+		if (paramFileName) {
+		    fp.defaultString = paramFileName;
+		}
+		else {
+		    fp.defaultString = "";
+		}
+            
+                // this.LogTrace("fileselectorBinding.selectFileByName():...............20.");
+
+                var rv = fp.show();
+                if ((rv == Components.interfaces.nsIFilePicker.returnOK) ||
+		    (rv == Components.interfaces.nsIFilePicker.returnReplace)) {
+    	            // this.LogDebug("fileselectorBinding.selectFileByName(): fp.file.path: "+ fp.file.path +"");
+		    var selectedFile = fp.file;
+	            this.mFilePathElem.value = selectedFile.path;
+    	            this.handleFilePathChange(this.mFilePathElem);
+            
+		    this.mFilePathElem.focus();
+                    this.LogTrace("fileselectorBinding.selectFileByName():.........................End(1).");
+	            return selectedFile;
+                }
+
+                this.LogTrace("fileselectorBinding.selectFileByName():.........................End.");
+                return null;
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="selectFile">
+		<parameter name="aTargetElem"/>
+		<parameter name="ev"/>
+	        <body>
+		<![CDATA[
+		// this.mMaxLogLevel = 9;
+                this.LogTrace("fileselectorBinding.selectFile():.........................Start.");
+
+		var selectedFile = null;
+		try {
+		    selectedFile = this.selectFileByName(null, null);
+		} catch (ex) {
+                    this.LogTrace("fileselectorBinding.selectFile(): this.selectFileByName() failed - ex: " + ex);
+		}
+
+                if (!selectedFile && ev) {
+		    ev.stopPropagation();
+                }
+
+                this.LogTrace("fileselectorBinding.selectFile():.........................End.");
+		// this.mMaxLogLevel = 4;
+                return selectedFile;
+		]]>
+	        </body>
+	    </method>
+
+
+
+
+	    <method name="handleFilePathChange">
+		<parameter name="aTargetElem"/>
+		<parameter name="ev"/>
+	        <body>
+		<![CDATA[
+                this.LogTrace("fileselectorBinding.handleFilePathChange():............Start.");
+
+                if (aTargetElem == null) {
+    	            return;
+                }
+
+                // this.LogDebug("fileselectorBinding.handleFilePathChange(): newPath: " + aTargetElem.value + "");
+		if (this.mFileRef && (this.mFileRef.path == aTargetElem.value)) {
+		    if (ev) {
+		    	ev.stopPropagation();
+		    }
+    	            return;
+		}
+
+		var newFilePath = this.trim(aTargetElem.value);
+		aTargetElem.value = newFilePath;
+
+                var /* nsIFile */ localFile = null;
+    	        localFile = this.getLocalFile(aTargetElem.value);
+                this.mFileRef = localFile;
+
+                if (localFile) {
+		    /*
+		    if (ev) {
+		    	dump("ev.type: " + ev.type + "\n");
+		    }
+		    */
+    	            this.autoCompleteAction(aTargetElem, ev);
+		    if (this.fileMode == "folder") {
+	                this.mDisplayDirFile = localFile.parent;
+		    }
+		    else {
+	                this.mDisplayDirFile = localFile.parent;
+		    }
+		    if (this.mFilePicker) {
+		    	this.mFilePicker.displayDirectory = this.mDisplayDirFile;
+		    }
+                }
+
+                this.setAttribute("value", aTargetElem.value);
+                this.updateDisplayView();
+
+                this.LogTrace("fileselectorBinding.handleFilePathChange():............End.");
+                return;
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="autoCompleteAction">
+		<parameter name="aTargetElem"/>
+		<parameter name="ev"/>
+	        <body>
+		<![CDATA[
+		/*
+		if (!ev) {
+		    return;
+		}
+		if (ev.type == "textentered") {
+		    return;
+		}
+		*/
+
+                var formFieldKey = aTargetElem.getAttribute("autocompletesearchparam");
+		if (!formFieldKey) {
+		    return;
+		}
+                var formFieldValue = aTargetElem.value;
+                if (formFieldValue == "") {
+    	            return;
+                }
+
+                var formhistory = null;
+                if ("nsIFormHistory" in Components.interfaces){
+                    formhistory = Components.classes["@mozilla.org/satchel/form-history;1"].
+        			            getService(Components.interfaces.nsIFormHistory);
+                }
+                else if ("nsIFormHistory2" in Components.interfaces){
+                    formhistory = Components.classes["@mozilla.org/satchel/form-history;1"].
+        			            getService(Components.interfaces.nsIFormHistory2);
+                }
+                if (!formhistory) {
+    	            return;
+                }
+
+                // use the same value for key as "autocompletesearchparam" in textbox:
+                formhistory.addEntry(formFieldKey, formFieldValue);
+
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="findFileByName">
+		<parameter name="paramDisplayDirFile"/>
+		<parameter name="paramFileName"/>
+	        <body>
+		<![CDATA[
+		// this.mMaxLogLevel = 9;
+                this.LogTrace("fileselectorBinding.findFileByName():...............Start.");
+
+		if (!paramFileName) {
+    	            this.LogError("fileselectorBinding.findFileByName(): ERROR: null paramFileName.");
+		    return null;
+		}
+            
+		this.removeOrphanFile();
+
+                if (!paramDisplayDirFile) {
+                    if (!this.mDisplayDirFile) {
+    	                this.mDisplayDirFile = this.getLocalFile(this.fileDisplayDirPath);
+	                if (this.mDisplayDirFile == null) {
+	                    this.mDisplayDirFile = this.getTempDir();
+	                }
+                    }
+                }
+                else {
+	            this.mDisplayDirFile = paramDisplayDirFile;
+                }
+
+		if (!this.mDisplayDirFile || !this.mDisplayDirFile.exists() || !this.mDisplayDirFile.isWritable()) {
+		    /*
+		    this.LogDebug("fileselectorBinding.findFileByName() : this.mDisplayDirFile: " + this.mDisplayDirFile + "");
+		    if (this.mDisplayDirFile) {
+		    	this.LogDebug("fileselectorBinding.findFileByName() : this.mDisplayDirFilePath: " + this.mDisplayDirFile.path + "");
+		    }
+    	            this.LogError("fileselectorBinding.findFileByName(): ERROR: Either target directory does not exists or it is not writable.");
+		    */
+		    return null;
+		}
+            
+                var /* nsIFile */ targetFile = this.mDisplayDirFile.clone();
+                targetFile.append(paramFileName);
+		var targetFilePath = targetFile.path;
+                if (!targetFile.exists()) {
+		    this.LogError("fileselectorBinding.findFileByName(): failed to find file " + targetFilePath + "");
+                    return null;
+		}
+
+		this.file = targetFile;
+            
+                this.LogTrace("fileselectorBinding.findFileByName():...............End.");
+		// this.mMaxLogLevel = 2;
+                return targetFile;
+		]]>
+	        </body>
+	    </method>
+
+
+
+	</implementation>
+    </binding>
+
+    <binding id="fileitemBinding">
+        <resources>
+        </resources>
+    	<!-- content, property, method and event descriptions go here -->
+    	<content>
+	    <xul:checkbox anonid="fileitem.file.format.pem"
+		xbl:inherits="label=formatlabel,hidden=formathidden,checked=ascii,disabled,tooltiptext=formattooltiptext"
+                label="text"
+		hidden="true"
+		disabled="true"
+               	oncommand="getBindingParent(this).setFileFormat(this, event);"
+                />
+	    <xul:textbox anonid="fileitem.file.path" flex="1"
+		xbl:inherits="value,disabled,tooltiptext,flex,preference,readonly"
+		readonly="true"
+	        />
+	    <xul:button anonid="fileitem.file.view"
+		xbl:inherits="label=viewlabel,tooltiptext=viewtooltiptext,hidden=viewhidden,disabled,oncommand=oncommandview"
+	  	label="View"
+		hidden="true"
+  		tooltiptext="View"
+               	oncommand="getBindingParent(this).viewFile(event);"
+		/>
+    	</content>
+	<implementation>
+	    <field name="mIOService">
+    	        Components.classes["@mozilla.org/network/io-service;1"]
+		    .getService(Components.interfaces.nsIIOService);
+	    </field>
+	    <field name="mFileFormatElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "fileitem.file.format.pem");
+	    </field>
+	    <field name="mFilePathElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "fileitem.file.path");
+	    </field>
+	    <field name="mFileViewElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "fileitem.file.view");
+	    </field>
+	    <field name="mFileRef"/>
+
+	    <property name="file">
+	        <getter>
+		  <![CDATA[
+		    return this.mFileRef;
+		  ]]>
+	        </getter>
+	        <setter>
+		  <![CDATA[
+		    var filePath = "";
+		    if (val) {
+		    	filePath = val.path;
+		    }
+		    // dump("fileselector.file.set(): filePath: " + filePath + "\n");
+
+		    this.mFilePathElem.value = filePath;
+		    this.mFileRef = val;
+		    this.fileStateChanged();
+		    return val;
+		  ]]>
+	        </setter>
+	    </property>
+
+	    <property name="filepath">
+	        <getter>
+		  <![CDATA[
+		  return this.mFilePathElem.value;
+		  ]]>
+	        </getter>
+	        <setter>
+		  <![CDATA[
+	          if (!val || (val == "")) {
+		      this.file = null;
+		      return val;
+		  }
+		  var localFile = null;
+		  try {
+		      localFile = Components.classes['@mozilla.org/file/local;1']
+		                     .createInstance(Components.interfaces.nsILocalFile);
+                      localFile.initWithPath(val);
+		  } catch(ex) { return val;}
+
+		  this.file = localFile;
+		  return val;
+		  ]]>
+	        </setter>
+	    </property>
+
+	    <property name="value"
+	        onget="return this.filepath"
+	        onset="this.filepath=val;return val;"
+		/>
+	    <property name="ascii"
+                onget="return this.mFileFormatElem.checked;"
+	    	onset="this.mFileFormatElem.checked = val;
+		       this.setFileFormat(this.mFileFormatElem);
+                       return val;"
+		/>
+
+	    <constructor>
+		<![CDATA[
+		this.file = null;
+		]]>
+	    </constructor>
+
+
+	    <!--
+	    <method name="fileStateChanged">
+	        <body>
+		<![CDATA[
+		this.mFileViewElem.hidden = true;
+		if (!this.file || !this.file.exists()) {
+		    return;
+		}
+		if (this.ascii) {
+		    this.mFileViewElem.hidden = false;
+		}
+		]]>
+	        </body>
+	    </method>
+	    -->
+
+	    <method name="fileStateChanged">
+	        <body>
+		<![CDATA[
+		    this.mFileViewElem.hidden = true;
+		    // dump("fileStateChanged(): this.file: " + this.file + " this.ascii: " + this.ascii + "\n");
+		    if (this.file) {
+			if (this.ascii) {
+		    	    this.mFileViewElem.hidden = false;
+			    this.mFileFormatElem.hidden = false;
+			}
+		    }
+		    /*
+		    else {
+			this.formathidden = true;
+		    }
+		    */
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="setFileFormat">
+		<parameter name="aTargetElem"/>
+		<parameter name="ev"/>
+	        <body>
+		<![CDATA[
+                // http://books.mozdev.org/html/mozilla-chp-5-sect-3.html#mozilla-CHP-5-SECT-3.1
+                if (ev) {
+    	            ev.stopPropagation();
+                }
+		/*
+	        if (aTargetElem.checked) {
+	    	    this.setAttribute('ascii',true);
+	        }
+	        else {
+		    this.removeAttribute('ascii');
+	        }
+		*/
+
+		/*
+		// Make the format element hidden we ascii is set to false.
+		if (!this.ascii) {
+		    this.mFileFormatElem.hidden = false;
+		}
+		*/
+
+	        this.fileStateChanged();
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="viewFile">
+		<parameter name="ev"/>
+	        <body>
+		<![CDATA[
+                // http://books.mozdev.org/html/mozilla-chp-5-sect-3.html#mozilla-CHP-5-SECT-3.1
+                if (ev) {
+    	            ev.stopPropagation();
+                }
+                if (this.file.exists() == false ) {
+    	            dump("fileselector.xml:viewFile(): File: " + this.value + " does not exist.\n");
+	            return;
+                }
+                var /* nsIFileURL */ fileURL = this.mIOService.newFileURI(this.file);
+                var fileURLStr = fileURL.spec;
+                window.open(fileURLStr, "_blank", "resizable,toolbar=1,location=1,status=1,scrollbars=1,width=700,height=400");
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="readData">
+	        <body>
+		<![CDATA[
+
+                var /* nsIFile */ localFile = this.file;
+                if (localFile.exists() == false ) {
+    	            dump("fileselector.xml(): File: " + localFile.path + " does not exist.\n");
+	            return null;
+                }
+                // dump("viewFile():this.file.path: " + this.file.path + "\n");
+
+                var fiStream = Components.classes["@mozilla.org/network/file-input-stream;1"]
+		        .createInstance(Components.interfaces.nsIFileInputStream);
+                fiStream.init(localFile, 1, 0, false);
+            
+                var siStream = Components.classes["@mozilla.org/scriptableinputstream;1"]
+		        .createInstance(Components.interfaces.nsIScriptableInputStream);
+                siStream.init(fiStream);
+
+                // var dataCnt = siStream.available();
+
+                var fileDataStr = "";
+                var str = siStream.read(-1);
+                while (str.length > 0) {
+	            fileDataStr += str;
+	            str = siStream.read(-1);
+                }
+                siStream.close();
+                fiStream.close();
+
+                return fileDataStr;
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="readFile">
+	        <body>
+		<![CDATA[
+		return this.readData();
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="getBytes">
+	        <body>
+		<![CDATA[
+                var /* nsIFile */ localFile = this.file;
+                if (!localFile || localFile.exists() == false ) {
+    	            dump("filesitemBinding.getBytes(): File: " + this.filepath + " does not exist.\n");
+	            return null;
+                }
+
+		var binData = null;
+		try {
+        	    var fiStream = Components.classes["@mozilla.org/network/file-input-stream;1"]
+				.createInstance(Components.interfaces.nsIFileInputStream);
+		    fiStream.init(this.mFileRef, 1, 0, false);
+        	    var biStream = Components.classes["@mozilla.org/binaryinputstream;1"]
+		        	.createInstance(Components.interfaces.nsIBinaryInputStream);
+        	    biStream.setInputStream(fiStream);
+        	    binData = biStream.readByteArray(biStream.available());
+        	    biStream.close();
+		    fiStream.close();
+		} catch (ex) {
+    		    dump("filesitemBinding.getBytes(): failed to read file - ex: " + ex + "\n");
+		    binData = null;
+		}
+		return binData;
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="saveData">
+		<parameter name="fileData"/>
+	        <body>
+		<![CDATA[
+                var outFile = this.file;
+                if (!outFile) {
+	            alert("saveFile(): this.file == NULL");
+	            return;
+                }
+                if (!fileData || (fileData.length <= 0)) {
+	            alert("saveFile(): fileData == NULL");
+	            return;
+                }
+		// dump("fileselectorBinding.saveFile():\n" + fileData + "\n");
+
+                var foStream = Components.classes["@mozilla.org/network/file-output-stream;1"].
+		            createInstance(Components.interfaces.nsIFileOutputStream);
+                foStream.QueryInterface(Components.interfaces.nsIOutputStream);
+                foStream.QueryInterface(Components.interfaces.nsISeekableStream);
+
+                foStream.init(outFile, 0x02 | 0x08 | 0x20, 0664, 0); // write, create, truncate
+
+                var count = foStream.write(fileData, fileData.length);
+
+                foStream.flush();
+                foStream.close();
+
+                // This is a HACK to update the file size
+                this.mFileRef.initWithPath(this.value);
+                return;
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="saveFile">
+		<parameter name="fileData"/>
+	        <body>
+		<![CDATA[
+		this.saveData(fileData);
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="removeBase64Envelope">
+		<parameter name="target"/>
+	        <body>
+		<![CDATA[
+                // var beginPattern = "^-+[ ]*BEGIN[ ]*.+[ ]*-+[ ]*";
+                var beginPattern = "^-+[ ]*BEGIN[ ]*.+\n";
+
+                // var endPattern = "^-+[ ]*END[ ]*.+[ ]*-+[ ]*";
+                // var endPattern = "-+[ ]*.+\n";
+                var endPattern = "-+[ ]*END[ ]*.+\n";
+
+                var result = target;
+                var beginRegExp = new RegExp(beginPattern, "g");
+                result = result.replace(beginRegExp, "");
+                // alert("result: " + result + "(" + result.length + ") (pattern was: " + endPattern + ")");
+    
+                var endRegExp = new RegExp(endPattern, "g");
+                result = result.replace(endRegExp, "");
+
+                var regExp = new RegExp("\n");
+                // result = result.replace("^[ ]*\n", "");
+
+                // alert("result:\n" + result + "(" + result.length + ") (pattern was: " + endPattern + ")");
+                return result;
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="readBase64Data">
+		<parameter name="keepBase64Envelope"/>
+	        <body>
+		<![CDATA[
+                // dump("readBase64Data():...............Start.\n");
+
+                var base64EnvelopedData = this.readFile();
+                if ((keepBase64Envelope == null) || (keepBase64Envelope == true)) {
+    	            return base64EnvelopedData;
+                }
+
+                var base64Data = this.removeBase64Envelope(base64EnvelopedData);
+
+                // dump("readBase64Data():...............End.\n");
+                return base64Data;
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="readXMLDocFromString">
+		<parameter name="aXmlDocDataStr"/>
+		<body>
+		<![CDATA[
+		var xmlDoc = null;
+		try {
+	    	    var xmlParser = new DOMParser();
+		    xmlDoc = xmlParser.parseFromString(aXmlDocDataStr, "text/xml");
+		} catch (ex) {
+		    dump("readXMLDocFromString(): xmlParser.parseFromString() failed - ex: " + ex + "\n");
+		    return null;
+		}
+
+		var docElemTag = xmlDoc.documentElement;
+		if ((docElemTag.tagName == "parserError")
+		    || (docElemTag.namespaceURI == "http://www.mozilla.org/newlayout/xml/parsererror.xml")){
+		    dump("readXMLDocFromString(): xmlParser.parseFromString() failed - parserError" + "\n");
+		    return null;
+		}
+		return xmlDoc;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="saveXMLDocToString">
+		<parameter name="aXmlDoc"/>
+		<body>
+		<![CDATA[
+		if (!this.mXmlSerializer) {
+		    this.mXmlSerializer = new XMLSerializer();
+		}
+		var xmlDocDataStr = null;
+		if (!aXmlDoc) {
+		    return xmlDocDataStr;
+		}
+		xmlDocStr = this.mXmlSerializer.serializeToString(aXmlDoc);
+		return xmlDocStr;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="readXMLDocFromFile">
+		<body>
+		<![CDATA[
+		// dump("readXMLDocFromFile():................Start.\n");
+                var xmlDocFile = this.mFileRef;
+		if (!xmlDocFile) {
+		    dump("readXMLDocFromFile(): NULL parameters.\n");
+		    return null;
+		}
+
+		var xmlDocData = this.readData();
+		if (!xmlDocData) {
+		    dump("readXMLDocFromFile(): failed to read file.\n");
+		    return null;
+		}
+		var xmlDoc = this.readXMLDocFromString(xmlDocData);
+
+		// dump("readXMLDocFromFile():................End.\n");
+		return xmlDoc;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="readXMLDoc">
+		<body>
+		<![CDATA[
+		// dump("readXMLDoc():................Start.\n");
+		var xmlDoc = null;
+
+		try {
+	    	    var xmlParser = new DOMParser();
+		    var xmlDocDataStr = this.readData();
+		    xmlDoc = xmlParser.parseFromString(xmlDocDataStr, "text/xml");
+		} catch (ex) {
+		    dump("readXMLDoc(): this.xmlParser.parseFromString() failed - ex: " + ex);
+		    return null;
+		}
+
+		var docElemTag = xmlDoc.documentElement;
+		if ((docElemTag.tagName == "parserError")
+		    || (docElemTag.namespaceURI == "http://www.mozilla.org/newlayout/xml/parsererror.xml")){
+		    dump("readXMLDoc(): xmlParser.parseFromString() failed - parserError\n");
+		    return null;
+		}
+
+		// dump("readXMLDoc():................End.\n");
+		return xmlDoc;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="saveXMLDocToFile">
+		<parameter name="aXmlDoc"/>
+		<body>
+		<![CDATA[
+		// dump("saveXMLDocToFile():................Start.\n");
+                var xmlDocFile = this.mFileRef;
+		if (!xmlDocFile) {
+		    dump("saveXMLDocToFile(): NULL parameters.\n");
+		    return null;
+		}
+
+		var xmlDocStr = this.saveXMLDocToString(aXmlDoc);
+		this.saveData(xmlDocStr);
+
+		// dump("saveXMLDocToFile():................End.\n");
+		return;
+		]]>
+		</body>
+	    </method>
+
+	    <!--
+	    <method name="saveXMLDocToTmpFile">
+		<parameter name="aXmlDoc"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("saveXMLDocToTmpFile():................Start.\n");
+
+		var outXMLDocFile = this.getTmpFile("XMLDSigTool/anyxmlfile.xml");
+		if (!outXMLDocFile) {
+		    this.LogError("saveXMLDocToTmpFile(): NULL parameters.\n");
+		    return null;
+		}
+
+		this.saveXMLDocToFile(aXmlDoc, outXMLDocFile);
+
+		this.LogTrace("saveXMLDocToTmpFile():................End.\n");
+		return outXMLDocFile;
+		]]>
+		</body>
+	    </method>
+	    -->
+
+
+	</implementation>
+    </binding>
+
+    <binding id="rofileitemBinding">
+        <resources>
+        </resources>
+    	<!-- content, property, method and event descriptions go here -->
+    	<content>
+            <xul:fileselector anonid="fileselector.rofileitem.file"
+		xbl:inherits="id"
+		disabled="true"
+		/>
+    	</content>
+	<implementation>
+	</implementation>
+    </binding>
+
+    <binding id="x509certfileselectorBinding"
+	extends="#fileselectorBinding"
+        >
+	<implementation>
+	    <constructor>
+		<![CDATA[
+                // dump("x509certfileselectorBinding.constructor(id: " + this.id + "):...............Start.\n");
+
+		if (!this.getAttribute("formatlabel")) {
+		    this.setAttribute("formatlabel", "Base64");
+		}
+		if (!this.getAttribute("fileDialogMsg")) {
+		    this.setAttribute("fileDialogMsg", "Choose X509 Cert file");
+		}
+		if (!this.getAttribute("fileTypeMsg")) {
+		    this.setAttribute("fileTypeMsg", "X.509 Cert file");
+		}
+		if (!this.getAttribute("fileTypeFilters")) {
+		    this.setAttribute("fileTypeFilters", "*.cer; *.pem; *.crt");
+		}
+
+                // dump("x509certfileselectorBinding.constructor(id: " + this.id + "):...............End.\n");
+		]]>
+	    </constructor>
+	</implementation>
+    </binding>
+
+
+    <binding id="attrcertfileselectorBinding"
+	extends="fileselector.xml#fileselectorBinding"
+        >
+	<implementation>
+	    <constructor>
+		<![CDATA[
+		]]>
+	    </constructor>
+	</implementation>
+    </binding>
+
+
+</bindings>
+

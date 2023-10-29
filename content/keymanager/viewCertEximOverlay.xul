@@ -1,0 +1,734 @@
+<?xml version="1.0"?>
+<!-- @(#) $Id: viewCertEximOverlay.xul,v 1.23 2012/10/07 17:19:41 subrata Exp $ -->
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is Avaya Labs Research, Avaya Inc. Code.
+   -
+   - The Initial Developer of the Original Code is
+   - Subrata Mazumdar, Avaya Labs Research, Avaya Inc.
+   - Portions created by the Initial Developer are Copyright (C) 2007.
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Subrata Mazumdar (mazum@avaya.com)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+
+<!DOCTYPE overlay SYSTEM "chrome://pippki/locale/certManager.dtd">
+
+<!--
+Source: http://xulplanet.com/tutorials/xultu/overlay.html
+-->
+
+<!--
+Installation instructions: 
+Add the following line in the chrome.manifest file:
+    overlay chrome://pippki/content/certViewer.xul  chrome://keymanager/content/viewCertEximOverlay.xul
+-->
+
+<overlay id="certExportWin"
+    xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    >
+
+  <script type="application/x-javascript" src="chrome://keymanager/content/keyManagerExportCerts.js"/>
+  <script type="application/x-javascript" src="chrome://keymanager/content/BrowserPrefUtil.js"/>
+
+<script type="application/x-javascript">
+<![CDATA[
+
+
+if ((typeof avpki) == 'undefined') {
+    var avpki = {};
+    avpki.keymanager = {};
+}
+if ((typeof avpki.keymanager) == 'undefined') {
+    avpki.keymanager = {};
+}
+avpki.keymanager.CertEditImportOverlay = {
+
+    mLeafCertType : null,
+    mKeyManager : null,
+
+    mMaxLogLevel : 2,
+    log : function(level, msg)
+    {
+	if (level > avpki.keymanager.CertEditImportOverlay.mMaxLogLevel) {
+	    return;
+	}
+	dump(msg + "\n");
+    },
+
+    logError : function(msg)
+    {
+	avpki.keymanager.CertEditImportOverlay.log(2, msg);
+    },
+    logTrace : function(msg)
+    {
+	avpki.keymanager.CertEditImportOverlay.log(4, msg);
+    },
+    logDebug : function(msg)
+    {
+	avpki.keymanager.CertEditImportOverlay.log(8, msg);
+    },
+
+    init : function () 
+    {
+	avpki.keymanager.CertEditImportOverlay.mKeyManager = Components.classes["@avaya.com/pkm/keymanager;1"]
+		    		.getService(Components.interfaces.alrIKeyManager);
+    },
+
+
+    getCertBasicConstraintsIsCA : function (aX509Cert) 
+    {
+	var /* nsIPersistentProperties */ certProps;
+	certProps = Components.classes["@mozilla.org/persistent-properties;1"].
+		    createInstance(Components.interfaces.nsIPersistentProperties);
+
+
+	var bcExtensionName = "basicConstraints";
+	var bcActiveName = "basicConstraints";
+	var bcIsCAName = "basicConstraints-cA-radio";
+
+	try {
+	    avpki.keymanager.CertEditImportOverlay.mKeyManager.exportX509v3CertExtnToProperties(aX509Cert, bcExtensionName, certProps);
+	} catch (ex) {
+	    return false;
+	}
+
+	var bcActive = null;
+	try {
+	    bcActive = certProps.getStringProperty(bcActiveName);
+	} catch (ex) {}
+	avpki.keymanager.CertEditImportOverlay.logDebug("avpki.keymanager.CertEditImportOverlay.getCertBasicConstraintsIsCA(): cert: " + aX509Cert.nickname + " bcActive: " + bcActive + "");
+	if (!bcActive) {
+	    return false;
+	}
+	if (bcActive != "true") {
+	    return false;
+	}
+
+	var bcIsCA = null;
+	try {
+	    bcIsCA = certProps.getStringProperty(bcIsCAName);
+	} catch (ex) {}
+	avpki.keymanager.CertEditImportOverlay.logDebug("avpki.keymanager.CertEditImportOverlay.getCertBasicConstraintsIsCA(): cert: " + aX509Cert.nickname + " bcIsCA: " + bcIsCA + "");
+	if (!bcIsCA) {
+	    return false;
+	}
+
+	if (bcIsCA != "true") {
+	    return false;
+	}
+	bcIsCA = true;
+
+	return bcIsCA;
+    },
+
+
+    activateButtons : function (ev)
+    {
+	avpki.keymanager.CertEditImportOverlay.logTrace("avpki.keymanager.CertEditImportOverlay.activateButtons():......................Start.");
+
+	var selectedCert = avpki.keymanager.CertEditImportOverlay.initSelectedCert();
+	if (!selectedCert) {
+	    avpki.keymanager.CertEditImportOverlay.logTrace("avpki.keymanager.CertEditImportOverlay.activateButtons():......................End(0).");
+	    return;
+	}
+
+	var keyManager = Components.classes["@avaya.com/pkm/keymanager;1"]
+		    		.getService(Components.interfaces.alrIKeyManager);
+	if (!avpki.keymanager.CertEditImportOverlay.mKeyManager) {
+	    avpki.keymanager.CertEditImportOverlay.logTrace("avpki.keymanager.CertEditImportOverlay.activateButtons():......................End(1).");
+	    return ;
+	}
+	// avpki.keymanager.CertEditImportOverlay.dumpCertData(selectedCert);
+
+	var selectedX509Cert2 = selectedCert.QueryInterface(Components.interfaces.nsIX509Cert2);
+	var selectedX509Cert3 = selectedCert.QueryInterface(Components.interfaces.nsIX509Cert3);
+	if ((selectedX509Cert2.certType != Components.interfaces.nsIX509Cert2.ANY_CERT)
+		|| (selectedX509Cert2.certType != Components.interfaces.nsIX509Cert2.UNKNOWN_CERT)) {
+	    avpki.keymanager.CertEditImportOverlay.mLeafCertType = selectedX509Cert2.certType;
+	}
+	avpki.keymanager.CertEditImportOverlay.logDebug("avpki.keymanager.CertEditImportOverlay.activateButtons(): avpki.keymanager.CertEditImportOverlay.mLeafCertType: " + avpki.keymanager.CertEditImportOverlay.mLeafCertType + "");
+
+
+	// We do not need Export button in FF3. FF3 supports Export.
+	// So, show/hide Export button based on the pereference.
+	/*
+	var showCertExportButton = getPrefBoolValue("extensions.avpki.eximcerts.overlay.show.export");
+	var exportButtonElem = document.getElementById("cert_exportButton");
+	exportButtonElem.hidden = !showCertExportButton;
+	*/
+
+	var importButtonElem = document.getElementById("cert_importButton");
+	var importChainButtonElem = document.getElementById("cert_importChainButton");
+	var editButtonElem = document.getElementById("cert_editButton");
+	editButtonElem.hidden = false;
+
+	// For user cert, i.e., that has associated private key in the DB,
+	// no need to import or edit. May edit button - I am not sure.
+	var isUserCert = avpki.keymanager.CertEditImportOverlay.mKeyManager.isUserCert(selectedCert);
+	avpki.keymanager.CertEditImportOverlay.logDebug("avpki.keymanager.CertEditImportOverlay.activateButtons(): isUserCert: " + isUserCert + "");
+	if (isUserCert) {
+	    importButtonElem.hidden = true;
+	    importChainButtonElem.hidden = true;
+
+	    // Show edit button only for self-signed certs.
+	    if (!avpki.keymanager.CertEditImportOverlay.mLeafCertType) {
+		avpki.keymanager.CertEditImportOverlay.mLeafCertType = Components.interfaces.nsIX509Cert.USER_CERT;
+	    }
+	    // editButtonElem.hidden = false;
+	    /*
+	    if (selectedX509Cert3.isSelfSigned) {
+		editButtonElem.hidden = false;
+	    }
+	    else {
+		editButtonElem.hidden = true;
+	    }
+	    */
+	    return;
+	}
+
+
+	var isCACert = (avpki.keymanager.CertEditImportOverlay.mLeafCertType == Components.interfaces.nsIX509Cert.CA_CER);
+	var isTempCert = false;
+	try {
+	    if (!isCACert) {
+		isCACert = avpki.keymanager.CertEditImportOverlay.mKeyManager.isCACert(selectedCert);
+	    }
+	    isTempCert = avpki.keymanager.CertEditImportOverlay.mKeyManager.isTemporaryCert(selectedCert);
+	} catch(ex) {
+	    avpki.keymanager.CertEditImportOverlay.logError("avpki.keymanager.CertEditImportOverlay.activateButtons() : error - ex: " + ex + "");
+	    return;
+	}
+
+	/*
+	avpki.keymanager.CertEditImportOverlay.logDebug("avpki.keymanager.CertEditImportOverlay.activateButtons(): " + 
+			" selectedCert: |" + selectedCert.nickname + "|" +
+			" subjectName: " + selectedCert.subjectName + "|" +
+			" isTempCert? " + isTempCert + "|" +
+			" isCA? " + isCACert + 
+			"");
+
+	*/
+
+	/*
+	avpki.keymanager.CertEditImportOverlay.mLeafCertType, once computed, does not change over life-of the dialog window.
+	*/
+	// avpki.keymanager.CertEditImportOverlay.mLeafCertType = null;
+
+	if (!isTempCert) {
+	    // If the cert is permanent cert, then only show edit button.
+	    importButtonElem.hidden = true;
+	    importChainButtonElem.hidden = true;
+	    editButtonElem.hidden = false;
+
+	    // Deduce the type of cert for selecting the edit-dialog.
+	    // If we cannot determine it, do not show edit button.
+	    if (!isCACert && !avpki.keymanager.CertEditImportOverlay.mLeafCertType) {
+		var verifiedObj = new Object();
+		var usageObj = new Object();
+		selectedCert.getUsagesString(false, verifiedObj, usageObj);
+
+		/*
+		avpki.keymanager.CertEditImportOverlay.logDebug("avpki.keymanager.CertEditImportOverlay.activateButtons(): selectedCert.usage: " + usageObj.value + "");
+		avpki.keymanager.CertEditImportOverlay.logDebug("avpki.keymanager.CertEditImportOverlay.activateButtons(): selectedCert.verified? " + verifiedObj.value + "");
+		avpki.keymanager.CertEditImportOverlay.logDebug("avpki.keymanager.CertEditImportOverlay.activateButtons(): avpki.keymanager.CertEditImportOverlay.mLeafCertType: " + avpki.keymanager.CertEditImportOverlay.mLeafCertType + " usageObj.value: " + usageObj.value + "");
+		*/
+
+		if (!avpki.keymanager.CertEditImportOverlay.mLeafCertType && usageObj.value) {
+		    if (usageObj.value.indexOf("Server") >= 0) {
+		        avpki.keymanager.CertEditImportOverlay.mLeafCertType = Components.interfaces.nsIX509Cert.SERVER_CERT;
+		    }
+		    else if (usageObj.value.indexOf("Client") >= 0) {
+		        avpki.keymanager.CertEditImportOverlay.mLeafCertType = Components.interfaces.nsIX509Cert.EMAIL_CERT;
+		    }
+		}
+	    }
+	    if (!avpki.keymanager.CertEditImportOverlay.mLeafCertType) {
+		editButtonElem.hidden = true;
+	    }
+	    return;
+	}
+
+	// For temporary cert, show import button and hide edit button.
+	editButtonElem.hidden = true;
+	importButtonElem.hidden = false;
+
+	// For a temporary certs with temporary issuer cert, show import-chain button
+	var isIssuerTempCert = false;
+	if (selectedCert.issuer) {
+	    isIssuerTempCert = avpki.keymanager.CertEditImportOverlay.mKeyManager.isTemporaryCert(selectedCert.issuer);
+	}
+
+	// Show import-chain button only for cert with non-null temporary issuer cert.
+	if (selectedCert.issuer && isIssuerTempCert && !(selectedCert.equals(selectedCert.issuer))) {
+	    importChainButtonElem.hidden = false;
+	}
+	else {
+	    importChainButtonElem.hidden = true;
+	}
+
+	avpki.keymanager.CertEditImportOverlay.logTrace("avpki.keymanager.CertEditImportOverlay.activateButtons():......................End.");
+    },
+
+    getSelectedCert : function ()
+    {
+        avpki.keymanager.CertEditImportOverlay.logTrace("avpki.keymanager.CertEditImportOverlay.getSelectedCert():......................Start.");
+
+	var treesetDumpElem = document.getElementById('treesetDump');
+        var selectedCert = treesetDumpElem.selectedCert;
+
+        if (selectedCert) {
+            avpki.keymanager.CertEditImportOverlay.logDebug("avpki.keymanager.CertEditImportOverlay.getSelectedCert(): selectedCert: " + selectedCert.subjectName + "");
+            avpki.keymanager.CertEditImportOverlay.logTrace("avpki.keymanager.CertEditImportOverlay.getSelectedCert():......................End(0).");
+            return selectedCert;
+        }
+
+        avpki.keymanager.CertEditImportOverlay.logDebug("avpki.keymanager.CertEditImportOverlay.getSelectedCert(): treesetDumpElem.currentIndex: " + treesetDumpElem.currentIndex + "");
+
+	// Reuse the getCurrentCert() from the .../security/manager/pki/resources/content/viewCertDetails.js
+	// defined for the overlay for the certDump.xul.
+	selectedCert = getCurrentCert();
+
+	if (!selectedCert) {
+            avpki.keymanager.CertEditImportOverlay.logTrace("avpki.keymanager.CertEditImportOverlay.getSelectedCert():......................10.");
+            if (treesetDumpElem.currentIndex < 0) {
+	        // alert("No items are selected."); //This should never happen.
+	        if (window.arguments && window.arguments[0]) {
+	            var pkiParams = window.arguments[0].QueryInterface(Components.interfaces.nsIPKIParamBlock);
+	            var isupport = pkiParams.getISupportAtIndex(1);
+	            selectedCert = isupport.QueryInterface(Components.interfaces.nsIX509Cert);
+	        }
+            }
+            else {
+	        var item = treesetDumpElem.contentView.getItemAtIndex(treesetDumpElem.currentIndex);
+	        var dbKey = item.firstChild.firstChild.getAttribute('display');
+	        //  Get the cert from the cert database
+	        var certdb = Components.classes["@mozilla.org/security/x509certdb;1"]
+			    .getService(Components.interfaces.nsIX509CertDB);
+	        var cert = certdb.findCertByDBKey(dbKey,null);
+	        selectedCert = cert;
+            }
+	}
+	if (selectedCert) {
+            avpki.keymanager.CertEditImportOverlay.logDebug("avpki.keymanager.CertEditImportOverlay.getSelectedCert(): selectedCert: " + selectedCert.subjectName + "");
+	}
+
+        avpki.keymanager.CertEditImportOverlay.logTrace("avpki.keymanager.CertEditImportOverlay.getSelectedCert():......................End.");
+        return selectedCert;
+    },
+
+    initCertEditImportOverlay : function ()
+    {
+	avpki.keymanager.CertEditImportOverlay.logTrace("avpki.keymanager.CertEditImportOverlay.initCertEditImportOverlay():......................Start.");
+
+	avpki.keymanager.CertEditImportOverlay.mKeyManager = Components.classes["@avaya.com/pkm/keymanager;1"]
+		    		.getService(Components.interfaces.alrIKeyManager);
+	if (!avpki.keymanager.CertEditImportOverlay.mKeyManager) {
+	    avpki.keymanager.CertEditImportOverlay.logTrace("avpki.keymanager.CertEditImportOverlay.initCertEditImportOverlay():......................End(0).");
+	    return ;
+	}
+
+	// Use the preference to show/hide the buttons for exporting and importing certs.
+	var showCertEximButtons = false;
+	do {
+	    try {
+		var Prefs = Components.classes["@mozilla.org/preferences-service;1"]
+			        .getService(Components.interfaces.nsIPrefService);
+		var prefBranchPrefixId = "keymgr.";
+		var prefsBranch = Prefs.getBranch(prefBranchPrefixId);
+		if (!prefsBranch) {
+		    break;
+		}
+
+		var prefBoolValue = prefsBranch.getBoolPref("eximcerts.import.tempcerts.enabled");
+		if (prefBoolValue) {
+		    showCertEximButtons = true;
+		}
+	    } catch (ex) {
+		avpki.keymanager.CertEditImportOverlay.logDebug("avpki.keymanager.CertEditImportOverlay.initCertEditImportOverlay():  unable to obtain preferences - ex: " + ex + "");
+	    }
+	} while (0);
+	avpki.keymanager.CertEditImportOverlay.logDebug("avpki.keymanager.CertEditImportOverlay.initCertEditImportOverlay(): showCertEximButtons: " + showCertEximButtons + "");
+
+	var certEximButtonHboxElem = document.getElementById("CertEximButtonHbox");
+	certEximButtonHboxElem.collapsed = !showCertEximButtons;
+	if (!showCertEximButtons) {
+	    avpki.keymanager.CertEditImportOverlay.logTrace("avpki.keymanager.CertEditImportOverlay.initCertEditImportOverlay():......................End(2).");
+	    return;
+	}
+
+	// Move the edit-import buttons after the 'export_cert' button defined in
+	// .../mozilla/security/manager/pki/resources/content/certDump.xul 
+	var exportCertButtonElem = document.getElementById("export_cert");
+	var exportCertHBoxElem = exportCertButtonElem.parentNode;
+	exportCertHBoxElem.appendChild(certEximButtonHboxElem);
+
+	// Depending on the cert, show the relevant buttons.
+	avpki.keymanager.CertEditImportOverlay.activateButtons();
+
+	// avpki.keymanager.CertEditImportOverlay.logDebug("avpki.keymanager.CertEditImportOverlay.initCertEditImportOverlay(): avpki.keymanager.CertEditImportOverlay.activateButtons: " + avpki.keymanager.CertEditImportOverlay.activateButtons + "");
+	var treesetDumpElem = document.getElementById('treesetDump');
+	treesetDumpElem.addEventListener("select", avpki.keymanager.CertEditImportOverlay.activateButtons, false);
+
+	avpki.keymanager.CertEditImportOverlay.logTrace("avpki.keymanager.CertEditImportOverlay.initCertEditImportOverlay():......................End.");
+    },
+
+    initSelectedCert : function ()
+    {
+        avpki.keymanager.CertEditImportOverlay.logTrace("avpki.keymanager.CertEditImportOverlay.initSelectedCert():......................Start.");
+
+	var treesetDumpElem = document.getElementById('treesetDump');
+	// force the computation of selected cert 
+	treesetDumpElem.selectedCert = null;
+
+	var selectedCert = null;
+	try {
+	    selectedCert = avpki.keymanager.CertEditImportOverlay.getSelectedCert();
+	} catch (ex) {
+	    avpki.keymanager.CertEditImportOverlay.logError("avpki.keymanager.CertEditImportOverlay.initSelectedCert() : avpki.keymanager.CertEditImportOverlay.getSelectedCert() failed -  ex: " + ex + "");
+	}
+        treesetDumpElem.selectedCert = selectedCert;
+
+        avpki.keymanager.CertEditImportOverlay.logTrace("avpki.keymanager.CertEditImportOverlay.initSelectedCert():......................End.");
+	return selectedCert;
+    },
+
+
+    exportSelectedCert : function ()
+    {
+	avpki.keymanager.CertEditImportOverlay.logTrace("avpki.keymanager.CertEditImportOverlay.exportSelectedCert():......................Start.");
+
+	var tree = document.getElementById('treesetDump');
+
+	// var selectedCert = avpki.keymanager.CertEditImportOverlay.initSelectedCert();
+	var selectedCert = avpki.keymanager.CertEditImportOverlay.getSelectedCert();
+	if (!selectedCert) {
+	    return;
+	}
+
+	var certList = [ selectedCert ];
+
+	// exportX509CertsToFile() function is defined in keyManagerExportCerts.js file.
+	avpki.keymanager.CertEditImportOverlay.exportX509CertsToFile(certList, false);
+
+	avpki.keymanager.CertEditImportOverlay.logTrace("avpki.keymanager.CertEditImportOverlay.exportSelectedCert():......................End.");
+    },
+
+
+    editSelectedX509Cert : function (selectedCert)
+    {
+    avpki.keymanager.CertEditImportOverlay.logTrace("avpki.keymanager.CertEditImportOverlay.editSelectedX509Cert():......................Start.");
+    avpki.keymanager.CertEditImportOverlay.logDebug("avpki.keymanager.CertEditImportOverlay.editSelectedX509Cert(): avpki.keymanager.CertEditImportOverlay.mLeafCertType: " + avpki.keymanager.CertEditImportOverlay.mLeafCertType + "");
+
+    if (!selectedCert) {
+	return;
+    }
+
+    var selectedX509Cert2 = selectedCert.QueryInterface(Components.interfaces.nsIX509Cert2);
+    var selectedX509Cert3 = selectedCert.QueryInterface(Components.interfaces.nsIX509Cert3);
+    /*
+    if ((selectedX509Cert2.certType != Components.interfaces.nsIX509Cert2.ANY_CERT)
+	|| (selectedX509Cert2.certType != Components.interfaces.nsIX509Cert2.UNKNOWN_CERT)) {
+	avpki.keymanager.CertEditImportOverlay.mLeafCertType = selectedX509Cert2.certType;
+    }
+    */
+
+    if (!avpki.keymanager.CertEditImportOverlay.mLeafCertType) {
+	return;
+    }
+
+    var certDBKey = selectedCert.dbKey;
+
+    if (avpki.keymanager.CertEditImportOverlay.mLeafCertType == Components.interfaces.nsIX509Cert.USER_CERT) {
+	var bcIsCA = avpki.keymanager.CertEditImportOverlay.getCertBasicConstraintsIsCA(selectedCert);
+	if (bcIsCA) {
+	    window.openDialog('chrome://pippki/content/editcacert.xul', certDBKey,
+		        'chrome,centerscreen,modal');
+	}
+	else {
+	    window.openDialog('chrome://pippki/content/editemailcert.xul', certDBKey,
+		        'chrome,centerscreen,modal');
+	}
+    }
+    else if (avpki.keymanager.CertEditImportOverlay.mLeafCertType == Components.interfaces.nsIX509Cert.EMAIL_CERT) {
+	window.openDialog('chrome://pippki/content/editemailcert.xul', certDBKey,
+		        'chrome,centerscreen,modal');
+    }
+    else if (avpki.keymanager.CertEditImportOverlay.mLeafCertType == Components.interfaces.nsIX509Cert.SERVER_CERT) {
+	window.openDialog('chrome://pippki/content/editsslcert.xul', certDBKey,
+		        'chrome,centerscreen,modal');
+    }
+    else if (avpki.keymanager.CertEditImportOverlay.mLeafCertType == Components.interfaces.nsIX509Cert.CA_CERT) {
+	window.openDialog('chrome://pippki/content/editcacert.xul', certDBKey,
+		        'chrome,centerscreen,modal');
+    }
+
+    avpki.keymanager.CertEditImportOverlay.logTrace("avpki.keymanager.CertEditImportOverlay.editSelectedX509Cert():......................End.");
+    },
+
+    editSelectedCert : function ()
+    {
+	avpki.keymanager.CertEditImportOverlay.logTrace("avpki.keymanager.CertEditImportOverlay.editSelectedCert():......................Start.");
+
+	// var selectedCert = avpki.keymanager.CertEditImportOverlay.initSelectedCert();
+	var selectedCert = avpki.keymanager.CertEditImportOverlay.getSelectedCert();
+	if (!selectedCert) {
+	    return;
+	}
+
+	avpki.keymanager.CertEditImportOverlay.editSelectedX509Cert(selectedCert);
+
+	avpki.keymanager.CertEditImportOverlay.logTrace("avpki.keymanager.CertEditImportOverlay.editSelectedCert():......................End.");
+    },
+
+    importX509CertChain : function (aX509Cert, aImportChain, aCertType)
+    {
+        if (!aX509Cert) {
+	    avpki.keymanager.CertEditImportOverlay.logError("avpki.keymanager.CertEditImportOverlay.importX509CertChain(): ERROR: NULL aX509Cert");
+	    return;
+        }
+        avpki.keymanager.CertEditImportOverlay.logTrace("avpki.keymanager.CertEditImportOverlay.importX509CertChain(subject: '" + aX509Cert.subjectName + "', " + aImportChain + ", " + aCertType +"):......................Start.");
+
+        var issuerX509Cert = aX509Cert.issuer;
+        avpki.keymanager.CertEditImportOverlay.logDebug("avpki.keymanager.CertEditImportOverlay.importX509CertChain(): issuerX509Cert: " + issuerX509Cert + "");
+	// Import the Issuer cert first before importing the selected cert
+        if (aImportChain && issuerX509Cert) {
+	    var x509Cert3 = aX509Cert.QueryInterface(Components.interfaces.nsIX509Cert3);
+	    var isCertSelfSigned = x509Cert3.isSelfSigned;
+	    avpki.keymanager.CertEditImportOverlay.logDebug("avpki.keymanager.CertEditImportOverlay.importX509CertChain(): isCertSelfSigned: " + isCertSelfSigned + "");
+    
+	    var isIssuerTempCert = avpki.keymanager.CertEditImportOverlay.mKeyManager.isTemporaryCert(issuerX509Cert);
+	    avpki.keymanager.CertEditImportOverlay.logDebug("avpki.keymanager.CertEditImportOverlay.importX509CertChain(): isIssuerTempCert: " + isIssuerTempCert + "");
+	    if (!isCertSelfSigned && isIssuerTempCert) {
+	        avpki.keymanager.CertEditImportOverlay.importX509CertChain(
+				issuerX509Cert,
+				aImportChain,
+				Components.interfaces.nsIX509Cert.CA_CERT
+				);
+	    }
+        }
+    
+        var dataLenObj = new Object();
+        var dataDER = aX509Cert.getRawDER(dataLenObj);
+        if (dataLenObj.value <= 0) {
+	    avpki.keymanager.CertEditImportOverlay.logError("avpki.keymanager.CertEditImportOverlay.importX509CertChain(): ERROR zero-length DER cert-data for : " + aX509Cert.subjectName + "");
+	    return;
+        }
+
+        var x509Cert2 = aX509Cert.QueryInterface(Components.interfaces.nsIX509Cert2);
+        var certType = x509Cert2.certType;
+        avpki.keymanager.CertEditImportOverlay.logDebug("importX509CertChain(): x509Cert2.certType: " + certType + "");
+        if (certType == Components.interfaces.nsIX509Cert.UNKNOWN_CERT) {
+	    certType = aCertType;
+        }
+        avpki.keymanager.CertEditImportOverlay.logDebug("avpki.keymanager.CertEditImportOverlay.importX509CertChain(): certType: " + certType + "");
+
+        var certdb = Components.classes["@mozilla.org/security/x509certdb;1"]
+			.getService(Components.interfaces.nsIX509CertDB);
+        switch(certType) {
+	    case Components.interfaces.nsIX509Cert.CA_CERT :
+	        avpki.keymanager.CertEditImportOverlay.logDebug("avpki.keymanager.CertEditImportOverlay.importX509CertChain(): certType: Components.interfaces.nsIX509Cert.CA_CERT");
+	        certdb.importCertificates(
+		    	dataDER,
+		    	dataLenObj.value,
+		    	Components.interfaces.nsIX509Cert.CA_CERT,
+		    	null
+		    	);
+	        break;
+	    case Components.interfaces.nsIX509Cert.SERVER_CERT :
+	        avpki.keymanager.CertEditImportOverlay.logDebug("avpki.keymanager.CertEditImportOverlay.importX509CertChain(): certType: Components.interfaces.nsIX509Cert.SERVER_CERT");
+	        certdb.importServerCertificate(
+		    	dataDER,
+		    	dataLenObj.value,
+		    	null
+		    	);
+	        break;
+	    case Components.interfaces.nsIX509Cert.EMAIL_CERT :
+	        avpki.keymanager.CertEditImportOverlay.logDebug("avpki.keymanager.CertEditImportOverlay.importX509CertChain(): certType: Components.interfaces.nsIX509Cert.EMAIL_CERT");
+	        certdb.importEmailCertificate(
+			dataDER,
+			dataLenObj.value,
+			null
+			);
+	        break;
+	    case Components.interfaces.nsIX509Cert.USER_CERT :
+	        break;
+	    default :
+	        avpki.keymanager.CertEditImportOverlay.logDebug("avpki.keymanager.CertEditImportOverlay.importX509CertChain(): Unknown cert type: " + aCertType + "");
+	        return;
+        }
+
+        avpki.keymanager.CertEditImportOverlay.logTrace("avpki.keymanager.CertEditImportOverlay.importX509CertChain():...............................End.");
+        return;
+    },
+
+
+    importSelectedX509CertChain : function (aImportChain)
+    {
+        avpki.keymanager.CertEditImportOverlay.logTrace("avpki.keymanager.CertEditImportOverlay.importSelectedX509CertChain(" + aImportChain + "):......................Start.");
+
+	// var selectedCert = avpki.keymanager.CertEditImportOverlay.initSelectedCert();
+	var selectedCert = avpki.keymanager.CertEditImportOverlay.getSelectedCert();
+        if (!selectedCert) {
+	    avpki.keymanager.CertEditImportOverlay.logError("avpki.keymanager.CertEditImportOverlay.importSelectedX509CertChain(): NULL selectedCert.");
+	    return;
+        }
+
+        var selectedCert2 = selectedCert.QueryInterface(Components.interfaces.nsIX509Cert2);
+        var selectedCertType = selectedCert2.certType;
+
+        if (avpki.keymanager.CertEditImportOverlay.mKeyManager.isUserCert(selectedCert)) {
+	    avpki.keymanager.CertEditImportOverlay.logTrace("avpki.keymanager.CertEditImportOverlay.importSelectedX509CertChain():......................End(1).");
+	    return;
+        }
+        avpki.keymanager.CertEditImportOverlay.logTrace("avpki.keymanager.CertEditImportOverlay.importSelectedX509CertChain():....................20.");
+
+        if (avpki.keymanager.CertEditImportOverlay.mKeyManager.isCACert(selectedCert)) {
+	    avpki.keymanager.CertEditImportOverlay.importX509CertChain(
+	    		selectedCert,
+			aImportChain,
+			Components.interfaces.nsIX509Cert.CA_CERT
+			);
+	    avpki.keymanager.CertEditImportOverlay.activateButtons();
+
+	    avpki.keymanager.CertEditImportOverlay.logTrace("avpki.keymanager.CertEditImportOverlay.importSelectedX509CertChain():......................End(2).");
+	    return;
+        }
+        avpki.keymanager.CertEditImportOverlay.logTrace("avpki.keymanager.CertEditImportOverlay.importSelectedX509CertChain():....................40.");
+
+
+        if (selectedCertType == Components.interfaces.nsIX509Cert.UNKNOWN_CERT) {
+	    var verifiedObj = new Object();
+	    var usageObj = new Object();
+	    selectedCert.getUsagesString(false, verifiedObj, usageObj);
+	    avpki.keymanager.CertEditImportOverlay.logDebug("avpki.keymanager.CertEditImportOverlay.importSelectedX509CertChain(): selectedCert.usage: " + usageObj.value + " " + 
+		            "selectedCert.verified? " + verifiedObj.value + "");
+
+	    var isServerCert = true;
+	    var serverCertObj = new Object();
+	    serverCertObj.value = true;
+	    var promptService = Components.classes["@mozilla.org/embedcomp/prompt-service;1"]
+			            .getService().QueryInterface(Components.interfaces.nsIPromptService);
+	    var dialogOk = promptService.confirmCheck(
+			    window,
+		     	    "Select Certificate Type",
+		     	    "You can import the certificate as either server or e-mail certificate.\nChoose one of them. Press cancel to terminate this task.",
+			    "Server certificate?",
+			    serverCertObj
+		     	    );
+	    if (!dialogOk) {
+	        return;
+	    }
+	    isServerCert = serverCertObj.value;
+	    if (isServerCert) {
+	        selectedCertType = Components.interfaces.nsIX509Cert.SERVER_CERT; 
+	    }
+	    else {
+	        selectedCertType = Components.interfaces.nsIX509Cert.EMAIL_CERT; 
+	    }
+        }
+
+        avpki.keymanager.CertEditImportOverlay.importX509CertChain(
+			selectedCert,
+			aImportChain,
+			selectedCertType
+			);
+        avpki.keymanager.CertEditImportOverlay.mLeafCertType = selectedCertType;
+        // avpki.keymanager.CertEditImportOverlay.editSelectedX509Cert(selectedCert);
+        avpki.keymanager.CertEditImportOverlay.activateButtons();
+
+        avpki.keymanager.CertEditImportOverlay.logTrace("avpki.keymanager.CertEditImportOverlay.importSelectedX509CertChain():......................End.");
+    },
+
+    importSelectedCert : function ()
+    {
+	avpki.keymanager.CertEditImportOverlay.importSelectedX509CertChain(false);
+    },
+
+    importSelectedCertChain : function ()
+    {
+	avpki.keymanager.CertEditImportOverlay.importSelectedX509CertChain(true);
+    },
+
+    dumpCertData : function (aCert)
+    {
+	var selectedCert = aCert;
+	if (!selectedCert) {
+	    return;
+	}
+	avpki.keymanager.CertEditImportOverlay.logDebug("avpki.keymanager.CertEditImportOverlay.dumpSelectedCert(): selectedCert.nickname: " + selectedCert.nickname + "");
+    },
+
+    lastMethod : function () 
+    {
+    }
+}
+
+
+]]>
+</script>
+
+  <dialog id="certDetails"
+      onload="setWindowName(); avpki.keymanager.CertEditImportOverlay.initCertEditImportOverlay();"
+      >
+      <hbox id="CertEximButtonHbox"
+	  pack="end"
+	  insertafter="certDetails"
+	  >
+	  <!--
+	  <button id="cert_exportButton"
+		label="Export"
+		hidden="true"
+		oncommand="avpki.keymanager.CertEditImportOverlay.exportSelectedCert();"/>
+	  -->
+	  <button id="cert_editButton"
+		label="Edit"
+		tooltiptext="Edit the trust settings of the selected cert"
+		oncommand="avpki.keymanager.CertEditImportOverlay.editSelectedCert();"
+		/>
+	  <button id="cert_importButton"
+		label="Import"
+		tooltiptext="Import the selected cert into cert-DB cert permanently - do not forget to change the trust setting if it is needed."
+		hidden="true"
+		oncommand="avpki.keymanager.CertEditImportOverlay.importSelectedCert();"
+		/>
+	  <button id="cert_importChainButton"
+		label="Import Chain"
+		tooltiptext="Import the selected cert and its issuer chain into cert-DB cert permanently - do not forget to change the trust setting if it is needed."
+		hidden="true"
+		oncommand="avpki.keymanager.CertEditImportOverlay.importSelectedCertChain();"
+		/>
+      </hbox>
+  </dialog>
+
+</overlay>
+

@@ -1,0 +1,362 @@
+<?xml version="1.0"?>
+<!-- @(#) $Id: textvaluelist.xml,v 1.11 2009/04/16 13:11:54 subrata Exp $ -->
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is Avaya Labs Research, Avaya Inc. Code.
+   -
+   - The Initial Developer of the Original Code is
+   - Subrata Mazumdar, Avaya Labs Research, Avaya Inc.
+   - Portions created by the Initial Developer are Copyright (C) 2007.
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Subrata Mazumdar (mazum@avaya.com)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+
+<!DOCTYPE bindings SYSTEM "chrome://keymanager/locale/keyManager.dtd">
+
+<bindings id="textvaluelistBindings"
+    xmlns="http://www.mozilla.org/xbl"
+    xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    xmlns:xbl="http://www.mozilla.org/xbl">
+
+    <binding id="textvaluelistBinding"
+	extends="chrome://keymanager/content/ExtnXBL/certextn.xml#certextnbaseBinding"
+        >
+        <!--
+        <resources>
+    	    <script type="application/x-javascript" src="chrome://keymanager/content/GeneralNameItem.js"/>
+    		    onchange="getBindingParent(this).handleFilePathChange(this)"
+  	  	    onkeyup="if (event.keyCode == 13)
+  	  			{getBindingParent(this).autoCompleteAction(event.target)};"
+        </resources>
+        -->
+    	<!-- content, property, method and event descriptions go here -->
+    	<content>
+	    <xul:vbox anonid="keymgr.textvaluelist">
+	        <xul:hbox>
+	            <xul:vbox>
+		        <xul:textbox anonid="keymgr.textvaluelist.newvalue"
+			    xbl:inherits="tooltiptext=newvaluetooltip,autocompletesearchparam=newvaluesearchparam"
+  	  	            type="autocomplete" 
+  	  	            autocompletesearch="form-history" 
+  	  	            completeselectedindex="true"
+  	  	            autocompletesearchparam="keymgr.textvaluelist.newvalue"
+		            />
+	                <xul:listbox anonid="keymgr.textvaluelist.list"
+			    xbl:inherits="label=listlabel,tooltiptext=listtooltip,rows"
+		            rows="3"
+			    >
+	                </xul:listbox>
+	            </xul:vbox>
+	            <xul:vbox anonid="keymgr.textvaluelist.cmds"
+		        align="start" 
+		        xbl:inherits="hidden=readonly"
+		        >
+	                <xul:button anonid="keymgr.textvaluelist.cmd.add"
+			    xbl:inherits="label=addlabel,tooltiptext=addtooltip"
+		            label="Add"
+		    	    oncommand="getBindingParent(this).addNewValueToList(event);"
+			    /> 
+	                <xul:button anonid="keymgr.textvaluelist.cmd.remove"
+			    xbl:inherits="label=removelabel,tooltiptext=removetooltip"
+		            label="Remove"
+		    	    oncommand="getBindingParent(this).deleteValueFromList(event);"
+			    /> 
+	            </xul:vbox>
+	        </xul:hbox>
+	        <xul:textbox anonid="keymgr.textvaluelist.values.text"
+			xbl:inherits="value=textValues,certPropName=textValueListCertPropName"
+		    	collapsed="true" readonly="true"
+		    	certPropName="values-text"
+			/>
+	    </xul:vbox>
+    	</content>
+	<implementation>
+	    <field name="mTextValueListElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.textvaluelist");
+	    </field>
+	    <field name="mNewValueElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.textvaluelist.newvalue");
+	    </field>
+	    <field name="mTextValueListListElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.textvaluelist.list");
+	    </field>
+	    <field name="mTextValueListValueTextElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.textvaluelist.values.text");
+	    </field>
+	    <field name="mValueSeparator">"|"</field>
+
+	    <property name="value"
+	        onget="this.computeAttributeListValue(); return this.mTextValueListValueTextElem.value;"
+	        onset="this.mTextValueListValueTextElem.value=val; this.updateValueList();return val;"
+		/>
+	    <property name="newvalue"
+	        onget="return this.mNewValueElem.value;"
+	        onset="this.mNewValueElem.value=val; return val;"
+		/>
+	    <property name="readonly"
+	        onget="return this.mTextValueListElem.readonly;"
+	    	onset="this.mTextValueListElem.readonly = val;
+		       this.setReadonly(this.mTextValueListElem, val);
+	    	       if (val) {
+		       	this.setAttribute('readonly',true);
+		       }
+                       else {
+		       	this.removeAttribute('readonly');
+		       	this.refresh();
+		       }
+		       return val;"
+		/>
+
+	    <constructor>
+		<![CDATA[
+		// this.mMaxLogLevel = 9;
+		this.LogTrace("textvaluelistBinding.constructor():......................Start.");
+
+		this.refresh();
+
+		var autoCompleteSearchParam = (this.id?(this.id + "."):(this.localName+ ".")) + this.mNewValueElem.getAttribute("anonid");
+		// var autoCompleteSearchParam = (getBindingParent(this).localName + ".") + (this.localName + ".") + this.mNewValueElem.getAttribute("anonid");
+		this.mNewValueElem.setAttribute("autocompletesearchparam", autoCompleteSearchParam);
+
+		var valueSep = this.getAttribute("valueSeparator");
+		this.LogDebug("textvaluelistBinding(): valueSep: " + valueSep + "");
+		if (valueSep) {
+		    this.mValueSeparator = valueSep;
+		}
+		this.LogDebug("textvaluelistBinding(): this.mValueSeparator: " + this.mValueSeparator + "");
+
+		this.LogTrace("textvaluelistBinding.constructor():......................End.");
+		]]>
+	    </constructor>
+
+	    <method name="refresh">
+	        <body>
+		<![CDATA[
+		this.removeAllItemsFromList();
+		if (this.mTextValueListValueTextElem.value != "") {
+		    this.updateValueList();
+		}
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="removeAllItemsFromList">
+	        <body>
+		<![CDATA[
+		for (var i = (this.mTextValueListListElem.getRowCount() - 1); i >= 0; i--) {
+		    this.mTextValueListListElem.removeItemAt(i);
+		}
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="reset">
+	        <body>
+		<![CDATA[
+		this.LogTrace("textvaluelistBinding.reset():......................Start.");
+
+		this.removeAllItemsFromList();
+		this.newvalue = "";
+		this.value = "";
+
+		this.LogTrace("textvaluelistBinding.reset():......................End.");
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="computeAttributeListValue">
+	        <body>
+		<![CDATA[
+                this.LogTrace("textvaluelistBinding.computeAttributeListValue(): ...........................Start."); 
+
+                // Format:  <value-1>|<value-2>|.........|<value-n>
+
+
+                var attributeValueListText = "";
+                var rowCount = this.mTextValueListListElem.getRowCount();
+                this.LogDebug("textvaluelistBinding.computeAttributeListValue(): rowCount: " + rowCount + ""); 
+                for (var i = 0; i < rowCount; i++) {
+    	            var rowItemElem = this.mTextValueListListElem.getItemAtIndex(i);
+		    if (i > 0) {
+    	            	attributeValueListText += this.mValueSeparator; // "|";
+		    }
+	            attributeValueListText += rowItemElem.value;
+
+                }
+		this.LogDebug("textvaluelistBinding.computeAttributeListValue(): attributeValueListText: " + attributeValueListText + "");
+
+                this.mTextValueListValueTextElem.value = attributeValueListText;
+
+                this.LogTrace("textvaluelistBinding.computeAttributeListValue(): ...........................End."); 
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="updateValueList">
+	        <body>
+		<![CDATA[
+                this.LogDebug("textvaluelistBinding.updateValueList(): valueSeq: "  + this.mTextValueListValueTextElem.value + "");
+
+                // var textValueSeq = this.mTextValueListValueTextElem.value.split("|");
+                var textValueSeq = this.mTextValueListValueTextElem.value.split(this.mValueSeparator);
+                if (textValueSeq.length <= 0) {
+    	            return;
+                }
+                this.LogDebug("textvaluelistBinding.updateValueList(): textValueSeq.length: "  + textValueSeq.length + "");
+
+                for (var i = 0; i < textValueSeq.length; i++) {
+    	            var textValue = textValueSeq[i];
+	            if (textValue == "") {
+	                continue;
+	            }
+    	            var listItem = this.mTextValueListListElem.appendItem(textValue, textValue);
+		    listItem.setAttribute("tooltiptext", textValue);
+                }
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="autoCompleteAction">
+		<parameter name="targetElem"/>
+	        <body>
+		<![CDATA[
+                var formFieldKey = targetElem.getAttribute("autocompletesearchparam");
+		if (!formFieldKey) {
+		    return;
+		}
+                var formFieldValue = this.trim(targetElem.value);
+                if (formFieldValue == "") {
+    	            return;
+                }
+
+                var formhistory = null;
+                if ("nsIFormHistory" in Components.interfaces){
+                    formhistory = Components.classes["@mozilla.org/satchel/form-history;1"].
+        			            getService(Components.interfaces.nsIFormHistory);
+                }
+                else if ("nsIFormHistory2" in Components.interfaces){
+                    formhistory = Components.classes["@mozilla.org/satchel/form-history;1"].
+        			            getService(Components.interfaces.nsIFormHistory2);
+                }
+                if (!formhistory) {
+    	            return;
+                }
+
+                // use the same value for key as "autocompletesearchparam" in textbox:
+                formhistory.addEntry(formFieldKey, formFieldValue);
+
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="setAndAddNewValueToList">
+		<parameter name="aNewValue"/>
+	        <body>
+		<![CDATA[
+		this.mNewValueElem.value = this.trim(aNewValue);
+		this.addNewValueToList();
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="addNewValueToList">
+	        <body>
+		<![CDATA[
+
+		this.LogTrace("textvaluelistBinding.addNewValueToList():......................Start.");
+
+		var newValue = this.trim(this.mNewValueElem.value);
+		if (newValue == "") {
+		    this.mNewValueElem.value = "";
+		    return;
+		}
+                var listItem = this.mTextValueListListElem.appendItem(newValue, newValue);
+		listItem.setAttribute("tooltiptext", newValue);
+		this.mTextValueListListElem.selectItem(listItem);
+		this.mTextValueListListElem.ensureElementIsVisible(listItem);
+
+                this.computeAttributeListValue();
+
+		this.autoCompleteAction(this.mNewValueElem);
+
+		this.LogTrace("textvaluelistBinding.addNewValueToList():......................End.");
+                return;
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="deleteValueFromList">
+	        <body>
+		<![CDATA[
+                this.mTextValueListListElem.removeItemAt(this.mTextValueListListElem.selectedIndex);
+                this.mTextValueListListElem.selectedIndex = -1;
+                this.mTextValueListListElem.clearSelection();
+            
+                this.computeAttributeListValue();
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="toCertProps">
+		<parameter name="aCertProps"/>
+	        <body>
+		<![CDATA[
+		this.computeAttributeListValue();
+		this.certExtnToProps(this.mTextValueListElem, aCertProps);
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="updateCertProps">
+		<parameter name="aCertProps"/>
+	        <body>
+		<![CDATA[
+		this.updateCertExtnProps(this.mTextValueListElem, aCertProps);
+		this.refresh();
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="mergeCertProps">
+		<parameter name="aCertProps"/>
+	        <body>
+		<![CDATA[
+		this.updateCertExtnProps(this.mTextValueListElem, aCertProps, true);
+		this.refresh();
+		]]>
+	        </body>
+	    </method>
+	</implementation>
+    </binding>
+
+
+</bindings>
+

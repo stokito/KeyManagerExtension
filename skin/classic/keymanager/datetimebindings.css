@@ -1,0 +1,5 @@
+
+datetimepicker {
+  -moz-binding: url('chrome://keymanager/content/ExtnXBL/datetimebindings.xml#datetimepickerBinding');
+}
+

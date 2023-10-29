@@ -1,0 +1,433 @@
+<?xml version="1.0"?>
+<!-- @(#) $Id: jksmanagecertOptionsOverlay.xul,v 1.8 2012/10/07 17:20:30 subrata Exp $ -->
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is Avaya Labs Research, Avaya Inc. Code.
+   -
+   - The Initial Developer of the Original Code is
+   - Subrata Mazumdar, Avaya Labs Research, Avaya Inc.
+   - Portions created by the Initial Developer are Copyright (C) 2007.
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Subrata Mazumdar (mazum@avaya.com)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+
+
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://keymanager/skin/kmbindings.css" type="text/css"?>
+
+<!DOCTYPE overlay SYSTEM "chrome://keymanager/locale/jksmanagecert.dtd">
+
+<overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+	id="keymgr.options.win.overlay.jksmanagecert"
+	>
+
+<script type="application/x-javascript">
+<![CDATA[
+
+var JKSManageCertOptions = {
+
+    mMaxLogLevel		: 2,
+    log : function(level, msg)
+    {
+	if (level > this.mMaxLogLevel) {
+            return;
+        }
+        dump(msg + "\n");
+    },
+
+    logError : function(msg)
+    {
+        this.log(2, msg);
+    },
+    logTrace : function(msg)
+    {
+        this.log(4, msg);
+    },
+    logDebug : function(msg)
+    {
+        this.log(8, msg);
+    },
+
+    init : function () 
+    {
+	JKSManageCertOptions.logTrace("JKSManageCertOptions.init():................Start.");
+
+	var jksManageCertEnabledElem = document.getElementById("keymgr.jksmanagecert.enabled.defval");
+	JKSManageCertOptions.handleJKSManageCertEnableChange(jksManageCertEnabledElem);
+
+	/*
+	var isLinux = (navigator.userAgent.indexOf("Linux") != -1);
+	var isMac = (navigator.userAgent.indexOf("Mac") != -1);
+	*/
+
+	var isWin = (navigator.userAgent.indexOf("Win") != -1);
+	JKSManageCertOptions.logDebug("JKSManageCertOptions.init(): isWin: " + isWin + "");
+
+	var kShellCmdPath = JKSManageCertOptions.getEnvironmentVariable("SHELL");
+	if (!kShellCmdPath && !isWin) {
+	    kShellCmdPath = "/bin/bash";
+	}
+	var kJavaHomeDirPath = JKSManageCertOptions.getEnvironmentVariable("JAVA_HOME");
+	var kGenKeyOptionName = "-genkeypair";
+
+	var shellCmdFilePickerElem = document.getElementById("keymgr.jksmanagecert.shellcmdpath.defval");
+	var javaHomeFilePickerElem = document.getElementById("keymgr.jksmanagecert.javahome.defval");
+	// var genKeyOptionElem = document.getElementById("keymgr.jksmanagecert.genkeyoption.defval");
+	var javaVersionMenuElem = document.getElementById("keymgr.jksmanagecert.javaversion.menulist");
+
+
+	JKSManageCertOptions.logDebug("JKSManageCertOptions.init(): kShellCmdPath: " + kShellCmdPath + " " + "shellCmdFilePickerElem.filepath: " + shellCmdFilePickerElem.filepath);
+	if (shellCmdFilePickerElem.filepath == "") {
+	    if (kShellCmdPath && (kShellCmdPath != "")) {
+	    	// shellCmdFilePickerElem.filepath = kShellCmdPath;
+		KeyManagerOptions.setPreference("extensions.avpki.jksmanagecert.shellcmdpath", kShellCmdPath, "string");
+	    	JKSManageCertOptions.handleShellCmdPathChange(shellCmdFilePickerElem);
+	    }
+	}
+
+	JKSManageCertOptions.logDebug("JKSManageCertOptions.init(): kJavaHomeDirPath: " + kJavaHomeDirPath + " " + "javaHomeFilePickerElem.value: " + javaHomeFilePickerElem.value);
+	if (javaHomeFilePickerElem.value == "") {
+	    if (kJavaHomeDirPath && (kJavaHomeDirPath != "")) {
+	    	// javaHomeFilePickerElem.value = kJavaHomeDirPath;
+		KeyManagerOptions.setPreference("extensions.avpki.jksmanagecert.javahome", kJavaHomeDirPath, "string");
+	    	JKSManageCertOptions.handleJavaHomeFilePickerChange(javaHomeFilePickerElem);
+	    }
+	}
+
+	/*
+	if (genKeyOptionElem.value == "") {
+	    genKeyOptionElem.value = kGenKeyOptionName;
+	}
+	*/
+
+	JKSManageCertOptions.validatedPreferences();
+
+	JKSManageCertOptions.logTrace("JKSManageCertOptions.init():................End.");
+    },
+
+    validatedPreferences : function () 
+    {
+	JKSManageCertOptions.logTrace("JKSManageCertOptions.validatedPreferences():................Start.");
+
+	var jksManageCertEnabledElem = document.getElementById("keymgr.jksmanagecert.enabled.defval");
+	var shellCmdFilePickerElem = document.getElementById("keymgr.jksmanagecert.shellcmdpath.defval");
+	var javaHomeFilePickerElem = document.getElementById("keymgr.jksmanagecert.javahome.defval");
+
+	var validPref = false;
+	do {
+	    if (!shellCmdFilePickerElem.file || !shellCmdFilePickerElem.file.exists()) {
+		JKSManageCertOptions.logTrace("JKSManageCertOptions.validatedPreferences():................10.");
+	    	break;
+	    }
+	    if (!javaHomeFilePickerElem.file || !javaHomeFilePickerElem.file.exists()) {
+		JKSManageCertOptions.logTrace("JKSManageCertOptions.validatedPreferences():................20.");
+	    	break;
+	    }
+	    validPref = true;
+	} while (0);
+	JKSManageCertOptions.logDebug("JKSManageCertOptions.validatedPreferences(): validPref: " + validPref + "");
+
+	if (validPref) {
+	    KeyManagerOptions.setPreference("extensions.avpki.jksmanagecert.validconfig", "true", "bool");
+	}
+	else {
+	    KeyManagerOptions.resetPreference("extensions.avpki.jksmanagecert.validconfig");
+	}
+	/*
+	if (!validPref) {
+	    jksManageCertEnabledElem.checked = validPref;
+	}
+	// jksManageCertEnabledElem.disabled = !validPref;
+	*/
+
+	JKSManageCertOptions.logTrace("JKSManageCertOptions.validatedPreferences():................End.");
+	return validPref;
+    },
+ 
+    getEnvironmentVariable : function (envVarName)
+    {
+	var envVarValue = null;
+        try {
+            var environment = Components.classes["@mozilla.org/process/environment;1"].
+                		getService(Components.interfaces.nsIEnvironment);
+            envVarValue = environment.get(envVarName);
+        } catch(ex) { }
+	return envVarValue;
+    },
+ 
+    handleJKSManageCertEnableChange : function (aJKSManageCertEnableElem, ev) 
+    {
+	JKSManageCertOptions.logTrace("JKSManageCertOptions.handleJKSManageCertEnableChange():................Start.");
+
+	var jksManageCertOptionsGridElem = document.getElementById("keymgr.jksmanagecert.pref.defval.grid");
+	var javaVersionMenuElem = document.getElementById("keymgr.jksmanagecert.javaversion.menulist");
+
+	jksManageCertOptionsGridElem.hidden = !aJKSManageCertEnableElem.checked;
+	if (ev && aJKSManageCertEnableElem.checked) {
+	    JKSManageCertOptions.handleJavaVersionChange(javaVersionMenuElem);
+	}
+
+	JKSManageCertOptions.logTrace("JKSManageCertOptions.handleJKSManageCertEnableChange():................End.");
+    },
+
+    handleShellCmdPathChange : function (aShellCmdPathElem, ev) 
+    {
+	JKSManageCertOptions.logTrace("JKSManageCertOptions.handleShellCmdPathChange():................Start.");
+
+	var isWin = (navigator.userAgent.indexOf("Win") != -1);
+
+	if (!aShellCmdPathElem.file || !aShellCmdPathElem.file.exists()) {
+	    alert("Shell command file path does not exists : " + aShellCmdPathElem.value);
+	    aShellCmdPathElem.value = "";
+	    KeyManagerOptions.resetPreference("extensions.avpki.jksmanagecert.shellcmdpath");
+	}
+
+	JKSManageCertOptions.validatedPreferences();
+
+	JKSManageCertOptions.logTrace("JKSManageCertOptions.handleShellCmdPathChange():................End.");
+    },
+
+    handleJavaHomeFilePickerChange : function (aJavaHomeFilePickerElem, ev) 
+    {
+	JKSManageCertOptions.logTrace("JKSManageCertOptions.handleJavaHomeFilePickerChange():................Start.");
+
+	if (!aJavaHomeFilePickerElem.file || !aJavaHomeFilePickerElem.file.exists()) {
+	    alert("JAVA_HOME path does not exists : " + aJavaHomeFilePickerElem.value);
+	    aJavaHomeFilePickerElem.value = "";
+	}
+
+
+	var keytoolFile = aJavaHomeFilePickerElem.file.clone();
+	keytoolFile.append("bin");
+	if (!keytoolFile.exists()) {
+	    alert("bin directory not found under JDK_HOME: " + aJavaHomeFilePickerElem.value);
+	    aJavaHomeFilePickerElem.value = "";
+	    KeyManagerOptions.resetPreference("extensions.avpki.jksmanagecert.javahome");
+	    JKSManageCertOptions.validatedPreferences();
+	    return;
+	}
+
+	var isWin = (navigator.userAgent.indexOf("Win") != -1);
+	if (isWin) {
+	    keytoolFile.append("keytool.exe");
+	}
+	else {
+	    keytoolFile.append("keytool");
+	}
+	if (!keytoolFile.exists()) {
+	    alert("keytool executable not found under JDK_HOME: " + aJavaHomeFilePickerElem.value + "/bin");
+	    aJavaHomeFilePickerElem.value = "";
+	    KeyManagerOptions.resetPreference("extensions.avpki.jksmanagecert.javahome");
+	    JKSManageCertOptions.validatedPreferences();
+	    return;
+	}
+
+	var javaVersionMenuElem = document.getElementById("keymgr.jksmanagecert.javaversion.menulist");
+	JKSManageCertOptions.handleJavaVersionChange(javaVersionMenuElem);
+
+	JKSManageCertOptions.validatedPreferences();
+
+	JKSManageCertOptions.logTrace("JKSManageCertOptions.handleJavaHomeFilePickerChange():................End.");
+    },
+
+    handleJavaVersionChange : function (aJavaVersionMenuElem, ev) 
+    {
+	JKSManageCertOptions.logTrace("JKSManageCertOptions.handleJavaVersionChange():................Start.");
+	/*
+	var genKeyOptionElem = document.getElementById("keymgr.jksmanagecert.genkeyoption.defval");
+	if (aJavaVersionMenuElem.value == "1.5") {
+	    genKeyOptionElem.value = "-selfcert"
+	}
+	else {
+	    genKeyOptionElem.value = "-genkeypair"
+	}
+	JKSManageCertOptions.logDebug("JKSManageCertOptions.handleJavaVersionChange(): genKeyOption: " + genKeyOptionElem.value + "");
+	*/
+
+	JKSManageCertOptions.logTrace("JKSManageCertOptions.handleJavaVersionChange():................End.");
+    },
+
+    lastMethod : function () 
+    {
+    }
+}
+
+
+]]>
+</script>
+
+
+    <prefpane id="keymgr.options.tabpanel.overlay.jksmanagecert"
+    	label="JKS Manage Cert Default Values"
+	onpaneload="JKSManageCertOptions.init();"
+    	>
+	<preferences>
+	    <preference
+		id="keymgr.jksmanagecert.enabled.pref"
+		name="extensions.avpki.jksmanagecert.enabled"
+		type="bool"
+		/>
+
+	    <preference
+		id="keymgr.jksmanagecert.shellcmdpath.pref"
+		name="extensions.avpki.jksmanagecert.shellcmdpath"
+		type="string"
+		/>
+	    <preference
+		id="keymgr.jksmanagecert.javahome.pref"
+		name="extensions.avpki.jksmanagecert.javahome"
+		type="string"
+		/>
+	    <preference
+		id="keymgr.jksmanagecert.javaversion.pref"
+		name="extensions.avpki.jksmanagecert.javaversion"
+		type="string"
+		/>
+	    <preference
+		id="keymgr.jksmanagecert.genkeyoption.pref"
+		name="extensions.avpki.jksmanagecert.genkeyoption"
+		type="string"
+		/>
+	    <!--
+	    <preference
+		id="keymgr.jksmanagecert.xxxx.pref"
+		name="extensions.avpki.jksmanagecert.xxxx"
+		type="string"
+		/>
+	    -->
+	</preferences>
+	<groupbox>
+	    <caption>
+		    <hbox pack="start">
+  			<checkbox id="keymgr.jksmanagecert.enabled.defval"
+			    label="&keymgr.jksmanagecert.enabled.label;"
+			    tooltiptext="&keymgr.jksmanagecert.enabled.tooltip;"
+			    oncommand="JKSManageCertOptions.handleJKSManageCertEnableChange(this, event);"
+			    preference="keymgr.jksmanagecert.enabled.pref"
+			    />
+		    </hbox>
+	    </caption>
+	<grid id="keymgr.jksmanagecert.pref.defval.grid"> 
+	    <columns>
+		<column/>
+		<column flex="1"/>
+	    </columns>
+	    <rows>
+		<row
+		    align="center"
+		    >
+		    <spacer/>
+		</row>
+
+		<row
+		    align="center"
+		    >
+		    <label control="keymgr.jksmanagecert.shellcmdpath.defval"  value="&keymgr.jksmanagecert.shellcmdpath.label;"/>
+  			<fileselector id="keymgr.jksmanagecert.shellcmdpath.defval"
+			    preference="keymgr.jksmanagecert.shellcmdpath.pref"
+			    preference-editable="true"
+			    formathidden="true"
+			    fileMode="open"
+			    filetooltiptext="&keymgr.jksmanagecert.shellcmdpath.tooltip;"
+			    oncommand="JKSManageCertOptions.handleShellCmdPathChange(this, event);"
+			    onchange="JKSManageCertOptions.handleShellCmdPathChange(this, event);"
+			    onpopuphiding="JKSManageCertOptions.handleShellCmdPathChange(this, event);"
+			    />
+		</row>
+
+		<row
+		    align="center"
+		    >
+		    <label control="keymgr.jksmanagecert.javahome.defval"  value="&keymgr.jksmanagecert.javahome.label;"/>
+  			<fileselector id="keymgr.jksmanagecert.javahome.defval"
+			    preference="keymgr.jksmanagecert.javahome.pref"
+			    preference-editable="true"
+			    formathidden="true"
+			    fileMode="folder"
+			    filetooltiptext="&keymgr.jksmanagecert.javahome.tooltip;"
+			    oncommand="JKSManageCertOptions.handleJavaHomeFilePickerChange(this, event);"
+			    onchange="JKSManageCertOptions.handleJavaHomeFilePickerChange(this, event);"
+			    onpopuphiding="JKSManageCertOptions.handleJavaHomeFilePickerChange(this, event);"
+			    />
+		    <!--
+		    <hbox 
+			pack="start"
+			>
+		    </hbox>
+		    -->
+		</row>
+		<row
+		    align="center"
+		    >
+		    <label control="keymgr.jksmanagecert.javaversion.defval"  value="&keymgr.jksmanagecert.javaversion.label;"/>
+		    <hbox 
+			pack="start"
+			>
+			<menulist id="keymgr.jksmanagecert.javaversion.menulist"
+			    preference="keymgr.jksmanagecert.javaversion.pref"
+			    xpreference-editable="true"
+		    	    tooltiptext="Select the Java version"
+		    	    oncommand="JKSManageCertOptions.handleJavaVersionChange(this, event)"
+		    	    >
+		    	    <menupopup>
+				<menuitem id="keymgr.jksmanagecert.javaversion.fiveandless"
+				    label="&lt;=v1.5"
+				    value="1.5"
+				    />
+				<menuitem id="keymgr.jksmanagecert.javaversion.sixandup"
+				    label="v1.6+"
+				    value="1.6"
+				    />
+		    	    </menupopup>
+		    	</menulist>
+		    </hbox>
+		</row>
+		<!--
+		<row
+		    align="center"
+		    >
+		    <label control="keymgr.jksmanagecert.genkeyoption.defval"  value="&keymgr.jksmanagecert.genkeyoption.label;"/>
+		    <hbox 
+			pack="start"
+			>
+			<textbox id="keymgr.jksmanagecert.genkeyoption.defval"
+			    preference="keymgr.jksmanagecert.genkeyoption.pref"
+			    />
+		    </hbox>
+		</row>
+		-->
+	    </rows>
+	</grid>
+	</groupbox>
+
+    </prefpane>
+</overlay>
+

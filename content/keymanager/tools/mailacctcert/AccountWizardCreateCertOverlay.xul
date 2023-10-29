@@ -1,0 +1,142 @@
+<?xml version="1.0"?>
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is Avaya Labs Research, Avaya Inc. Code.
+   -
+   - The Initial Developer of the Original Code is
+   - Subrata Mazumdar, Avaya Labs Research, Avaya Inc.
+   - Portions created by the Initial Developer are Copyright (C) 2007.
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Subrata Mazumdar (mazum@avaya.com)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://keymanager/skin/kmbindings.css" type="text/css"?>
+
+<!--
+
+INSTALLATION Instructions:
+
+You have to modify the following for your own setup:
+   - taget XUL file in the chrome.manifest 
+   - overlay XUL file in the chrome.manifest 
+
+For Thunderbird: 
+    - Add the following statement in the chorme.manifest file:
+	overlay chrome://messenger/content/AccountWizard.xul    chrome://keymanager/content/tools/mailacctcert/AccountWizardCertCertOverlay.xul
+
+    The above declaration will insert the wizardpage from this XUL file into the AccountWizard.xul identitypage.
+
+For Seamonkey: 
+    - contents.rdf file is initialized for the overlay
+    - Add the following line in install.js file for chrome registration
+      of contents.rdf: 
+	registerChrome(contentFlag, folder, jarFolderName + "");
+ 
+-->
+
+
+<!DOCTYPE overlay
+        [
+        <!ENTITY % certManager.dtd SYSTEM "chrome://pippki/locale/certManager.dtd">
+        %certManager.dtd;
+        <!ENTITY % keyManager.dtd SYSTEM "chrome://keymanager/locale/keyManager.dtd">
+        %keyManager.dtd;
+	]>
+
+<overlay id="AccountWizardCreateCertWin"
+    xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    >
+
+  <script type="application/x-javascript" src="AccountWizardCreateCertOverlay.js"/>
+  <script type="application/x-javascript" src="chrome://keymanager/content/BrowserPrefUtil.js"/>
+
+  <wizardpage id="ispPage16"
+  	pageid="createcert"
+        label="Create Self-signed X.509 Cert"
+        onpageshow="return createCertPageShow(this, event);"
+        onpageadvanced="return createCertPageUnload(this, event);"
+	>
+        <vbox id="keymgr.demo.wizard.csr"
+	    flex="1"
+	    pack="start" align="start"
+	    >
+	    <fileselector id="keymgr.demo.wizard.csutom.profile.file"
+	    	hidden="true"
+		ascii="true"
+		formathidden="true"
+		fileMode="save"
+	        />
+	    <x509v3certificate id="keymgr.demo.wizard.csr.form"
+		style="overflow:auto"
+		flex="1"
+                certparamtag=""
+                selfsigncert="true"
+                selfsigncerthidden="true"
+	        isproxysigning="false"
+	        isproxysigninghidden="true"
+                profile="custom"
+	        profilecerttype="user"
+                xdisabledx509v3certtags="x509certstdextenions, x509certnsextenions"
+                ydisabledx509v3certtags="x509certnsextenions"
+		xenabledx509v1certtags=""
+		xenabledx509v3stdexttags=""
+                xenabledx509v3nsexttags="nscerttype"
+                disabledx509v1certtags="subject,subjectpublickeyinfo"
+                xdisabledx509v3stdexttags=""
+                xdisabledx509v3nsexttags=""
+                />
+            <hbox id="keymgr.cert.csr.form.signedcert"
+	         pack="start" align="start"
+		 >
+                <groupbox pack="start" align="start" orient="horizontal">
+	        <label value="Self-Signed Cert:"/>
+	        <certitem id="keymgr.cert.csr.form.selfsigned.cert"/>
+	    	</groupbox>
+                <groupbox pack="start" align="start" orient="horizontal">
+	            <button id="keymgr.cert.csr.form.cmd.SelfSignCertButton"
+	                label="Generate"
+                        oncommand="doGenerateSelfSignedCert();"/> 
+                    <button id="keymgr.cert.csr.form.cmd.PKCS10Button"
+		        disabled="true"
+	                label="&keymgr.cert.csr.form.cmd.pkcs10.label;"
+                        oncommand="doGeneratePKCS10CSR();"/> 
+                    <button id="keymgr.cert.csr.form.cmd.ScepClientButton" class="normal" 
+		        disabled="true"
+               	        label="&keymgr.cert.csr.form.cmd.scepClient.label;"
+               	        oncommand="doGenerateScepCSR();"/>
+	    	</groupbox>
+	    </hbox>
+    	</vbox>
+    </wizardpage>
+
+</overlay>
+

@@ -1,0 +1,651 @@
+<?xml version="1.0"?>
+<!-- @(#) $Id: logotypeextn.xml,v 1.12 2012/10/03 23:09:41 subrata Exp $ -->
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is Avaya Labs Research, Avaya Inc. Code.
+   -
+   - The Initial Developer of the Original Code is
+   - Subrata Mazumdar, Avaya Labs Research, Avaya Inc.
+   - Portions created by the Initial Developer are Copyright (C) 2007.
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Subrata Mazumdar (mazum@avaya.com)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+
+<!DOCTYPE bindings SYSTEM "chrome://keymanager/locale/keyManager.dtd">
+
+<bindings id="logotypeextnBindings"
+    xmlns="http://www.mozilla.org/xbl"
+    xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    xmlns:xbl="http://www.mozilla.org/xbl">
+
+    <binding id="logotypeinfoBinding"
+	extends="chrome://keymanager/content/ExtnXBL/certextn.xml#certextnbaseBinding"
+        >
+        <!--
+        <resources>
+    	    <script type="application/x-javascript" src="chrome://keymanager/content/GeneralNameItem.js"/>
+        </resources>
+        -->
+    	<!-- content, property, method and event descriptions go here -->
+    	<content>
+	    <xul:vbox anonid="certextn.stdx509extn.logotype.logotypeinfo" flex="1"
+		xbl:inherits="hidden,flex"
+		>
+	        <xul:hbox anonid="certextn.stdx509extn.logotype.logotypeinfo.grp1" flex="1"
+		    pack="start"
+		    align="start"
+		    >
+		    <xul:menulist anonid="certextn.stdx509extn.logotype.logotypeinfo.type"
+	            	xbl:inherits="disabled,readonly,tooltiptext=logotypeinfotypetooltip,certPropName=logotypeinfotypePropName,value=logotypeinfotype"
+			tooltiptext="Logotype info type (direct|indirect)"
+			value="indirect"
+		    	certPropName="Logotype-infotype"
+			onchange="getBindingParent(this).handleLogoTypeInfoTypeChange(this, event)"
+		  	oncommand="getBindingParent(this).handleLogoTypeInfoTypeChange(this, event)"
+		  	>
+                        <xul:menupopup>
+                            <xul:menuitem anonid="certextn.stdx509extn.logotype.logotypeinfo.type.direct"
+			       label="Direct"
+			       value="direct"
+			       />
+                            <xul:menuitem anonid="certextn.stdx509extn.logotype.logotypeinfo.type.indirect"
+			       label="Indirect"
+			       value="indirect"
+			       />
+                        </xul:menupopup>
+                    </xul:menulist>
+                    <xul:hashalgmenu anonid="certextn.stdx509extn.logotype.logotypeinfo.hashalg"
+	                xbl:inherits="disabled=readonly,tooltiptext=logotypeinfohashalgtooltip,certPropName=logotypeinfohashalgPropName,value=logotypeinfohashalg"
+		        tooltiptext="Select Hash Algorithm from the list"
+		        value="SHA1"
+               	        oncommand="getBindingParent(this).handleSigAlgorithmChange(this, event);"
+		        certPropName="Logotype-HashAlgorithm"
+	                />
+                    <xul:textbox anonid="certextn.stdx509extn.logotype.logotypeinfo.mediatype" flex="1"
+	                xbl:inherits="disabled=readonly,tooltiptext=logotypeinfomediatypetooltip,certPropName=logotypeinfomediatypePropName,value=logotypeinfomediatype"
+		        size="8"
+		        hidden="true"
+		        tooltiptext="Enter Media Type"
+		        value=""
+		        certPropName="Logotype-MediaType"
+		        />
+	        </xul:hbox>
+                <xul:textbox anonid="certextn.stdx509extn.logotype.logotypeinfo.logouri"
+	                xbl:inherits="disabled,readonly,tooltiptext=logotypeinfologouritooltip,certPropName=logotypeinfologouriPropName,value=logotypeinfologoouri,autocompletesearchparam=logotypeinfologourisearchparam"
+			flex="1"
+	    	    	style="overflow:auto;"
+		        value=""
+                        type="autocomplete"
+                        autocompletesearch="form-history"
+                        xautocompletesearchparam="certextn.stdx509extn.logotype.logotypeinfo.logouri"
+                        completedefaultindex="true"
+                        completeselectedindex="true"
+                        enablehistory="true"
+		        tooltiptext="Enter Logotype Logo URI"
+		        certPropName="Logotype-LogoURI"
+                        onchange="document.getBindingParent(this).handleLogoURIChange(this, event)"
+                        zonselect="document.getBindingParent(this).handleLogoURIChange(this, event)"
+		        />
+	    </xul:vbox>
+    	</content>
+	<implementation>
+	    <field name="mBaseExtnElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certextn.stdx509extn.logotype.logotypeinfo");
+	    </field>
+	    <field name="mLogotypeInfotypeElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certextn.stdx509extn.logotype.logotypeinfo.type");
+	    </field>
+	    <field name="mLogotypeInfoHashAlgElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certextn.stdx509extn.logotype.logotypeinfo.hashalg");
+	    </field>
+	    <field name="mLogotypeInfoMediaTypeElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certextn.stdx509extn.logotype.logotypeinfo.mediatype");
+	    </field>
+	    <field name="mLogotypeInfoLogoURIElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certextn.stdx509extn.logotype.logotypeinfo.logouri");
+	    </field>
+	    <property name="readonly"
+	        onget="return this.mBaseExtnElem.readonly;"
+	    	onset="this.mBaseExtnElem.readonly = val;
+		       this.mLogotypeInfotypeElem.disabled=val;
+		       this.mLogotypeInfoHashAlgElem.disabled=val;
+		       this.mLogotypeInfoMediaTypeElem.disabled=val;
+		       this.mLogotypeInfoLogoURIElem.disabled=val;
+		       return val;"
+		/>
+
+	    <constructor>
+		<![CDATA[
+		// this.LogTrace("logotypeinfoBinding.constructor():......................Start.\n");
+		var autoCompleteSearchParamOld = this.mLogotypeInfoLogoURIElem.getAttribute("autocompletesearchparam");
+		this.setAutoCompleteSearchParam(
+				this.mLogotypeInfoLogoURIElem,
+				document.getBindingParent(this)
+				);
+		var autoCompleteSearchParam = this.mLogotypeInfoLogoURIElem.getAttribute("autocompletesearchparam");
+                // dump("setAutoCompleteSearchParam():\t" + autoCompleteSearchParamOld + "\t==> " + autoCompleteSearchParam + "\n");
+
+		this.refresh();
+
+		// this.LogTrace("logotypeinfoBinding.constructor():......................End.\n");
+		]]>
+	    </constructor>
+
+	    <method name="refresh">
+	        <body>
+		<![CDATA[
+		this.handleLogoTypeInfoTypeChange(this.mLogotypeInfotypeElem);
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="setAutoCompleteSearchParam">
+		<parameter name="aTargetElem"/>
+		<parameter name="aBindingParent"/>
+	        <body>
+		<![CDATA[
+		/*
+		dump("setAutoCompleteSearchParam(): this.localName: " + this.localName + " " +
+					"aBindingParentTag: " + aBindingParent.localName +
+					"\n");
+		*/
+
+		/*
+		 * Our goal is to derive a unique name for the aTargetElem. 
+		 * I do not like the scheme currently implemeted.
+		 * Hopefully, I will come up with a better scheme. 
+		 */
+
+		// If the autoCompleteSearchParam attribute is specieifed, then use it.
+		var autoCompleteSearchParam = aTargetElem.getAttribute("autocompletesearchparam");
+		if (autoCompleteSearchParam) {
+		    return;
+		}
+
+		// If the autoCompleteSearchParam attribute is not specified but this element 
+		// has an id, then use that id as autoCompleteSearchParam attribute.
+		if (this.id) {
+		    autoCompleteSearchParam = this.id;
+		    aTargetElem.setAttribute("autocompletesearchparam", autoCompleteSearchParam);
+		    return;
+		}
+		// Otherwise, if the binding parent has an id, then use that id and the tag name 
+		// of this elements.
+		if (aBindingParent && aBindingParent.id) {
+		    autoCompleteSearchParam = aBindingParent.id;
+		    autoCompleteSearchParam += "." + this.localName;
+		    aTargetElem.setAttribute("autocompletesearchparam", autoCompleteSearchParam);
+		    return;
+		}
+
+		// Otherwise, if the aBindingParent exists, use its tag name as 
+		// prefix for autoCompleteSearchParam. Otherwise, use the "keymgr" 
+		// as prefix. Finally, append the tag name of this element and the 
+		// anonid of the target element to the prefix.
+		if (aBindingParent) {
+		    autoCompleteSearchParam = aBindingParent.localName;
+		}
+		else {
+		    autoCompleteSearchParam = "keymgr";
+		}
+		autoCompleteSearchParam += "." + this.localName;
+		autoCompleteSearchParam += "." + aTargetElem.getAttribute("anonid");
+
+		aTargetElem.setAttribute("autocompletesearchparam", autoCompleteSearchParam);
+
+		]]>
+	        </body>
+	    </method>
+
+
+	    <method name="handleLogoTypeInfoTypeChange">
+		<parameter name="aLogotypeInfotypeElem"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		// this.LogTrace("logotypeinfoBinding.handleLogoTypeInfoTypeChange():......................Start.\n");
+
+		if (ev) {
+		    ev.stopPropagation();
+		}
+		// this.LogTrace("logotypeinfoBinding.handleLogoTypeInfoTypeChange(): aLogotypeInfotypeElem.value: " + aLogotypeInfotypeElem.value + "\n");
+		if (aLogotypeInfotypeElem.value == "direct") {
+		    this.mLogotypeInfoMediaTypeElem.hidden = false;
+		}
+		else {
+		    this.mLogotypeInfoMediaTypeElem.hidden = true;
+		}
+		// this.LogTrace("logotypeinfoBinding.handleLogoTypeInfoTypeChange():......................End.\n");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="handleLogoURIChange">
+		<parameter name="aLogotypeInfoLogoURIElem"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		// this.LogTrace("logotypeinfoBinding.handleLogoURIChange():......................Start.\n");
+
+		if (ev) {
+		    ev.stopPropagation();
+		}
+
+		this.autoCompleteAction(aLogotypeInfoLogoURIElem);
+
+		// this.LogTrace("logotypeinfoBinding.handleLogoURIChange():......................End.\n");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="reset">
+	        <body>
+		<![CDATA[
+		// this.LogTrace("logotypeinfoBinding.reset():......................Start.\n");
+
+		// this.LogTrace("logotypeinfoBinding.reset():......................End.\n");
+		]]>
+	        </body>
+	    </method>
+
+
+	    <method name="toCertProps">
+		<parameter name="aCertProps"/>
+	        <body>
+		<![CDATA[
+		this.certExtnToProps(this.mBaseExtnElem, aCertProps);
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="updateCertProps">
+		<parameter name="aCertProps"/>
+	        <body>
+		<![CDATA[
+		this.updateCertExtnProps(this.mBaseExtnElem, aCertProps);
+		this.refresh();
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="mergeCertProps">
+		<parameter name="aCertProps"/>
+	        <body>
+		<![CDATA[
+		this.updateCertExtnProps(this.mBaseExtnElem, aCertProps, true);
+		this.refresh();
+		]]>
+	        </body>
+	    </method>
+	</implementation>
+    </binding>
+
+
+    <binding id="logotypeextnBinding"
+	extends="chrome://keymanager/content/ExtnXBL/certextn.xml#certextnbaseBinding"
+        >
+        <!--
+        <resources>
+    	    <script type="application/x-javascript" src="chrome://keymanager/content/ExtnXBL/certextn2props.js"/>
+	    <stylesheet src="chrome://keymanager/skin/kmbindings.css"/>
+        </resources>
+        -->
+    	<!-- content, property, method and event descriptions go here -->
+    	<content>
+	    <xul:certextn anonid="certextn.stdx509extn.logotypeextn"
+	        xbl:inherits="flex,captionlabel,active,activelabel,activetooltip,activePropName,critical,criticallabel,criticaltooltip,criticalPropName,mandatory,mandatorylabel,mandatorytooltip,mandatoryPropName"
+	        captionlabel="Logotype"
+		flex="1"
+		optionsflex="1"
+		activePropName="Logotype"
+		criticalPropName="Logotype-crit"
+		mandatoryPropName="Logotype-mandatory"
+		oncommand="getBindingParent(this).handleExtensionControlChange(this, event)"
+		>
+		<xul:vbox
+		     flex="1"
+		     pack="start"
+		     >
+		    <xul:hbox
+			pack="start"
+			>
+                        <xul:checkbox anonid="certextn.stdx509extn.logotypeextn.issuerlogo.present"
+	            	    xbl:inherits="label=issuerlogolabel,disabled,checked=issuer,tooltiptext=issuerlogotooltip"
+		            label="Issuer Logo?"
+			    checked="true"
+		    	    tooltiptext="Choose to include Issuer Logo"
+		    	    certPropName="Logotype-issuer"
+		  	    oncommand="getBindingParent(this).handleLogotypeIssuerPresentChange(this, event)"
+			    />
+                        <xul:checkbox anonid="certextn.stdx509extn.logotypeextn.subjectlogo.present"
+	            	    xbl:inherits="label=subjectlogolabel,disabled,checked=subject,tooltiptext=subjectlogotooltip"
+		            label="Subject Logo?"
+			    checked="true"
+		    	    tooltiptext="Choose to include Subject Logo"
+		    	    certPropName="Logotype-subject"
+		  	    oncommand="getBindingParent(this).handleLogotypeSubjectPresentChange(this, event)"
+			    />
+		    </xul:hbox>
+	            <xul:tabbox anonid="certextn.stdx509extn.logotypeextn.tabbox" flex="1"
+		        >
+		        <xul:tabs anonid="certextn.stdx509extn.logotypeextn.tabs">
+		            <xul:tab anonid="certextn.stdx509extn.logotypeextn.tab.issuer"
+			        label="Issuer Logo"
+			        />
+		            <xul:tab anonid="certextn.stdx509extn.logotypeextn.tab.subject"
+			        label="Subject Logo"
+			        />
+		        </xul:tabs>
+		        <xul:tabpanels anonid="certextn.stdx509extn.logotypeextn.tabpanels" flex="1">
+		            <xul:tabpanel anonid="certextn.stdx509extn.logotypeextn.tabpanel.issuer" flex="1">
+		                <xul:logotypeinfo anonid="certextn.stdx509extn.logotypeextn.issuerLogo" flex="1"
+	            	            xbl:inherits="disabled,readonly,logotypeinfotypetooltip=issuerinfotypetooltip,logotypeinfotypePropName=issuerinfotypePropName,logotypeinfotype=issuerinfotype,logotypeinfohashalgtooltip=issuerhashalgtooltip,logotypeinfohashalgPropName=issuerhashalgPropName,logotypeinfohashalg=issuerhashalg,logotypeinfomediatypetooltip=issuermediatypetooltip,logotypeinfomediatypePropName=issuermediatypePropName,logotypeinfomediatype=issuermediatype,logotypeinfologouritooltip=issuerlogouritooltip,logotypeinfologouriPropName=issuerlogouriPropName,logotypeinfologouri=issuerlogouri"
+		                    donotdebug="false"
+		                    logotypeinfotypePropName="Logotype-issuerInfotype"
+		                    logotypeinfohashalgPropName="Logotype-issuerHashAlgorithm"
+		                    logotypeinfomediatypePropName="Logotype-issuerMediaType"
+		                    logotypeinfologouriPropName="Logotype-issuerLogoURI"
+				    logotypeinfologourisearchparam="certextn.stdx509extn.logotypeextn.issuerLogo"
+		                />
+		            </xul:tabpanel>
+		            <xul:tabpanel anonid="certextn.stdx509extn.logotypeextn.tabpanel.subject" flex="1">
+		                <xul:logotypeinfo anonid="certextn.stdx509extn.logotypeextn.subjectLogo" flex="1"
+	            	            xbl:inherits="disabled,readonly,logotypeinfotypetooltip=subjinfotypetooltip,logotypeinfotypePropName=subjinfotypePropName,logotypeinfotype=subjinfotype,logotypeinfohashalgtooltip=subjhashalgtooltip,logotypeinfohashalgPropName=subjhashalgPropName,logotypeinfohashalg=subjhashalg,logotypeinfomediatypetooltip=subjmediatypetooltip,logotypeinfomediatypePropName=subjmediatypePropName,logotypeinfomediatype=subjmediatype,logotypeinfologouritooltip=subjlogouritooltip,logotypeinfologouriPropName=subjlogouriPropName,logotypeinfologouri=subjlogouri"
+		                    donotdebug="false"
+		                    logotypeinfotypePropName="Logotype-subjectInfotype"
+		                    logotypeinfohashalgPropName="Logotype-subjectHashAlgorithm"
+		                    logotypeinfomediatypePropName="Logotype-subjectMediaType"
+		                    logotypeinfologouriPropName="Logotype-subjectLogoURI"
+				    logotypeinfologourisearchparam="certextn.stdx509extn.logotypeextn.subjectLogo"
+		                />
+		            </xul:tabpanel>
+		        </xul:tabpanels>
+	            </xul:tabbox>
+		</xul:vbox>
+	    </xul:certextn>
+    	</content>
+	<implementation>
+	    <field name="mBaseExtnElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certextn.stdx509extn.logotypeextn");
+	    </field>
+	    <field name="mIssuerLogoPresentElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certextn.stdx509extn.logotypeextn.issuerlogo.present");
+	    </field>
+	    <field name="mSubjectLogoPresentElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certextn.stdx509extn.logotypeextn.subjectlogo.present");
+	    </field>
+	    <field name="mLogoTypeTabboxElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certextn.stdx509extn.logotypeextn.tabbox");
+	    </field>
+	    <field name="mIssuerLogoTypeInfoTabElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certextn.stdx509extn.logotypeextn.tab.issuer");
+	    </field>
+	    <field name="mSubjectLogoTypeInfoTabElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certextn.stdx509extn.logotypeextn.tab.subject");
+	    </field>
+	    <field name="mIssuerLogoTypeInfoElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certextn.stdx509extn.logotypeextn.issuerLogo");
+	    </field>
+	    <field name="mSubjectLogoTypeInfoElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certextn.stdx509extn.logotypeextn.subjectLogo");
+	    </field>
+
+	    <property name="active"
+	        onget="return this.mBaseExtnElem.active;"
+	    	onset="this.mBaseExtnElem.active = val;return val;"
+		/>
+	    <property name="critical"
+	        onget="return this.mBaseExtnElem.critical;"
+	    	onset="this.mBaseExtnElem.critical = val;return val;"
+		/>
+	    <property name="mandatory"
+	        onget="return this.mBaseExtnElem.mandatory;"
+	    	onset="this.mBaseExtnElem.mandatory = val;return val;"
+		/>
+	    <property name="readonly"
+	        onget="return this.mBaseExtnElem.readonly;"
+	    	onset="this.mBaseExtnElem.readonly = val;
+		       this.setReadonly(this.mBaseExtnElem, val);
+		       this.mIssuerLogoTypeInfoElem.readonly = val;
+		       this.mSubjectLogoTypeInfoElem.readonly = val;
+		       if(!val) {this.refresh();}
+		       return val;"
+		/>
+	    <property name="disabled"
+	        onget="return this.mBaseExtnElem.disabled;"
+	    	onset="this.mBaseExtnElem.disabled = val;return val;"
+		/>
+
+	    <constructor>
+		<![CDATA[
+		// this.LogTrace("logotypeextnBinding.constructor():......................Start.\n");
+
+		this.refresh();
+
+		// this.LogTrace("logotypeextnBinding.constructor():......................End.\n");
+		]]>
+	    </constructor>
+
+	    <method name="refresh">
+	        <body>
+		<![CDATA[
+
+		this.handleLogotypeIssuerPresentChange(this.mIssuerLogoPresentElem);
+		this.handleLogotypeSubjectPresentChange(this.mSubjectLogoPresentElem);
+
+		if (this.mSubjectLogoPresentElem.checked) {
+		    this.mSubjectLogoTypeInfoElem.refresh();
+		}
+
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="reset">
+	        <body>
+		<![CDATA[
+		// this.LogTrace("logotypeextnBinding.reset():..........................Start.\n");
+
+		this.resetCertExtn(this.mBaseExtnElem);
+		this.mBaseExtnElem.activateControl(true);
+		this.mBaseExtnElem.reset();
+
+		this.refresh();
+
+		// this.LogTrace("logotypeextnBinding.reset():..........................End.\n");
+		]]>
+	        </body>
+	    </method>
+
+
+	    <method name="handleExtensionControlChange">
+		<parameter name="aExtensionControlElem"/>
+		<parameter name="ev"/>
+	        <body>
+		<![CDATA[
+		// this.LogTrace("logotypeextnBinding.handleExtensionControlChange():..........................Start.\n");
+		if (ev) {
+		    ev.stopPropagation();
+		}
+		var cmdElem = ev.target;
+		var anonid = cmdElem.getAttribute("anonid");
+		if (!anonid) {
+		    return;
+		}
+		if (anonid != "certextn.active") {
+		    return;
+		}
+
+		this.refresh();
+
+		// this.LogTrace("logotypeextnBinding.handleExtensionControlChange():..........................End.\n");
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="handleLogotypeIssuerPresentChange">
+		<parameter name="aLogotypeIssuerPresentElem"/>
+		<parameter name="ev"/>
+	        <body>
+		<![CDATA[
+		// this.LogTrace("logotypeextnBinding.handleLogotypeIssuerPresentChange():..........................Start.\n");
+		if (ev) {
+		    ev.stopPropagation();
+		}
+
+		if (!this.mIssuerLogoPresentElem.checked && !this.mSubjectLogoPresentElem.checked) {
+		    this.mLogoTypeTabboxElem.hidden = true;
+		}
+		else {
+		    this.mLogoTypeTabboxElem.hidden = false;
+		}
+
+	    	this.mIssuerLogoTypeInfoTabElem.hidden = !aLogotypeIssuerPresentElem.checked;
+		if (aLogotypeIssuerPresentElem.checked) {
+	    	    this.mLogoTypeTabboxElem.selectedTab = this.mIssuerLogoTypeInfoTabElem;
+		    this.mIssuerLogoTypeInfoElem.refresh();
+		}
+		else {
+	    	    this.mLogoTypeTabboxElem.selectedTab = this.mSubjectLogoTypeInfoTabElem;
+		}
+		// this.LogTrace("logotypeextnBinding.handleLogotypeIssuerPresentChange():..........................End.\n");
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="handleLogotypeSubjectPresentChange">
+		<parameter name="aLogotypeSubjectPresentElem"/>
+		<parameter name="ev"/>
+	        <body>
+		<![CDATA[
+		// this.LogTrace("logotypeextnBinding.handleLogotypeSubjectPresentChange():..........................Start.\n");
+		if (ev) {
+		    ev.stopPropagation();
+		}
+
+		if (!this.mIssuerLogoPresentElem.checked && !this.mSubjectLogoPresentElem.checked) {
+		    this.mLogoTypeTabboxElem.hidden = true;
+		}
+		else {
+		    this.mLogoTypeTabboxElem.hidden = false;
+		}
+
+	    	this.mSubjectLogoTypeInfoTabElem.hidden = !aLogotypeSubjectPresentElem.checked;
+		if (aLogotypeSubjectPresentElem.checked) {
+	    	    this.mLogoTypeTabboxElem.selectedTab = this.mSubjectLogoTypeInfoTabElem;
+		    this.mSubjectLogoTypeInfoElem.refresh();
+		} 
+		else {
+	    	    this.mLogoTypeTabboxElem.selectedTab = this.mIssuerLogoTypeInfoTabElem;
+		}
+
+		// this.LogTrace("logotypeextnBinding.handleLogotypeSubjectPresentChange():..........................End.\n");
+		]]>
+	        </body>
+	    </method>
+
+
+	    <method name="toCertProps">
+		<parameter name="aCertProps"/>
+	        <body>
+		<![CDATA[
+
+		if (!this.active) {
+		    return;
+		}
+
+		this.certExtnToProps(this.mBaseExtnElem, aCertProps);
+		if (this.mIssuerLogoPresentElem.checked) {
+		    this.mIssuerLogoTypeInfoElem.toCertProps(aCertProps);
+		}
+		if (this.mSubjectLogoPresentElem.checked) {
+		    this.mSubjectLogoTypeInfoElem.toCertProps(aCertProps);
+		}
+
+
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="updateCertProps">
+		<parameter name="aCertProps"/>
+	        <body>
+		<![CDATA[
+                // this.LogTrace("logotypeextnBinding.updateCertProps():.................Start.\n");
+		if (! this.containsAnyProperty(this.mBaseExtnElem, aCertProps)) {
+		    return;
+		}
+
+		this.reset();
+
+		this.updateCertExtnProps(this.mBaseExtnElem, aCertProps);
+		// if (this.mIssuerLogoPresentElem.checked) {
+		// }
+		this.mIssuerLogoTypeInfoElem.updateCertProps(aCertProps);
+
+		// if (this.mSubjectLogoPresentElem.checked) {
+		// }
+		this.mSubjectLogoTypeInfoElem.updateCertProps(aCertProps);
+
+		this.refresh();
+
+                // this.LogTrace("logotypeextnBinding.updateCertProps():.................End.\n");
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="mergeCertProps">
+		<parameter name="aCertProps"/>
+	        <body>
+		<![CDATA[
+		if (! this.containsAnyProperty(this.mBaseExtnElem, aCertProps)) {
+		    return;
+		}
+
+		this.updateCertExtnProps(this.mBaseExtnElem, aCertProps, true);
+		// if (this.mIssuerLogoPresentElem.checked) {
+		// }
+		this.mIssuerLogoTypeInfoElem.mergeCertProps(aCertProps);
+
+		// if (this.mSubjectLogoPresentElem.checked) {
+		// }
+		this.mSubjectLogoTypeInfoElem.mergeCertProps(aCertProps);
+
+		this.refresh();
+		]]>
+	        </body>
+	    </method>
+
+	</implementation>
+    </binding>
+
+</bindings>
+

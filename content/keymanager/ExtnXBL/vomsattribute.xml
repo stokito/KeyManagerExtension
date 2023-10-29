@@ -1,0 +1,626 @@
+<?xml version="1.0"?>
+<!-- @(#) $Id: vomsattribute.xml,v 1.18 2009/04/21 03:41:04 subrata Exp $ -->
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is Avaya Labs Research, Avaya Inc. Code.
+   -
+   - The Initial Developer of the Original Code is
+   - Subrata Mazumdar, Avaya Labs Research, Avaya Inc.
+   - Portions created by the Initial Developer are Copyright (C) 2007.
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Subrata Mazumdar (mazum@avaya.com)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+
+<!DOCTYPE bindings SYSTEM "chrome://keymanager/locale/keyManager.dtd">
+
+<bindings id="vomsattributeBindings"
+    xmlns="http://www.mozilla.org/xbl"
+    xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    xmlns:xbl="http://www.mozilla.org/xbl">
+
+    <binding id="vomsattrvaluelistBinding"
+	extends="chrome://keymanager/content/ExtnXBL/certextn.xml#certextnbaseBinding"
+        >
+        <!--
+        <resources>
+        </resources>
+        -->
+    	<!-- content, property, method and event descriptions go here -->
+    	<content>
+	    <xul:groupbox anonid="keymgr.vomsattrvaluelist"
+	        >
+	        <xul:hbox anonid="keymgr.vomsattrvaluelist.fqan.items"
+		    xbl:inherits="hidden=readonly"
+		    pack="start"
+		    align="center"
+		    tooltiptext="You must use the Add button to add to the computed value to the FQAN list below"
+		    onchange="getBindingParent(this).updateNewVomsAttributeValue(this, event);"
+		    >
+		    <xul:label value="/"/>
+		    <xul:textbox anonid="keymgr.vomsattrvaluelist.fqan.voname"
+			tooltiptext="Enter VO name of FQAN (has to be well formed DNS name using only lower case characters)"
+			width="120"
+			readonly="true"
+		    	onchange="getBindingParent(this).validateVOName(this, event);"
+		        />
+		    <!--
+		    -->
+		    <xul:label value="/"/>
+		    <xul:textbox anonid="keymgr.vomsattrvaluelist.fqan.group"
+  	  	        type="autocomplete" 
+  	  	        autocompletesearch="form-history" 
+  	  	        completeselectedindex="true"
+  	  	        autocompletesearchparam="keymgr.vomsattrvaluelist.fqan.group"
+			tooltiptext="Enter group/subgroup name of FQAN (may contain only character and dash), e.g. /group[/subgroup(s)]"
+			width="120"
+		    	onchange="getBindingParent(this).validateRoleOrGroup(this, event);"
+		    	onpopuphiding="getBindingParent(this).validateRoleOrGroup(this, event);"
+		    	zonselect="getBindingParent(this).validateRoleOrGroup(this, event);"
+		        />
+		    <xul:label value="/Role="/>
+		    <xul:textbox anonid="keymgr.vomsattrvaluelist.fqan.role"
+  	  	        type="autocomplete" 
+  	  	        autocompletesearch="form-history" 
+  	  	        completeselectedindex="true"
+  	  	        autocompletesearchparam="keymgr.vomsattrvaluelist.fqan.role"
+			tooltiptext="Enter role name of FQAN (may contain only character and dash)."
+			width="70"
+		    	onchange="getBindingParent(this).validateRoleOrGroup(this, event);"
+		    	onpopuphiding="getBindingParent(this).validateRoleOrGroup(this, event);"
+		    	zonselect="getBindingParent(this).validateRoleOrGroup(this, event);"
+		        />
+		    <xul:label value="/Capability="/>
+		    <xul:textbox anonid="keymgr.vomsattrvaluelist.fqan.capability"
+  	  	        type="autocomplete" 
+  	  	        autocompletesearch="form-history" 
+  	  	        completeselectedindex="true"
+  	  	        autocompletesearchparam="keymgr.vomsattrvaluelist.fqan.capability"
+			tooltiptext="Enter capability of the FQAN (may contain only character and dash)."
+			width="70"
+		    	onchange="getBindingParent(this).validateRoleOrGroup(this, event);"
+		    	onpopuphiding="getBindingParent(this).validateRoleOrGroup(this, event);"
+		    	zonselect="getBindingParent(this).validateRoleOrGroup(this, event);"
+		        />
+	        </xul:hbox>
+		<xul:attrsyntaxvalue anonid="keymgr.vomsattrvaluelist.textvalue"
+		    xbl:inherits="newvaluetooltip,listlabel,listtooltip,rows,addlabel,addtooltip,removelabel,removetooltip,textValues,valuetype=valuestype,valuetypetooltip=valuestypetooltip,valuetypedisabled=valuestypedisabled,readonly,newvaluesearchparam=newvaluessearchparam"
+		    newvaluesearchparam="keymgr.vomsattrvaluelist.textvalue"
+		    valuetypedisabled="true"
+		    valuetype="octets"
+		    />
+	    </xul:groupbox>
+    	</content>
+	<implementation>
+	    <field name="mBaseExtnElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.vomsattrvaluelist");
+	    </field>
+	    <field name="mAttributeValueItemsElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.vomsattrvaluelist.fqan.items");
+	    </field>
+	    <field name="mAttrSyntaxValueElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.vomsattrvaluelist.textvalue");
+	    </field>
+	    <field name="mVONameElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.vomsattrvaluelist.fqan.voname");
+	    </field>
+
+	    <property name="value"
+	        onget="return this.mAttrSyntaxValueElem.value;"
+	        onset="this.mAttrSyntaxValueElem.value=val;return val;"
+		/>
+	    <property name="voname"
+	        onget="return this.mVONameElem.value;"
+	        onset="this.resetNewVomsAttributeValue();
+			this.mVONameElem.value=val;
+			this.validateVOName(this.mVONameElem);
+			this.updateNewVomsAttributeValue(this.mAttributeValueItemsElem);
+			return val;"
+		/>
+	    <property name="readonly"
+	        onget="return this.mAttrSyntaxValueElem.readonly;"
+	    	onset="this.mAttrSyntaxValueElem.readonly = val;
+		       this.setReadonly(this.mAttributeValueItemsElem, val);
+		       this.removeAttribute('readonly');
+	    	       if (val) {
+		       	this.setAttribute('readonly',true);
+		       }
+                       else {
+		       	this.refresh();
+		       }
+		       return val;"
+		/>
+
+	    <constructor>
+		<![CDATA[
+		this.mLogLevel = 9;
+		this.LogTrace("vomsattrvaluelistBinding.constructor():......................Start.");
+
+		var groupTextBoxElem = document.getAnonymousElementByAttribute(	
+				this, "anonid", "keymgr.vomsattrvaluelist.fqan.group");
+		this.setAutoCompleteSearchParam(groupTextBoxElem, getBindingParent(this));
+		var roleTextBoxElem = document.getAnonymousElementByAttribute(	
+					this, "anonid", "keymgr.vomsattrvaluelist.fqan.role");
+		this.setAutoCompleteSearchParam(roleTextBoxElem, getBindingParent(this));
+		var capTextBoxElem = document.getAnonymousElementByAttribute(	
+					this, "anonid", "keymgr.vomsattrvaluelist.fqan.capability");
+		this.setAutoCompleteSearchParam(capTextBoxElem, getBindingParent(this));
+
+		this.refresh();
+
+		this.LogTrace("vomsattrvaluelistBinding.constructor():......................End.");
+		]]>
+	    </constructor>
+
+	    <method name="setAutoCompleteSearchParam">
+		<parameter name="aTargetElem"/>
+		<parameter name="aBindingParent"/>
+	        <body>
+		<![CDATA[
+		/*
+		dump("setAutoCompleteSearchParam(): this.localName: " + this.localName + " " +
+					"aBindingParentTag: " + aBindingParent.localName +
+					"\n");
+		*/
+
+		/*
+		 * Our goal is to derive a unique name for the aTargetElem. 
+		 * I do not like the scheme currently implemeted.
+		 * Hopefully, I will come up with a better scheme. 
+		 */
+
+		// If the autoCompleteSearchParam attribute is specieifed, then use it.
+		var autoCompleteSearchParam = aTargetElem.getAttribute("autocompletesearchparam");
+		if (autoCompleteSearchParam) {
+		    return;
+		}
+
+		// If the autoCompleteSearchParam attribute is not specified but this element 
+		// has an id, then use that id as autoCompleteSearchParam attribute.
+		if (this.id) {
+		    autoCompleteSearchParam = this.id;
+		    aTargetElem.setAttribute("autocompletesearchparam", autoCompleteSearchParam);
+		    return;
+		}
+		// Otherwise, if the binding parent has an id, then use that id and the tag name 
+		// of this elements.
+		if (aBindingParent && aBindingParent.id) {
+		    autoCompleteSearchParam = aBindingParent.id;
+		    autoCompleteSearchParam += "." + this.localName;
+		    aTargetElem.setAttribute("autocompletesearchparam", autoCompleteSearchParam);
+		    return;
+		}
+
+		// Otherwise, if the aBindingParent exists, use its tag name as 
+		// prefix for autoCompleteSearchParam. Otherwise, use the "keymgr" 
+		// as prefix. Finally, append the tag name of this element and the 
+		// anonid of the target element to the prefix.
+		if (aBindingParent) {
+		    autoCompleteSearchParam = aBindingParent.localName;
+		}
+		else {
+		    autoCompleteSearchParam = "keymgr";
+		}
+		autoCompleteSearchParam += "." + this.localName;
+		autoCompleteSearchParam += "." + aTargetElem.getAttribute("anonid");
+
+		aTargetElem.setAttribute("autocompletesearchparam", autoCompleteSearchParam);
+
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="refresh">
+	        <body>
+		<![CDATA[
+
+		this.mAttrSyntaxValueElem.refresh();
+
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="reset">
+	        <body>
+		<![CDATA[
+		this.LogTrace("vomsattrvaluelistBinding.reset():......................Start.");
+
+		this.mAttrSyntaxValueElem.reset();
+		this.resetCertExtn(this.mBaseExtnElem);
+
+		this.LogTrace("vomsattrvaluelistBinding.reset():......................End.");
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="validateVOName">
+		<parameter name="aVONameElem"/>
+		<parameter name="ev"/>
+	        <body>
+		<![CDATA[
+		this.LogTrace("vomsattrvaluelistBinding.validateVOName():......................Start.");
+		if (aVONameElem.value == "") {
+		    return;
+		}
+		aVONameElem.value = aVONameElem.value.toLowerCase();
+
+		this.LogTrace("vomsattrvaluelistBinding.validateVOName():......................End.");
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="validateRoleOrGroup">
+		<parameter name="aTargetElem"/>
+		<parameter name="ev"/>
+	        <body>
+		<![CDATA[
+
+		this.autoCompleteAction(aTargetElem);
+
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="resetNewVomsAttributeValue">
+	        <body>
+		<![CDATA[
+		var vonameTextBoxElem = document.getAnonymousElementByAttribute(this, "anonid", "keymgr.vomsattrvaluelist.fqan.voname");
+		var groupTextBoxElem = document.getAnonymousElementByAttribute(this, "anonid", "keymgr.vomsattrvaluelist.fqan.group");
+		var roleTextBoxElem = document.getAnonymousElementByAttribute(this, "anonid", "keymgr.vomsattrvaluelist.fqan.role");
+		var capTextBoxElem = document.getAnonymousElementByAttribute(this, "anonid", "keymgr.vomsattrvaluelist.fqan.capability");
+
+		vonameTextBoxElem.value = "";
+		groupTextBoxElem.value = "";
+		roleTextBoxElem.value = "";
+		capTextBoxElem.value = "";
+
+		this.mAttrSyntaxValueElem.newvalue = "";
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="updateNewVomsAttributeValue">
+		<parameter name="aValueCompsHboxElem"/>
+		<parameter name="ev"/>
+	        <body>
+		<![CDATA[
+		this.LogTrace("updateNewVomsAttributeValue():.................Start.");
+
+		var vonameTextBoxElem = document.getAnonymousElementByAttribute(this, "anonid", "keymgr.vomsattrvaluelist.fqan.voname");
+		var groupTextBoxElem = document.getAnonymousElementByAttribute(this, "anonid", "keymgr.vomsattrvaluelist.fqan.group");
+		var roleTextBoxElem = document.getAnonymousElementByAttribute(this, "anonid", "keymgr.vomsattrvaluelist.fqan.role");
+		var capTextBoxElem = document.getAnonymousElementByAttribute(this, "anonid", "keymgr.vomsattrvaluelist.fqan.capability");
+
+		var newValue = "";
+		if (vonameTextBoxElem.value == "") {
+		    this.mAttrSyntaxValueElem.newvalue = "";
+		    return;
+		}
+		newValue += "/" + vonameTextBoxElem.value;
+
+		if (groupTextBoxElem.value == "") {
+		    this.mAttrSyntaxValueElem.newvalue = "";
+		    return;
+		}
+
+
+		var groupName = groupTextBoxElem.value;
+		var roleName = roleTextBoxElem.value;
+		var capabilityName = capTextBoxElem.value;
+
+		if (groupName != "") {
+		    if (groupName.substr(0,1) != "/") {
+		    	newValue += "/";
+		    }
+		    newValue += groupName;
+		}
+		this.LogDebug("updateNewVomsAttributeValue(): newValue: " + newValue + "");
+
+		if ((capabilityName != "") && (roleName == "")) {
+		    roleName = "NULL";
+		}
+
+		if (roleName != "") {
+		    newValue += "/Role=" + roleName;
+		}
+		this.LogDebug("updateNewVomsAttributeValue(): newValue: " + newValue + "");
+
+		if (capabilityName != "") {
+		    newValue += "/Capability=" + capTextBoxElem.value;
+		}
+		this.LogDebug("updateNewVomsAttributeValue(): newValue: " + newValue + "");
+
+		this.mAttrSyntaxValueElem.newvalue = newValue;
+
+		this.LogTrace("updateNewVomsAttributeValue():.................End.");
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="toCertProps">
+		<parameter name="aCertProps"/>
+	        <body>
+		<![CDATA[
+		this.mAttrSyntaxValueElem.toCertProps(aCertProps);
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="updateCertProps">
+		<parameter name="aCertProps"/>
+	        <body>
+		<![CDATA[
+		this.mAttrSyntaxValueElem.updateCertProps(aCertProps);
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="mergeCertProps">
+		<parameter name="aCertProps"/>
+	        <body>
+		<![CDATA[
+		this.mAttrSyntaxValueElem.mergeCertProps(aCertProps);
+		]]>
+	        </body>
+	    </method>
+	</implementation>
+    </binding>
+
+
+    <binding id="vomsattributeBinding"
+	extends="chrome://keymanager/content/ExtnXBL/certextn.xml#certextnbaseBinding"
+        >
+        <!--
+        <resources>
+    	    <script type="application/x-javascript" src="chrome://keymanager/content/ExtnXBL/certextn2props.js"/>
+	    <stylesheet src="chrome://keymanager/skin/kmbindings.css"/>
+        </resources>
+        -->
+    	<!-- content, property, method and event descriptions go here -->
+    	<content>
+	    <xul:certextn anonid="attrcert.attribute.vomsattribute"
+	        xbl:inherits="captionlabel,active,activelabel,activetooltip,activePropName,mandatory,mandatorylabel,mandatorytooltip,mandatoryPropName"
+	        captionlabel="VOMS Attribute"
+		activePropName="voms-attribute"
+		criticalhidden="true"
+		mandatoryhidden="true"
+		flex="1"
+		optionsflex="1"
+    		oncommand="getBindingParent(this).handleActivateAttr(this, event)"
+		>
+		<xul:grid anonid="attrcert.attribute.vomsattribute.value"> 
+                    <xul:columns>
+                    	<xul:column/>
+                    	<xul:column flex="1"/>
+                    </xul:columns>
+                    <xul:rows>
+                    	<xul:row>
+			    <xul:label value="VO Name"/>
+			    <xul:hbox pack="start">
+		                <xul:textbox anonid="attrcert.attribute.vomsattribute.fqan.voname"
+			            tooltiptext="Enter VO name of FQAN (has to be well formed DNS name using only lower case characters)"
+			            width="120"
+		    	            onchange="getBindingParent(this).handleVONameChange(this, event);"
+		                    />
+			    </xul:hbox>
+                  	</xul:row>
+                    	<xul:row>
+			    <xul:label value="Policy Authority"/>
+			    <xul:generalnamelistsimple anonid="attrcert.attribute.vomsattribute.policy.authority"
+				xbl:inherits="type=vomspatype,typetooltip=vomspatypetooltip,typedisabled=vomspatypedisabled,typehidden=vomspatypehidden,valuetooltip=vomspavaluetooltip,valuedisabled=vomspavaluedisabled,addlabel=vomspaaddlabel,addtooltip=vomspaaddtooltip,removelabel=vomsparemovelabel,removetooltip=vomsparemovetooltip,listlabel=vomspalistlabel,listtooltip=vomspalisttooltip,rows=vomsparows,certPropName=vomspaCertPropName,newnamesearchparam=vomspanewnamesearchparam"
+				type="uri"
+				newnamesearchparam="attrcert.attribute.vomsattribute.policy.authority"
+				typedisabled="true"
+				valuetooltip="&lt;vo-name>://&lt;fqhn>:&lt;port> (Enter URI for the policy authority (has to be well formed URL with DNS name using only lower case characters))"
+			        certPropName="voms-attribute-policy-authority"
+    		    		onchange="getBindingParent(this).handlePolicyAuthorityChange(this, event)"
+			        />
+                  	</xul:row>
+                    	<xul:row>
+			    <xul:label value="Values"/>
+			    <xul:vomsattrvaluelist anonid="attrcert.attribute.vomsattribute.values"
+		    		xbl:inherits="newvaluetooltip=valuesnewvaluetooltip,listlabel=valueslistlabel,listtooltip=valueslisttooltip,rows=valuesrows,addlabel=valuesaddlabel,addtooltip=valuesaddtooltip,removelabel=valuesremovelabel,removetooltip=valuesremovetooltip,textValues=valuestextValues,valuestype,valuestypetooltip,valuestypedisabled,newvaluessearchparam,readonly,certPropName=valuesCertPropName"
+		    		newvaluetooltip="Type in the FQAN : /group[/subgroup(s)]][/Role=role][/Capability=cap] and then use the Add button to add to the list below"
+				listtooltip="List of Fully Qualified Attribute Names (FQAN)"
+				newvaluessearchparam="attrcert.attribute.vomsattribute.values"
+				addtooltip="Use this button to add a new value (on the left) to the list"
+				removetooltip="Use this button to remove the selected item from the list"
+			        certPropName="voms-attribute-values"
+			        />
+                  	</xul:row>
+                    </xul:rows>
+                </xul:grid>
+	    </xul:certextn>
+    	</content>
+	<implementation>
+	    <field name="mBaseExtnElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "attrcert.attribute.vomsattribute");
+	    </field>
+	    <field name="mVONameElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "attrcert.attribute.vomsattribute.fqan.voname");
+	    </field>
+	    <field name="mPolicyAuthorityElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "attrcert.attribute.vomsattribute.policy.authority");
+	    </field>
+	    <field name="mVomsAttributeValueElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "attrcert.attribute.vomsattribute.values");
+	    </field>
+
+	    <property name="active"
+	        onget="return this.mBaseExtnElem.active;"
+	    	onset="this.mBaseExtnElem.active = val;return val;"
+		/>
+	    <property name="critical"
+	        onget="return this.mBaseExtnElem.critical;"
+	    	onset="this.mBaseExtnElem.critical = val;return val;"
+		/>
+	    <property name="mandatory"
+	        onget="return this.mBaseExtnElem.mandatory;"
+	    	onset="this.mBaseExtnElem.mandatory = val;return val;"
+		/>
+	    <property name="readonly"
+	        onget="return this.mBaseExtnElem.readonly;"
+	    	onset="this.mBaseExtnElem.readonly = val;
+		       this.setReadonly(this.mBaseExtnElem, val);
+		       this.mPolicyAuthorityElem.readonly=val;
+		       this.mVomsAttributeValueElem.readonly=val;
+		       return val;"
+		/>
+	    <property name="disabled"
+	        onget="return this.mBaseExtnElem.disabled;"
+	    	onset="this.mBaseExtnElem.disabled = val;return val;"
+		/>
+
+	    <constructor>
+		<![CDATA[
+		// this.LogTrace("vomsattributeBinding.constructor():......................Start.");
+		this.refresh();
+		// this.LogTrace("vomsattributeBinding.constructor():......................End.");
+		]]>
+	    </constructor>
+
+	    <method name="refresh">
+	        <body>
+		<![CDATA[
+		// Force the critical checkbox to be hidden
+		// TODO: do this at the base class for attribute.
+		this.handleActivateAttr();
+		]]>
+	        </body>
+	    </method>
+
+
+	    <method name="reset">
+	        <body>
+		<![CDATA[
+		// this.LogTrace("vomsattributeBinding.reset():......................Start.");
+
+		this.mVONameElem.value = "";
+		this.mPolicyAuthorityElem.reset();
+		this.mVomsAttributeValueElem.reset();
+
+		this.resetCertExtn(this.mBaseExtnElem);
+		this.mBaseExtnElem.reset();
+
+		// this.LogTrace("vomsattributeBinding.reset():......................End.");
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="handleActivateAttr">
+		<parameter name="targetElem"/>
+		<parameter name="ev"/>
+	        <body>
+		<![CDATA[
+		this.mBaseExtnElem.removeAttribute("criticalhidden");
+		this.mBaseExtnElem.setAttribute("criticalhidden", true);
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="handleVONameChange">
+		<parameter name="aVONameElem"/>
+		<parameter name="ev"/>
+	        <body>
+		<![CDATA[
+		this.autoCompleteAction(aVONameElem);
+		/*
+		if (aVONameElem.value == "") {
+		    return;
+		}
+		*/
+		this.mVomsAttributeValueElem.voname = aVONameElem.value;
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="handlePolicyAuthorityChange">
+		<parameter name="targetElem"/>
+		<parameter name="ev"/>
+	        <body>
+		<![CDATA[
+		// this.autoCompleteAction(targetElem);
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="toCertProps">
+		<parameter name="aCertProps"/>
+	        <body>
+		<![CDATA[
+
+		if (!this.active) {
+		    return;
+		}
+
+		this.certExtnToProps(this.mBaseExtnElem, aCertProps);
+
+		// this.dumpProperties(aCertProps);
+
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="updateCertProps">
+		<parameter name="aCertProps"/>
+	        <body>
+		<![CDATA[
+
+		if (! this.containsAnyProperty(this.mBaseExtnElem, aCertProps)) {
+		    return;
+		}
+
+		this.reset();
+		this.updateCertExtnProps(this.mBaseExtnElem, aCertProps);
+		this.refresh();
+
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="mergeCertProps">
+		<parameter name="aCertProps"/>
+	        <body>
+		<![CDATA[
+		if (! this.containsAnyProperty(this.mBaseExtnElem, aCertProps)) {
+		    return;
+		}
+
+		this.updateCertExtnProps(this.mBaseExtnElem, aCertProps, true);
+		this.refresh();
+		]]>
+	        </body>
+	    </method>
+
+	</implementation>
+    </binding>
+
+</bindings>
+

@@ -1,0 +1,64 @@
+<!ENTITY keymgr.sshclient.dialog.win.title		"OpenSSH Client Dialog">
+<!ENTITY keymgr.sshclient.options.win.title		"OpenSSH Client Preferences">
+<!ENTITY keymgr.sshclient.version			"0.1.2.20081127">
+<!ENTITY keymgr.sshclient.version			"0.1.2.20081127">
+
+<!ENTITY keymgr.sshclient.open.dialog.label		"OpenSSH Client">
+<!ENTITY keymgr.sshclient.open.dialog.tooltip		"Click this button to start the OpenSSH-2 dialog window. Modify the OpenSSH-2 preference (options) to enable/disable it. OpenSSH Client is not implemented on Windows becuase of lack of NSS support in SSH support for Windows platform. May be nxssh is one option when it is enabled for keys from Mozilla NSS DB. On Linux/Mac, do (ssh -o 'usenss yes' localhost) in a command line to check if OpenSSH support keys from Mozilla NSS.">
+
+
+<!ENTITY keymgr.sshclient.enabled.label			"Enable OpenSSH-2 Client">
+<!ENTITY keymgr.sshclient.shellcmdpath.label		"SHELL Command Path">
+<!ENTITY keymgr.sshclient.terminal.label		"Terminal Command Path">
+<!ENTITY keymgr.sshclient.termargs.label		"Terminal Arguments">
+<!ENTITY keymgr.sshclient.sshcommand.label		"OpenSSH-2 Command Path">
+<!ENTITY keymgr.sshclient.sshargs.label			"OpenSSH-2 Arguments">
+<!ENTITY keymgr.sshclient.usetoken.label		"Use PK11Token">
+<!ENTITY keymgr.sshclient.pk11token.label		"PK11 Token Name">
+<!ENTITY keymgr.sshclient.certNickName.label		"Key Cert Nickname">
+<!ENTITY keymgr.sshclient.remoteHost.label		"Remote Hostname">
+<!ENTITY keymgr.sshclient.remotePort.label		"Remote Port">
+<!ENTITY keymgr.sshclient.remoteUser.label		"Remote User Id">
+
+<!ENTITY keymgr.sshclient.enabled.tooltip		"Check this box to enable OpenSSH-2 Client. Note: Support for Windows is not yet implemented.">
+<!ENTITY keymgr.sshclient.terminal.filepath.label	"Terminal Command Path">
+<!ENTITY keymgr.sshclient.terminal.tooltip		"File path for the terminal command to be used for OpenSSH">
+<!ENTITY keymgr.sshclient.termargs.tooltip		"Optional arguments for the selected terminal command - use man page of the selected terminal command for specific options">
+<!ENTITY keymgr.sshclient.sshcommand.filepath.label	"OpenSSH-2 Command Path">
+<!ENTITY keymgr.sshclient.sshcommand.tooltip		"File path for the OpenSSH-2 command - must be a version that supports keys from NSS Cert DB. Typically ssh is a patched version of OpenSSH. OpenSSH in Fedora Linux supports NSS DB based keys. Try (ssh -o 'usenss yes' localhost) in a window to test if ssh supports keys in Mozilla-NSS DB. Look for README.nss file that came with ssh distribution.">
+<!ENTITY keymgr.sshclient.sshargs.tooltip		"Optional arguments for the selected OpensSSH-2 command - use man page of the selected ssh command for specific options">
+<!ENTITY keymgr.sshclient.usetoken.tooltip		"Select this if you want select keys from a specific PK11Token">
+<!ENTITY keymgr.sshclient.pk11token.tooltip		"Select the token which contains keys for OpenSSH">
+<!ENTITY keymgr.sshclient.cert.nickname.label		"Key Cert Nickname">
+<!ENTITY keymgr.sshclient.remote.hostname.label		"Remote Hostname">
+<!ENTITY keymgr.sshclient.remote.portid.label		"Remote Port">
+<!ENTITY keymgr.sshclient.remote.userid.label		"Remote User Id">
+
+<!ENTITY keymgr.sshclient.cert.view.label		"View">
+<!ENTITY keymgr.sshclient.file.browser.label		"Browse">
+
+<!ENTITY keymgr.sshclient.terminal.filepath.tooltip	"File path for the terminal command to be used for OpenSSH">
+<!ENTITY keymgr.sshclient.terminal.filepath.dialog.msg	"Select the terminal executable.">
+<!ENTITY keymgr.sshclient.terminal.filepath.type.msg	"Executable">
+<!ENTITY keymgr.sshclient.terminal.filepath.browser.tooltip	"Click this button to select the terminal command file.">
+
+<!ENTITY keymgr.sshclient.sshcommand.filepath.tooltip	"The file path for the SSH command.">
+<!ENTITY keymgr.sshclient.sshcommand.filepath.dialog.msg	"Select the SSH executable.">
+<!ENTITY keymgr.sshclient.sshcommand.filepath.type.msg	"Executable">
+<!ENTITY keymgr.sshclient.sshcommand.filepath.browser.tooltip	"Click this button to select the SSH command file.">
+
+<!ENTITY keymgr.sshclient.certpicker.tooltip		"Select the certificate for the SSH from the list">
+<!ENTITY keymgr.sshclient.certpicker.view.tooltip	"Click this button to view the selected cert.">
+
+<!ENTITY keymgr.sshclient.remote.hostname.tooltip	"Enter FQDN or IP-address of the remote host">
+<!ENTITY keymgr.sshclient.remote.portid.tooltip		"Enter remote port number of the SSH server - default is 22.">
+<!ENTITY keymgr.sshclient.remote.userid.tooltip		"Enter user-id at the remote host">
+
+<!ENTITY keymgr.sshclient.exec.cmd.label		"SSH Terminal Executable">
+
+<!ENTITY keymgr.sshclient.cmd.connect.label		"Connect">
+<!ENTITY keymgr.sshclient.cmd.connect.tooltip		"Click this button to start the SSH session">
+<!ENTITY keymgr.sshclient.cmd.help.label		"Help">
+<!ENTITY keymgr.sshclient.cmd.cancel.label		"Cancel">
+
+<!ENTITY keymgr.sshclient.xxxx.label			"XXXX">

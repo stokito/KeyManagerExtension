@@ -1,0 +1,528 @@
+<?xml version="1.0"?>
+<!-- @(#) $Id: acattributes.xml,v 1.15 2012/10/03 23:09:41 subrata Exp $ -->
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is Avaya Labs Research, Avaya Inc. Code.
+   -
+   - The Initial Developer of the Original Code is
+   - Subrata Mazumdar, Avaya Labs Research, Avaya Inc.
+   - Portions created by the Initial Developer are Copyright (C) 2007.
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Subrata Mazumdar (mazum@avaya.com)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+
+<!DOCTYPE bindings SYSTEM "chrome://keymanager/locale/keyManager.dtd">
+
+<bindings id="acattributesBindings"
+    xmlns="http://www.mozilla.org/xbl"
+    xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    xmlns:xbl="http://www.mozilla.org/xbl">
+
+    <binding id="acattributesBinding"
+	extends="chrome://keymanager/content/ExtnXBL/certextn.xml#certextnbaseBinding"
+	>
+	<!--
+	<resources>
+	    <script type="application/x-javascript" src="chrome://keymanager/content/ExtnXBL/certextn2props.js"/>
+	    <stylesheet src="chrome://keymanager/skin/kmbindings.css"/>
+	</resources>
+	-->
+	<!-- content, property, method and event descriptions go here -->
+	<content>
+	    <xul:tabbox anonid="attrcert.form.attributes.tabbox"
+		xbl:inherits="flex"
+	        >
+		<xul:tabs anonid="attrcert.form.attributes.tabs">
+		      <xul:tab anonid="attrcert.form.attributes.tab.group"
+			label="Group"
+			/>
+		      <xul:tab anonid="attrcert.form.attributes.tab.role"
+			label="Role"
+			/>
+		      <xul:tab anonid="attrcert.form.attributes.tab.voms"
+			label="VOMS"
+			/>
+		      <xul:tab anonid="attrcert.form.attributes.tab.authinfo.accessid"
+			label="Auth Info and Access Id"
+			/>
+		      <xul:tab anonid="attrcert.form.attributes.tab.chargingid"
+			label="Charging Id"
+			/>
+		      <xul:tab anonid="attrcert.form.attributes.tab.wlanssid"
+			label="WLAN SSID"
+			/>
+		</xul:tabs>
+		<xul:tabpanels anonid="attrcert.form.attributes.tabpanels"
+		    flex="1"
+		    >
+		    <xul:tabpanel 
+			style="overflow:auto;"
+			flex="1"
+			>
+			<xul:groupattribute anonid="attrcert.form.attributes.groupattribute"
+			    class="acattribute"
+			    flex="1"
+			    />
+		    </xul:tabpanel>
+		    <xul:tabpanel 
+			style="overflow:auto;"
+			flex="1"
+			>
+			<xul:roleattribute anonid="attrcert.form.attributes.roleattribute"
+			    class="acattribute"
+			    flex="1"
+			    />
+		    </xul:tabpanel>
+		    <xul:tabpanel 
+			style="overflow:auto;"
+			flex="1"
+			>
+			<xul:vomsattribute anonid="attrcert.form.attributes.vomsattribute"
+			    class="acattribute"
+			    flex="1"
+			    />
+		    </xul:tabpanel>
+		    <xul:tabpanel 
+			flex="1"
+			style="overflow:auto;"
+			orient="vertical"
+			>
+			    <xul:authinfoattribute anonid="attrcert.form.attributes.authinfoattribute"
+			        class="acattribute"
+			        flex="1"
+			        />
+			    <xul:accessidattribute anonid="attrcert.form.attributes.accessidattribute"
+			        class="acattribute"
+			        flex="1"
+			        />
+			<xul:vbox>
+			</xul:vbox>
+		    </xul:tabpanel>
+		    <xul:tabpanel 
+			flex="1"
+			style="overflow:auto;"
+			orient="vertical"
+			>
+			    <xul:chargingidattribute anonid="attrcert.form.attributes.chargingidattribute"
+			        class="acattribute"
+			        flex="1"
+			        />
+			<xul:vbox>
+			</xul:vbox>
+		    </xul:tabpanel>
+		    <xul:tabpanel 
+			flex="1"
+			style="overflow:auto;"
+			>
+			    <xul:wlanssidattribute anonid="attrcert.form.attributes.wlanssidattribute"
+			        class="acattribute"
+			        flex="1"
+			        />
+			<xul:vbox>
+			</xul:vbox>
+		    </xul:tabpanel>
+		</xul:tabpanels>
+	    </xul:tabbox>
+	</content>
+	<implementation>
+	    <field name="mCertDB">
+		Components.classes["@mozilla.org/security/x509certdb;1"]
+			.getService(Components.interfaces.nsIX509CertDB);
+	    </field>
+	    <field name="mKeyManager">
+		/* alrIKeyManager */
+		Components.classes["@avaya.com/pkm/keymanager;1"]
+			.getService(Components.interfaces.alrIKeyManager);
+	    </field>
+	    <field name="mACAttributesTabboxElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "attrcert.form.attributes.tabbox");
+	    </field>
+	    <field name="mACAttributesTabpanelsElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "attrcert.form.attributes.tabpanels");
+	    </field>
+
+	    <field name="mReadonly">
+	    false
+	    </field>
+
+	    <field name="mAttributeCert">
+	    </field>
+
+	    <property name="attributeCert"
+		onget="return this.mAttributeCert;"
+		onset="this.mAttributeCert = val; return val;"
+		/>
+
+	    <property name="readonly">
+		<getter>
+		<![CDATA[
+		return this.mReadonly;
+		]]>
+		</getter>
+		<setter>
+		<![CDATA[
+		this.LogTrace("acattributesBinding.readonly.set():......................Start.\n");
+		this.mReadonly = val;
+		var /* NodeList */ acAttributeNodeList = this.mACAttributesTabpanelsElem.getElementsByAttribute("class", "acattribute");
+		for (var i = 0; i < acAttributeNodeList.length; i++) {
+		    var attributeElem = acAttributeNodeList.item(i);
+		    this.LogDebug("acattributesBinding.readonly.set(): i : " + i + " attrId: " + attributeElem.tagName + "\n");
+		    attributeElem.readonly = val;
+		}
+		this.LogTrace("acattributesBinding.readonly.set():......................End.\n");
+		]]>
+		</setter>
+	    </property>
+
+
+	    <property name="totalActiveAttributes">
+		<getter>
+		<![CDATA[
+		var count = 0;
+		var /* NodeList */ acAttributeNodeList = this.mACAttributesTabpanelsElem.getElementsByAttribute("class", "acattribute");
+		for (var i = 0; i < acAttributeNodeList.length; i++) {
+		    var attributeElem = acAttributeNodeList.item(i);
+		    if (!attributeElem.active) {
+			continue;
+		    }
+		    count++;
+		}
+		return count;
+		]]>
+		</getter>
+	    </property>
+
+	    <constructor>
+		<![CDATA[
+		// this.LogTrace("acattributesBinding.constructor():......................Start.\n");
+		this.refresh();
+		// this.LogTrace("acattributesBinding.constructor():......................End.\n");
+		]]>
+	    </constructor>
+
+	    <method name="refresh">
+		<body>
+		<![CDATA[
+		var /* NodeList */ acAttributeNodeList = this.mACAttributesTabpanelsElem.getElementsByAttribute("class", "acattribute");
+		for (var i = 0; i < acAttributeNodeList.length; i++) {
+		    var attributeElem = acAttributeNodeList.item(i);
+		    // this.LogDebug("acattributesBinding.refresh(): i : " + i + " attrId: " + attributeElem.tagName + "\n");
+		    if (attributeElem.refresh) {
+			attributeElem.refresh();
+		    }
+		}
+		]]>
+		</body>
+	    </method>
+
+	    <method name="reset">
+		<body>
+		<![CDATA[
+		var /* NodeList */ acAttributeNodeList = this.mACAttributesTabpanelsElem.getElementsByAttribute("class", "acattribute");
+		for (var i = 0; i < acAttributeNodeList.length; i++) {
+		    var attributeElem = acAttributeNodeList.item(i);
+		    attributeElem.reset();
+		}
+		]]>
+		</body>
+	    </method>
+
+	    <method name="mergeCertProps">
+		<parameter name="aCertProps"/>
+		<parameter name="aCert"/>
+		<body>
+		<![CDATA[
+		var /* NodeList */ acAttributeNodeList = this.mACAttributesTabpanelsElem.getElementsByAttribute("class", "acattribute");
+		for (var i = 0; i < acAttributeNodeList.length; i++) {
+		    var attributeElem = acAttributeNodeList.item(i);
+		    attributeElem.mergeCertProps(aCertProps);
+		}
+
+		this.mX509Cert = null;
+		if (aCert) {
+		    this.mX509Cert = aCert;
+		}
+		]]>
+		</body>
+	    </method>
+
+	    <method name="mergeCertPropsByAttributeTag">
+		<parameter name="aAttributeTagName"/>
+		<parameter name="aCertProps"/>
+		<body>
+		<![CDATA[
+		var /* NodeList */ acAttributeNodeList = this.mACAttributesTabpanelsElem.getElementsByTagName(aAttributeTagName);
+		if (acAttributeNodeList.length <= 0) {
+		    if (aAttributeTagName.indexOf("xul:") < 0) {
+		    	var tagName = "xul:" + aAttributeTagName;
+		        acAttributeNodeList = this.mACAttributesTabpanelsElem.getElementsByTagName(tagName);
+		    }
+		}
+		for (var i = 0; i < acAttributeNodeList.length; i++) {
+		    var attributeElem = acAttributeNodeList.item(i);
+		    attributeElem.mergeCertProps(aCertProps);
+		    break;
+		}
+		]]>
+		</body>
+	    </method>
+
+	    <method name="mergeCertPropsByAttributeTagList">
+		<parameter name="aAttributeTagNameList"/>
+		<parameter name="aCertProps"/>
+		<body>
+		<![CDATA[
+		for (var j = 0; j < aAttributeTagNameList.length; j++) {
+		    var attribTagName = aAttributeTagNameList[j];
+		    this.mergeCertPropsByAttributeTag(attribTagName, aCertProps);
+		}
+		]]>
+		</body>
+	    </method>
+
+
+	    <method name="updateCertProps">
+		<parameter name="aCertProps"/>
+		<parameter name="aCert"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("acattributesBinding.updateCertProps():......................Start.\n");
+		// this.dumpProperties(aCertProps, "acattributesBinding.updateCertProps(): aCertProps: ");
+
+		var /* NodeList */ acAttributeNodeList = this.mACAttributesTabpanelsElem.getElementsByAttribute("class", "acattribute");
+		for (var i = 0; i < acAttributeNodeList.length; i++) {
+		    var attributeElem = acAttributeNodeList.item(i);
+		    this.LogDebug("acattributesBinding.updateCertProps(): i : " + i + " extnId: " + attributeElem.tagName + "\n");
+		    attributeElem.updateCertProps(aCertProps);
+		}
+
+		this.mX509Cert = null;
+		if (aCert) {
+		    this.mX509Cert = aCert;
+		}
+		// this.LogTrace("acattributesBinding.updateCertProps():......................End.\n");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="updateCertPropsByAttributeTag">
+		<parameter name="aAttributeTagName"/>
+		<parameter name="aCertProps"/>
+		<body>
+		<![CDATA[
+		var /* NodeList */ acAttributeNodeList = this.mACAttributesTabpanelsElem.getElementsByTagName(aAttributeTagName);
+		if (acAttributeNodeList.length <= 0) {
+		    if (aAttributeTagName.indexOf("xul:") < 0) {
+		    	var tagName = "xul:" + aAttributeTagName;
+		        acAttributeNodeList = this.mACAttributesTabpanelsElem.getElementsByTagName(tagName);
+		    }
+		}
+		for (var i = 0; i < acAttributeNodeList.length; i++) {
+		    var attributeElem = acAttributeNodeList.item(i);
+		    attributeElem.updateCertProps(aCertProps);
+		    break;
+		}
+		]]>
+		</body>
+	    </method>
+
+	    <method name="updateCertPropsByAttributeTagList">
+		<parameter name="aAttributeTagNameList"/>
+		<parameter name="aCertProps"/>
+		<body>
+		<![CDATA[
+		for (var j = 0; j < aAttributeTagNameList.length; j++) {
+		    var attribTagName = aAttributeTagNameList[j];
+		    this.updateCertPropsByAttributeTag(attribTagName, aCertProps);
+		}
+		]]>
+		</body>
+	    </method>
+
+
+	    <method name="updateCert">
+		<parameter name="aCert"/>
+		<body>
+		<![CDATA[
+		if (!aCert) {
+		    return;
+		}
+		var certProps = Components.classes["@mozilla.org/persistent-properties;1"].
+					createInstance(Components.interfaces.nsIPersistentProperties);
+		try {
+		    aCert.exportAttributesToProperties(certProps);
+		} catch (ex) {
+		    return;
+		} 
+		this.updateCertProps(certProps, aCert);
+		]]>
+		</body>
+	    </method>
+
+	    <method name="updateCertByAttributeTag">
+		<parameter name="aAttributeTagName"/>
+		<parameter name="aCert"/>
+		<body>
+		<![CDATA[
+		if (!aCert) {
+		    return;
+		}
+		var certProps = Components.classes["@mozilla.org/persistent-properties;1"].
+					createInstance(Components.interfaces.nsIPersistentProperties);
+		try {
+		    aCert.exportAttributeToProperties(aAttributeTagName, certProps);
+		} catch (ex) {
+		    return;
+		} 
+		this.updateCertPropsByAttributeTag(aAttributeTagName, certProps);
+		]]>
+		</body>
+	    </method>
+
+	    <method name="updateCertByAttributeTagList">
+		<parameter name="aAttributeTagNameList"/>
+		<parameter name="aCert"/>
+		<body>
+		<![CDATA[
+		if (!aCert) {
+		    return;
+		}
+		var certProps = Components.classes["@mozilla.org/persistent-properties;1"].
+					createInstance(Components.interfaces.nsIPersistentProperties);
+		try {
+		    aCert.exportAttributesToProperties(certProps);
+		} catch (ex) {
+		    return;
+		} 
+		this.updateCertPropsByAttributeTagList(aAttributeTagNameList, certProps);
+		]]>
+		</body>
+	    </method>
+
+	    <method name="toCertProps">
+		<parameter name="aCertProps"/>
+		<body>
+		<![CDATA[
+		var /* NodeList */ acAttributeNodeList = this.mACAttributesTabpanelsElem.getElementsByAttribute("class", "acattribute");
+		for (var i = 0; i < acAttributeNodeList.length; i++) {
+		    var attributeElem = acAttributeNodeList.item(i);
+		    attributeElem.toCertProps(aCertProps);
+		}
+		// this.dumpProperties(aCertProps, "Attr Cert Attributes");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="toCertPropsByAttributeTag">
+		<parameter name="aAttributeTagName"/>
+		<parameter name="aCertProps"/>
+		<body>
+		<![CDATA[
+		var /* NodeList */ acAttributeNodeList = this.mACAttributesTabpanelsElem.getElementsByTagName(aAttributeTagName);
+		if (acAttributeNodeList.length <= 0) {
+		    if (aAttributeTagName.indexOf("xul:") < 0) {
+		    	var tagName = "xul:" + aAttributeTagName;
+		        acAttributeNodeList = this.mACAttributesTabpanelsElem.getElementsByTagName(tagName);
+		    }
+		}
+		for (var i = 0; i < acAttributeNodeList.length; i++) {
+		    var attributeElem = acAttributeNodeList.item(i);
+		    attributeElem.toCertProps(aCertProps);
+		    break;
+		}
+		]]>
+		</body>
+	    </method>
+
+	    <method name="toCertPropsByAttributeTagList">
+		<parameter name="aAttributeTagNameList"/>
+		<parameter name="aCertProps"/>
+		<body>
+		<![CDATA[
+		for (var j = 0; j < aAttributeTagNameList.length; j++) {
+		    var attribTagName = aAttributeTagNameList[j];
+		    this.toCertPropsByAttributeTag(attribTagName, aCertProps);
+		}
+		]]>
+		</body>
+	    </method>
+
+	    <method name="activateTaggedItemList">
+		<parameter name="aTagNameListStr"/>
+		<parameter name="aStatusFlag"/>
+		<body>
+		<![CDATA[
+		if (!aTagNameListStr) {
+		    return;
+		}
+		var tagNameList = aTagNameListStr.split(",");
+		if (tagNameList.length <= 0) {
+		    return;
+		}
+		for (var i = 0; i < tagNameList.length; i++) {
+		    // var nsTagName = "xul:" + tagNameList[i];
+		    var nsTagName = this.trim(tagNameList[i]);
+		    this.activateAttributeByTag(nsTagName, aStatusFlag); 
+		}
+		]]>
+		</body>
+	    </method>
+
+
+	    <method name="activateAttributeByTag">
+		<parameter name="aAttributeTagName"/>
+		<parameter name="aStatusFlag"/>
+		<body>
+		<![CDATA[
+		var /* NodeList */ acAttributeNodeList = this.mACAttributesTabpanelsElem.getElementsByTagName(aAttributeTagName);
+		if (acAttributeNodeList.length <= 0) {
+		    if (aAttributeTagName.indexOf("xul:") < 0) {
+		    	var tagName = "xul:" + aAttributeTagName;
+		        acAttributeNodeList = this.mACAttributesTabpanelsElem.getElementsByTagName(tagName);
+		    }
+		}
+		for (var i = 0; i < acAttributeNodeList.length; i++) {
+		    var attributeElem = acAttributeNodeList.item(i);
+		    attributeElem.readonly = !aStatusFlag;
+		    // this.LogDebug("acattributesBinding.activateAttributeByTag(): i : " + i + " extnId: " + attributeElem.tagName + "\n");
+		    return true;
+		}
+		return false;
+		]]>
+		</body>
+	    </method>
+
+
+	</implementation>
+    </binding>
+
+</bindings>
+

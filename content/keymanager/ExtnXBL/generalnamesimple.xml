@@ -1,0 +1,537 @@
+<?xml version="1.0"?>
+<!-- @(#) $Id: generalnamesimple.xml,v 1.13 2011/02/04 18:54:53 subrata Exp $ -->
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is Avaya Labs Research, Avaya Inc. Code.
+   -
+   - The Initial Developer of the Original Code is
+   - Subrata Mazumdar, Avaya Labs Research, Avaya Inc.
+   - Portions created by the Initial Developer are Copyright (C) 2007.
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Subrata Mazumdar (mazum@avaya.com)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+<!DOCTYPE bindings
+    	[
+	<!ENTITY % certManager.dtd SYSTEM "chrome://pippki/locale/certManager.dtd">
+	%certManager.dtd;
+	<!ENTITY % keyManager.dtd SYSTEM "chrome://keymanager/locale/keyManager.dtd">
+	%keyManager.dtd;
+	]>
+
+<bindings id="generalnamesimpleBindings"
+    xmlns="http://www.mozilla.org/xbl"
+    xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    xmlns:xbl="http://www.mozilla.org/xbl">
+
+    <script type="application/x-javascript" src="chrome://keymanager/content/GeneralNameItem.js"/>
+
+    <binding id="generalnamesimpleBinding"
+	extends="chrome://keymanager/content/ExtnXBL/certextn.xml#certextnbaseBinding"
+        >
+    	<!-- content, property, method and event descriptions go here -->
+    	<content>
+	    <xul:groupbox anonid="certextn.stdx509extn.generalname.simple" flex="1"
+		xbl:inherits="flex"
+	    	orient="horizontal"
+		>
+          	<xul:generalnametype anonid="certextn.stdx509extn.generalname.item.nameType"
+		    xbl:inherits="type,typetooltip,typedisabled,x400disabled,othernamedisabled,hidden=typehidden,readonly"
+		    x400disabled="true"
+		    othernamedisabled="true"
+          	    oncommand="getBindingParent(this).onListItemSelection(this, event)"
+		    />
+                <xul:textbox anonid="certextn.stdx509extn.generalname.item.name.value" flex="1"
+		    xbl:inherits="value=namevalue,tooltiptext=valuetooltip,disabled=valuedisabled,readonly,width=namewidth,autocompletesearchparam=namesearchparam"
+  	  	    type="autocomplete" 
+  	  	    autocompletesearch="form-history" 
+  	  	    completeselectedindex="true"
+  	  	    xautocompletesearchparam="certextn.stdx509extn.generalname.item.name.value"
+	    	    style="overflow:auto;"
+          	    tooltiptext="&keymgr.create.generalName.item.name.tooltip;"
+          	    onchange="getBindingParent(this).handleNameValueChange(this, event)"
+          	    zonselect="getBindingParent(this).handleNameValueChange(this, event)"
+		    />
+	    	<xul:hbox collapsed="true">
+                    <xul:textbox anonid="certextn.stdx509extn.generalname.item.oid"
+			xbl:inherits="value=oid,tooltiptext=oidtooltip,disabled=oiddisabled"
+	    		style="overflow:auto;"
+          		tooltiptext="&keymgr.create.generalName.item.oid.tooltip;"
+          		/>
+                    <xul:checkbox anonid="certextn.stdx509extn.generalname.item.name.value.binary" 
+			xbl:inherits="checked=binary,tooltiptext=binarytooltip,disabled=binarydisabled"
+          		label="&keymgr.create.generalName.item.name.binary.label;"
+          		tooltiptext="&keymgr.create.generalName.item.name.binary.tooltip;"
+			/>
+		</xul:hbox>
+	    </xul:groupbox>
+    	</content>
+	<implementation>
+	    <field name="mGeneralNameTypeMenuElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certextn.stdx509extn.generalname.item.nameType");
+	    </field>
+	    <field name="mGeneralNameItemOidElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certextn.stdx509extn.generalname.item.oid");
+	    </field>
+	    <field name="mGeneralNameItemValueElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certextn.stdx509extn.generalname.item.name.value");
+	    </field>
+	    <field name="mGeneralNameItemValueBinaryElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certextn.stdx509extn.generalname.item.name.value.binary");
+	    </field>
+
+	    <field name="mOrderedNameValueStr"/>
+	    <field name="mTypedNameValueStr"/>
+
+	    <property name="type"
+	        onget="return this.mGeneralNameTypeMenuElem.value;"
+	        onset="this.mGeneralNameTypeMenuElem.value=val; return val;"
+		/>
+	    <property name="namevalue"
+	        onget="return this.mGeneralNameItemValueElem.value;"
+	        onset="this.mGeneralNameItemValueElem.value=val; return val;"
+		/>
+	    <property name="oid"
+	        onget="return this.mGeneralNameItemOidElem.value;"
+	        onset="this.mGeneralNameItemOidElem.value=val; return val;"
+		/>
+	    <property name="binary"
+	        onget="return this.mGeneralNameItemValueBinaryElem.checked;"
+	        onset="this.mGeneralNameItemValueBinaryElem.checked=(val?true:false); return val;"
+		/>
+	    <property name="orderedvalue" readonly="true">
+	        <getter>
+		<![CDATA[
+		this.computeFormattedGeneralName();
+		return this.mOrderedNameValueStr;
+		]]>
+	        </getter>
+	    </property>
+
+	    <property name="typedvalue">
+	        <getter>
+		<![CDATA[
+		this.computeFormattedGeneralName();
+		return this.mTypedNameValueStr;
+		]]>
+	        </getter>
+	        <setter>
+		<![CDATA[
+		this.updateTypedGeneralNameItem(val);
+		return val;
+		]]>
+	        </setter>
+	    </property>
+
+	    <property name="value"
+	        onget="return this.typedvalue;"
+	        onset="this.typedvalue=val; return val;"
+		/>
+
+	    <property name="readonly"
+	        onget="return this.getAttribute('readonly');"
+	    	onset="this.removeAttribute('readonly');
+		       if (val) {
+		       	this.setAttribute('readonly',true);
+		       }
+                       else {
+		       	this.refresh();
+		       }
+		       this.mGeneralNameTypeMenuElem.readonly = val;
+		       // this.mGeneralNameItemValueElem.readonly = val;
+		       return val;"
+		/>
+
+	    <constructor>
+		<![CDATA[
+		this.LogTrace("generalnamesimpleBinding.constructor():......................Start.\n");
+
+		var autoCompleteSearchParamOld = this.mGeneralNameItemValueElem.getAttribute("autocompletesearchparam");
+		this.setAutoCompleteSearchParam(
+				this.mGeneralNameItemValueElem,
+				getBindingParent(this)
+				);
+		var autoCompleteSearchParam = this.mGeneralNameItemValueElem.getAttribute("autocompletesearchparam");
+                // dump("setAutoCompleteSearchParam():\t" + autoCompleteSearchParamOld + "\t==> " + autoCompleteSearchParam + "\n");
+
+		this.reset();
+
+		this.LogTrace("generalnamesimpleBinding.constructor():......................End.\n");
+		]]>
+	    </constructor>
+
+	    <method name="setAutoCompleteSearchParam">
+		<parameter name="aTargetElem"/>
+		<parameter name="aBindingParent"/>
+	        <body>
+		<![CDATA[
+		/*
+		dump("setAutoCompleteSearchParam(): this.localName: " + this.localName + " " +
+					"aBindingParentTag: " + aBindingParent.localName +
+					"\n");
+		*/
+
+		/*
+		 * Our goal is to derive a unique name for the aTargetElem. 
+		 * I do not like the scheme currently implemeted.
+		 * Hopefully, I will come up with a better scheme. 
+		 */
+
+		// If the autoCompleteSearchParam attribute is specieifed, then use it.
+		var autoCompleteSearchParam = aTargetElem.getAttribute("autocompletesearchparam");
+		if (autoCompleteSearchParam) {
+		    return;
+		}
+
+		// If the autoCompleteSearchParam attribute is not specified but this element 
+		// has an id, then use that id as autoCompleteSearchParam attribute.
+		if (this.id) {
+		    autoCompleteSearchParam = this.id;
+		    aTargetElem.setAttribute("autocompletesearchparam", autoCompleteSearchParam);
+		    return;
+		}
+		// Otherwise, if the binding parent has an id, then use that id and the tag name 
+		// of this elements.
+		if (aBindingParent && aBindingParent.id) {
+		    autoCompleteSearchParam = aBindingParent.id;
+		    autoCompleteSearchParam += "." + this.localName;
+		    aTargetElem.setAttribute("autocompletesearchparam", autoCompleteSearchParam);
+		    return;
+		}
+
+		// Otherwise, if the aBindingParent exists, use its tag name as 
+		// prefix for autoCompleteSearchParam. Otherwise, use the "keymgr" 
+		// as prefix. Finally, append the tag name of this element and the 
+		// anonid of the target element to the prefix.
+		if (aBindingParent) {
+		    autoCompleteSearchParam = aBindingParent.localName;
+		}
+		else {
+		    autoCompleteSearchParam = "keymgr";
+		}
+		autoCompleteSearchParam += "." + this.localName;
+		autoCompleteSearchParam += "." + aTargetElem.getAttribute("anonid");
+
+		aTargetElem.setAttribute("autocompletesearchparam", autoCompleteSearchParam);
+
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="refresh">
+	        <body>
+		<![CDATA[
+		this.onListItemSelection(this.mGeneralNameTypeMenuElem);
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="reset">
+	        <body>
+		<![CDATA[
+		// this.LogTrace("generalnamesimpleBinding.reset():......................Start.\n");
+
+		this.mGeneralNameTypeMenuElem.reset();
+
+		this.namevalue = "";
+		this.oid = "";
+		this.binary = false;
+
+		var typedValue = this.getAttribute("typedvalue");
+		if (typedValue) {
+		    this.updateTypedGeneralNameItem(typedValue);
+		}
+		else {
+		    var type = this.getAttribute("type");
+		    var namevalue = this.getAttribute("namevalue");
+		    if (type) {
+		    	this.type = type;
+		    }
+		    if (namevalue) {
+		    	this.namevalue = namevalue;
+		    }
+		}
+		this.refresh();
+
+		// this.LogTrace("generalnamesimpleBinding.reset():......................End.\n");
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="mapGeneralNameTypeToValue">
+		<parameter name="itemType"/>
+	        <body>
+		<![CDATA[
+		return this.mGeneralNameTypeMenuElem.mapGeneralNameTypeToValue(itemType);
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="createTypedGeneralNameItem">
+		<parameter name="nameType"/>
+		<parameter name="itemNameValue"/>
+		<parameter name="nameOid"/>
+		<parameter name="isBinary"/>
+	        <body>
+		<![CDATA[
+                // typedGeneralNameItem Format:
+                //  <name-type>:{<oid>,<name>[,binary]}, for other name
+                //  <name-type>:<value>}
+
+                var typedGeneralNameItem;
+                if (nameOid) {
+                    typedGeneralNameItem = nameType + ":"
+    	            typedGeneralNameItem += nameOid;
+	            typedGeneralNameItem += "," + itemNameValue;
+    	            if (isBinary) {
+	                typedGeneralNameItem += ",binary";
+    	            }
+                }
+                else {
+    	            typedGeneralNameItem = nameType + ":" + itemNameValue;
+                }
+                return typedGeneralNameItem;
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="createOrderedGeneralNameItem">
+		<parameter name="nameType"/>
+		<parameter name="itemNameValue"/>
+		<parameter name="nameOid"/>
+		<parameter name="isBinary"/>
+	        <body>
+		<![CDATA[
+                // orderedGeneralNameItemStr Format:
+                //  <name>-<name-type-idx>
+                //  <name>-<oid>[-<binary>]-<name-type-idx>
+                //  <name>-<oid>[1|0]<0-8>
+                // name format is "<name-value> + <(name-type):[0-9]>" | "<name-value> + <oid> + [(bin):1|0] + <(name-type):[0-9]>" 
+                var orderedGeneralNameItemStr = "";
+                orderedGeneralNameItemStr = itemNameValue;
+                if (nameOid) {
+    	            orderedGeneralNameItemStr += " - " + nameOid;
+                    if (isBinary) {
+    	                orderedGeneralNameItemStr += " - " + "1";
+                    }
+	            else {
+    	                orderedGeneralNameItemStr += " - " + "0";
+	            }
+                }
+                var nameItemTypeValue = this.mapGeneralNameTypeToValue(nameType);
+                orderedGeneralNameItemStr += " - " + nameItemTypeValue;
+            
+                return orderedGeneralNameItemStr;
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="updateTypedGeneralNameItem">
+		<parameter name="aTypedGeneralNameItemStr"/>
+	        <body>
+		<![CDATA[
+                var nameType = null;
+                var itemNameValue = null;
+                var nameOid = null;
+                var isBinary = false;
+
+                // this.LogTrace("updateTypedGeneralNameItem():............................Start.\n");
+
+		// parse name in format:  <name-type>:{<oid>,<name>[,binary]} format to 
+
+                var generalNameItemNVP = aTypedGeneralNameItemStr.split(":");
+                switch(generalNameItemNVP.length) {
+    	            case 0:
+	                break;
+    	            case 1:
+	                nameType = generalNameItemNVP[0];
+	                itemNameValue = "";
+	                break;
+    	            default:
+	                nameType = generalNameItemNVP[0];
+	                itemNameValue = aTypedGeneralNameItemStr.substr((nameType.length+1));
+	                break;
+                }
+                if (!nameType) {
+    	            return;
+                }
+                if (itemNameValue != "") {
+    	            var itemNameValueCompList = itemNameValue.split(",");
+                    // this.LogDebug("generalnamesimpleBinding.updateTypedGeneralNameItem(): itemNameValueCompList.length: " + itemNameValueCompList.length + "\n");
+    	            switch(itemNameValueCompList.length) {
+		        case 0:
+	    	            break;
+		        case 1:
+		            itemNameValue = itemNameValueCompList[0];
+	    	            break;
+		        case 2:
+		            nameOid = itemNameValueCompList[0];
+		            itemNameValue = itemNameValueCompList[1];
+	    	            break;
+    		        default:
+		            nameOid = itemNameValueCompList[0];
+		            itemNameValue = itemNameValueCompList[1];
+		            var isBinaryStr = itemNameValueCompList[2];
+		            if (isBinaryStr == "binary") {
+		    	    	isBinary = true;
+		            }
+	    	            break;
+	            }
+                }
+		/*
+                this.LogDebug("generalnamesimpleBinding.updateTypedGeneralNameItem(): " +
+				"nameType: " + nameType + " " +
+				"itemNameValue: " + itemNameValue + " " +
+				"nameOid: " + nameOid + " " +
+				"isBinary: " + isBinary + " " +
+				"\n");
+		*/
+
+	    	this.mGeneralNameTypeMenuElem.type = nameType;
+	    	this.mGeneralNameItemValueElem.value = itemNameValue;
+	    	// this.mGeneralNameItemOidElem.value = nameOid;
+	    	// this.mGeneralNameItemValueBinaryElem.checked = isBinary;
+
+                // this.LogTrace("updateTypedGeneralNameItem():............................End.\n");
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="mapTypedGeneralNameItem">
+		<parameter name="aTypedGeneralNameItemStr"/>
+	        <body>
+		<![CDATA[
+
+		this.updateTypedGeneralNameItem(aTypedGeneralNameItemStr);
+
+                var generalNameItemStr = this.orderedvalue;
+                this.LogDebug("generalnamesimpleBinding.mapTypedGeneralNameItem(): " +
+				aTypedGeneralNameItemStr + " ==> " + generalNameItemStr + "\n");
+                return generalNameItemStr;
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="onListItemSelection">
+		<parameter name="aNameTypeMenuListElem"/>
+		<parameter name="ev"/>
+	        <body>
+		<![CDATA[
+                // this.LogTrace("onListItemSelection():............................Start.\n");
+
+                // this.LogTrace("onListItemSelection()............................End.\n");
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="handleNameValueChange">
+		<parameter name="aTargetElem"/>
+		<parameter name="ev"/>
+	        <body>
+		<![CDATA[
+
+		var newValue = this.trim(aTargetElem.value);
+		if (newValue == "") {
+		    aTargetElem.value = "";
+		    return;
+		}
+
+		this.autoCompleteAction(aTargetElem);
+
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="autoCompleteAction">
+		<parameter name="targetElem"/>
+	        <body>
+		<![CDATA[
+                // this.LogTrace("autoCompleteAction():...............10.\n");
+                var formFieldKey = targetElem.getAttribute("autocompletesearchparam");
+		if (!formFieldKey) {
+		    return;
+		}
+                var formFieldValue = this.trim(targetElem.value);
+                if (formFieldValue == "") {
+    	            return;
+                }
+
+                var formhistory = null;
+                if ("nsIFormHistory" in Components.interfaces){
+                    formhistory = Components.classes["@mozilla.org/satchel/form-history;1"].
+        			            getService(Components.interfaces.nsIFormHistory);
+                }
+                else if ("nsIFormHistory2" in Components.interfaces){
+                    formhistory = Components.classes["@mozilla.org/satchel/form-history;1"].
+        			            getService(Components.interfaces.nsIFormHistory2);
+                }
+                if (!formhistory) {
+    	            return;
+                }
+
+                // use the same value for key as "autocompletesearchparam" in textbox:
+                formhistory.addEntry(formFieldKey, formFieldValue);
+
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="computeFormattedGeneralName">
+	        <body>
+		<![CDATA[
+                if (this.mGeneralNameTypeMenuElem.selectedIndex < 0) {
+	            alert("Select a name type from list.");
+    	            return false;
+                }
+		var otherName = false;
+    	        this.mTypedNameValueStr = this.createTypedGeneralNameItem(
+					            this.mGeneralNameTypeMenuElem.value,
+					            this.mGeneralNameItemValueElem.value
+					            );
+                // this.LogDebug("computeFormattedGeneralName(): this.mTypedNameValueStr : " + this.mTypedNameValueStr + "\n");
+
+
+    	        this.mOrderedNameValueStr = this.createOrderedGeneralNameItem(
+					            this.mGeneralNameTypeMenuElem.value,
+					            this.mGeneralNameItemValueElem.value
+					            );
+                // this.LogDebug("computeFormattedGeneralName(): this.mOrderedNameValueStr: " + this.mOrderedNameValueStr + "\n");
+
+                return true;
+		]]>
+	        </body>
+	    </method>
+
+
+	</implementation>
+    </binding>
+
+</bindings>
+

@@ -1,0 +1,229 @@
+<?xml version="1.0"?>
+<!-- @(#) $Id: subjaltnameextn.xml,v 1.14 2009/09/13 13:41:00 subrata Exp $ -->
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is Avaya Labs Research, Avaya Inc. Code.
+   -
+   - The Initial Developer of the Original Code is
+   - Subrata Mazumdar, Avaya Labs Research, Avaya Inc.
+   - Portions created by the Initial Developer are Copyright (C) 2007.
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Subrata Mazumdar (mazum@avaya.com)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+
+<!DOCTYPE bindings SYSTEM "chrome://keymanager/locale/keyManager.dtd">
+
+<bindings id="subjaltnameextnBindings"
+    xmlns="http://www.mozilla.org/xbl"
+    xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    xmlns:xbl="http://www.mozilla.org/xbl">
+
+    <binding id="subjaltnameextnBinding"
+	extends="chrome://keymanager/content/ExtnXBL/certextn.xml#certextnbaseBinding"
+        >
+        <!--
+        <resources>
+    	    <script type="application/x-javascript" src="chrome://keymanager/content/ExtnXBL/certextn2props.js"/>
+	    <stylesheet src="chrome://keymanager/skin/kmbindings.css"/>
+        </resources>
+        -->
+    	<!-- content, property, method and event descriptions go here -->
+    	<content>
+	    <xul:certextn anonid="certextn.stdx509extn.subjaltname"
+	        xbl:inherits="flex,captionlabel,active,activelabel,activetoolip,activePropName,mandatory,critical,criticallabel,criticaltoolip,criticalPropName,listlabel,listtooltip,rows,addlabel,addtooltip,deletelabel,deletetooltip"
+	        captionlabel="&keymgr.cert.csr.form.tab.stdx509ext.subjaltname.label;"
+		activePropName="SubAltName"
+		criticalPropName="SubAltName-crit"
+		mandatoryPropName="SubAltName-mandatory"
+	        >
+		<xul:generalnames anonid="certextn.stdx509extn.subjaltname.list"
+		    xbl:inherits="listlabel,listtooltip,rows,addlabel,addtooltip,removelabel,removetooltip,altNameText,altNameDisplayText,numTextCertPropName,dispTextCertPropName,readonly,disabled"
+		    donotdebug="false"
+		    listtooltip="List of subject alternative name in string form. Use the buttons on the right to add new item to the list or remove the selected item from the list."
+		    addtooltip="Click this button to add a new subject alternative name to the list."
+		    removetooltip="Click this button to remove the selected subject alternative name from the list."
+		    numTextCertPropName="SubAltName-text"
+		    dispTextCertPropName="SubAltName-display-text"
+		    />
+	    </xul:certextn>
+    	</content>
+	<implementation>
+
+	    <field name="mBaseExtnElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certextn.stdx509extn.subjaltname");
+	    </field>
+	    <field name="mAltNameListElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certextn.stdx509extn.subjaltname.list");
+	    </field>
+
+	    <property name="active"
+	        onget="return this.mBaseExtnElem.active;"
+	    	onset="this.mBaseExtnElem.active = val;return val;"
+		/>
+	    <property name="critical"
+	        onget="return this.mBaseExtnElem.critical;"
+	    	onset="this.mBaseExtnElem.critical = val;return val;"
+		/>
+	    <property name="mandatory"
+	        onget="return this.mBaseExtnElem.mandatory;"
+	    	onset="this.mBaseExtnElem.mandatory = val;return val;"
+		/>
+	    <property name="readonly"
+	        onget="return this.mBaseExtnElem.readonly;"
+	    	onset="this.mBaseExtnElem.readonly = val;
+		       this.setReadonly(this.mBaseExtnElem, val);
+		       this.mAltNameListElem.readonly = val;
+		       if(!val) {this.refresh();}
+		       return val;"
+		/>
+	    <property name="disabled"
+	        onget="return this.mBaseExtnElem.disabled;"
+	    	onset="this.mBaseExtnElem.disabled = val;return val;"
+		/>
+	    <property name="altNameText" readonly="true"
+	        onget="return this.mAltNameListElem.altNameText;"
+		/>
+	    <property name="altNameDisplayText" readonly="true"
+	        onget="return this.mAltNameListElem.altNameDisplayText;"
+		/>
+
+
+	    <constructor>
+		<![CDATA[
+		// this.LogTrace("subjaltnameextnBinding.constructor():......................Start.");
+		this.refresh();
+		// this.LogTrace("subjaltnameextnBinding.constructor():......................End.");
+		]]>
+	    </constructor>
+
+	    <method name="refresh">
+	        <body>
+		<![CDATA[
+		this.mAltNameListElem.refresh();
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="addAltNameItem">
+		<parameter name="aTypedGeneralNameItemStr"/>
+	        <body>
+		<![CDATA[
+		this.mAltNameListElem.addTypedNameItemToAltNameList(aTypedGeneralNameItemStr);
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="addAltNameItemList">
+		<parameter name="aTypedGeneralNamesStr"/>
+	        <body>
+		<![CDATA[
+		if (!aTypedGeneralNamesStr || (aTypedGeneralNamesStr == "")) {
+		    this.mAltNameListElem.reset();
+		    return;
+		}
+		this.mAltNameListElem.addTypedNamesToAltNameList(aTypedGeneralNamesStr);
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="reset">
+	        <body>
+		<![CDATA[
+		this.resetCertExtn(this.mBaseExtnElem);
+		this.mBaseExtnElem.reset();
+		this.mAltNameListElem.reset();
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="toCertProps">
+		<parameter name="aCertProps"/>
+	        <body>
+		<![CDATA[
+
+		if (!this.active) {
+		    return;
+		}
+		if (this.altNameDisplayText == "") {
+		    return;
+		}
+
+		this.certExtnToProps(this.mBaseExtnElem, aCertProps);
+		this.mAltNameListElem.toCertProps(aCertProps);
+
+		if (this.altNameDisplayText == "") {
+		    aCertProps.setStringProperty("SubAltName", "false");
+		    aCertProps.setStringProperty("SubAltName-crit", "false");
+		    aCertProps.setStringProperty("SubAltName-mandatory", "false");
+		}
+
+		// this.dumpProperties(aCertProps);
+
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="updateCertProps">
+		<parameter name="aCertProps"/>
+	        <body>
+		<![CDATA[
+		if (! this.containsAnyProperty(this.mBaseExtnElem, aCertProps)) {
+		    return;
+		}
+
+		this.reset();
+		this.updateCertExtnProps(this.mBaseExtnElem, aCertProps);
+		this.mAltNameListElem.updateCertProps(aCertProps);
+		this.refresh();
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="mergeCertProps">
+		<parameter name="aCertProps"/>
+	        <body>
+		<![CDATA[
+		if (! this.containsAnyProperty(this.mBaseExtnElem, aCertProps)) {
+		    return;
+		}
+
+		this.updateCertExtnProps(this.mBaseExtnElem, aCertProps, true);
+		this.mAltNameListElem.mergeCertProps(aCertProps);
+		this.refresh();
+		]]>
+	        </body>
+	    </method>
+
+	</implementation>
+    </binding>
+
+</bindings>
+

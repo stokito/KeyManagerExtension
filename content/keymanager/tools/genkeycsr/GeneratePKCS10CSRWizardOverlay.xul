@@ -1,0 +1,432 @@
+<?xml version="1.0"?>
+<!-- @(#) $Id: GeneratePKCS10CSRWizardOverlay.xul,v 1.2 2010/12/24 20:04:28 subrata Exp $ -->
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is Avaya Labs Research, Avaya Inc. Code.
+   -
+   - The Initial Developer of the Original Code is
+   -     Subrata Mazumdar, Avaya Labs Research, Avaya Inc.
+   - Portions created by the Initial Developer are Copyright (C) 2007.
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Subrata Mazumdar (mazum@avaya.com)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://keymanager/skin/kmbindings.css" type="text/css"?>
+
+<!--
+<!DOCTYPE wizard
+	[
+	<!ENTITY % xmldsigffext.dtd SYSTEM "chrome://xmldsigffext/locale/xmldsigffext.dtd">
+	%xmldsigffext.dtd;
+	]>
+-->
+
+<!DOCTYPE overlay SYSTEM "chrome://keymanager/locale/keyManager.dtd">
+
+<overlay id="keymgr.genkeycsr.overlay.win"
+    xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    >
+
+    <script type="application/x-javascript" src="GeneratePKCS10CSRWizardOverlay.js"/>
+
+    <wizardpage
+	id="keymgr.genkeycsr.wizard.page.keysource"
+	pageid="keymgr.genkeycsr.wizard.page.keysource"
+	description="&keymgr.genkeycsr.wizard.page.keysource.label;"
+	onpageshow="return GeneratePKCS10CSRWizardOverlay.selectKeySourcePageShow(this);"
+	onpageadvanced="return GeneratePKCS10CSRWizardOverlay.selectKeySourcePageAdvanced(this);"
+	next="keymgr.genkeycsr.wizard.page.newkey"
+	>
+	<vbox class="box-padded" id="keymgr.genkeycsr.wizard.keysource.vbox"
+	    flex="1"
+	    >
+
+	    <grid id="keymgr.genkeycsr.wizard.keysource.grid"
+		zflex="1"
+		> 
+		<columns>
+		    <column/>
+		    <column flex="1"/>
+		</columns>
+		<row
+		    align="center"
+		    >
+		    <label value="&keymgr.genkeycsr.wizard.keysource.label;"/> 
+		    <groupbox 
+			xorient="horizontal"
+			pack="start"
+			>
+			<radiogroup id="keymgr.genkeycsr.wizard.keysource.options"
+			    xorient="horizontal"
+			    oncommand="GeneratePKCS10CSRWizardOverlay.handleKeySourceOptionChange(this, event);"
+			    >
+			    <radio id="keymgr.genkeycsr.wizard.keysource.existingkey"
+				label="&keymgr.genkeycsr.wizard.keysource.existingkey.label;"
+				tooltiptext="&keymgr.genkeycsr.wizard.keysource.existingkey.tooltip;"
+				selected="true"
+				value="existingkey"
+				next="keymgr.genkeycsr.wizard.page.existingkey"
+				group="keymgr.genkeycsr.wizard.keysource"
+				/>
+			    <radio id="keymgr.genkeycsr.wizard.keysource.newkey"
+				label="&keymgr.genkeycsr.wizard.keysource.newkey.label;"
+				tooltiptext="&keymgr.genkeycsr.wizard.keysource.newkey.tooltip;"
+				value="newkey"
+				next="keymgr.genkeycsr.wizard.page.newkey"
+				group="keymgr.genkeycsr.wizard.keysource"
+				/>
+			</radiogroup>
+		    </groupbox> 
+		</row>
+	    </grid>
+
+	</vbox>
+    </wizardpage>
+
+    <!--
+    <wizardpage
+	id="keymgr.genkeycsr.wizard.page.keysource"
+	pageid="keymgr.genkeycsr.wizard.page.keysource"
+	description="&keymgr.genkeycsr.wizard.page.keysource.label;"
+	onpageshow="return GeneratePKCS10CSRWizardOverlay.selectKeySourcePageShow(this);"
+	onpageadvanced="return GeneratePKCS10CSRWizardOverlay.selectKeySourcePageAdvanced(this);"
+	next="keymgr.genkeycsr.wizard.page.newkey"
+	nextlabel="&keymgr.genkeycsr.wizard.page.keysource.label;"
+	>
+	<vbox class="box-padded" id="keymgr.genkeycsr.wizard.keysource.vbox"
+	    flex="1"
+	    >
+	    <grid id="keymgr.genkeycsr.wizard.keysource.grid"
+		zflex="1"
+		> 
+		<columns>
+		    <column/>
+		    <column flex="1"/>
+		</columns>
+		<row
+		    align="center"
+		    >
+		    <label value="&keymgr.genkeycsr.wizard.keysource.label;"/> 
+		    <groupbox 
+			orient="horizontal"
+			pack="start"
+			>
+		    </groupbox> 
+		</row>
+	    </grid>
+	</vbox>
+    </wizardpage>
+    -->
+
+    <wizardpage
+	id="keymgr.genkeycsr.wizard.page.newkey"
+	pageid="keymgr.genkeycsr.wizard.page.newkey"
+	description="&keymgr.genkeycsr.wizard.page.newkey.label;"
+	onpageshow="return GeneratePKCS10CSRWizardOverlay.generateNewKeyPageShow(this);"
+	onpageadvanced="return GeneratePKCS10CSRWizardOverlay.generateNewKeyPageAdvanced(this);"
+	xnext="keymgr.genkeycsr.wizard.page.newkey.simple"
+	next="keymgr.genkeycsr.wizard.page.existingkey.browser"
+	>
+	<vbox class="box-padded" id="keymgr.genkeycsr.wizard.page.newkey.vbox"
+	    flex="1"
+	    >
+		    <hbox
+			pack="start"
+			align="start"
+			>
+			<createcert id="keymgr.genkeycsr.wizard.page.newkey.createcert"
+			    class="menu"
+			    optypelabel="&keymgr.genkeycsr.wizard.page.newkey.createcert.label;"
+			    casignedhidden="true"
+			    selfproxyhidden="true"
+			    otpkhidden="true"
+			    oncommand="GeneratePKCS10CSRWizardOverlay.handleUserCertCreate(this, event)"
+			    />
+		      </hbox>
+	</vbox>
+    </wizardpage>
+
+    <wizardpage
+	id="keymgr.genkeycsr.wizard.page.newkey.simple"
+	pageid="keymgr.genkeycsr.wizard.page.newkey.simple"
+	description="&keymgr.genkeycsr.wizard.page.newkey.simple.label;"
+	onpageshow="return GeneratePKCS10CSRWizardOverlay.generateNewKeySimplePageShow(this);"
+	onpageadvanced="return GeneratePKCS10CSRWizardOverlay.generateNewKeySimplePageAdvanced(this);"
+	next="keymgr.genkeycsr.wizard.page.selectedkey"
+	>
+	<vbox class="box-padded" id="keymgr.genkeycsr.wizard.page.newkey.simple.vbox"
+	    flex="1"
+	    >
+	</vbox>
+    </wizardpage>
+    <wizardpage
+	id="keymgr.genkeycsr.wizard.page.newkey.advanced"
+	pageid="keymgr.genkeycsr.wizard.page.newkey.advanced"
+	description="&keymgr.genkeycsr.wizard.page.newkey.advanced.label;"
+	onpageshow="return GeneratePKCS10CSRWizardOverlay.generateNewKeyAdvancedPageShow(this);"
+	onpageadvanced="return GeneratePKCS10CSRWizardOverlay.generateNewKeyAdvancedPageAdvanced(this);"
+	next="keymgr.genkeycsr.wizard.page.selectedkey"
+	>
+	<vbox class="box-padded" id="keymgr.genkeycsr.wizard.page.newkey.advanced.vbox"
+	    flex="1"
+	    >
+	</vbox>
+    </wizardpage>
+
+    <wizardpage
+	id="keymgr.genkeycsr.wizard.page.existingkey"
+	pageid="keymgr.genkeycsr.wizard.page.existingkey"
+	description="&keymgr.genkeycsr.wizard.page.existingkey.label;"
+	onpageshow="return GeneratePKCS10CSRWizardOverlay.useExistingKeyPageShow(this);"
+	onpageadvanced="return GeneratePKCS10CSRWizardOverlay.useExistingKeyPageAdvanced(this);"
+	next="keymgr.genkeycsr.wizard.page.existingkey.browser"
+	>
+	<vbox class="box-padded" id="keymgr.genkeycsr.wizard.existingkey.vbox"
+	    flex="1"
+	    >
+	    <grid id="keymgr.genkeycsr.wizard.existingkey.grid"
+		zflex="1"
+		> 
+		<columns>
+		    <column/>
+		    <column flex="1"/>
+		</columns>
+		<row
+		    align="center"
+		    >
+		    <label value="&keymgr.genkeycsr.wizard.existingkey.label;"/> 
+		    <groupbox 
+			xorient="horizontal"
+			pack="start"
+			>
+			<radiogroup id="keymgr.genkeycsr.wizard.existingkey.options"
+			    xorient="horizontal"
+			    oncommand="GeneratePKCS10CSRWizardOverlay.handleExistingKeyOptionChange(this, event);"
+			    >
+			    <radio id="keymgr.genkeycsr.wizard.existingkey.browser"
+				label="&keymgr.genkeycsr.wizard.existingkey.browser.label;"
+				tooltiptext="&keymgr.genkeycsr.wizard.existingkey.browser.tooltip;"
+				selected="true"
+				value="browser"
+				next="keymgr.genkeycsr.wizard.page.existingkey.browser"
+				group="keymgr.genkeycsr.wizard.existingkey"
+				/>
+			    <radio id="keymgr.genkeycsr.wizard.existingkey.external"
+				label="&keymgr.genkeycsr.wizard.existingkey.external.label;"
+				tooltiptext="&keymgr.genkeycsr.wizard.existingkey.external.tooltip;"
+				value="external"
+				next="keymgr.genkeycsr.wizard.page.existingkey.external"
+				group="keymgr.genkeycsr.wizard.existingkey"
+				/>
+			</radiogroup>
+		    </groupbox> 
+		</row>
+	    </grid>
+	</vbox>
+    </wizardpage>
+
+    <wizardpage
+	id="keymgr.genkeycsr.wizard.page.existingkey.browser"
+	pageid="keymgr.genkeycsr.wizard.page.existingkey.browser"
+	description="&keymgr.genkeycsr.wizard.page.existingkey.browser.label;"
+	onpageshow="return GeneratePKCS10CSRWizardOverlay.useExistingKeyBrowserPageShow(this);"
+	onpageadvanced="return GeneratePKCS10CSRWizardOverlay.useExistingKeyBrowserPageAdvanced(this);"
+	next="keymgr.genkeycsr.wizard.page.selectedkey"
+	>
+	<vbox class="box-padded" id="keymgr.genkeycsr.wizard.existingkey.browser.vbox"
+	    flex="1"
+	    >
+	    	    <hbox
+			pack="start"
+			>
+			<certpicker id="keymgr.genkeycsr.wizard.existingkey.browser.certpicker"
+			    menutooltiptext="&keymgr.genkeycsr.wizard.existingkey.browser.certpicker.tooltip;"
+			    tokentypehidden="true"
+			    certtype="user"
+			    xcerttype="user_selfsigned"
+			    certtypehidden="true"
+			    xcertusage="EmailRecipient"
+			    certusagehidden="false"
+			    xcertusagedisabled="true"
+			    viewhidden="false"
+			    viewlabel="&keymgr.genkeycsr.wizard.cert.view.label;"
+			    viewtooltiptext="&keymgr.genkeycsr.wizard.cert.view.tooltip;"
+			    oncommand="GeneratePKCS10CSRWizardOverlay.handleUserCertPickerChange(this, event);"
+			    />
+		    </hbox>
+	</vbox>
+    </wizardpage>
+
+    <wizardpage
+	id="keymgr.genkeycsr.wizard.page.existingkey.external"
+	pageid="keymgr.genkeycsr.wizard.page.existingkey.external"
+	description="&keymgr.genkeycsr.wizard.page.existingkey.external.label;"
+	onpageshow="return GeneratePKCS10CSRWizardOverlay.useExistingKeyExternalPageShow(this);"
+	onpageadvanced="return GeneratePKCS10CSRWizardOverlay.useExistingKeyExternalPageAdvanced(this);"
+	xnext="keymgr.genkeycsr.wizard.page.existingkey.external.softtoken"
+	next="keymgr.genkeycsr.wizard.page.selectedkey"
+	>
+	<vbox class="box-padded" id="keymgr.genkeycsr.wizard.existingkey.external.vbox"
+	    flex="1"
+	    >
+	    <grid> 
+		<columns>
+		    <column/>
+		    <column flex="1"/>
+		</columns>
+		<rows>
+		    <row align="center">
+		    	<spacer/>
+	    	        <hbox
+			    pack="start"
+			    >
+		    	    <softtoken id="keymgr.genkeycsr.wizard.existingkey.external.softtoken"
+			        orient="vertical"
+			        excludecredtype="true"
+			        softtokentype="keydb"
+			        persist="softtokentype"
+			        onchange="GeneratePKCS10CSRWizardOverlay.handleSoftTokenChange(this, event);"
+			        oncommand="GeneratePKCS10CSRWizardOverlay.handleSoftTokenChange(this, event);"
+			        />
+		        </hbox>
+		    </row>
+
+		    <row>
+		    	<separator class="thin"/>
+			<spacer/>
+		    </row>
+
+		    <row align="center">
+		    	<spacer/>
+			<hbox 
+			    style="border: 2px solid green;"
+			    >
+			    <textbox id="keymgr.genkeycsr.wizard.existingkey.external.softtoken.info" flex="1"
+			        value="&keymgr.genkeycsr.wizard.existingkey.external.softtoken.info.text;"
+				rows="6" cols="40"
+			        multiline="true"
+			        readonly="true"
+				style="font-size: 10pt; font-family: Courier; overflow:auto;"
+			        />
+			</hbox> 
+		    </row>
+		</rows>
+	    </grid>
+	</vbox>
+    </wizardpage>
+    <!--
+    <wizardpage
+	id="keymgr.genkeycsr.wizard.page.existingkey.external.softtoken"
+	pageid="keymgr.genkeycsr.wizard.page.existingkey.external.softtoken"
+	description="&keymgr.genkeycsr.wizard.page.existingkey.external.softtoken.label;"
+	onpageshow="return GeneratePKCS10CSRWizardOverlay.useExternalSoftTokenPageShow(this);"
+	onpageadvanced="return GeneratePKCS10CSRWizardOverlay.useExternalSoftTokenPageAdvanced(this);"
+	next="keymgr.genkeycsr.wizard.page.selectedkey"
+	>
+	<vbox class="box-padded" id="keymgr.genkeycsr.wizard.existingkey.external.softtoken.vbox"
+	    flex="1"
+	    >
+	</vbox>
+    </wizardpage>
+    <wizardpage
+	id="keymgr.genkeycsr.wizard.page.existingkey.external.file"
+	pageid="keymgr.genkeycsr.wizard.page.existingkey.external.file"
+	description="&keymgr.genkeycsr.wizard.page.existingkey.external.file.label;"
+	onpageshow="return GeneratePKCS10CSRWizardOverlay.useExternalFileKeystorePageShow(this);"
+	onpageadvanced="return GeneratePKCS10CSRWizardOverlay.useExternalFileKeystorePageAdvanced(this);"
+	next="keymgr.genkeycsr.wizard.page.selectedkey"
+	>
+	<vbox class="box-padded" id="keymgr.genkeycsr.wizard.existingkey.external.file.vbox"
+	    flex="1"
+	    >
+	</vbox>
+    </wizardpage>
+    -->
+
+    <wizardpage
+	id="keymgr.genkeycsr.wizard.page.selectedkey"
+	pageid="keymgr.genkeycsr.wizard.page.selectedkey"
+	description="&keymgr.genkeycsr.wizard.page.selectedkey.label;"
+	onpageshow="return GeneratePKCS10CSRWizardOverlay.selectedKeyPageShow(this);"
+	onpageadvanced="return GeneratePKCS10CSRWizardOverlay.selectedKeyPageAdvanced(this);"
+	next="keymgr.genkeycsr.wizard.page.finish"
+	>
+	<vbox class="box-padded" id="keymgr.genkeycsr.wizard.page.selectedkey.vbox"
+	    flex="1"
+	    >
+	    <grid> 
+		<columns>
+		    <column/>
+		    <column flex="1"/>
+		</columns>
+		<rows>
+		    <row
+			align="center"
+			>
+			<label value="&keymgr.genkeycsr.wizard.selectedkey.cert.label;"/> 
+			<hbox
+			    pack="start"
+			    >
+			    <certitem id="keymgr.genkeycsr.wizard.selectedkey.cert" 
+				viewlabel="&keymgr.genkeycsr.wizard.cert.view.label;"
+				viewtooltiptext="&keymgr.genkeycsr.wizard.cert.view.tooltip;"
+				tooltiptext="&keymgr.genkeycsr.wizard.selectedkey.cert.tooltip;"
+				/>
+			</hbox>
+		    </row>
+		    <row
+			align="center"
+			>
+			<label value="&keymgr.genkeycsr.wizard.selectedkey.challengepw.label;"/>
+			<hbox pack="start">
+			    <textbox id="keymgr.genkeycsr.wizard.selectedkey.challengepw"
+				type="password"
+				tooltiptext="&keymgr.genkeycsr.wizard.selectedkey.challengepw.tooltip;"
+				/>
+			    <button id="keymgr.genkeycsr.wizard.selectedkey.challengepw.retrieve"
+				label="&keymgr.genkeycsr.wizard.selectedkey.challengepw.retrieve.label;"
+				tooltiptext="&keymgr.genkeycsr.wizard.selectedkey.challengepw.retrieve.tooltip;"
+				oncommand="GeneratePKCS10CSRWizardOverlay.getUserChallengePassword(event);"
+				/> 
+			  </hbox>
+		      </row>
+		      <row>
+			  <separator class="thin"/>
+			  <spacer/>
+		      </row>
+		</rows>
+	    </grid>
+	</vbox>
+    </wizardpage>
+
+</overlay>
+

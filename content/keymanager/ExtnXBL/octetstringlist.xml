@@ -1,0 +1,325 @@
+<?xml version="1.0"?>
+<!-- @(#) $Id: octetstringlist.xml,v 1.4 2009/04/21 03:41:04 subrata Exp $ -->
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is Avaya Labs Research, Avaya Inc. Code.
+   -
+   - The Initial Developer of the Original Code is
+   - Subrata Mazumdar, Avaya Labs Research, Avaya Inc.
+   - Portions created by the Initial Developer are Copyright (C) 2007.
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Subrata Mazumdar (mazum@avaya.com)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+
+<!DOCTYPE bindings SYSTEM "chrome://keymanager/locale/keyManager.dtd">
+
+<bindings id="octetstringlistBindings"
+    xmlns="http://www.mozilla.org/xbl"
+    xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    xmlns:xbl="http://www.mozilla.org/xbl">
+
+    <binding id="octetstringlistBinding"
+	extends="chrome://keymanager/content/ExtnXBL/certextn.xml#certextnbaseBinding"
+        >
+        <!--
+        <resources>
+    	    <script type="application/x-javascript" src="chrome://keymanager/content/GeneralNameItem.js"/>
+    		    onchange="getBindingParent(this).handleFilePathChange(this)"
+  	  	    onkeyup="if (event.keyCode == 13)
+  	  			{getBindingParent(this).autoCompleteAction(event.target)};"
+        </resources>
+        -->
+    	<!-- content, property, method and event descriptions go here -->
+    	<content>
+	    <xul:vbox anonid="keymgr.octetstringlist"
+		flex="1"
+	        >
+	        <xul:hbox
+		    flex="1"
+		    >
+	            <xul:vbox
+		        flex="1"
+		        >
+		        <xul:textbox anonid="keymgr.octetstringlist.newvalue"
+			    xbl:inherits="tooltiptext=newvaluetooltip,autocompletesearchparam=newvaluesearchparam,hidden=readonly"
+		            flex="1"
+  	  	            type="autocomplete" 
+  	  	            autocompletesearch="form-history" 
+  	  	            completeselectedindex="true"
+  	  	            autocompletesearchparam="keymgr.octetstringlist.newvalue"
+		            />
+	                <xul:listbox anonid="keymgr.octetstringlist.list"
+			    xbl:inherits="label=listlabel,tooltiptext=listtooltip,rows=listrows,readonly"
+		            flex="1"
+		            rows="3"
+			    >
+	                </xul:listbox>
+	        	<xul:textbox anonid="keymgr.octetstringlist.values.text"
+			    xbl:inherits="value=octetstringlist,certPropName=octetStringListPropName"
+		    	    collapsed="true" readonly="true"
+		    	    certPropName="values-text"
+			    />
+	            </xul:vbox>
+	            <xul:vbox anonid="keymgr.octetstringlist.cmds"
+		        align="start" 
+		        xbl:inherits="hidden=readonly"
+		        >
+	                <xul:button anonid="keymgr.octetstringlist.cmd.add"
+			    xbl:inherits="label=addlabel,tooltiptext=addtooltip"
+		            label="Add"
+		    	    oncommand="getBindingParent(this).addNewValueToList(event);"
+			    /> 
+	                <xul:button anonid="keymgr.octetstringlist.cmd.remove"
+			    xbl:inherits="label=removelabel,tooltiptext=removetooltip"
+		            label="Remove"
+		    	    oncommand="getBindingParent(this).deleteValueFromList(event);"
+			    /> 
+	            </xul:vbox>
+	        </xul:hbox>
+	    </xul:vbox>
+    	</content>
+	<implementation>
+	    <field name="mOctetStringListElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.octetstringlist");
+	    </field>
+	    <field name="mNewValueElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.octetstringlist.newvalue");
+	    </field>
+	    <field name="mOctetStringListListElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.octetstringlist.list");
+	    </field>
+	    <field name="mOctetStringListValueTextElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.octetstringlist.values.text");
+	    </field>
+
+	    <property name="value"
+	        onget="this.computeAttributeListValue(); return this.mOctetStringListValueTextElem.value;"
+	        onset="this.mOctetStringListValueTextElem.value=val; this.updateValueList();return val;"
+		/>
+	    <property name="newvalue"
+	        onget="return this.mNewValueElem.value;"
+	        onset="this.mNewValueElem.value=val; return val;"
+		/>
+	    <property name="readonly"
+	        onget="return this.mOctetStringListElem.readonly;"
+	    	onset="this.mOctetStringListElem.readonly = val;
+		       this.setReadonly(this.mOctetStringListElem, val);
+	    	       if (val) {
+		       	this.setAttribute('readonly',true);
+		       }
+                       else {
+		       	this.removeAttribute('readonly');
+		       	this.refresh();
+		       }
+		       return val;"
+		/>
+
+	    <constructor>
+		<![CDATA[
+		// this.LogTrace("octetstringlistBinding.constructor():......................Start.\n");
+
+		this.refresh();
+		// var autoCompleteSearchParam = (this.id?(this.id + "."):"") + this.mNewValueElem.getAttribute("anonid");
+		var autoCompleteSearchParam = (getBindingParent(this).localName + ".") + (this.localName + ".") + this.mNewValueElem.getAttribute("anonid");
+		this.mNewValueElem.setAttribute("autocompletesearchparam", autoCompleteSearchParam);
+
+		// this.LogTrace("octetstringlistBinding.constructor():......................End.\n");
+		]]>
+	    </constructor>
+
+	    <method name="refresh">
+	        <body>
+		<![CDATA[
+		this.removeAllItemsFromList();
+		if (this.mOctetStringListValueTextElem.value != "") {
+		    this.updateValueList();
+		}
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="removeAllItemsFromList">
+	        <body>
+		<![CDATA[
+		for (var i = (this.mOctetStringListListElem.getRowCount() - 1); i >= 0; i--) {
+		    this.mOctetStringListListElem.removeItemAt(i);
+		}
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="reset">
+	        <body>
+		<![CDATA[
+		// this.LogTrace("octetstringlistBinding.reset():......................Start.\n");
+
+		this.removeAllItemsFromList();
+		this.newvalue = "";
+		this.value = "";
+
+		// this.resetCertExtn(this.mOctetStringListElem);
+		// this.mOctetStringListElem.reset();
+
+		// this.refresh();
+
+		// this.LogTrace("octetstringlistBinding.reset():......................End.\n");
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="computeAttributeListValue">
+	        <body>
+		<![CDATA[
+                // this.LogTrace("octetstringlistBinding.computeAttributeListValue(): ...........................Start.\n"); 
+
+                // Format:  <value-1>|<value-2>|.........|<value-n>
+
+
+                var attributeValueListText = "";
+                var rowCount = this.mOctetStringListListElem.getRowCount();
+                this.LogDebug("octetstringlistBinding.computeAttributeListValue(): rowCount: " + rowCount + "\n"); 
+                for (var i = 0; i < rowCount; i++) {
+    	            var rowItemElem = this.mOctetStringListListElem.getItemAtIndex(i);
+		    if (i > 0) {
+    	            attributeValueListText += "|";
+		    }
+	            attributeValueListText += rowItemElem.value;
+
+                }
+		this.LogDebug("octetstringlistBinding.computeAttributeListValue(): attributeValueListText: " + attributeValueListText + "\n");
+
+                this.mOctetStringListValueTextElem.value = attributeValueListText;
+
+                // this.LogTrace("octetstringlistBinding.computeAttributeListValue(): ...........................End.\n"); 
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="updateValueList">
+	        <body>
+		<![CDATA[
+                // this.LogTrace("octetstringlistBinding.updateValueList(): valueSeq: "  + this.mOctetStringListValueTextElem.value + "\n");
+
+                var octetStrValueSeq = this.mOctetStringListValueTextElem.value.split("|");
+                if (octetStrValueSeq.length <= 0) {
+    	            return;
+                }
+                this.LogDebug("octetstringlistBinding.updateValueList(): octetStrValueSeq.length: "  + octetStrValueSeq.length + "\n");
+
+                for (var i = 0; i < octetStrValueSeq.length; i++) {
+    	            var octetStrValue = octetStrValueSeq[i];
+	            if (octetStrValue == "") {
+	                continue;
+	            }
+    	            var listItem = this.mOctetStringListListElem.appendItem(octetStrValue, octetStrValue);
+		    listItem.setAttribute("tooltiptext", octetStrValue);
+                }
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="addNewValueToList">
+	        <body>
+		<![CDATA[
+
+		var newValue = this.trim(this.mNewValueElem.value);
+		if (newValue == "") {
+		    this.mNewValueElem.value = "";
+		    return;
+		}
+                var listItem = this.mOctetStringListListElem.appendItem(newValue, newValue);
+		listItem.setAttribute("tooltiptext", newValue);
+		this.mOctetStringListListElem.selectItem(listItem);
+		this.mOctetStringListListElem.ensureElementIsVisible(listItem);
+
+                this.computeAttributeListValue();
+
+		this.autoCompleteAction(this.mNewValueElem);
+
+                return;
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="deleteValueFromList">
+	        <body>
+		<![CDATA[
+                this.mOctetStringListListElem.removeItemAt(this.mOctetStringListListElem.selectedIndex);
+                this.mOctetStringListListElem.selectedIndex = -1;
+                this.mOctetStringListListElem.clearSelection();
+            
+                this.computeAttributeListValue();
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="toCertProps">
+		<parameter name="aCertProps"/>
+	        <body>
+		<![CDATA[
+		this.computeAttributeListValue();
+		this.certExtnToProps(this.mOctetStringListElem, aCertProps);
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="updateCertProps">
+		<parameter name="aCertProps"/>
+	        <body>
+		<![CDATA[
+		this.updateCertExtnProps(this.mOctetStringListElem, aCertProps);
+		this.refresh();
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="mergeCertProps">
+		<parameter name="aCertProps"/>
+	        <body>
+		<![CDATA[
+		this.updateCertExtnProps(this.mOctetStringListElem, aCertProps, true);
+		this.refresh();
+		]]>
+	        </body>
+	    </method>
+	</implementation>
+    </binding>
+
+    <!--
+    <binding id="ssidlistBinding"
+	extends="chrome://keymanager/content/ExtnXBL/octetstringlist.xml#octetstringlistBinding"
+        >
+    </binding>
+    -->
+
+
+</bindings>
+

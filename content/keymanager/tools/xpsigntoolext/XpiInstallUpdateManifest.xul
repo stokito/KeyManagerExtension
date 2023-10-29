@@ -1,0 +1,478 @@
+<?xml version="1.0"?>
+<!-- @(#) $Id: XpiInstallUpdateManifest.xul,v 1.11 2009/12/02 07:10:58 subrata Exp $ -->
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is Avaya Labs Research, Avaya Inc. Code.
+   -
+   - The Initial Developer of the Original Code is
+   - Subrata Mazumdar, Avaya Labs Research, Avaya Inc.
+   - Portions created by the Initial Developer are Copyright (C) 2007.
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Subrata Mazumdar (mazum@avaya.com)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+
+<!--
+Source: Extension Versioning, Update and Compatibility (MDC): 
+http://developer.mozilla.org/en/docs/Extension_Versioning%2C_Update_and_Compatibility
+-->
+
+
+<?xml-stylesheet href="chrome://keymanager/skin/kmbindings.css" type="text/css"?>
+<!DOCTYPE overlay
+	[
+	<!ENTITY % keyManager.dtd SYSTEM "chrome://keymanager/locale/keyManager.dtd">
+	%keyManager.dtd;
+	<!ENTITY % xpsigntoolext.dtd SYSTEM "chrome://keymanager/locale/xpsigntoolext.dtd">
+	%xpsigntoolext.dtd;
+	]>
+
+
+<overlay id="xpsigntoolext.form.sign.update.rdf.win" 
+    xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    >
+
+  <script type="application/x-javascript" src="chrome://keymanager/content/tools/xpsigntoolext/XpiInstallUpdateManifest.js"/>
+  <script type="application/x-javascript" src="chrome://keymanager/content/tools/xpsigntoolext/rdfserializer.js"/>
+
+    <vbox class="box-padded" id="xpsigntoolext.form.overlay.sign.update.rdf">
+
+    <tabbox id="xpsigntoolext.form.install.sign.update.rdf.tabbox" flex="1"
+	persist="selectedIndex"
+    	>
+	<tabs>
+	    <tab id="xpsigntoolext.form.install.rdf.tab.addUpdateKey"
+		label="&xpsigntoolext.form.install.rdf.tab.addUpdateKey.label;"
+		/>
+	    <tab id="xpsigntoolext.form.update.signer.tab.signUpdateRdf"
+		label="&xpsigntoolext.form.update.signer.tab.signUpdateRdf.label;"
+		/>
+	</tabs>
+
+	<tabpanels flex="1">
+	    <tabpanel id="xpsigntoolext.form.tabpanel.updateKey.add"
+		flex="1"
+		xstyle="overflow:auto; width:800px"
+		style="overflow:auto;"
+		orient="vertical"
+		>
+
+		<grid flex="1"> 
+		    <columns>
+			<column/>
+			<column flex="1"/>
+		    </columns>
+		    <rows>
+		    <row
+			align="center"
+			>
+			<label class="header" value="&xpsigntoolext.form.install.rdf.label;"/>
+			<groupbox>
+			    <radiogroup id="xpsigntoolext.form.install.rdf.options"
+				oncommand="xpsigntoolext_handleInstallRdfFileOptionChange(this, event)"
+				>
+
+				<hbox id="xpsigntoolext.form.install.rdf.xpi.hbox"
+				    flex="1"
+				    >
+				    <radio id="xpsigntoolext.form.install.rdf.xpi.option"
+					label="&xpsigntoolext.form.install.rdf.xpi.option.label;"
+					tooltiptext="&xpsigntoolext.form.install.rdf.xpi.option.tooltip;"
+					selected="true"
+					value="xpi"
+					group="xpsigntoolext.form.install.rdf.options"
+					/>
+				    <fileselector id="xpsigntoolext.form.install.rdf.xpi.path" flex="2"
+					formathidden="true"
+					fileMode="open"
+					fileDialogMsg="Choose XPI File"
+					fileTypeMsg="XPI File"
+					fileTypeFilters="*.xpi"
+					filetooltiptext="&xpsigntoolext.form.install.rdf.xpi.path.tooltip;"
+					browselabel="&xpsigntoolext.form.file.browser.label;"
+					browsetooltiptext="&xpsigntoolext.form.install.rdf.xpi.browser.tooltip;"
+					onpopuphiding="xpsigntoolext_handleInstallRdfXPIFilePickerChange(this, event);"
+					onchange="xpsigntoolext_handleInstallRdfXPIFilePickerChange(this, event);"
+					oncommand="xpsigntoolext_handleInstallRdfXPIFilePickerChange(this, event);"
+					/>
+				    <!--
+				    <button id="xpsigntoolext.form.install.rdf.signer.file.archive.in.extract"
+					hidden="true"
+					label="&xpsigntoolext.form.file.extract.label;"
+					tooltiptext="&xpsigntoolext.form.file.extract.tooltip;"
+	 				oncommand="xpsigntoolext_extractXPIFileById('xpsigntoolext.form.install.rdf.signer.file.archive.in.file.path', 'xpsigntoolext.form.install.rdf.signer.file.archive.tmp.path');"
+					/>
+				    -->
+				</hbox>
+
+				<hbox flex="1">
+				    <radio id="xpsigntoolext.form.install.rdf.dir.option"
+					label="&xpsigntoolext.form.install.rdf.dir.option.label;"
+					tooltiptext="&xpsigntoolext.form.install.rdf.dir.option.tooltip;"
+					value="dir"
+					group="xpsigntoolext.form.install.rdf.options"
+					/>
+				    <fileselector id="xpsigntoolext.form.install.rdf.dir.path" flex="2"
+					fileMode="folder"
+					fileDialogMsg="Choose Directory for install.rdf"
+					fileTypeMsg="XPI Directory"
+					fileTypeFilters="*.rdf"
+					filetooltiptext="&xpsigntoolext.form.install.rdf.dir.path.tooltip;"
+					browselabel="&xpsigntoolext.form.file.browser.label;"
+					browsetooltiptext="&xpsigntoolext.form.install.rdf.dir.browser.tooltip;"
+					onpopuphiding="xpsigntoolext_handleInstallRdfDirFilePickerChange(this, event);"
+					onchange="xpsigntoolext_handleInstallRdfDirFilePickerChange(this, event);"
+					oncommand="xpsigntoolext_handleInstallRdfDirFilePickerChange(this, event);"
+					/>
+				</hbox>
+
+				<hbox flex="1">
+				    <radio id="xpsigntoolext.form.install.rdf.file.option"
+					label="&xpsigntoolext.form.install.rdf.file.option.label;"
+					tooltiptext="&xpsigntoolext.form.install.rdf.file.option.tooltip;"
+					value="file"
+					group="xpsigntoolext.form.install.rdf.options"
+					/>
+				    <fileselector id="xpsigntoolext.form.install.rdf.file.path" flex="2"
+					ascii="true"
+					formathidden="true"
+					fileMode="open"
+					fileDialogMsg="Choose install.rdf file"
+					fileTypeMsg="RDF file"
+					fileTypeFilters="*.rdf"
+					filetooltiptext="&xpsigntoolext.form.install.rdf.file.path.tooltip;"
+					browselabel="&xpsigntoolext.form.file.browser.label;"
+					browsetooltiptext="&xpsigntoolext.form.install.rdf.file.browser.tooltip;"
+					onpopuphiding="xpsigntoolext_handleInstallRdfFilePickerChange(this, event);"
+					onchange="xpsigntoolext_handleInstallRdfFilePickerChange(this, event);"
+					oncommand="xpsigntoolext_handleInstallRdfFilePickerChange(this, event);"
+					/>
+				</hbox>
+			    </radiogroup>
+			</groupbox>
+		    </row>
+
+		    <row id="xpsigntoolext.form.install.rdf.updateURL.row"
+			align="center"
+			>
+			<label class="header" value="&xpsigntoolext.form.install.rdf.updateURL.label;"/>
+			<textbox id="xpsigntoolext.form.install.rdf.updateURL"
+			    tooltiptext="&xpsigntoolext.form.install.rdf.updateURL.tooltip;"
+			    readonly="true"
+			    />
+		    </row>
+		    <row id="xpsigntoolext.form.install.rdf.signer.cert.row"
+			align="center"
+			hidden="true"
+			>
+			<label class="header" value="&xpsigntoolext.form.install.rdf.signer.cert.label;"/>
+			<groupbox pack="start">
+			    <groupbox id="xpsigntoolext.form.install.rdf.signer.updateKey.gbox"
+			        >
+				<caption class="header" 
+				    label="&xpsigntoolext.form.install.rdf.signer.updateKey.label;"
+				    />
+			        <textbox id="xpsigntoolext.form.install.rdf.signer.updateKey"
+				    flex="1"
+				    style="overflow:auto; border: 1px solid black"
+				    readonly="true"
+				    multiline="true"
+				    rows="3" xcols="80"
+				    tooltiptext="&xpsigntoolext.form.install.rdf.signer.updateKey.tooltip;"
+				    />
+			    </groupbox>
+			    <deck id="xpsigntoolext.form.install.rdf.signer.cert.deck" flex="1">
+				<hbox id="xpsigntoolext.form.install.rdf.signer.cert.hbox"
+				    pack="start" flex="1" 
+				    >
+				    <certpicker id="xpsigntoolext.form.install.rdf.signer.certpicker"
+					menutooltiptext="&xpsigntoolext.form.install.rdf.signer.certpicker.tooltip;"
+					tokentypehidden="true"
+			  		certtype="user"
+					certtypedisabled="true"
+					certusage="ObjectSigner"
+					certusagehidden="false"
+					certusagedisabled="true"
+					viewhidden="false"
+					xviewlabel="&xpsigntoolext.form.sign.cert.view.label;"
+					viewtooltiptext="&xpsigntoolext.form.install.rdf.signer.cert.view.tooltip;"
+	 				oncommand="xpsigntoolext_handleUpdateKeyCertPickerChange(this, event);"
+					/>
+				</hbox>
+				<vbox id="xpsigntoolext.form.install.rdf.signer.cert.item.hbox"
+				    pack="start" flex="1" 
+				    >
+				    <certitem id="xpsigntoolext.form.install.rdf.signer.cert.item"
+				        tooltiptext="&xpsigntoolext.form.install.rdf.signer.cert.item.tooltip;"
+				        />
+				    <textbox id="xpsigntoolext.form.install.rdf.signer.cert.noprivkey"
+				        flex="1"
+				        xclass="header"
+				        readonly="true"
+				        multiline="true"
+				        rows="2" xcols="80"
+				        value="&xpsigntoolext.form.install.rdf.signer.cert.noprivkey.label;"
+				        style="overflow:auto; border:2px solid red;"
+				        />
+				</vbox>
+				<hbox id="xpsigntoolext.form.install.rdf.signer.cert.none"
+				    flex="1"
+				    style="border:2px solid red;"
+				    >
+				    <textbox id="xpsigntoolext.form.install.rdf.signer.cert.nonex"
+				        flex="1"
+				        xclass="header"
+				        readonly="true"
+				        multiline="true"
+				        rows="2" xcols="80"
+				        value="&xpsigntoolext.form.install.rdf.signer.cert.none.label;"
+				        style="overflow:auto; border:2px solid red;"
+				        />
+				</hbox>
+			    </deck>
+			    <hbox
+				pack="start" align="center"
+				>
+				<checkbox id="xpsigntoolext.form.install.rdf.signer.cert.modify"
+				    xchecked="true"
+				    label="&xpsigntoolext.form.install.rdf.signer.cert.modify.label;"
+				    tooltiptext="&xpsigntoolext.form.install.rdf.signer.cert.modify.tooltip;"
+				    oncommand="xpsigntoolext_handleModifyCertOptionChange(this, event);"
+				    />
+				<hbox id="xpsigntoolext.form.install.rdf.signer.cmd.hbox"
+				    pack="start" flex="1"
+				    >
+				    <checkbox id="xpsigntoolext.form.install.rdf.infile.backup"
+				        checked="true"
+				        label="&xpsigntoolext.form.install.rdf.infile.backup.label;"
+				        tooltiptext="&xpsigntoolext.form.install.rdf.infile.backup.tooltip;"
+				        xoncommand="xpsigntoolext_handleModifyCertOptionChange(this, event);"
+				        />
+				    <button id="xpsigntoolext.form.install.rdf.signer.cmd.addUpdateKey"
+					hidden="true"
+	 				label="&xpsigntoolext.form.install.rdf.signer.cmd.addUpdateKey.label;"
+					tooltiptext="&xpsigntoolext.form.install.rdf.signer.cmd.addUpdateKey.tooltip;"
+					oncommand="xpsigntoolext_addUpdateKey(event);"
+					/>
+				    <button id="xpsigntoolext.form.install.rdf.signer.cmd.modifyUpdateKey"
+					hidden="true"
+					label="&xpsigntoolext.form.install.rdf.signer.cmd.modifyUpdateKey.label;"
+					tooltiptext="&xpsigntoolext.form.install.rdf.signer.cmd.modifyUpdateKey.tooltip;"
+					oncommand="xpsigntoolext_modifyUpdateKey(event);"
+					/>
+				</hbox>
+			    </hbox>
+			    <hbox
+				flex="1"
+				style="border:2px solid yellow;"
+			    	>
+			    <textbox
+				flex="1"
+				readonly="true"
+				multiline="true"
+				rows="2" xcols="80"
+				style="overflow:auto; border:2px solid yellow;"
+				value= "&xpsigntoolext.form.install.rdf.signer.updateKey.info;"
+				/> 
+			    </hbox>
+			</groupbox>
+		    </row>
+		    <row id="xpsigntoolext.form.install.rdf.oufile.row"
+			align="center"
+			hidden="true"
+			>
+			<spacer/>
+			<fileselector id="xpsigntoolext.form.install.rdf.outfile.path"
+			    ascii="true"
+			    formathidden="true"
+			    fileMode="save"
+			    fileDialogMsg="Choose install.rdf file"
+			    fileTypeMsg="RDF file"
+			    fileTypeFilters="*.rdf"
+			    filetooltiptext="&xpsigntoolext.form.install.rdf.file.path.tooltip;"
+			    browselabel="&xpsigntoolext.form.file.browser.label;"
+			    browsetooltiptext="&xpsigntoolext.form.install.rdf.file.browser.tooltip;"
+			    xoncommand="xpsigntoolext_handleInstallRdfFilePickerChange(this, event);"
+			    />
+		    </row>
+		    </rows>
+	        </grid>
+
+		<!--
+		<grid flex="1"
+		    style="overflow:auto; max-width:400;"
+		    > 
+		    <columns>
+			<column/>
+			<column flex="1"/>
+		    </columns>
+		    <rows>
+
+		    </rows>
+	        </grid>
+		-->
+	    </tabpanel>
+
+	    <tabpanel id="xpsigntoolext.form.update.signer.tabpanel.signUpdateRdf"
+		flex="1"
+		xstyle="overflow:auto; width:800px"
+		style="overflow:auto;"
+		>
+		<grid flex="1"
+		    style="overflow:auto"
+		    > 
+		    <columns>
+			<column/>
+			<column flex="1"/>
+		    </columns>
+		    <rows>
+			<row id="xpsigntoolext.form.update.rdf.file.row"
+			    align="center"
+			    >
+			    <label class="header" 
+				value="&xpsigntoolext.form.update.rdf.file.label;"
+				control="xpsigntoolext.form.update.rdf.filepicker"
+				/> 
+			    <fileselector id="xpsigntoolext.form.update.rdf.filepicker" flex="1"
+				ascii="true"
+				formathidden="true"
+				fileMode="open"
+				fileDialogMsg="Choose update.rdf file"
+				fileTypeMsg="RDF file"
+				filetooltiptext="&xpsigntoolext.form.update.rdf.file.tooltip;"
+				xfileTypeFilters="update.rdf"
+				fileTypeFilters="*.rdf"
+				browselabel="&xpsigntoolext.form.file.browser.label;"
+				browsetooltiptext="Click this button to select the update.rdf file path"
+				onpopuphiding="xpsigntoolext_handleUpdateRdfFilePickerChange(this, event);"
+				onchange="xpsigntoolext_handleUpdateRdfFilePickerChange(this, event);"
+				oncommand="xpsigntoolext_handleUpdateRdfFilePickerChange(this, event);"
+				/>
+			</row>
+			<row id="xpsigntoolext.form.update.rdf.file.backup.row"
+			    align="center"
+			    >
+			    <spacer/>
+			    <checkbox id="xpsigntoolext.form.update.rdf.file.backup"
+			        checked="true"
+			        label="&xpsigntoolext.form.update.rdf.file.backup.label;"
+			        tooltiptext="&xpsigntoolext.form.update.rdf.file.backup.tooltip;"
+			        oncommand="xpsigntoolext_UpdateRdf_handleFileBackupChange(this, event);"
+			        />
+			</row>
+			<row id="xpsigntoolext.form.update.rdf.target.app.row"
+			    align="center"
+			    >
+			    <label class="header" value="&xpsigntoolext.form.update.rdf.target.apps.label;"/> 
+			    <UpdateRdfTargetAppList id="xpsigntoolext.form.update.rdf.target.apps"
+				oncommand="xpsigntoolext_handleUpdateRdfTargetAppChange(this, event)"
+				>
+			    </UpdateRdfTargetAppList>
+				<!--
+				<richlistitem class="UpdateRdfTargetApp"
+				    updateLink="http://updateLink.1"
+				    updateHash="updateHash-1"
+				    />
+				<richlistitem class="UpdateRdfTargetApp"
+				    updateLink="https://updateLink.2"
+				    />
+				-->
+			</row>
+			<row id="xpsigntoolext.form.update.rdf.signer.cert.row"
+			    align="center"
+			    hidden="true"
+			    >
+			    <label class="header" value="&xpsigntoolext.form.update.rdf.signer.cert.label;"/>
+			    <certitem id="xpsigntoolext.form.update.rdf.signer.certpicker"
+				    tooltiptext="&xpsigntoolext.form.update.rdf.signer.cert.tooltip;"
+				    viewtooltiptext="&xpsigntoolext.form.update.rdf.signer.cert.view.tooltip;"
+				    />
+			    <!--
+			    <certpicker id="xpsigntoolext.form.update.rdf.signer.certpicker"
+				menutooltiptext="&xpsigntoolext.form.update.rdf.signer.cert.tooltip;"
+				tokentypehidden="true"
+			  	certtype="user"
+				certtypedisabled="true"
+				certusage="ObjectSigner"
+				certusagehidden="false"
+				certusagedisabled="true"
+				viewhidden="false"
+				zviewlabel="&xpsigntoolext.form.sign.cert.view.label;"
+				viewtooltiptext="&xpsigntoolext.form.update.rdf.signer.cert.view.tooltip;"
+	 			oncommand="xpsigntoolext_handleUpdateRdfSignerCertPickerChange(this, event);"
+				/>
+			    -->
+			    <!--
+				certtypehidden="true"
+				certusagehidden="true"
+			    -->
+			</row>
+			<row id="xpsigntoolext.form.update.rdf.signature.row"
+			    align="center"
+			    hidden="true"
+			    >
+			    <label class="header" value="&xpsigntoolext.form.update.rdf.signature.label;"/>
+				<textbox id="xpsigntoolext.form.update.rdf.signature"
+				    flex="1"
+				    multiline="true"
+				    rows="4"
+				    readonly="true"
+				    tooltiptext="&xpsigntoolext.form.update.rdf.signature.tooltip;"
+				    />
+			</row>
+			<row id="xpsigntoolext.form.update.rdf.sign.verify.row"
+			    align="center"
+			    hidden="true"
+			    >
+			    <spacer/>
+			    <groupbox pack="start" align="center" orient="horizontal">
+				    <button id="xpsigntoolext.form.update.rdf.cmd.sign"
+					xhidden="true"
+					label="&xpsigntoolext.form.update.rdf.cmd.sign.label;"
+					tooltiptext="&xpsigntoolext.form.update.rdf.cmd.sign.tooltip;"
+					oncommand="xpsigntoolext_signUpdateRdfFile(event);"
+					/>
+				    <button id="xpsigntoolext.form.update.rdf.cmd.verify"
+					hidden="true"
+					label="&xpsigntoolext.form.update.rdf.cmd.verify.label;"
+					tooltiptext="&xpsigntoolext.form.update.rdf.cmd.verify.tooltip;"
+					oncommand="xpsigntoolext_verifyUpdateRdfSignature(event);"
+					/>
+			    </groupbox>
+			</row>
+		    </rows>
+		</grid>
+	    </tabpanel>
+
+	  </tabpanels>
+	</tabbox>
+    </vbox>
+</overlay>
+

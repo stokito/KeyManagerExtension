@@ -1,0 +1,107 @@
+## Reference for Chrome Registration: https://developer.mozilla.org/en/Chrome_Registration
+
+## Registration for keymanager package
+content		keymanager			content/keymanager/
+skin		keymanager	classic/1.0	skin/classic/keymanager/
+locale		keymanager	en-US		locale/en-US/keymanager/
+# Register a resource: protocol alias so we can refer to extension modules
+# via resource://avahapkg/modules[/sub-moudle]/[module name] URLs.
+resource	keymanager			./
+
+##  Overlays for Mozilla PSM
+overlay chrome://pippki/content/device_manager.xul  	chrome://keymanager/content/tools/softtokendbmgr/SoftTokenDBManager.xul
+# overlay chrome://pippki/content/crlManager.xul		chrome://keymanager/content/tools/crltool/crlManagerCreateOverlay.xul
+overlay	chrome://pippki/content/certViewer.xul		chrome://keymanager/content/viewCertEximOverlay.xul
+overlay	chrome://pippki/content/changepassword.xul	chrome://keymanager/content/changepasswordOverlay.xul
+# overlay	chrome://pippki/content/certDump.xul	chrome://keymanager/content/viewCertEximOverlay.xul
+
+##  Overlay for Firefox toolbar
+overlay	chrome://browser/content/browser.xul		chrome://keymanager/content/keymanagerToolboxOverlayFF.xul
+overlay	chrome://browser/content/browser.xul		chrome://keymanager/content/tools/certenroll/scep/EjbCACertEnrollOverlay.xul
+
+##  Overlay for Mozilla/SeaMonkey toolbar
+overlay	chrome://navigator/content/navigator.xul	chrome://keymanager/content/keymanagerToolboxOverlaySM.xul
+
+##  Overlay for Thunderbird toolbar
+overlay	chrome://messenger/content/mailWindowOverlay.xul chrome://keymanager/content/keymanagerToolboxOverlaySM.xul
+
+## Overlay for Sunbird calendar toolbar
+overlay	chrome://calendar/content/calendar.xul		chrome://keymanager/content/keymanagerToolboxOverlaySUNB.xul
+
+## Overlay for Songbird toolbar
+overlay chrome://songbird/content/xul/layoutBaseOverlay.xul chrome://keymanager/content/keymanagerToolboxOverlaySNGB.xul application=songbird@songbirdnest.com
+
+# Overlay for Spicebird toolbar 
+overlay chrome://collab/content/collab.xul      	chrome://keymanager/content/keymanagerToolboxOverlaySPCB.xul
+
+## Adds "Create Cert" button to "Account Setting --> Security"
+overlay chrome://messenger/content/am-smime.xul         chrome://keymanager/content/tools/mailacctcert/am-smime-createCertOverlay.xul
+
+
+# Source: https://developer.mozilla.org/en/XPCOM/XPCOM_changes_in_Gecko_2.0#What_you_need_to_change
+#
+# XPT Files: 
+# The path of any XPT files must be listed explicitly 
+# interfaces components/alrcrlmanager.xpt
+interfaces components/attrcert.xpt
+interfaces components/keymanager.xpt
+interfaces components/xpsigntool.xpt
+
+
+# JavaScript Components
+# component 284d1a61-32f1-4e1b-9ba5-630da0272451 components/alrKeyManagerCmdlineHandler.js
+# contract  @mozilla.org/commandlinehandler/general-startup;1?type=keymanager 284d1a61-32f1-4e1b-9ba5-630da0272451
+
+# JS Implementation of alrIBase64 and alrIIOUtil interfaces
+component 22bff064-0ee8-4728-a176-36a53ade7a27 components/ALRBase64Impl.js
+contract @avaya.com/pkm/base64;1 22bff064-0ee8-4728-a176-36a53ade7a27
+
+# JS Implementation of alrIFileUtil interface
+component 063fd8b4-fca6-49a6-8c8b-4baa316e9e48 components/ALRPKIFileUtilImpl.js
+contract @avaya.com/avpki/js/fileutil;1 063fd8b4-fca6-49a6-8c8b-4baa316e9e48
+
+# JS Implementation of KeyManagerSvcs interface
+component 3aea362d-0611-4524-ba51-03529ecbe74f components/ALRPKIMgmtSvcs.js
+contract @avaya.com/avpki/js/avpkimgmtsvcs;1 3aea362d-0611-4524-ba51-03529ecbe74f
+
+# Binary Components
+# Binary components must be listed explicitly in a manifest using a binary-component directive:
+
+# Platform-Specific Directories
+#
+# Linux_x86-gcc3
+binary-component platform/Linux_x86-gcc3/components/libkeymanager.so		ABI=Linux_x86-gcc3
+# binary-component platform/Linux_x86-gcc3/components/libalrcrlmanager.so		ABI=Linux_x86-gcc3
+binary-component platform/Linux_x86-gcc3/components/libsofttokendbmgr.so	ABI=Linux_x86-gcc3
+binary-component platform/Linux_x86-gcc3/components/libxpsigntool.so		ABI=Linux_x86-gcc3
+binary-component platform/Linux_x86-gcc3/components/libattrcert.so		ABI=Linux_x86-gcc3
+
+# Linux_x86_64-gcc3
+binary-component platform/Linux_x86_64-gcc3/components/libkeymanager.so 	ABI=Linux_x86_64-gcc3
+# binary-component platform/Linux_x86_64-gcc3/components/libalrcrlmanager.so	ABI=Linux_x86_64-gcc3
+binary-component platform/Linux_x86_64-gcc3/components/libsofttokendbmgr.so	ABI=Linux_x86_64-gcc3
+binary-component platform/Linux_x86_64-gcc3/components/libxpsigntool.so		ABI=Linux_x86_64-gcc3
+binary-component platform/Linux_x86_64-gcc3/components/libattrcert.so		ABI=Linux_x86_64-gcc3
+
+# WINNT_x86-msvc
+binary-component platform/WINNT_x86-msvc/components/keymanager.dll		ABI=WINNT_x86-msvc
+# binary-component platform/WINNT_x86-msvc/components/alrcrlmanager.dll		ABI=WINNT_x86-msvc
+binary-component platform/WINNT_x86-msvc/components/softtokendbmgr.dll		ABI=WINNT_x86-msvc
+binary-component platform/WINNT_x86-msvc/components/xpsigntool.dll		ABI=WINNT_x86-msvc
+binary-component platform/WINNT_x86-msvc/components/attrcert.dll		ABI=WINNT_x86-msvc
+
+# Darwin_x86-gcc3
+# binary-component platform/Darwin_x86-gcc3/components/libkeymanager.dylib	ABI=Darwin_x86-gcc3
+# binary-component platform/Darwin_x86-gcc3/components/libalrcrlmanager.dylib	ABI=Darwin_x86-gcc3
+# binary-component platform/Darwin_x86-gcc3/components/libsofttokendbmgr.dylib	ABI=Darwin_x86-gcc3
+# binary-component platform/Darwin_x86-gcc3/components/libxpsigntool.dylib	ABI=Darwin_x86-gcc3
+# binary-component platform/Darwin_x86-gcc3/components/libattrcert.dylib		ABI=Darwin_x86-gcc3
+
+# Darwin_x86_64-gcc3
+binary-component platform/Darwin_x86_64-gcc3/components/libkeymanager.dylib	ABI=Darwin_x86_64-gcc3
+# binary-component platform/Darwin_x86_64-gcc3/components/libalrcrlmanager.dylib	ABI=Darwin_x86_64-gcc3
+binary-component platform/Darwin_x86_64-gcc3/components/libsofttokendbmgr.dylib	ABI=Darwin_x86_64-gcc3
+binary-component platform/Darwin_x86_64-gcc3/components/libxpsigntool.dylib	ABI=Darwin_x86_64-gcc3
+binary-component platform/Darwin_x86_64-gcc3/components/libattrcert.dylib	ABI=Darwin_x86_64-gcc3
+
+

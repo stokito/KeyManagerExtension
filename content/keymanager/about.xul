@@ -1,0 +1,150 @@
+<?xml version="1.0"?>
+<!-- @(#) $Id: about.xul,v 1.12 2009/02/02 04:30:58 subrata Exp $ -->
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is Avaya Labs Research, Avaya Inc. Code.
+   -
+   - The Initial Developer of the Original Code is
+   - Subrata Mazumdar, Avaya Labs Research, Avaya Inc.
+   - Portions created by the Initial Developer are Copyright (C) 2007.
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Subrata Mazumdar (mazum@avaya.com)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+
+<!DOCTYPE window SYSTEM "chrome://keymanager/locale/keymanagerOverlay.dtd">
+
+<window id="keymanagerAboutWin"
+  onload='onLoad();'
+  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+<script type="application/x-javascript">
+
+<![CDATA[
+
+function onLoad()
+{
+    var disclaimerText = 
+	"\n" +
+	" AVAYA MAKES NO REPRESENTATIONS OR WARRANTIES ABOUT THE SUITABILITY OF THE \n" +
+	" SOFTWARE, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE \n" +
+	" IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR \n" +
+	" PURPOSE, OR NON-INFRINGEMENT. AVAYA SHALL NOT BE LIABLE FOR ANY DAMAGES \n" +
+	" SUFFERED BY USER AS A RESULT OF USING, MODIFYING OR DISTRIBUTING \n" +
+	" THIS SOFTWARE OR ITS DERIVATIVES. \n" +
+	"";
+    var disclaimerTextElem =document.getElementById('keymgr.about.win.disclaimer.text');
+    disclaimerTextElem.value = disclaimerText;
+
+    var toolDescText = 
+	"\n" +
+	"Firefox Add-on for Key Generation, Certificate Enrollment, CRL Signing, and Identity and Authority Delegation\n" + 
+	"Author: Subrata Mazumdar (mazum@avaya.com) \n" + 
+	"        http://www.research.avayalabs.com/gcm/usa/en-us/people/all/subratamazumdar.htm \n" + 
+	"\n" + 
+	"KeyManager is a stand alone PKI tool for key generation " + 
+	"and certificate enrollment. It is built on top Mozilla NSS and PSM code base " + 
+	"of Open Source PKI Projects (http://www.mozilla.org/projects/security/pki/)." + 
+	"The KeyManager tool is packaged as 'chrome' based Firefox extension. \n" + 
+	"\n" + 
+	"We have extended the Certificate Manager wizard in Mozilla " + 
+	"PSM and added the capability for key generation and SCEP based " + 
+	"certificate enrollment. Currently, PSM allows import and export " + 
+	"of keys but does not provide interface for local key generation. " + 
+	"Our extension enables Mozilla PSM to act as key management tool. " + 
+	"In addition, the tool supports signing of proxy certificates for " + 
+	"delegation of authorities and provides XUL based GUI for signing " + 
+	"archive files.\n" + 
+	"\n" + 
+	"KeyManager tool has following features: \n" + 
+	"    - Generation of keys and X.509 based self-signed certificate \n" +
+	"    - Generation of PKCS#10 based Certificate Signing Requests (CSR) \n" + 
+	"    - SCEP based Certificate enrollment with Certificate Authority\n" + 
+	"    - CRL Signing \n" + 
+	"    - Signing of archive files, including XPI files (like signtool in Mozilla NSS) \n" + 
+	"    - Signing of Proxy Certificate (RFC 3820) and other users' certificates \n" + 
+	"    - Signing and verification of Attribute certificates (RFC3281)  \n" + 
+	"    - Generation of keys and certificates for OpenSSL based applications \n" + 
+	"\n" + 
+	"We have reused code from certutil, certcgi, signtool, pk12util, and " + 
+	"zlib of Mozilla NSS Security Tools " + 
+	"(http://www.mozilla.org/projects/security/pki/nss/tools/) " + 
+	"in order to implement the XP-IDL based XPCOM interfaces related key " + 
+	"generation, and signing of certificate and archive. " + 
+	"The XUL forms for CSR generation and X.509 extensions are reimplementation " + 
+	"of the HTML based forms used in certcgi WEB interface." + 
+	"\n" + 
+	"\n" + 
+	"For more info: http://pubs.research.avayalabs.com/pdfs/ALR-2006-044.pdf \n" + 
+	"               http://pubs.research.avayalabs.com/pdfs/ALR-2007-023.pdf \n" + 
+	"               https://addons.mozilla.org/en-US/firefox/addon/4471\n" + 
+	"\n" +
+	"";
+    var toolDescTextElem = document.getElementById('keymgr.about.win.tool.text');
+    toolDescTextElem.value = toolDescText;
+}
+
+]]>
+
+</script>
+
+    <vbox flex = "1">
+	<label value="&keymanager.title; (v &keymanager.version;) "/>
+	<label value="Author: Subrata Mazumdar (mazum@avaya.com)"/>
+
+	<textbox id="keymgr.about.win.tool.text"
+	    readonly="true"
+      	    multiline="true" rows="8" cols="80" flex="1"
+      	    style="font-size: 9pt; font-family: Courier; min-width: 80px; overflow: auto;"
+      	    />
+
+	<!--
+	-->
+	<iframe id="keymgrAboutWinLicTextIframe"
+            name="keymgrAboutWinLicTextIframe"
+    	    style="border:none"
+    	    width="400px" height="100px" flex="1"
+	    src="./LICENSE.txt"
+	    >
+        </iframe>
+
+	<textbox id="keymgr.about.win.disclaimer.text"
+      	    readonly="true"
+      	    multiline="true" rows="2" cols="80"
+      	    style="font-size: 9pt; font-family: Courier; min-width: 80px; overflow: auto;"
+    	    />
+
+	<label value="(c) Copyright 2007 Avaya Inc."/>
+	<label value="All Rights Reserved."/>
+    </vbox>
+
+</window>

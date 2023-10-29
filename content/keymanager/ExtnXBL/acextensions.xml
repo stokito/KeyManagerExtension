@@ -1,0 +1,482 @@
+<?xml version="1.0"?>
+<!-- @(#) $Id: acextensions.xml,v 1.18 2012/10/03 23:09:41 subrata Exp $ -->
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is Avaya Labs Research, Avaya Inc. Code.
+   -
+   - The Initial Developer of the Original Code is
+   - Subrata Mazumdar, Avaya Labs Research, Avaya Inc.
+   - Portions created by the Initial Developer are Copyright (C) 2007.
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Subrata Mazumdar (mazum@avaya.com)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+
+<!DOCTYPE bindings SYSTEM "chrome://keymanager/locale/keyManager.dtd">
+
+<bindings id="acextensionsBindings"
+    xmlns="http://www.mozilla.org/xbl"
+    xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    xmlns:xbl="http://www.mozilla.org/xbl">
+
+    <binding id="acextensionsBinding"
+	extends="chrome://keymanager/content/ExtnXBL/certextn.xml#certextnbaseBinding"
+	>
+	<!--
+	<resources>
+	    <script type="application/x-javascript" src="chrome://keymanager/content/ExtnXBL/certextn2props.js"/>
+	    <stylesheet src="chrome://keymanager/skin/kmbindings.css"/>
+	</resources>
+	-->
+	<!-- content, property, method and event descriptions go here -->
+	<content>
+	    <xul:vbox
+		xbl:inherits="flex"
+		xstyle="overflow:auto; height:475px;"
+		>
+	        <xul:grid anonid="attrcert.extensions.grid"
+		    xbl:inherits="flex,width,hidden"
+		    flex="1"
+		    debug="true"
+		    > 
+		    <xul:columns>
+		        <xul:column flex="1"/>
+		        <xul:column flex="1"/>
+		    </xul:columns>
+		    <xul:rows>
+		        <xul:row>
+			    <xul:basicconstraints anonid="attrcert.form.extension.basiconstraint"
+			        class="acextension"
+			        iscalabel="is AA?"
+				optionshidden="true"
+			        />
+			    <xul:crldistrpointsextn anonid="attrcert.form.extension.crldistrpoints"
+			        class="acextension"
+			        />
+		        </xul:row>
+		        <xul:row>
+			    <xul:authkeyid anonid="attrcert.form.extension.authkeyid"
+			        class="acextension"
+			        />
+			    <xul:authinfoaccessextn anonid="attrcert.form.extension.authinfoaccessextn"
+			        class="acextension"
+			        />
+		        </xul:row>
+		        <xul:row>
+			    <xul:vbox>
+			        <xul:norevavail anonid="attrcert.form.extension.norevavail"
+			            class="acextension"
+			            />
+				<xul:spacer flex="1"/>
+			        <xul:auditidentity anonid="attrcert.form.extension.auditidentity"
+			            class="acextension"
+			            />
+			    </xul:vbox>
+			    <xul:actarget anonid="attrcert.form.extension.actarget"
+			        class="acextension"
+			        />
+		        </xul:row>
+			<!--
+		        <xul:row>
+			    <xul:spacer/>
+		        </xul:row>
+			-->
+		    </xul:rows>
+	        </xul:grid>
+	    </xul:vbox>
+	</content>
+	<implementation>
+	    <field name="mCertDB">
+		Components.classes["@mozilla.org/security/x509certdb;1"].getService(Components.interfaces.nsIX509CertDB);
+	    </field>
+	    <field name="mKeyManager">
+		/* alrIKeyManager */
+		Components.classes["@avaya.com/pkm/keymanager;1"].
+			getService(Components.interfaces.alrIKeyManager);
+	    </field>
+	    <field name="mACExtensionsGridElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "attrcert.extensions.grid");
+	    </field>
+
+	    <field name="mReadonly">
+	    false
+	    </field>
+
+	    <field name="mAttributeCert">
+	    </field>
+
+	    <property name="attributeCert"
+		onget="return this.mAttributeCert;"
+		onset="this.mAttributeCert = val; return val;"
+		/>
+
+	    <property name="readonly">
+		<getter>
+		<![CDATA[
+		return this.mReadonly;
+		]]>
+		</getter>
+		<setter>
+		<![CDATA[
+		this.mReadonly = val;
+		var /* NodeList */ acExtensionNodeList
+			= this.mACExtensionsGridElem.getElementsByAttribute("class", "acextension");
+		for (var i = 0; i < acExtensionNodeList.length; i++) {
+		    var attributeElem = acExtensionNodeList.item(i);
+		    attributeElem.readonly = val;
+		}
+		]]>
+		</setter>
+	    </property>
+
+
+	    <constructor>
+		<![CDATA[
+		// this.LogTrace("acextensionsBinding.constructor():......................Start.\n");
+		this.refresh();
+		// this.LogTrace("acextensionsBinding.constructor():......................End.\n");
+		]]>
+	    </constructor>
+
+	    <method name="refresh">
+		<body>
+		<![CDATA[
+		var bcElem = document.getAnonymousElementByAttribute(this, "anonid", "attrcert.form.extension.basiconstraint");
+		bcElem.iscadisabled = true;
+
+		var /* NodeList */ acExtensionNodeList
+			= this.mACExtensionsGridElem.getElementsByAttribute("class", "acextension");
+		for (var i = 0; i < acExtensionNodeList.length; i++) {
+		    var attributeElem = acExtensionNodeList.item(i);
+		    this.LogDebug("acextensionsBinding.refresh(): i : " + i + " extnId: " + attributeElem.tagName + "\n");
+		    if (attributeElem.refresh) {
+			attributeElem.refresh();
+		    }
+		}
+		]]>
+		</body>
+	    </method>
+
+	    <method name="reset">
+		<body>
+		<![CDATA[
+		var /* NodeList */ acExtensionNodeList
+			= this.mACExtensionsGridElem.getElementsByAttribute("class", "acextension");
+		for (var i = 0; i < acExtensionNodeList.length; i++) {
+		    var attributeElem = acExtensionNodeList.item(i);
+		    attributeElem.reset();
+		}
+		]]>
+		</body>
+	    </method>
+
+	    <method name="mergeCertProps">
+		<parameter name="aCertProps"/>
+		<parameter name="aCert"/>
+		<body>
+		<![CDATA[
+		var /* NodeList */ acExtensionNodeList
+			= this.mACExtensionsGridElem.getElementsByAttribute("class", "acextension");
+		for (var i = 0; i < acExtensionNodeList.length; i++) {
+		    var attributeElem = acExtensionNodeList.item(i);
+		    attributeElem.mergeCertProps(aCertProps);
+		}
+
+		this.mX509Cert = null;
+		if (aCert) {
+		    this.mX509Cert = aCert;
+		}
+		]]>
+		</body>
+	    </method>
+
+	    <method name="mergeCertPropsByExtensionTag">
+		<parameter name="aExtensionTagName"/>
+		<parameter name="aCertProps"/>
+		<body>
+		<![CDATA[
+		var /* NodeList */ acExtensionNodeList = this.mACExtensionsGridElem.getElementsByTagName(aExtensionTagName);
+		if (acExtensionNodeList.length <= 0) {
+		    if (aExtensionTagName.indexOf("xul:") < 0) {
+		    	var tagName = "xul:" + aExtensionTagName;
+		        acExtensionNodeList = this.mACExtensionsGridElem.getElementsByTagName(tagName);
+		    }
+		}
+		for (var i = 0; i < acExtensionNodeList.length; i++) {
+		    var attributeElem = acExtensionNodeList.item(i);
+		    if (attributeElem.tagName == aExtensionTagName) {
+		    attributeElem.mergeCertProps(aCertProps);
+		    }
+		    break;
+		}
+		]]>
+		</body>
+	    </method>
+
+	    <method name="mergeCertPropsByExtensionTagList">
+		<parameter name="aExtensionTagNameList"/>
+		<parameter name="aCertProps"/>
+		<body>
+		<![CDATA[
+		for (var j = 0; j < aExtensionTagNameList.length; j++) {
+		    var attribTagName = aExtensionTagNameList[j];
+		    this.mergeCertPropsByExtensionTag(attribTagName, aCertProps);
+		}
+		]]>
+		</body>
+	    </method>
+
+
+	    <method name="updateCertProps">
+		<parameter name="aCertProps"/>
+		<parameter name="aCert"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("acextensionsBinding.updateCertProps():......................Start.\n");
+		// this.dumpProperties(aCertProps, "acextensionsBinding.updateCertProps(): aCertProps: ");
+
+		var /* NodeList */ acExtensionNodeList
+			= this.mACExtensionsGridElem.getElementsByAttribute("class", "acextension");
+		for (var i = 0; i < acExtensionNodeList.length; i++) {
+		    var attributeElem = acExtensionNodeList.item(i);
+		    this.LogDebug("acextensionsBinding.updateCertProps(): i : " + i + " extnId: " + attributeElem.tagName + "\n");
+		    attributeElem.updateCertProps(aCertProps);
+		}
+
+		this.mX509Cert = null;
+		if (aCert) {
+		    this.mX509Cert = aCert;
+		}
+		this.LogTrace("acextensionsBinding.updateCertProps():......................End.\n");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="updateCertPropsByExtensionTag">
+		<parameter name="aExtensionTagName"/>
+		<parameter name="aCertProps"/>
+		<body>
+		<![CDATA[
+		var /* NodeList */ acExtensionNodeList
+			= this.mACExtensionsGridElem.getElementsByTagName(aExtensionTagName);
+		if (acExtensionNodeList.length <= 0) {
+		    if (aExtensionTagName.indexOf("xul:") < 0) {
+		    	var tagName = "xul:" + aExtensionTagName;
+		        acExtensionNodeList = this.mACExtensionsGridElem.getElementsByTagName(tagName);
+		    }
+		}
+		for (var i = 0; i < acExtensionNodeList.length; i++) {
+		    var attributeElem = acExtensionNodeList.item(i);
+		    attributeElem.updateCertProps(aCertProps);
+		    break;
+		}
+		]]>
+		</body>
+	    </method>
+
+	    <method name="updateCertPropsByExtensionTagList">
+		<parameter name="aExtensionTagNameList"/>
+		<parameter name="aCertProps"/>
+		<body>
+		<![CDATA[
+		for (var j = 0; j < aExtensionTagNameList.length; j++) {
+		    var attribTagName = aExtensionTagNameList[j];
+		    this.updateCertPropsByExtensionTag(attribTagName, aCertProps);
+		}
+		]]>
+		</body>
+	    </method>
+
+
+	    <method name="updateCert">
+		<parameter name="aCert"/>
+		<body>
+		<![CDATA[
+		if (!aCert) {
+		    return;
+		}
+		var certProps = Components.classes["@mozilla.org/persistent-properties;1"].
+					createInstance(Components.interfaces.nsIPersistentProperties);
+    		/* XPIDL: void exportExtensionsToProperties(in nsIPersistentProperties aCertProps); */
+		try {
+		    aCert.exportExtensionsToProperties(certProps);
+		} catch (ex) {
+		    return;
+		} 
+
+		this.updateCertProps(certProps, aCert);
+		]]>
+		</body>
+	    </method>
+
+	    <method name="updateCertByExtensionTag">
+		<parameter name="aExtensionTagName"/>
+		<parameter name="aCert"/>
+		<body>
+		<![CDATA[
+		if (!aCert) {
+		    return;
+		}
+		var certProps = Components.classes["@mozilla.org/persistent-properties;1"].
+					createInstance(Components.interfaces.nsIPersistentProperties);
+
+    		/* XPIDL: void exportExtensionToProperties(in AString aExtensionName, in nsIPersistentProperties aCertProps); */
+		try {
+		    aCert.exportExtensionToProperties(aExtensionTagName, certProps);
+		} catch (ex) {
+		    return;
+		} 
+		this.updateCertPropsByExtensionTag(aExtensionTagName, certProps);
+		]]>
+		</body>
+	    </method>
+
+	    <method name="updateCertByExtensionTagList">
+		<parameter name="aExtensionTagNameList"/>
+		<parameter name="aCert"/>
+		<body>
+		<![CDATA[
+		if (!aCert) {
+		    return;
+		}
+		var certProps = Components.classes["@mozilla.org/persistent-properties;1"].
+					createInstance(Components.interfaces.nsIPersistentProperties);
+    		/* XPIDL: void exportExtensionsToProperties(in nsIPersistentProperties aCertProps); */
+		try {
+		    aCert.exportExtensionsToProperties(certProps);
+		} catch (ex) {
+		    return;
+		} 
+		this.updateCertPropsByExtensionTagList(aAttributeTagNameList, certProps);
+		]]>
+		</body>
+	    </method>
+
+	    <method name="toCertProps">
+		<parameter name="aCertProps"/>
+		<body>
+		<![CDATA[
+		var /* NodeList */ acExtensionNodeList
+			= this.mACExtensionsGridElem.getElementsByAttribute("class", "acextension");
+		for (var i = 0; i < acExtensionNodeList.length; i++) {
+		    var extensionElem = acExtensionNodeList.item(i);
+		    extensionElem.toCertProps(aCertProps);
+		}
+		// this.dumpProperties(aCertProps, "Attr Cert Extenions");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="toCertPropsByExtensionTag">
+		<parameter name="aExtensionTagName"/>
+		<parameter name="aCertProps"/>
+		<body>
+		<![CDATA[
+		var /* NodeList */ acExtensionNodeList
+			= this.mACExtensionsGridElem.getElementsByTagName(aExtensionTagName);
+		if (acExtensionNodeList.length <= 0) {
+		    if (aExtensionTagName.indexOf("xul:") < 0) {
+		    	var tagName = "xul:" + aExtensionTagName;
+		        acExtensionNodeList = this.mACExtensionsGridElem.getElementsByTagName(tagName);
+		    }
+		}
+		for (var i = 0; i < acExtensionNodeList.length; i++) {
+		    var attributeElem = acExtensionNodeList.item(i);
+		    attributeElem.toCertProps(aCertProps);
+		    break;
+		}
+		]]>
+		</body>
+	    </method>
+
+	    <method name="toCertPropsByExtensionTagList">
+		<parameter name="aExtensionTagNameList"/>
+		<parameter name="aCertProps"/>
+		<body>
+		<![CDATA[
+		for (var j = 0; j < aExtensionTagNameList.length; j++) {
+		    var attribTagName = aExtensionTagNameList[j];
+		    this.toCertPropsByExtensionTag(attribTagName, aCertProps);
+		}
+		]]>
+		</body>
+	    </method>
+
+	    <method name="activateAttributeByTag">
+		<parameter name="aExtensionTagName"/>
+		<parameter name="aStatusFlag"/>
+		<body>
+		<![CDATA[
+		var /* NodeList */ acExtensionNodeList
+			= his.mACExtensionsGridElem.getElementsByTagName(aExtensionTagName);
+		if (acExtensionNodeList.length <= 0) {
+		    if (aExtensionTagName.indexOf("xul:") < 0) {
+		    	var tagName = "xul:" + aExtensionTagName;
+		        acExtensionNodeList = this.mACExtensionsGridElem.getElementsByTagName(tagName);
+		    }
+		}
+		for (var i = 0; i < acExtensionNodeList.length; i++) {
+		    var attributeElem = acExtensionNodeList.item(i);
+		    attributeElem.readonly = !aStatusFlag;
+		    // this.LogDebug("acextensionsBinding.activateAttributeByTag(): i : " + i + " extnId: " + attributeElem.tagName + "\n");
+		    return true;
+		}
+		return false;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="activateTaggedItemList">
+		<parameter name="aTagNameListStr"/>
+		<parameter name="aStatusFlag"/>
+		<body>
+		<![CDATA[
+		if (!aTagNameListStr) {
+		    return;
+		}
+		var tagNameList = aTagNameListStr.split(",");
+		if (tagNameList.length <= 0) {
+		    return;
+		}
+		for (var i = 0; i < tagNameList.length; i++) {
+		    // var nsTagName = "xul:" + tagNameList[i];
+		    var nsTagName = this.trim(tagNameList[i]);
+		    this.activateAttributeByTag(nsTagName, aStatusFlag); 
+		}
+		]]>
+		</body>
+	    </method>
+
+
+	</implementation>
+    </binding>
+
+</bindings>
+

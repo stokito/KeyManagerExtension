@@ -1,0 +1,230 @@
+<?xml version="1.0"?>
+<!-- @(#) $Id: createcertExample.xul,v 1.6 2010/01/04 05:54:15 subrata Exp $ -->
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is Avaya Labs Research, Avaya Inc. Code.
+   -
+   - The Initial Developer of the Original Code is
+   - Subrata Mazumdar, Avaya Labs Research, Avaya Inc.
+   - Portions created by the Initial Developer are Copyright (C) 2007.
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Subrata Mazumdar (mazum@avaya.com)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://keymanager/skin/kmbindings.css" type="text/css"?>
+
+<!DOCTYPE window
+	[
+	<!ENTITY % keyManager.dtd SYSTEM "chrome://keymanager/locale/keyManager.dtd">
+	%keyManager.dtd;
+	]>
+
+<window id="keymanager.createcert.example.win"
+    xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    onload="CreateCertExample.initOnload();"
+    onunload="CreateCertExample.uninitOnUnload(event);"
+    >
+
+    <!--
+    <script type="application/x-javascript" src="chrome://keymanager/content/XBL/x509certprofileExample.js"/>
+    -->
+
+<script type="application/x-javascript" >
+<![CDATA[
+
+var CreateCertExample = {
+
+    initOnload : function ()
+    {
+	dump("CreateCertExample.initOnload():................Start.\n");
+
+	var createCertElem = null;
+
+	/*
+	createCertElem = document.getElementById("keymanager.createcert.1"); createCertElem.refresh();
+	createCertElem = document.getElementById("keymanager.createcert.2"); createCertElem.refresh();
+	createCertElem = document.getElementById("keymanager.createcert.3"); createCertElem.refresh();
+	createCertElem = document.getElementById("keymanager.createcert.4"); createCertElem.refresh();
+	var createCertMenuElem = null;
+	createCertMenuElem = document.getElementById("keymanager.createcert.menu.1"); createCertMenuElem.refresh();
+	*/
+
+	var createCertElemList = document.getElementsByTagName("createcert");
+	for (var i = 0; i < createCertElemList.length; i++) {
+	     createCertElem = createCertElemList[i];
+	     createCertElem.refresh();
+	}
+	 
+	dump("CreateCertExample.initOnload():................End.\n");
+    },
+    
+    uninitOnUnload : function (ev)
+    {
+	dump("CreateCertExample.uninitOnload():................Start.\n");
+    },
+    
+    handleCreateSelfSignedCertEvent: function (aCreateCertElem, ev)
+    {
+	dump("CreateCertExample.handleCreateSelfSignedCertEvent(): aCreateCertElem.id: " + aCreateCertElem.id + "\n");
+    },
+    
+    handleCreateCASignedCertEvent : function (aCreateCertElem, ev)
+    {
+	dump("CreateCertExample.handleCreateCASignedCertEvent(): aCreateCertElem.id: " + aCreateCertElem.id + "\n");
+    
+	dump("CreateCertExample.handleCreateCASignedCertEvent(): aCreateCertElem.newCert: " + aCreateCertElem.newCert + "\n");
+	if (aCreateCertElem.newCert) {
+		aCreateCertElem.profileType = "certificate";
+		aCreateCertElem.profilecert = aCreateCertElem.newCert;
+		aCreateCertElem.certCommonName = "XXX555XXXX";
+	}
+    },
+    
+    handleCreateSelfProxyCertEvent : function (aCreateCertElem, ev)
+    {
+	dump("CreateCertExample.handleCreateSelfProxyCertEvent(): aCreateCertElem.id: " + aCreateCertElem.id + "\n");
+    },
+    
+    handleCreateOTPKCertEvent : function (aCreateCertElem, ev)
+    {
+	dump("CreateCertExample.handleCreateOTPKCertEvent(): aCreateCertElem.id: " + aCreateCertElem.id + "\n");
+    },
+    
+    handleCreateCertMenuEvent : function (aCreateCertMenuElem, ev)
+    {
+	dump("CreateCertExample.handleCreateCertMenuEvent(): aCreateCertMenuElem.id: " + aCreateCertMenuElem.id + "\n");
+
+	var menuItemElem = ev.originalTarget;
+	dump("CreateCertExample.handleCreateCertMenuEvent(): menuItemElem.id: " + menuItemElem.id + "\n");
+	dump("CreateCertExample.handleCreateCertMenuEvent(): menuItemElem.tagName: " + menuItemElem.tagName + "\n");
+	dump("CreateCertExample.handleCreateCertMenuEvent(): menuItemElem.label: " + menuItemElem.label + "\n");
+	dump("CreateCertExample.handleCreateCertMenuEvent(): menuItemElem.value: " + menuItemElem.value + "\n");
+    }
+    
+};
+
+]]>
+</script>
+
+    <grid flex="1" debug="true"> 
+	<columns>
+	  <column/>
+	  <column flex="1"/>
+	</columns>
+	<rows flex="1">
+	  <!--
+
+	  <row>
+	    <spacer/>
+	    <createcert id="keymanager.createcert.1"
+		createCertOp="createSelfSignedCert"
+		certCommonName="SelfCN1"
+		oncommand="CreateCertExample.handleCreateSelfSignedCertEvent(this, event)"
+		/>
+	  </row>
+	  -->
+
+	  <row>
+	    <spacer/>
+	    <createcert id="keymanager.createcert.2"
+		createCertOp="createCASignedCert"
+		oplabel="Create CA-Signed Cert"
+		xcertCommonName="CACN2"
+		oncommand="CreateCertExample.handleCreateCASignedCertEvent(this, event)"
+		/>
+	  </row>
+
+
+	  <!--
+	  <row>
+	    <spacer/>
+	    <createcert id="keymanager.createcert.3"
+		createCertOp="createSelfProxyCert"
+		certCommonName="PCN0"
+		oncommand="CreateCertExample.handleCreateSelfProxyCertEvent(this, event)"
+		/>
+	  </row>
+
+	  <row>
+	    <spacer/>
+	    <createcert id="keymanager.createcert.4"
+		class="button"
+		createCertOp="createOTPKCert"
+		certCommonName="OTPKCN2"
+		oncommand="CreateCertExample.handleCreateOTPKCertEvent(this, event)"
+		/>
+	  </row>
+	  -->
+
+	  <row>
+	    <spacer/>
+	    <createcert id="keymanager.createcert.menu.1"
+		class="menu"
+		optypelabel="Create Cert"
+		ycreateCertOp="createSelfSignedCert"
+		zcreateCertOp="createOTPKCert"
+		zcertCommonName="OTPKCN2"
+		certCommonName="CreateCertMenuSelfCN1"
+		oncommand="CreateCertExample.handleCreateCertMenuEvent(this, event)"
+		/>
+	  </row>
+
+
+	  <!--
+	  <row>
+	    <spacer/>
+		<hbox pack="start">
+		<button id="keymanager.createcert.optype.menu"
+		    type="menu"
+		    label="Create Cert"
+		    oncommand="CreateCertExample.handleCreateCertMenuEvent(this, event)"
+		    >
+		    <menupopup>
+			<menuitem id="keymanager.createcert.optype.selfsigned"
+			    label="Self-Signed"
+			    value="user_selfsigned"
+			    />
+			<menuitem id="keymanager.createcert.optype.casigned"
+			    label="CA Signed"
+			    value="user_casigned"
+			    />
+		    </menupopup>
+		</button>
+		</hbox>
+	  </row>
+	  -->
+
+	</rows>
+    </grid>
+</window>
+
+

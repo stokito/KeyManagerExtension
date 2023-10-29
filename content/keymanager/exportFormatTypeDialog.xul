@@ -1,0 +1,387 @@
+<?xml version="1.0"?>
+<!-- @(#) $Id: exportFormatTypeDialog.xul,v 1.20 2009/03/17 12:51:07 subrata Exp $ -->
+
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is Avaya Labs Research, Avaya Inc. Code.
+   -
+   - The Initial Developer of the Original Code is
+   - Subrata Mazumdar, Avaya Labs Research, Avaya Inc.
+   - Portions created by the Initial Developer are Copyright (C) 2007.
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Subrata Mazumdar (mazum@avaya.com)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+
+<!DOCTYPE dialog
+    	[
+	<!ENTITY % certManager.dtd SYSTEM "chrome://pippki/locale/certManager.dtd">
+	%certManager.dtd;
+	<!ENTITY % keyManager.dtd SYSTEM "chrome://keymanager/locale/keyManager.dtd">
+	%keyManager.dtd;
+	]>
+
+<dialog id="keymgr.key.export.format.win"
+  title="&keymgr.key.export.format.win.title;"
+  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"      
+  style="width: 30em;"
+  persist="screenX screenY width height"
+  buttons="accept,cancel"
+  ondialogaccept="return X509CertExportFormatDialog.acceptExportFormat();"
+  ondialogcancel="return X509CertExportFormatDialog.cancelExportFormat();"
+  onload="X509CertExportFormatDialog.onLoad();">
+
+    <script type="application/x-javascript" src="chrome://keymanager/content/exportFormatTypeDialog.js"/>
+
+    <groupbox flex="1">
+        <caption class="header" label="&keymgr.key.export.format.label;"/>
+        <grid>
+	    <columns>
+	        <column/>
+	        <column/>
+	    </columns>
+	    <rows>
+	        <row
+		    align="center"
+		    >
+		    <label value="&keymgr.key.export.format.type.label;"/>
+                    <groupbox
+			orient="horizontal"
+			pack="start" align="start"
+		    	>
+                        <radiogroup id="keymgr.key.export.format.type" 
+            		    zpersists="selectedIndex"
+              		    onclick="X509CertExportFormatDialog.handleKeyExportFormatTypeGroupChange(this, event)"
+            	    	    >
+            		    <grid>
+            		        <columns>
+            		            <column/>
+            		            <column/>
+            		            <column/>
+            		        </columns>
+            		        <rows>
+            		            <row>
+                                        <radio id="keymgr.key.export.format.type.pkcs10"
+            		                    label="&keymgr.key.export.format.type.pkcs10.label;"
+            		                    tooltiptext="&keymgr.key.export.format.type.pkcs10.tooltip;"
+              		                    value="pkcs10"
+					    privatekeyonly="true"
+              		                    group="keymgr.key.export.format.type"
+					    />
+                                        <radio id="keymgr.key.export.format.type.pkcs8"
+            		                    label="&keymgr.key.export.format.type.pkcs8.label;"
+            		                    tooltiptext="&keymgr.key.export.format.type.pkcs8.tooltip;"
+              		                    value="pkcs8"
+					    privatekeyonly="true"
+              		                    group="keymgr.key.export.format.type"
+					    />
+                                        <radio id="keymgr.key.export.format.type.openssh2pubk"
+            		                    label="&keymgr.key.export.format.type.openssh2pubk.label;"
+            		                    tooltiptext="&keymgr.key.export.format.type.openssh2pubk.tooltip;"
+              		                    value="openssh2pubk"
+					    privatekeyonly="true"
+              		                    group="keymgr.key.export.format.type"
+					    />
+            		            </row>
+            		            <row>
+                                        <radio id="keymgr.key.export.format.type.x509"
+            		                    label="&keymgr.key.export.format.type.x509.label;"
+            		                    tooltiptext="&keymgr.key.export.format.type.x509.tooltip;"
+              		                    selected="true"
+              		                    value="x509"
+              		                    group="keymgr.key.export.format.type"
+					    />
+                                        <radio id="keymgr.key.export.format.type.osslepk"
+            		                    label="&keymgr.key.export.format.type.osslepk.label;"
+            		                    tooltiptext="&keymgr.key.export.format.type.osslepk.tooltip;"
+              		                    value="osslepk"
+					    privatekeyonly="true"
+              		                    group="keymgr.key.export.format.type"
+					    />
+                                        <radio id="keymgr.key.export.format.type.openssh2"
+            		                    label="&keymgr.key.export.format.type.openssh2.label;"
+            		                    tooltiptext="&keymgr.key.export.format.type.openssh2.tooltip;"
+              		                    value="openssh2"
+					    privatekeyonly="true"
+              		                    group="keymgr.key.export.format.type"
+					    />
+            		            </row>
+            		            <row>
+                                        <radio id="keymgr.key.export.format.type.pkcs7"
+            		                    label="&keymgr.key.export.format.type.pkcs7.label;"
+            		                    tooltiptext="&keymgr.key.export.format.type.pkcs7.tooltip;"
+              		                    value="pkcs7"
+              		                    group="keymgr.key.export.format.type"
+					    />
+                                        <radio id="keymgr.key.export.format.type.pkcs12"
+            		                    label="&keymgr.key.export.format.type.pkcs12.label;"
+            		                    tooltiptext="&keymgr.key.export.format.type.pkcs12.tooltip;"
+              		                    value="pkcs12"
+					    privatekeyonly="true"
+              		                    group="keymgr.key.export.format.type"
+					    />
+                                        <radio id="keymgr.key.export.format.type.puttyssh2"
+            		                    label="&keymgr.key.export.format.type.puttyssh2.label;"
+            		                    tooltiptext="&keymgr.key.export.format.type.puttyssh2.tooltip;"
+              		                    value="puttyssh2"
+					    disabled="true"
+					    privatekeyonly="true"
+              		                    group="keymgr.key.export.format.type"
+					    />
+            		            </row>
+            		        </rows>
+            		    </grid>
+                        </radiogroup>
+                    </groupbox>
+	        </row>
+	        <row
+		    align="center"
+		    >
+		    <spacer/>
+		    <spacer/>
+	        </row>
+
+	        <row
+		    align="center"
+		    >
+		    <label value="&keymgr.key.export.format.encoding.label;"/>
+                    <groupbox
+			orient="horizontal"
+			pack="start" align="start"
+		    	>
+                        <radiogroup id="keymgr.key.export.format.encoding" flex="1"
+		            disabled="true"
+  		            onclick="X509CertExportFormatDialog.handleExportFormatEncodingChange(this, event)"
+	    	            >
+  	                    <hbox pack="start" align="start">
+                                <radio id="keymgr.key.export.format.encoding.base64"
+		                  label="&keymgr.key.export.format.encoding.base64.label;"
+		                  tooltiptext="&keymgr.key.export.format.encoding.base64.tooltip;"
+  		                  disabled="true"
+  		                  value="base64"
+  		                  group="keymgr.key.export.format.encoding"/>
+                                <radio id="keymgr.key.export.format.encoding.der"
+		                  label="&keymgr.key.export.format.encoding.der.label;"
+		                  tooltiptext="&keymgr.key.export.format.encoding.der.tooltip;"
+  		                  selected="true"
+  		                  disabled="true"
+  		                  value="der"
+  		                  group="keymgr.key.export.format.encoding"/>
+  	                    </hbox>
+                        </radiogroup>
+                    </groupbox>
+	        </row>
+
+	        <row id="keymgr.key.export.cert.include.certchain.row"
+		    hidden="true"
+		    align="center"
+		    >
+		    <spacer/>
+                    <hbox id="keymgr.key.export.cert.include.certchain.hbox"
+			pack="start" align="start"
+		    	>
+	                <checkbox id="keymgr.key.export.cert.include.certchain"
+		            label="&keymgr.key.export.cert.include.certchain.label;"
+		            tooltiptext="&keymgr.key.export.cert.include.certchain.tooltip;"
+		            checked="false"
+		            />
+                    </hbox>
+	        </row>
+
+	        <row id="keymgr.key.export.cert.enc.param.row"
+		    align="center"
+		    hidden="true"
+		    >
+		    <label value="&keymgr.key.export.cert.enc.param.label;"/>
+                    <groupbox id="keymgr.key.export.cert.enc.param.hbox"
+			pack="start" align="center"
+			orient="horizontal"
+		    	>
+			<hbox
+			    pack="start" align="center"
+			    >
+		    	    <label value="&keymgr.key.export.cert.enc.iteration.label;"/>
+	                    <textbox id="keymgr.key.export.cert.enc.iteration"
+		                tooltiptext="&keymgr.key.export.cert.enc.iteration.tooltip;"
+			        size="2"
+			        value="1"
+		                />
+                        </hbox>
+                        <hbox id="keymgr.key.export.cert.enc.algname.hbox"
+			    pack="start" align="center"
+		    	    >
+		    	    <label value="&keymgr.key.export.cert.enc.algname.label;"/>
+	                    <textbox id="keymgr.key.export.cert.enc.algname"
+		                tooltiptext="&keymgr.key.export.cert.enc.algname.tooltip;"
+				hidden="true"
+			        size="8"
+			        value=""
+		                />
+			    <menulist id="keymgr.key.export.cert.enc.algname.osslepk.menuList"
+				persists="value"
+				value="DES-EDE3-CBC"
+				xdisabled="true"
+				tooltiptext="&keymgr.key.export.cert.enc.algname.osslepk.menuList.tooltip;"
+				oncommand="X509CertExportFormatDialog.handleOSSLEPKEncAlgMenuListChange(this, event)"
+				>
+				<menupopup>
+				    <menuitem id="keymgr.key.export.cert.enc.algname.osslepk.descbc"
+				    	label="DES-CBC"
+					value="DES-CBC"
+					/>
+				    <menuitem id="keymgr.key.export.cert.enc.algname.osslepk.desede3cbc"
+				    	label="DES-EDE3-CBC"
+					value="DES-EDE3-CBC"
+					/>
+				    <menuitem id="keymgr.key.export.cert.enc.algname.osslepk.aes128bc"
+				    	label="AES-128-CBC"
+					value="AES-128-CBC"
+					/>
+				    <menuitem id="keymgr.key.export.cert.enc.algname.osslepk.aes192cbc"
+				    	label="AES-192-CBC"
+					value="AES-192-CBC"
+					/>
+				    <menuitem id="keymgr.key.export.cert.enc.algname.osslepk.aes256cbc"
+				    	label="AES-256-CBC"
+					value="AES-256-CBC"
+					/>
+				</menupopup>
+			    </menulist>
+			    <menulist id="keymgr.key.export.cert.enc.algname.pkcs8.menuList"
+				persists="value"
+				value="DES-EDE3-CBC"
+				xdisabled="true"
+				tooltiptext="&keymgr.key.export.cert.enc.algname.pkcs8.menuList.tooltip;"
+				oncommand="X509CertExportFormatDialog.handlePKCS8EncAlgMenuListChange(this, event)"
+				>
+				<menupopup>
+				    <menuitem id="keymgr.key.export.cert.enc.algname.pkcs8.desede3cbc"
+				    	label="DES-EDE3-CBC"
+					value="DES-EDE3-CBC"
+					/>
+				    <menuitem id="keymgr.key.export.cert.enc.algname.pkcs8.descbc"
+				    	label="DES-CBC"
+					value="DES-CBC"
+					/>
+				    <menuitem id="keymgr.key.export.cert.enc.algname.pkcs8.rc2cbc"
+				    	label="RC2-CBC"
+					value="RC2-CBC"
+					/>
+				    <menuitem id="keymgr.key.export.cert.enc.algname.pkcs8.rc4cbc"
+				    	label="RC4-CBC"
+					value="RC4-CBC"
+					/>
+				    <menuitem id="keymgr.key.export.cert.enc.algname.pkcs8.aes128bc"
+				    	label="AES-128-CBC"
+					value="AES-128-CBC"
+					/>
+				    <menuitem id="keymgr.key.export.cert.enc.algname.pkcs8.aes192cbc"
+				    	label="AES-192-CBC"
+					value="AES-192-CBC"
+					/>
+				    <menuitem id="keymgr.key.export.cert.enc.algname.pkcs8.aes256cbc"
+				    	label="AES-256-CBC"
+					value="AES-256-CBC"
+					/>
+				    <!--
+				    <menuitem id="keymgr.key.export.cert.enc.algname.pkcs8.descbc"
+				    	label="PKCS5v2-DES"
+					value="PKCS5v2-DES"
+					/>
+				    <menuitem id="keymgr.key.export.cert.enc.algname.pkcs8.desede3cbc"
+				    	label="PKCS5v2-DES3"
+					value="PKCS5v2-DES3"
+					/>
+				    <menuitem id="keymgr.key.export.cert.enc.algname.pkcs8.pbemd2des"
+				    	label="PBE-MD2-DES"
+					value="PBE-MD2-DES"
+					/>
+				    <menuitem id="keymgr.key.export.cert.enc.algname.pkcs8.pbemd5des"
+				    	label="PBE-MD5-DES"
+					value="PBE-MD5-DES"
+					/>
+				    <menuitem id="keymgr.key.export.cert.enc.algname.pkcs8.pbesha1rc4128"
+				    	label="PBE-SHA1-RC4-128"
+					value="PBE-SHA1-RC4-128"
+					/>
+				    <menuitem id="keymgr.key.export.cert.enc.algname.pkcs8.pbesha1rc440"
+				    	label="PBE-SHA1-RC4-40"
+					value="PBE-SHA1-RC4-40"
+					/>
+				    <menuitem id="keymgr.key.export.cert.enc.algname.pkcs8.pbesha13des"
+				    	label="PBE-SHA1-3DES"
+					value="PBE-SHA1-3DES"
+					/>
+				    <menuitem id="keymgr.key.export.cert.enc.algname.pkcs8.pbesha12des"
+				    	label="PBE-SHA1-2DES"
+					value="PBE-SHA1-2DES"
+					/>
+				    <menuitem id="keymgr.key.export.cert.enc.algname.pkcs8.pbesha1rc2128"
+				    	label="PBE-SHA1-RC2-128"
+					value="PBE-SHA1-RC2-128"
+					/>
+				    <menuitem id="keymgr.key.export.cert.enc.algname.pkcs8.pbesha1rc240"
+				    	label="PBE-SHA1-RC2-128"
+					value="PBE-SHA1-RC2-128"
+					/>
+				    <menuitem id="keymgr.key.export.cert.enc.algname.pkcs8.des"
+				    	label="DES"
+					value="DES"
+					/>
+				    <menuitem id="keymgr.key.export.cert.enc.algname.pkcs8.des3"
+				    	label="DES3"
+					value="DES3"
+					/>
+				    -->
+				</menupopup>
+			    </menulist>
+                        </hbox>
+                    </groupbox>
+	        </row>
+
+	        <row id="keymgr.key.export.file.view.row" hidden="true">
+		    <spacer/>
+                    <hbox id="keymgr.key.export.file.view.hbox"
+			pack="start" align="start"
+		    	>
+	                <checkbox id="keymgr.key.export.file.view"
+		            label="&keymgr.key.export.file.view.label;"
+		            tooltiptext="&keymgr.key.export.file.view.tooltip;"
+		            checked="false"
+		            />
+                    </hbox>
+	        </row>
+	    </rows>
+	</grid>
+    </groupbox>
+</dialog>
+

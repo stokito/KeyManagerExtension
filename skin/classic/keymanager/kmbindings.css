@@ -1,0 +1,489 @@
+/* @(#) $Id: kmbindings.css,v 1.23 2010/03/03 17:01:12 subrata Exp $ */
+
+/* ***** BEGIN LICENSE BLOCK *****
+ * Version: MPL 1.1/GPL 2.0/LGPL 2.1
+ *
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * The Original Code is  Avaya Labs Research, Avaya Inc. Code.
+ *
+ * The Initial Developer of the Original Code is
+ *     Subrata Mazumdar, Avaya Labs Research, Avaya Inc.
+ * Portions created by the Initial Developer are Copyright (C) 2007
+ * the Initial Developer. All Rights Reserved.
+ *
+ * Contributor(s):
+ *   Subrata Mazumdar (mazum@avaya.com)
+ *
+ * Alternatively, the contents of this file may be used under the terms of
+ * either the GNU General Public License Version 2 or later (the "GPL"), or
+ * the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+ * in which case the provisions of the GPL or the LGPL are applicable instead
+ * of those above. If you wish to allow use of your version of this file only
+ * under the terms of either the GPL or the LGPL, and not to allow others to
+ * use your version of this file under the terms of the MPL, indicate your
+ * decision by deleting the provisions above and replace them with the notice
+ * and other provisions required by the GPL or the LGPL. If you do not delete
+ * the provisions above, a recipient may use your version of this file under
+ * the terms of any one of the MPL, the GPL or the LGPL.
+ *
+ * ***** END LICENSE BLOCK ***** */
+
+
+prefutil {
+    -moz-binding: url('chrome://keymanager/content/XBL/prefutil.xml#prefutilBinding');
+}
+
+filepicker {
+    -moz-binding: url('chrome://keymanager/content/XBL/fileselector.xml#fileselectorBinding');
+}
+fileselector {
+    -moz-binding: url('chrome://keymanager/content/XBL/fileselector.xml#fileselectorBinding');
+}
+fileitem {
+    -moz-binding: url('chrome://keymanager/content/XBL/fileselector.xml#fileitemBinding');
+}
+
+x509certfileselector {
+    -moz-binding: url('chrome://keymanager/content/XBL/fileselector.xml#x509certfileselectorBinding');
+}
+
+attrcertfileselector {
+    -moz-binding: url('chrome://keymanager/content/XBL/fileselector.xml#attrcertfileselectorBinding');
+}
+
+
+certdatetimepicker {
+    -moz-binding: url('chrome://keymanager/content/XBL/certdatetime.xml#certdatetimepicker');
+}
+tokenmenulist {
+    -moz-binding: url('chrome://keymanager/content/XBL/certpicker.xml#tokenmenulistBinding');
+}
+
+pk11tokentype {
+    -moz-binding: url('chrome://keymanager/content/XBL/certpicker.xml#pk11tokentypeBinding');
+}
+x509certtype {
+    -moz-binding: url('chrome://keymanager/content/XBL/certpicker.xml#x509certtypeBinding');
+}
+
+certpicker {
+    -moz-binding: url('chrome://keymanager/content/XBL/certpicker.xml#certpickerBinding');
+}
+certitem {
+    -moz-binding: url('chrome://keymanager/content/XBL/certpicker.xml#certitemBinding');
+}
+certpickertest {
+    -moz-binding: url('chrome://keymanager/content/XBL/certpicker.xml#certpickertestBinding');
+}
+
+certusagemenu {
+    -moz-binding: url('chrome://keymanager/content/XBL/certusage.xml#certusagemenuBinding');
+}
+
+certificateusagemenu {
+    -moz-binding: url('chrome://keymanager/content/XBL/certificateusage.xml#certificateusagelistBinding');
+}
+
+hashalgmenu {
+    -moz-binding: url('chrome://keymanager/content/XBL/hashalgmenu.xml#hashalgmenuBinding');
+}
+
+scephttpmethod {
+    -moz-binding: url('chrome://keymanager/content/XBL/scephttpmethod.xml#scephttpmethodBinding');
+}
+
+createcert {
+    -moz-binding: url('chrome://keymanager/content/XBL/createcert.xml#createcertBinding');
+}
+createcert.button {
+    -moz-binding: url('chrome://keymanager/content/XBL/createcert.xml#createcertBinding');
+}
+createcert.menu {
+    -moz-binding: url('chrome://keymanager/content/XBL/createcert.xml#createcertmenuBinding');
+}
+createcertmenu {
+    -moz-binding: url('chrome://keymanager/content/XBL/createcert.xml#createcertmenuBinding');
+}
+
+
+x509certprofiletype {
+    -moz-binding: url('chrome://keymanager/content/XBL/x509certprofile.xml#x509certprofiletypeBinding');
+}
+x509certprofile {
+    -moz-binding: url('chrome://keymanager/content/XBL/x509certprofile.xml#x509certprofileBinding');
+}
+
+certextn {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/certextn.xml#certextnBinding');
+}
+certextnutil {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/certextn.xml#certextnutilBinding');
+}
+
+generalnametype {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/generalnametype.xml#generalnametypeBinding');
+}
+generalnamesimple {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/generalnamesimple.xml#generalnamesimpleBinding');
+}
+generalnameitem {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/generalnameitem.xml#generalnameitemBinding');
+}
+
+generalnamelist {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/generalnamelist.xml#generalnamelistBinding');
+}
+
+generalnamelistsimple {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/generalnamelistsimple.xml#generalnamelistsimpleBinding');
+}
+
+generalnames {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/generalnames.xml#generalnamesBinding');
+}
+
+distrpointreasons {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/crldistrpoints.xml#distrpointreasonsBinding');
+}
+crldistrpoint {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/crldistrpoints.xml#crldistrpointBinding');
+}
+crldistrpoints {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/crldistrpoints.xml#crldistrpointsBinding');
+}
+crldistrpointsextn {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/crldistrpointsextn.xml#crldistrpointsextnBinding');
+}
+inhibitanypolicyextn {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/inhibitanypolicyextn.xml#inhibitanypolicyextnBinding');
+}
+policyconstraintsextn {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/policyconstraintsextn.xml#policyconstraintsextnBinding');
+}
+
+accessdescription {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/authinfoaccess.xml#accessdescriptionBinding');
+}
+authinfoaccesssyntax {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/authinfoaccess.xml#authinfoaccesssyntaxBinding');
+}
+authinfoaccessextn {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/authinfoaccessextn.xml#authinfoaccessextnBinding');
+}
+
+basicconstraints {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/basicconstraintsextn.xml#basicconstraintsextnBinding');
+}
+
+keyusage {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/keyusageextn.xml#keyusageextnBinding');
+}
+extkeyusage {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/extkeyusageextn.xml#extkeyusageextnBinding');
+}
+privatekeyusageperiod {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/privatekeyusageperiodextn.xml#privatekeyusageperiodextnBinding');
+}
+subjkeyid {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/subjkeyidextn.xml#subjkeyidextnBinding');
+}
+authkeyid {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/authkeyidextn.xml#authkeyidextnBinding');
+}
+
+subjaltname {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/subjaltnameextn.xml#subjaltnameextnBinding');
+}
+
+issueraltname {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/issueraltnameextn.xml#issueraltnameextnBinding');
+}
+nameconstraint {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/nameconstraintextn.xml#nameconstraintextnBinding');
+}
+
+proxycert {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/proxycertextn.xml#proxycertinfoextnBinding');
+}
+
+logotypeinfo {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/logotypeextn.xml#logotypeinfoBinding');
+}
+
+logotype {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/logotypeextn.xml#logotypeextnBinding');
+}
+
+vomsattrcertlist {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/attributecertlistextn.xml#vomsattrcertlistextnBinding');
+}
+
+globusamlassertion {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/attributecertlistextn.xml#globusamlassertionextnBinding');
+}
+wlanssidextn {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/wlanssidextn.xml#wlanssidextnBinding');
+}
+
+
+nscerttype {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/nscerttypeextn.xml#nscerttypeextnBinding');
+}
+
+x509certnsextnbase {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/nsx509extns.xml#x509certnsextnbaseBinding');
+}
+
+nsx509extntext {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/nsx509extns.xml#nsx509extntextBinding');
+}
+
+nsbaseurl {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/nsx509extns.xml#nsbaseurlBinding');
+}
+nsrevocationurl {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/nsx509extns.xml#nsrevocationurlBinding');
+}
+nscarevocationurl {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/nsx509extns.xml#nscarevocationurlBinding');
+}
+nscertrenewalurl {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/nsx509extns.xml#nscertrenewalurlBinding');
+}
+nscapolicyurl {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/nsx509extns.xml#nscapolicyurlBinding');
+}
+nssslservername {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/nsx509extns.xml#nssslservernameBinding');
+}
+nscomment {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/nsx509extns.xml#nscommentBinding');
+}
+
+x509certstdextensions {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/x509certstdextensions.xml#x509certstdextensionsBinding');
+}
+
+x509certnsextensions {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/x509certnsextensions.xml#x509certnsextensionsBinding');
+}
+x509certproxyextensions {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/x509certproxyextensions.xml#x509certproxyextensionsBinding');
+}
+
+keytype {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/x509v1certificate.xml#keytypeBinding');
+}
+keysize {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/x509v1certificate.xml#keysizeBinding');
+}
+
+rdn.singlevalued {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/x509certsubject.xml#svrdnBinding');
+}
+rdn.multivalued {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/x509certsubject.xml#mvrdnBinding');
+}
+x509certsubject {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/x509certsubject.xml#x509certsubjectBinding');
+}
+
+subject {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/x509v1certificate.xml#subjectBinding');
+}
+
+subjectpublickeyinfo {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/x509v1certificate.xml#subjectpublickeyinfoBinding');
+}
+
+certattribute {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/x509v1certificate.xml#certattributeBinding');
+}
+
+eccurvemenulist {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/eccurvenamemenulist.xml#eccurvenamemenulistBinding');
+}
+
+certvalidity {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/x509v1certificate.xml#certvalidityBinding');
+}
+
+certvaliditycal {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/certvaliditycal.xml#certvaliditycalBinding');
+}
+
+x509v1certificate {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/x509v1certificate.xml#x509v1certificateBinding');
+}
+
+csrdatasource {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/x509certsignparams.xml#csrdatasourceBinding');
+}
+
+subjectaltnameparam {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/x509certsignparams.xml#subjectaltnameparamBinding');
+}
+
+selfsignedcertgenparams {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/x509certsignparams.xml#selfsignedcertgenparamsBinding');
+}
+
+signothercertparams {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/x509certsignparams.xml#signothercertparamsBinding');
+}
+
+x509v3certificate {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/x509v3certificate.xml#x509v3certificateBinding');
+}
+
+acprofile {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/acprofile.xml#acprofileBinding');
+}
+
+acattributes {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/acattributes.xml#acattributesBinding');
+}
+
+textvaluelist {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/textvaluelist.xml#textvaluelistBinding');
+}
+octetstringlist {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/octetstringlist.xml#octetstringlistBinding');
+}
+ssidlist {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/octetstringlist.xml#octetstringlistBinding');
+}
+
+attrsyntaxvalue {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/attrsyntaxtype.xml#attrsyntaxvalueBinding');
+}
+attrsyntax {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/attrsyntaxtype.xml#attrsyntaxBinding');
+}
+
+chargingidattribute {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/chargingidattribute.xml#chargingidattributeBinding');
+}
+
+vomsattrvaluelist {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/vomsattribute.xml#vomsattrvaluelistBinding');
+}
+
+vomsattribute {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/vomsattribute.xml#vomsattributeBinding');
+}
+
+groupattribute {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/groupattribute.xml#groupattributeBinding');
+}
+
+rolesyntax {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/roleattribute.xml#rolesyntaxBinding');
+}
+
+roleattribute {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/roleattribute.xml#roleattributeBinding');
+}
+
+svceauthinfo {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/svceauthinfotype.xml#svceauthinfoBinding');
+}
+authinfoattribute {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/authinfoattribute.xml#authinfoattributeBinding');
+}
+
+accessidattribute {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/accessidattribute.xml#accessidattributeBinding');
+}
+
+wlanssidattribute {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/wlanssidattribute.xml#wlanssidattributeBinding');
+}
+
+
+acextensions {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/acextensions.xml#acextensionsBinding');
+}
+
+actarget {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/actargetextn.xml#actargetextnBinding');
+}
+norevavail {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/norevavailextn.xml#norevavailextnBinding');
+}
+auditidentity {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/auditidentityextn.xml#auditidentityextnBinding');
+}
+
+UpdateRdfTargetAppList {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/updaterdftargetapp.xml#updaterdftargetapplistBinding');
+}
+UpdateRdfTargetApp {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/updaterdftargetapp.xml#updaterdftargetappBinding');
+}
+
+richlistitem.UpdateRdfTargetApp {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/updaterdftargetapp.xml#updaterdftargetappBinding');
+}
+
+
+treechildren::-moz-tree-row(removedCert, hidden)
+{
+  border: 2px solid red;
+}
+
+/*
+AnyURI {
+    -moz-binding: url('-moz-binding: url('chrome://keymanager/content/XBL/fileselector.xml#wrappeduriBinding');
+}
+*/
+
+
+epkcertfiles {
+    -moz-binding: url('chrome://keymanager/content/tools/pkcsfilemgr/pkcsfilemgr.xml#epkcertfilesBinding');
+}
+osslapptype {
+    -moz-binding: url('chrome://keymanager/content/tools/pkcsfilemgr/pkcsfilemgr.xml#osslapptypeBinding');
+}
+osslcredentialtype {
+    -moz-binding: url('chrome://keymanager/content/tools/pkcsfilemgr/pkcsfilemgr.xml#osslcredentialtypeBinding');
+}
+softtokentype {
+    -moz-binding: url('chrome://keymanager/content/tools/pkcsfilemgr/pkcsfilemgr.xml#softtokentypeBinding');
+}
+softtoken {
+    -moz-binding: url('chrome://keymanager/content/tools/pkcsfilemgr/pkcsfilemgr.xml#softtokenBinding');
+}
+softtoken.ossl {
+    -moz-binding: url('chrome://keymanager/content/tools/pkcsfilemgr/pkcsfilemgr.xml#osslsofttokenBinding');
+}
+osslsofttoken {
+    -moz-binding: url('chrome://keymanager/content/tools/pkcsfilemgr/pkcsfilemgr.xml#osslsofttokenBinding');
+}
+softtokenmgr {
+    -moz-binding: url('chrome://keymanager/content/tools/pkcsfilemgr/pkcsfilemgr.xml#softtokenmgrBinding');
+}
+
+crlentryreasoncode {
+    -moz-binding: url('chrome://keymanager/content/XBL/crlinfoitems.xml#crlentryreasoncodeBinding');
+}
+crlentrylist {
+    -moz-binding: url('chrome://keymanager/content/ExtnXBL/crlentrylistBindings.xml#crlentrylistBinding');
+}
+
+jkscertitem {
+    -moz-binding: url('chrome://keymanager/content/tools/jksmanagecert/jkscertchaingrid.xml#jkscertitemBinding');
+}
+jkscertchaingrid {
+    -moz-binding: url('chrome://keymanager/content/tools/jksmanagecert/jkscertchaingrid.xml#jkscertchaingridBinding');
+}
+

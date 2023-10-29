@@ -1,0 +1,193 @@
+<?xml version="1.0"?>
+<!-- @(#) $Id: mailacctcertOptions.xul,v 1.2 2009/04/20 02:07:15 subrata Exp $ -->
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is Avaya Labs Research, Avaya Inc. Code.
+   -
+   - The Initial Developer of the Original Code is
+   -     Subrata Mazumdar, Avaya Labs Research, Avaya Inc.
+   - Portions created by the Initial Developer are Copyright (C) 2007.
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Subrata Mazumdar (mazum@avaya.com)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+
+<!DOCTYPE prefwindow SYSTEM "chrome://keymanager/locale/mailacctcert.dtd">
+
+<prefwindow xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+	id="mailacctcert.options.win"
+	title="&mailacctcert.options.win.title;"
+	buttons="accept,cancel"
+	persist="screenX,screenY"
+	>
+
+    <prefpane id="mailacctcert.pref" label="Default Values">
+        <preferences>
+            <preference
+	      id="keymgr.mailacctcert.baseProfileType.pref"
+	      name="keymgr.mailacctcert.baseProfileType"
+	      type="string"/>
+            <preference
+	      id="keymgr.mailacctcert.baseProfileFilePath.pref"
+	      name="keymgr.mailacctcert.baseProfileFilePath"
+	      type="string"/>
+            <preference
+	      id="keymgr.mailacctcert.baseProfileURI.pref"
+	      name="keymgr.mailacctcert.baseProfileURI"
+	      type="string"/>
+        </preferences>
+
+      <!--
+	<vbox flex = "1">
+	  <spacer flex="1"/>
+	  <label value="Place holder for preferences yet to be defined."/>
+	  <spacer flex="1"/>
+	</vbox>
+      -->
+
+	<grid> 
+	    <columns>
+		<column/>
+		<column flex="1"/>
+	    </columns>
+	    <rows>
+		<row>
+		    <label value="Base Cert Profile Type" control="keymgr.mailacctcert.baseProfileType.default"/>
+		    <hbox pack="start" align="start">
+			<!--
+  	                <textbox id="keymgr.mailacctcert.baseProfileType.default"
+			    />
+			-->
+			<menulist id="keymgr.mailacctcert.baseProfileType.default"
+			    preference="keymgr.mailacctcert.baseProfileType.pref"
+		  	    >
+			    <menupopup>
+				<menuitem
+				    label="No Extensions"
+				    tooltiptext="Select this option if you do not want preset extensions or want to reset the forms for no extensions"
+				    value="noextensions"
+				    />
+				<menuitem
+				    label="Basic Constraints Extension Only"
+				    tooltiptext="Select this option if you do want set basic constraints extensions only"
+				    value="basicconstraints"
+				    />
+				<menuitem
+				    label="Digital Signature"
+				    tooltiptext="Select this option if you want the key just for digital signature"
+				    value="digitalsig"
+				    />
+				<menuitem
+				    label="Data Encipherment"
+				    tooltiptext="Select this option if you want the key just for data encipherment"
+				    value="dataencipherment"
+				    />
+				<menuitem
+				    label="Digital Signature and Data Encipherment"
+				    tooltiptext="Select this option if you want the key for both digital signature and data encipherment"
+				    value="sig_dataencipherment"
+				    />
+				<menuitem
+				    label="HE PKI-Lite Cert Profile"
+				    tooltiptext="Select this option to select HE PKI-Lite Certificate profile (http://middleware.internet2.edu/hepki-tag/pki-lite/hepki-tag-pkilite-profile-current.html)."
+				    value="pkilite"
+				    />
+				<menuitem
+				    label="Server Cert Profile"
+				    tooltiptext="Select this option to select Server Certificate profile."
+				    value="server"
+				    />
+				<menuitem
+				    label="CA Cert Profile"
+				    tooltiptext="Select this option to select CA Certificate profile."
+				    profiletype="ca"
+				    />
+				<menuitem
+				    label="MS IIS CA Cert Profile"
+				    tooltiptext="Select this option to select MS IIS Server CA Certificate profile."
+				    value="msiisca"
+				    />
+				<menuitem
+				    label="MS IIS Server Cert Profile"
+				    tooltiptext="Select this option to select MS IIS Server Certificate profile."
+				    value="msiisserver"
+				    />
+
+				<menuitem
+				    label="Proxy Cert Profile"
+				    tooltiptext="Select this option to select the proxy cert extension profile."
+				    hidden="true"
+				    value="proxycert"
+				    />
+				<menuitem
+				    label="Custom Cert Profile File"
+				    tooltiptext="Select this option to load key usage profile from a file - after loading, use the Advanced tab control for further customization."
+				    value="custom"
+				    />
+				<menuitem
+				    label="Custom Cert Profile URI"
+				    tooltiptext="Select this option to load key usage profile from a file - after loading, use the Advanced tab control for further customization."
+				    value="customuri"
+				    />
+				<menuitem
+				    label="Copy profile from existing Cert"
+				    tooltiptext="Select this option to load certificate profile from an existing certificate - after loading, use the Advanced tab control for further customization."
+				    hidden="true"
+				    value="certificate"
+				    />
+			    </menupopup>
+			</menulist>
+		    </hbox> 
+		</row>
+		<row>
+		  <label value="Base Custom Profile Path" control="keymgr.mailacctcert.baseProfileFilePath.default"/>
+  	          <textbox id="keymgr.mailacctcert.baseProfileFilePath.default"
+		      tooltiptext="Enter the custome profile file path"
+		      preference="keymgr.mailacctcert.baseProfileFilePath.pref"/>
+		</row>
+		<row>
+		  <label value="Base Custom Profile URI" control="keymgr.mailacctcert.baseProfileURI.default"/>
+  	          <textbox id="keymgr.mailacctcert.baseProfileURI.default"
+		      tooltiptext="Enter the custome profile file URI "
+		      preference="keymgr.mailacctcert.baseProfileURI.pref"/>
+		</row>
+	    </rows>
+	</grid>
+    </prefpane>
+
+  <keyset id="keys">
+    <key keycode="VK_ESCAPE" oncommand="window.close();"/>
+  </keyset>
+
+</prefwindow>
+
+

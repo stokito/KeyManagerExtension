@@ -1,0 +1,939 @@
+<?xml version="1.0"?>
+
+<!-- @(#) $Id: xmldsigbindings.xml,v 1.99 2009/07/22 05:34:20 subrata Exp $ -->
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is Avaya Labs Research, Avaya Inc. Code.
+   -
+   - The Initial Developer of the Original Code is
+   -     Subrata Mazumdar, Avaya Labs Research, Avaya Inc.
+   - Portions created by the Initial Developer are Copyright (C) 2007.
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Subrata Mazumdar (mazum@avaya.com)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+
+
+<!DOCTYPE bindings SYSTEM "chrome://keymanager/locale/keyManager.dtd">
+
+<bindings id="xmldsigBindings"
+    xmlns="http://www.mozilla.org/xbl"
+    xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    xmlns:xbl="http://www.mozilla.org/xbl">
+
+    <binding id="xmldsig-base">
+	<resources>
+	</resources>
+	<content>
+	</content>
+	<implementation>
+	    <field name="mXmlDSigNsURI" readonly="true">
+		    "http://www.w3.org/2000/09/xmldsig#"
+	    </field>
+
+	    <field name="mXulDocNsURI" readonly="true">
+	    "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+	    </field>
+
+	    <field name="mXmlDSigTool">
+	    /* alrIXPXmlDSigTool */
+	    Components.classes["@avaya.com/pkm/xmldsigtool;1"].
+			getService(Components.interfaces.alrIXPXmlDSigTool);
+	    </field>
+
+	    <field name="mX509CertDBUtil">
+	    /* alrIX509CertDBUtil */
+	    Components.classes["@avaya.com/pkm/x509certdbutil;1"].
+			getService(Components.interfaces.alrIX509CertDBUtil);
+	    </field>
+
+	    <field name="mIOService" readonly="true">
+	    Components.classes["@mozilla.org/network/io-service;1"]
+			.getService(Components.interfaces.nsIIOService);
+	    </field>
+
+	    <field name="mMaxLogLevel">4</field>
+	    <field name="mLogDebugLevel">8</field>
+	    <field name="mLogTraceLevel">6</field>
+	    <field name="mLogErrorLevel">2</field>
+
+	    <field name="mXPathEvaluator">
+	    </field>
+	    <field name="mXmlParser">
+		new DOMParser();
+	    </field>
+	    <field name="mXmlSerializer">
+		new XMLSerializer();
+	    </field>
+
+	    <method name="trim">
+		<parameter name="aStr"/>
+		<body>
+		<![CDATA[
+		// var newStr = (new java.lang.String(aStr)).trim();
+		// return newStr;
+		if (!aStr) {
+		    return aStr;
+		}
+		var sInString = aStr.replace( /^\s+/g, "" ); // strip leading whitespace
+		return sInString.replace( /\s+$/g, "" ); // strip trailing whitespace
+		]]>
+		</body>
+	    </method>
+
+	    <method name="Log">
+		<parameter name="level"/>
+		<parameter name="message"/>
+		<body>
+		<![CDATA[
+		if (level > this.mMaxLogLevel) {
+		    return;
+		}
+		dump("LOG(" + level + ") :  " + message + "\n");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="LogDebug">
+		<parameter name="message"/>
+		<body>
+		<![CDATA[
+		this.Log(this.mLogDebugLevel, message);
+		]]>
+		</body>
+	    </method>
+
+	    <method name="LogTrace">
+		<parameter name="message"/>
+		<body>
+		<![CDATA[
+		this.Log(this.mLogTraceLevel, message);
+		]]>
+		</body>
+	    </method>
+
+	    <method name="LogError">
+		<parameter name="message"/>
+		<body>
+		<![CDATA[
+		this.Log(this.mLogErrorLevel, message);
+		]]>
+		</body>
+	    </method>
+
+
+	    <method name="evaluateXPath">
+		<parameter name="aNode"/>
+		<parameter name="aExpr"/>
+		<body>
+		<![CDATA[
+		// Evaluate an XPath expression aExpression against a given DOM node
+		// or Document object (aNode), returning the results as an array
+
+		/*
+		if (!this.mXmlSerializer) {
+		    this.mXmlSerializer = new XMLSerializer();
+		}
+		*/
+		// this.LogDebug( "xmldsig-base.evaluateXPath(): xmlDocDataStr:\n" + this.serialize(aNode) + "");
+		// this.LogDebug( "xmldsig-base.evaluateXPath(): aExpr: " + aExpr);
+
+		if (!this.mXPathEvaluator) {
+		    this.mXPathEvaluator = new XPathEvaluator();
+		}
+		var ownerDocument = aNode.ownerDocument;
+		var nsResolver = this.mXPathEvaluator.createNSResolver(
+				(ownerDocument == null)?aNode.documentElement:ownerDocument.documentElement
+				);
+		this.LogTrace( "xmldsig-base.evaluateXPath(): nsResolver: " + nsResolver);
+
+		var foundElemList = [];
+		var result = null;
+		try {
+		    result = this.mXPathEvaluator.evaluate(aExpr, aNode, nsResolver, 0, null);
+		} catch(ex) {
+		    dump("xmldsig-base.evaluateXPath(): mXPathEvaluator.evaluate() failed - ex: " + ex + "\n");
+		}
+		this.LogTrace( "xmldsig-base.evaluateXPath(): result: " + result);
+		if (!result) {
+		    return foundElemList;
+		}
+
+		var res;
+		// while ((res = result.iterateNext())) {
+		for (res = result.iterateNext(); res; res = result.iterateNext()) {
+		    // this.LogDebug( "xmldsig-base.evaluateXPath(): res: " + res);
+		    foundElemList.push(res);
+		}
+		return foundElemList;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="getElementsByXPath">
+		<parameter name="aNode"/>
+		<parameter name="aExpr"/>
+		<body>
+		<![CDATA[
+		return this.evaluateXPath(aNode, aExpr);
+		]]>
+		</body>
+	    </method>
+
+	    <method name="getElementsByAttributeNames">
+		<parameter name="aDocElem"/>
+		<parameter name="aElemAttrNameList"/>
+		<body>
+		<![CDATA[
+		var xpathExpr = null;
+		var attrPresenceExpr = "";
+		for (var i = 0; aElemAttrNameList.length; i++) {
+		    var attrName = aElemAttrNameList[i];
+		    if (i > 0) {
+			attrPresenceExpr += " or ";
+		    }
+		    attrPresenceExpr += "@" + attrName;
+		}
+
+		xpathExpr = ""//*[" + attrPresenceExpr + "]";
+
+		dump("xmldsig-base.getElementsByAttributeNames(): xpathExpr: " + xpathExpr + "\n");
+		/*
+		if (!aElemAttrValue || (aElemAttrValue == "*")) {
+		    // xpathExpr = "//*[@" + aElemAttrName + "]";
+		    xpathExpr = "//*[@" + aElemAttrName + "]";
+		}
+		else {
+		    xpathExpr = "//*[@" + aElemAttrName + "=\"" + aElemAttrValue + "\"]";
+		}
+		*/
+		return this.evaluateXPath(aDocElem, xpathExpr);
+		]]>
+		</body>
+	    </method>
+
+	    <method name="getDocElementsByAttribute">
+		<parameter name="aDocElem"/>
+		<parameter name="aElemAttrName"/>
+		<parameter name="aElemAttrValue"/>
+		<body>
+		<![CDATA[
+		var xpathExpr = null;
+		if (!aElemAttrValue || (aElemAttrValue == "*")) {
+		    // xpathExpr = "//*[@" + aElemAttrName + "]";
+		    xpathExpr = "//*[@" + aElemAttrName + "]";
+		}
+		else {
+		    xpathExpr = "//*[@" + aElemAttrName + "=\"" + aElemAttrValue + "\"]";
+		}
+		return this.evaluateXPath(aDocElem, xpathExpr);
+		]]>
+		</body>
+	    </method>
+
+	    <method name="getAnyXmlDocElem">
+		<parameter name="aDocElem"/>
+		<parameter name="aElemTag"/>
+		<body>
+		<![CDATA[
+		if (!aDocElem || !aElemTag) {
+		    dump("saml-base.getAnyXmlDocElem(): NULL Arguments.\n");
+		    return null;
+		}
+		var docElemList = aDocElem.getElementsByTagName(aElemTag);
+		if (!docElemList || (docElemList.length == 0)) {
+		    // dump("saml-base.getAnyXmlDocElem(): couldn't find elem Tag: " + aElemTag + "\n");
+		    return null;
+		}
+		var selectedDocElem = docElemList.item(0);
+		return selectedDocElem;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="getAnyXmlDocElemAttribute">
+		<parameter name="aDocElem"/>
+		<parameter name="aElemTag"/>
+		<parameter name="aElemAttributeName"/>
+		<body>
+		<![CDATA[
+		var selectedDocElem = this.getAnyXmlDocElem(aDocElem, aElemTag);
+		if (!selectedDocElem) {
+		    return null;
+		}
+		var docElemAttribValue = selectedDocElem.getAttribute(aElemAttributeName);
+		return docElemAttribValue;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="getXmlDocElemChildByAttrNVP">
+		<parameter name="aDocElem"/>
+		<parameter name="aElemAttrId"/>
+		<parameter name="aElemAttrValue"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("getXmlDocElemChildByAttrNVP():..........................Start");
+
+		if (!aDocElem.hasChildNodes()) {
+		    return null;
+		}
+
+		var elemChildNodeList = aDocElem.childNodes;
+		if (elemChildNodeList.length == 0) {
+		    return null;
+		}
+		for (var i = 0; i < elemChildNodeList.length; i++) {
+		    var elemNode = elemChildNodeList.item(i);
+		    if (!elemNode) {
+			continue;
+		    }
+		    var /* nsIDOMElement */ elemChild = null;
+		    try {
+			elemChild = elemNode.QueryInterface(Components.interfaces.nsIDOMElement);
+		    } catch (ex) {
+			continue;
+		    }
+		    this.LogDebug("elemNode: " + elemNode + " tag: " + elemNode.nodeName + "");
+		    if (elemChild.getAttribute(aElemAttrId) == aElemAttrValue) {
+			return elemChild;
+		    }
+		}
+		return null;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="getChildElementsByTagName">
+		<parameter name="aDocElem"/>
+		<parameter name="aTagName"/>
+		<body>
+		<![CDATA[
+		// this.LogTrace("getChildElementsByTagName():..........................Start.");
+
+		var childElemList = [];
+
+		if (!aDocElem) {
+		    return null;
+		}
+
+		if (!aDocElem.hasChildNodes()) {
+		    return childElemList;
+		}
+
+		var elemChildNodeList = aDocElem.childNodes;
+		if (elemChildNodeList.length == 0) {
+		    return childElemList;
+		}
+
+		for (var i = 0; i < elemChildNodeList.length; i++) {
+		    var childNode = elemChildNodeList.item(i);
+		    if (!childNode) {
+			continue;
+		    }
+		    var /* nsIDOMElement */ childElem = null;
+		    try {
+			childElem = childNode.QueryInterface(Components.interfaces.nsIDOMElement);
+		    } catch (ex) {
+			continue;
+		    }
+		    // dump("xmldsig-base.getChildElementsByTagName(): childNode: " + childNode + " tag: " + childElem.nodeName + "\n");
+		    if (childElem.nodeName != aTagName) {
+			continue;
+		    }
+		    childElemList.push(childElem);
+		}
+
+		// this.LogTrace("getChildElementsByTagName():..........................End.");
+		return childElemList;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="getFirstChildElementByTagName">
+		<parameter name="aDocElem"/>
+		<parameter name="aTagName"/>
+		<body>
+		<![CDATA[
+		// this.LogTrace("getFirstChildElementByTagName():..........................Start.");
+
+		if (!aDocElem || !aDocElem.hasChildNodes()) {
+		    return null;
+		}
+		var elemChildNodeList = aDocElem.childNodes;
+		if (elemChildNodeList.length == 0) {
+		    return null;
+		}
+		for (var i = 0; i < elemChildNodeList.length; i++) {
+		    var childNode = elemChildNodeList.item(i);
+		    if (!childNode) {
+			continue;
+		    }
+		    var /* nsIDOMElement */ childElem = null;
+		    try {
+			childElem = childNode.QueryInterface(Components.interfaces.nsIDOMElement);
+		    } catch (ex) {
+			continue;
+		    }
+		    if (childElem.localName == aTagName) {
+			// dump("xmldsig-base.getFirstChildElementByTagName(): childNode: " + childNode + " tag: " + childElem.nodeName + "\n");
+			// this.LogTrace("getFirstChildElementByTagName():..........................End.");
+			return childElem;
+		    }
+		}
+		// this.LogTrace("getFirstChildElementByTagName():..........................End(ERROR).");
+		return null;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="getLastChildElementByTagName">
+		<parameter name="aDocElem"/>
+		<parameter name="aTagName"/>
+		<body>
+		<![CDATA[
+		// this.LogTrace("getLastChildElementByTagName():..........................Start.");
+
+		if (!aDocElem || !aDocElem.hasChildNodes()) {
+		    return null;
+		}
+
+		var elemChildNodeList = aDocElem.childNodes;
+		if (elemChildNodeList.length == 0) {
+		    return null;
+		}
+		for (var i = (elemChildNodeList.length -1); i >= 0; i--) {
+		    var childNode = elemChildNodeList.item(i);
+		    if (!childNode) {
+			continue;
+		    }
+		    var /* nsIDOMElement */ childElem = null;
+		    try {
+			childElem = childNode.QueryInterface(Components.interfaces.nsIDOMElement);
+		    } catch (ex) {
+			continue;
+		    }
+		    // dump("xmldsig-base.getLastChildElementByTagName(): childNode: " + childNode + " tag: " + childElem.nodeName + "\n");
+		    if (childElem.localName == aTagName) {
+			// this.LogTrace("getLastChildElementByTagName():..........................End.");
+			return childElem;
+		    }
+		}
+		// this.LogTrace("getLastChildElementByTagName():..........................End(ERROR).");
+		return null;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="containsAnyElement">
+		<parameter name="aDocElem"/>
+		<body>
+		<![CDATA[
+		var elemChildNodeList = aDocElem.childNodes;
+		for (var i = 0; i < elemChildNodeList.length; i++) {
+		    var childNode = elemChildNodeList.item(i);
+		    if (!childNode) {
+			continue;
+		    }
+		    var /* nsIDOMElement */ childElem = null;
+		    try {
+			childElem = childNode.QueryInterface(Components.interfaces.nsIDOMElement);
+		    } catch (ex) {
+			childElem = null;
+		    }
+		    if (childElem) {
+			return true;
+		    }
+		}
+		return false;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="getElementTextValue">
+		<parameter name="aChildElem"/>
+		<body>
+		<![CDATA[
+		if (!aChildElem || !aChildElem.hasChildNodes()) {
+		    return null;
+		}
+		var textValue = this.trim(aChildElem.firstChild.nodeValue);
+		return textValue;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="setElementTextValue">
+		<parameter name="aChildElem"/>
+		<parameter name="aChildElemValue"/>
+		<body>
+		<![CDATA[
+		// this.LogTrace("setElementTextValue():..........................Start");
+		if (!aChildElem) {
+		    return;
+		}
+		if (!aChildElem.hasChildNodes()) {
+		    var textNode = aChildElem.ownerDocument.createTextNode("");
+		    textNode = aChildElem.appendChild(textNode);
+		}
+
+		aChildElem.firstChild.nodeValue = aChildElemValue;
+
+		// this.LogTrace("setElementTextValue():..........................End");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="createAndAddElement">
+		<parameter name="aParentElem"/>
+		<parameter name="aNamespaceURI"/>
+		<parameter name="aChildElemTag"/>
+		<parameter name="aForceAdd"/>
+		<body>
+		<![CDATA[
+		var childElem = null;
+
+		var childElemList = aParentElem.getElementsByTagName(aChildElemTag);
+		if (aForceAdd || (childElemList.length <= 0)) {
+		    childElem = aParentElem.ownerDocument.createElementNS(aNamespaceURI, aChildElemTag);
+		    childElem = aParentElem.appendChild(childElem);
+		}
+		else {
+		    childElem = childElemList.item(0);
+		}
+
+		return childElem;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="createAndAddElementWithValue">
+		<parameter name="aParentElem"/>
+		<parameter name="aNamespaceURI"/>
+		<parameter name="aChildElemTag"/>
+		<parameter name="aChildElemValue"/>
+		<parameter name="aForceAdd"/>
+		<body>
+		<![CDATA[
+		var childElem = this.createAndAddElement(
+					aParentElem,
+					aNamespaceURI,
+					aChildElemTag,
+					aForceAdd
+					);
+		this.setElementTextValue(childElem, aChildElemValue);
+		return childElem;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="getChildElementTextValue">
+		<parameter name="aChildElemTag"/>
+		<body>
+		<![CDATA[
+		var childElem = this.getFirstChildElementByTagName(this, aChildElemTag);
+		if (!childElem) {
+		    return null;
+		}
+		return this.getElementTextValue(childElem);
+		]]>
+		</body>
+	    </method>
+
+	    <method name="setChildElementTextValue">
+		<parameter name="aChildElemTag"/>
+		<parameter name="aChildElemValue"/>
+		<body>
+		<![CDATA[
+		var childElem = null;
+
+		var childElem = this.createAndAddElementWithValue(
+					this,
+					this.mXulDocNsURI,
+					aChildElemTag,
+					aChildElemValue,
+					false
+					);
+		if (aChildElemValue) {
+		    if (childElem.refresh) {
+			childElem.refresh();
+		    }
+		}
+		return childElem;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="createEmptyDoc">
+		<parameter name="aNamespaceURI"/>
+		<parameter name="aRootElemTagName"/>
+		<body>
+		<![CDATA[
+		var doc = document.implementation.createDocument(aNamespaceURI, aRootElemTagName, null);
+		return doc;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="createDocRootElement">
+		<parameter name="aNamespaceURI"/>
+		<parameter name="aRootElemTagName"/>
+		<body>
+		<![CDATA[
+		var emptyDoc = createEmptyDoc(aNamespaceURI, aRootElemTagName);
+		return emptyDoc.documentElement;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="setAttrRecurse">
+		<parameter name="targetElem"/>
+		<parameter name="attrName"/>
+		<parameter name="attrValue"/>
+		<body>
+		<![CDATA[
+		// this.LogDebug( "setAttrRecurse(): targetElem: " + targetElem.tagName + "");
+		for (var i = 0; i < targetElem.childNodes.length; i++) {
+		    var childNode = targetElem.childNodes.item(i);
+		    if (childNode.nodeType != Components.interfaces.nsIDOMNode.ELEMENT_NODE) {
+			continue;
+		    }
+		    this.setAttrRecurse(childNode, attrName, attrValue);
+		}
+
+		if (targetElem.tagName == this.tagName) {
+		    return;
+		}
+
+		if (!attrValue) {
+		    targetElem.removeAttribute(attrName);
+		}
+		else {
+		    targetElem.setAttribute(attrName, attrValue);
+		}
+
+		if (attrName == "readonly") {
+		    if (attrValue) {
+			targetElem.readonly = true;
+		    }
+		    else {
+			targetElem.readonly = false;
+		    }
+		}
+		return;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="loginToCertToken">
+		<parameter name="aX509Cert"/>
+		<parameter name="force"/>
+		<body>
+		<![CDATA[
+		var tokendb = Components.classes["@mozilla.org/security/pk11tokendb;1"]
+			.getService(Components.interfaces.nsIPK11TokenDB);
+		var keyTokenName = "" + aX509Cert.tokenName;
+		var /* nsIPK11Token */ token = tokendb.findTokenByName(keyTokenName);
+		if (token == null) {
+		    return;
+		}
+		var forceLogin = ((force == null) ? false : force);
+		token.login(forceLogin);
+		]]>
+		</body>
+	    </method>
+
+	    <method name="readDataFromURI">
+		<parameter name="dataURI"/>
+		<body>
+		<![CDATA[
+		this.LogTrace( "xmldsig-base.readDataFromURI():................Start.");
+
+		var ioService = Components.classes["@mozilla.org/network/io-service;1"]
+				  .getService(Components.interfaces.nsIIOService);
+	    
+		// get a channel for that nsIURI
+		var channel = ioService.newChannelFromURI(dataURI);
+		if (!channel) {
+		    this.Log(this.mLogErrorLevel, "readDataFromURL(): ioService.newChannelFromURI() failed.");
+		    return null;
+		}
+	    
+		var channelIS = null;
+		/*
+		var jarChannel = channel.QueryInterface(Components.interfaces.nsIJARChannel);
+		if (jarChannel) {
+		    channelIS = jarChannel.open();
+		}
+		else {
+		    channelIS = channel.open();
+		}
+		*/
+		channelIS = channel.open();
+		if (!channelIS) {
+		    this.LogError("xmldsig-base.readDataFromURI(): channel.open() failed.");
+		    return null;
+		}
+	    
+		var siStream = Components.classes["@mozilla.org/scriptableinputstream;1"]
+			.createInstance(Components.interfaces.nsIScriptableInputStream);
+		siStream.init(channelIS);
+
+		var dataCnt = 0;
+		try {
+		    dataCnt = siStream.available();
+		} catch (ex) {
+		    this.LogError("readDataFromURL(): siStream.available() failed - ex: " + ex);
+		    throw ex;
+		}
+		if (dataCnt == 0) {
+		    this.LogError("readDataFromURL(): siStream.available() failed.");
+		    return null;
+		}
+
+		var urlDataStr = "";
+		var str = siStream.read(-1);
+		while (str.length > 0) {
+		    urlDataStr += str;
+		    str = siStream.read(-1);
+		}
+	    
+		siStream.close();
+		channelIS.close();
+	    
+		this.LogTrace( "xmldsig-base.readDataFromURI():................End.");
+		return urlDataStr;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="readDataFromURIStr">
+		<parameter name="dataURIStr"/>
+		<body>
+		<![CDATA[
+		this.LogTrace( "xmldsig-base.readDataFromURIStr(" + dataURIStr + "):................Start.");
+
+		var ioService = Components.classes["@mozilla.org/network/io-service;1"]
+				  .getService(Components.interfaces.nsIIOService);
+		// create an nsIURI
+		var dataURI = ioService.newURI(dataURIStr, null, null);
+
+		var dataStr =  this.readDataFromURI(dataURI);
+
+		this.LogTrace( "xmldsig-base.readDataFromURIStr(" + dataURIStr + "):................End.");
+		return dataStr;
+		]]>
+		</body>
+	    </method>
+
+
+	    <method name="readXMLDocFromString">
+		<parameter name="aXmlDocDataStr"/>
+		<body>
+		<![CDATA[
+		var xmlDoc = null;
+		try {
+		    xmlDoc = this.mXmlParser.parseFromString(aXmlDocDataStr, "text/xml");
+		} catch (ex) {
+		    this.LogError("readXMLDocFromString(): this.mXmlParser.parseFromString() failed - ex: " + ex);
+		    return null;
+		}
+
+		var docElemTag = xmlDoc.documentElement;
+		if ((docElemTag.tagName == "parserError")
+		    || (docElemTag.namespaceURI == "http://www.mozilla.org/newlayout/xml/parsererror.xml")){
+		    this.LogError("readXMLDocFromString(): this.mXmlParser.parseFromString() failed - parserError");
+		    return null;
+		}
+		return xmlDoc;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="readXMLDocFromURI">
+		<parameter name="aXmlDocURI"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("readXMLDocFromURI():................Start.");
+
+		var xmlDataStr =  this.readDataFromURI(aXmlDocURI);
+		if (!xmlDataStr) {
+		    this.LogTrace("readXMLDocFromURI():................End(1).");
+		    return null;
+		}
+		var xmlDoc = this.readXMLDocFromString(xmlDataStr);
+
+		this.LogTrace("readXMLDocFromURI():................End.");
+		return xmlDoc;
+		]]>
+		</body>
+	    </method>
+
+
+	    <method name="readXMLDocFromURIStr">
+		<parameter name="aXmlDocURIStr"/>
+		<body>
+		<![CDATA[
+		this.LogDebug( "readXMLDocFromURIStr(): aXmlDocURIStr:\n" + aXmlDocURIStr + "");
+
+		var xmlDataStr = this.readDataFromURIStr(aXmlDocURIStr);
+		if (!xmlDataStr) {
+		    return null;
+		}
+
+		var xmlDoc = this.readXMLDocFromString(xmlDataStr);
+		return xmlDoc;
+		]]>
+		</body>
+	    </method>
+
+
+	    <method name="readXMLDocFromFile">
+		<parameter name="aXmlDocFile"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("readXMLDocFromFile():................Start.");
+
+		if (!aXmlDocFile) {
+		    this.LogError("readXMLDocFromFile(): NULL parameters.");
+		    return null;
+		}
+
+		var /* nsIFileURI */ xmlDocFileURI = this.mIOService.newFileURI(aXmlDocFile);
+		this.LogDebug("readXMLDocFromFile(): xmlDocFileURI.spec: " + xmlDocFileURI.spec);
+
+		var xmlDoc = this.readXMLDocFromURI(xmlDocFileURI);
+
+		this.LogTrace("readXMLDocFromFile():................End.");
+		return xmlDoc;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="readXMLDocFromFilePath">
+		<parameter name="aXmlDocFilePath"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("readXMLDocFromFilePath(" + aXmlDocFilePath + "):................Start.");
+		if ((!aXmlDocFilePath) || (aXmlDocFilePath == "")) {
+		    this.LogError("readXMLDocFromFilePath(): NULL parameters.");
+		    return null;
+		}
+
+		var /* nsIFile */ xmlDocFile = null;
+		try {
+		    xmlDocFile = Components.classes["@mozilla.org/file/local;1"]
+				     .createInstance(Components.interfaces.nsILocalFile);
+		    xmlDocFile.initWithPath(aXmlDocFilePath);
+		} catch (ex) {xmlDocFile = null;}
+		if (!xmlDocFile) {
+		    this.LogError("readXMLDocFromFilePath(): xmlDocFile.initWithPath() failed.");
+		    return null;
+		}
+
+		var xmlDoc = this.readXMLDocFromFile(xmlDocFile);
+
+		this.LogTrace("readXMLDocFromFilePath(" + aXmlDocFilePath + "):................End.");
+		return xmlDoc;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="serialize">
+		<parameter name="aXmlDocElem"/>
+		<body>
+		<![CDATA[
+		if (!this.mXmlSerializer) {
+		    this.mXmlSerializer = new XMLSerializer();
+		}
+		var xmlDocDataStr = null;
+		if (aXmlDocElem) {
+		    xmlDocDataStr = this.mXmlSerializer.serializeToString(aXmlDocElem);
+		}
+		else {
+		    xmlDocDataStr = this.mXmlSerializer.serializeToString(this);
+		}
+		// this.LogDebug( "serialize(): xmlDocDataStr:\n" + xmlDocDataStr + "");
+
+		return xmlDocDataStr;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="dumpProperties">
+		<parameter name="aProperties"/>
+		<parameter name="msg"/>
+		<body>
+		<![CDATA[
+		if (msg) {dump(msg + " ");}
+		if (!aProperties) {
+		    dump("Properties {}\n");
+		    return;
+		}
+
+		var propKeyList = [];
+		var propEnum = aProperties.enumerate();
+		while (propEnum.hasMoreElements ()) {
+		    var propElem = propEnum.getNext ();
+		    var propItem = propElem.QueryInterface (Components.interfaces.nsIPropertyElement);
+		    var propKey = propItem.key;
+		    // var propValue = propItem.value;
+		    // this.LogDebug("    " + propKey + " = " + propValue + "\n");
+		    propKeyList[propKeyList.length] = propKey;
+		}
+		if (propKeyList.length <= 0) {
+		    dump("Properties {no elements.}\n");
+		    return;
+		}
+		// this.LogDebug("propKeyList.length: " + propKeyList.length + "\n");
+
+		propKeyList = propKeyList.sort();
+		// this.LogDebug("propKeyList.length(sorted): " + propKeyList.length + "");
+
+		dump("Properties {\n");
+		for (var i = 0; i < propKeyList.length; i++) {
+		    var propKey =  propKeyList[i];
+		    var propValue = null;
+		    try {
+			propValue = aProperties.getStringProperty(propKey);
+		    } catch(ex) {}
+		    dump("    " + propKey + " = " + propValue + "\n");
+		}
+		dump("}\n\n");
+
+		]]>
+		</body>
+	    </method>
+
+	</implementation>
+    </binding>
+
+</bindings>
+

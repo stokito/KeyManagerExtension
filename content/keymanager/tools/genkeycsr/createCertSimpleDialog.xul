@@ -1,0 +1,195 @@
+<?xml version="1.0"?>
+<!-- @(#) $Id: createCertSimpleDialog.xul,v 1.2 2010/03/03 17:01:08 subrata Exp $ -->
+
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is Avaya Labs Research, Avaya Inc. Code.
+   -
+   - The Initial Developer of the Original Code is
+   - Subrata Mazumdar, Avaya Labs Research, Avaya Inc.
+   - Portions created by the Initial Developer are Copyright (C) 2007.
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Subrata Mazumdar (mazum@avaya.com)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://keymanager/skin/kmbindings.css" type="text/css"?>
+<?xml-stylesheet href="chrome://keymanager/skin/datetimebindings.css" type="text/css"?>
+
+<!DOCTYPE dialog
+	[
+	<!ENTITY % keyManager.dtd SYSTEM "chrome://keymanager/locale/keyManager.dtd">
+	%keyManager.dtd;
+	]>
+
+<dialog id="keymgr.genkeycsr.createcert.simple.dialog"
+  title="&keymgr.genkeycsr.createcert.simple.dialog.title;"
+  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"      
+  style="width: 30em;"
+  persist="screenX screenY width height"
+  buttons="accept,cancel"
+  ondialogaccept="return CreateCertSimpleDialog.createCert();"
+  ondialogcancel="return CreateCertSimpleDialog.cancel();"
+  onload="CreateCertSimpleDialog.initOnLoad();">
+
+    <script type="application/x-javascript" src="chrome://keymanager/content/tools/genkeycsr/createCertSimpleDialog.js"/>
+
+	<grid flex="1">
+	    <columns>
+		<column/>
+		<column flex="1"/>
+	    </columns>
+	    <rows>
+		<row id="keymgr.genkeycsr.createcert.simple.subjectdn.row"
+		    align="center"
+		    >
+		    <label value="&keymgr.genkeycsr.createcert.simple.subjectdn.label;"/> 
+		    <hbox
+			pack="start"
+			>
+			<textbox id="keymgr.genkeycsr.createcert.simple.subjectdn"
+			    flex="1"
+			    tooltiptext="&keymgr.genkeycsr.createcert.simple.subjectdn.tooltip;"
+			    onchange="CreateCertSimpleDialog.handleCreateCertDNChange(this, event);"
+			    certPropName="subject"
+			    x500PropName="dn"
+			    />
+		    	<button 
+			    label="&keymgr.genkeycsr.createcert.simple.subjectdn.format.label;"
+			    tooltiptext="&keymgr.genkeycsr.createcert.simple.subjectdn.format.tooltip;"
+			    oncommand="CreateCertSimpleDialog.formatSubjectDN(this, event);"
+			    />
+		    </hbox>
+		</row>
+
+		<row id="keymgr.genkeycsr.createcert.simple.alias.row"
+		    align="center"
+		    >
+		    <label value="&keymgr.genkeycsr.createcert.simple.alias.label;"/>
+		    <hbox
+			pack="start"
+			>
+			<textbox id="keymgr.genkeycsr.createcert.simple.alias"
+			    tooltiptext="&keymgr.genkeycsr.createcert.simple.alias.tooltip;"
+			    onchange="CreateCertSimpleDialog.handleCreateCertAliasChange(this, event);"
+			    certPropName="nickName"
+			    />
+		    </hbox>
+		</row>
+		<row id="keymgr.genkeycsr.createcert.simple.keytype.row"
+		    align="center"
+		    >
+		    <label value="&keymgr.genkeycsr.createcert.simple.keytype.label;"/> 
+		    <hbox
+			pack="start"
+			>
+			<keytype id="keymgr.genkeycsr.createcert.simple.keytype"
+			    echidden="true"
+			    tooltiptext="&keymgr.genkeycsr.createcert.simple.keytype.tooltip;"
+			    oncommand="CreateCertSimpleDialog.handleCreateCertKeyTypeChange(this, event);"
+			    certPropName="keytype"
+			    />
+		    </hbox>
+		</row>
+
+		<row id="keymgr.genkeycsr.createcert.simple.keysize.row"
+		    align="center"
+		    >
+		    <label value="&keymgr.genkeycsr.createcert.simple.keysize.label;"/> 
+		    <hbox
+			pack="start"
+			>
+			<keysize id="keymgr.genkeycsr.createcert.simple.keysize"
+			    tooltiptext="&keymgr.genkeycsr.createcert.simple.keysize.tooltip;"
+			    oncommand="CreateCertSimpleDialog.handleCreateCertKeySizeChange(this, event);"
+			    certPropName="keysize"
+			    />
+		    </hbox>
+		</row>
+
+		<row id="keymgr.genkeycsr.createcert.simple.sigalg.row"
+		    align="center"
+		    >
+		    <label value="&keymgr.genkeycsr.createcert.simple.sigalg.label;"/> 
+		    <hbox
+			pack="start"
+			>
+			<hashalgmenu id="keymgr.genkeycsr.createcert.simple.sigalg"
+			    value="SHA1"
+			    tooltiptext="&keymgr.genkeycsr.createcert.simple.sigalg.tooltip;"
+			    oncommand="CreateCertSimpleDialog.handleCreateCertSigAlgChange(this, event);"
+			    certPropName="sigAlgorithm"
+			    />
+		    </hbox>
+		</row>
+
+		<row id="keymgr.genkeycsr.createcert.simple.expireson.row"
+		    align="center"
+		    hidden="true"
+		    >
+		    <label value="&keymgr.genkeycsr.createcert.simple.expireson.label;"/> 
+		    <hbox
+			pack="start"
+			>
+			<datetimepicker id="keymgr.genkeycsr.createcert.simple.expireson"
+			    xtimevalue="00:00:00"
+			    xdateonly="true"
+			    hidevalue="true"
+			    tooltiptext="&keymgr.genkeycsr.createcert.simple.expireson.tooltip;"
+			    onchange="CreateCertSimpleDialog.handleCreateCertExpiresOnChange(this, event);"
+			    oncommand="CreateCertSimpleDialog.handleCreateCertExpiresOnChange(this, event);"
+			    />
+		    </hbox>
+		</row>
+
+		<row id="keymgr.genkeycsr.createcert.simple.validitydays.row"
+		    align="center"
+		    >
+		    <label value="&keymgr.genkeycsr.createcert.simple.validitydays.label;"/> 
+		    <hbox
+			pack="start"
+			>
+			<textbox id="keymgr.genkeycsr.createcert.simple.validitydays"
+			    type="number"
+			    min="1"
+			    size="8"
+			    tooltiptext="&keymgr.genkeycsr.createcert.simple.validitydays.tooltip;"
+			    onchange="CreateCertSimpleDialog.handleCreateCertValidityChange(this, event);"
+			    certPropName="validityDuration"
+			    />
+		    </hbox>
+		</row>
+
+	    </rows>
+	</grid>
+
+</dialog>
+

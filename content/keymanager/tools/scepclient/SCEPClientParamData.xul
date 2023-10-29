@@ -1,0 +1,375 @@
+<?xml version="1.0"?>
+<!-- @(#) $Id: SCEPClientParamData.xul,v 1.1 2010/01/12 11:55:59 subrata Exp $ -->
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is Avaya Labs Research, Avaya Inc. Code.
+   -
+   - The Initial Developer of the Original Code is
+   - Subrata Mazumdar, Avaya Labs Research, Avaya Inc.
+   - Portions created by the Initial Developer are Copyright (C) 2007.
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Subrata Mazumdar (mazum@avaya.com)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+
+
+<!DOCTYPE overlay
+	[
+	<!ENTITY % keyManager.dtd SYSTEM "chrome://keymanager/locale/keyManager.dtd">
+	%keyManager.dtd;
+	]>
+
+<overlay id="keymgr.scepclient.param.form.overlay" 
+	 xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
+	 xmlns:cert="http://netscape.com/rdf-cert#" 
+	 xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+    <script type="application/x-javascript" src="chrome://keymanager/content/tools/scepclient/SCEPClientParamData.js"/>
+
+    <vbox id="keymgr.scepclient.param.form.pkcsreq"
+	class="box-padded"
+	xstyle='overflow: auto;'
+	>
+	<grid flex="1"> 
+	    <columns>
+		<column/>
+		<column flex="1"/>
+		<!--
+		<column/>
+		<column flex="1"/>
+		<column flex="5"/>
+		-->
+		</columns>
+	    <rows>
+		<!--
+		<row
+		    align="center"
+		    >
+		    <label value="&keymgr.scepclient.basic.scepserver.dest.label;"/> 
+		    <hbox
+			pack="start"
+			>
+			<radiogroup id="keymgr.scepclient.param.scepserver.dest.options"
+			    oncommand="SCEPClientParamData.handleScepServerURLDestOptionChange(this, event)"
+			    orient="horizontal"
+			    >
+			    <radio id="keymgr.scepclient.param.scepserver.dest.ca"
+				    label="&keymgr.scepclient.basic.scepserver.dest.ca.label;"
+				    tooltiptext="&keymgr.scepclient.basic.scepserver.dest.ca.tooltip;"
+				    selected="true"
+				    value="ca"
+				    group="keymgr.scepclient.param.scepserver.dest.options"
+				    />
+			    <radio id="keymgr.scepclient.param.scepserver.dest.ra"
+				    label="&keymgr.scepclient.basic.scepserver.dest.ra.label;"
+				    tooltiptext="&keymgr.scepclient.basic.scepserver.dest.ra.tooltip;"
+				    value="ra"
+				    group="keymgr.scepclient.param.scepserver.dest.options"
+				    />
+			</radiogroup>
+		    </hbox>
+		</row>
+		-->
+		<row
+		    align="center"
+		    >
+		    <label value="&keymgr.scepclient.basic.scepserver.url.label;"/> 
+		    <hbox pack="start">
+			<checkbox id="keymgr.scepclient.param.scepserver.isra"
+			    label="&keymgr.scepclient.basic.scepserver.isra.label;"
+			    tooltiptext="&keymgr.scepclient.basic.scepserver.isra.tooltip;"
+	       	            oncommand="SCEPClientParamData.handleScepServerIsRAChange(this, event);"
+			    />
+  	                <textbox id="keymgr.scepclient.param.scepserver.url" flex="1"
+  		                tooltiptext="&keymgr.scepclient.basic.scepserver.url.tooltip;"
+				persist="value"
+				xmaxwidth="350"
+  	  	                type="autocomplete" 
+  	  	                autocompletesearch="form-history" 
+  	  	                completedefaultindex="true"
+  	  	                completeselectedindex="true"
+  	  	                autocompletesearchparam="keymgr.scepclient.param.scepserver.url"
+			        onchange="SCEPClientParamData.handleScepServerURLChange(this, event)"
+				onpopuphiding="SCEPClientParamData.handleScepServerURLChange(this, event)"
+  		                />
+		    </hbox>
+		</row>
+		<row
+		    align="center"
+		    >
+		    <label control="keymgr.scepclient.param.scepserver.caid"
+			value="&keymgr.scepclient.basic.scepserver.caid.label;"
+			/>
+		    <hbox 
+			pack="start"
+			>
+			<textbox id="keymgr.scepclient.param.scepserver.caid"
+			    tooltiptext="&keymgr.scepclient.basic.scepserver.caid.tooltip;"
+			    onchange="SCEPClientParamData.handleGetCACertCAIdChange(this, event)"
+			    />
+			<!--
+			<button id="keymgr.scepclient.param.scepserver.downloadcert"
+			    label="&keymgr.scepclient.basic.scepserver.downloadcert.label;"
+			    tooltiptext="&keymgr.scepclient.basic.scepserver.downloadcert.tooltip;"
+			    oncommand="SCEPClientParamData.scepGetCACertChain(event);"
+			    /> 
+	      	        <button id="keymgr.scepclient.param.scepserver.getcaps"
+			    label="&keymgr.scepclient.basic.scepserver.getcaps.label;"
+  		      	    tooltiptext="&keymgr.scepclient.basic.scepserver.getcaps.tooltip;"
+			    oncommand="SCEPClientParamData.scepGetCACapabilities(event);"
+			    /> 
+			-->
+		    </hbox> 
+		</row>
+		<!--
+		<row
+		    align="center"
+		    >
+		    <spacer/>
+		    <hbox 
+			pack="start"
+			>
+		    </hbox>
+		</row>
+		-->
+		<row
+		    align="center"
+		    >
+		    <label value="&keymgr.scepclient.basic.scepserver.ca.cert.label;"/> 
+		    <vbox 
+			pack="start"
+			>
+		      <hbox
+			pack="start"
+			>
+			<textbox id="keymgr.scepclient.param.scepserver.ca.subjectdn"
+			    flex="1"
+			    tooltiptext="&keymgr.genkeycsr.createcert.simple.subjectdn.tooltip;"
+			    onchange="SCEPClientParamData.handleCASubjectDNChange(this, event);"
+			    certPropName="subject"
+			    x500PropName="dn"
+			    />
+		    	<button 
+			    label="&keymgr.genkeycsr.createcert.simple.subjectdn.format.label;"
+			    tooltiptext="&keymgr.genkeycsr.createcert.simple.subjectdn.format.tooltip;"
+			    oncommand="SCEPClientParamData.formatCASubjectDN(event);"
+			    />
+		      </hbox>
+		      <hbox 
+			pack="start"
+			>
+			<certpicker id="keymgr.scepclient.param.scepserver.ca.certpicker"
+  		            menutooltiptext="&keymgr.scepclient.basic.scepserver.ca.cert.tooltip;"
+			    persist="value"
+			    certmenucrop="start"
+			    certmenumaxwidth="300"
+			    certmenuminwidth="300"
+			    tokentypehidden="true"
+			    certtype="ca"
+			    certtypehidden="true"
+			    certusage="VerifyCA"
+			    certusagehidden="false"
+			    certusagedisabled="true"
+	  	            viewlabel="&keymgr.scepclient.wizard.cert.view.label;"
+			    viewhidden="false"
+  		            viewtooltiptext="&keymgr.scepclient.wizard.cert.view.tooltip;"
+			    includeTokenInfo="true"
+	       	            oncommand="SCEPClientParamData.handleSCEPServerCACertPickerChange(this, event);"
+			    />
+		      </hbox>
+		    </vbox> 
+		</row>
+
+		<row
+		    align="center"
+		    >
+		    <spacer/>
+		    <hbox 
+			pack="start"
+			>
+		    </hbox>
+		</row>
+		<row id="keymgr.scepclient.param.scepserver.recipient.cert.row"
+		    align="center"
+		    >
+		    <label value="&keymgr.scepclient.basic.scepserver.recipient.cert.label;"/> 
+		    <vbox 
+			pack="start"
+			>
+		      <hbox
+			pack="start"
+			>
+			<textbox id="keymgr.scepclient.param.scepserver.recipient.subjectdn"
+			    flex="1"
+			    tooltiptext="&keymgr.genkeycsr.createcert.simple.subjectdn.tooltip;"
+			    onchange="SCEPClientParamData.handleSCEPRecipientSubjectDNChange(this, event);"
+			    certPropName="subject"
+			    x500PropName="dn"
+			    />
+		    	<button 
+			    label="&keymgr.genkeycsr.createcert.simple.subjectdn.format.label;"
+			    tooltiptext="&keymgr.genkeycsr.createcert.simple.subjectdn.format.tooltip;"
+			    oncommand="SCEPClientParamData.formatSCEPRecipientSubjectDN(event);"
+			    />
+		      </hbox>
+		      <groupbox pack="start"
+		        >
+		        <hbox
+			    pack="start"
+			    >
+			    <checkbox id="keymgr.scepclient.param.scepserver.recipient.filterwithca"
+			        label="&keymgr.scepclient.basic.scepserver.recipient.filterwithca.label;"
+			        tooltiptext="&keymgr.scepclient.basic.scepserver.recipient.filterwithca.tooltip;"
+			        xchecked="true"
+	       	                oncommand="SCEPClientParamData.handleScepServerCertFilterWithCAChange(this, event);"
+			        />
+		        </hbox>
+			<certpicker id="keymgr.scepclient.param.scepserver.recipient.certpicker"
+  		            menutooltiptext="&keymgr.scepclient.basic.scepserver.recipient.cert.tooltip;"
+			    persist="value"
+			    certmenucrop="start"
+			    certmenumaxwidth="300"
+			    certmenuminwidth="300"
+			    tokentypehidden="true"
+			    certtype="ca"
+			    xcerttypedisabled="true"
+			    xcerttypehidden="true"
+			    certusage="VerifyCA"
+			    certusagehidden="false"
+			    xcertusagedisabled="true"
+	  	            viewlabel="&keymgr.scepclient.wizard.cert.view.label;"
+			    viewhidden="false"
+  		            viewtooltiptext="&keymgr.scepclient.wizard.cert.view.tooltip;"
+			    includeTokenInfo="true"
+	       	            oncommand="SCEPClientParamData.handleScepServerCertPickerChange(this, event);"
+			    />
+		      </groupbox>
+		    </vbox> 
+		</row>
+		<row
+		    align="center"
+		    >
+		    <label value="&keymgr.scepclient.basic.user.cert.label;"/> 
+		    <vbox 
+			pack="start"
+			>
+		      <hbox
+			pack="start"
+			>
+			<textbox id="keymgr.scepclient.param.user.subjectdn"
+			    flex="1"
+			    tooltiptext="&keymgr.genkeycsr.createcert.simple.subjectdn.tooltip;"
+			    onchange="SCEPClientParamData.handleUserSubjectDNChange(this, event);"
+			    certPropName="subject"
+			    x500PropName="dn"
+			    />
+		    	<button 
+			    label="&keymgr.genkeycsr.createcert.simple.subjectdn.format.label;"
+			    tooltiptext="&keymgr.genkeycsr.createcert.simple.subjectdn.format.tooltip;"
+			    oncommand="SCEPClientParamData.formatUserSubjectDN(event);"
+			    />
+		      </hbox>
+		      <hbox
+			pack="start"
+			>
+			<certpicker id="keymgr.scepclient.param.user.certpicker"
+  		            menutooltiptext="&keymgr.scepclient.basic.user.cert.tooltip;"
+			    tokentypehidden="true"
+			    certtype="user"
+			    certtypehidden="true"
+			    certusage="EmailRecipient"
+			    certusagehidden="false"
+			    certusagedisabled="true"
+			    viewhidden="false"
+	  	            viewlabel="&keymgr.scepclient.wizard.cert.view.label;"
+  		            viewtooltiptext="&keymgr.scepclient.basic.user.cert.view.tooltip;"
+			    includeTokenInfo="true"
+	       	            oncommand="SCEPClientParamData.handleUserCertPickerChange(this, event);"
+			    />
+		    	    <!--
+			    <button id="keymgr.scepclient.param.user.cert.create"
+	  	    	    	label="&keymgr.scepclient.basic.user.cert.create.label;"
+				type="menu"
+				>
+				<menupopup>
+				    <menuitem id="keymgr.scepclient.param.user.cert.create.simple"
+			    		label="&keymgr.scepclient.basic.user.cert.create.simple.label;"
+			    		tooltiptext="&keymgr.scepclient.basic.user.cert.create.simple.label;"
+			    		value="createSimple"
+	       	    			oncommand="SCEPClientParamData.handleCreateUserCertSimple(event)"
+			    		/>
+				    <menuitem id="keymgr.scepclient.param.user.cert.create.advanced"
+			    		label="&keymgr.scepclient.basic.user.cert.create.advanced.label;"
+			    		tooltiptext="&keymgr.scepclient.basic.user.cert.create.advanced.label;"
+			    		value="createAdvanced"
+	       	    			oncommand="SCEPClientParamData.handleCreateUserCertAdvanced(event)"
+			    		/>
+				</menupopup>
+			    </button>
+		    	    -->
+		      </hbox>
+		    </vbox> 
+		</row>
+		<row
+		    align="center"
+		    >
+		    <label value="&keymgr.scepclient.basic.user.challengepw.label;"/>
+		    <hbox pack="start">
+			<textbox id="keymgr.scepclient.param.user.challengepw"
+			    type="password"
+			    tooltiptext="&keymgr.scepclient.basic.user.challengepw.tooltip;"
+			    />
+	      	        <button id="keymgr.scepclient.param.user.challengepw.retrieve"
+			    label="&keymgr.scepclient.basic.user.challengepw.retrieve.label;"
+  		      	    tooltiptext="&keymgr.scepclient.basic.user.challengepw.retrieve.tooltip;"
+			    oncommand="SCEPClientParamData.getUserChallengePassword(event);"
+			    /> 
+		    </hbox>
+		</row>
+		<!--
+		<row
+		    align="center"
+		    >
+		    <label value="&keymgr.scepclient.basic.user.signedcert.certitem.label;"/> 
+		    <hbox
+			pack="start"
+			align="start"
+			>
+			<certitem id="keymgr.scepclient.param.user.signedcert.certitem"
+	  		    viewlabel="&keymgr.scepclient.wizard.cert.view.label;"
+  		      	    viewtooltiptext="&keymgr.scepclient.basic.user.signedcert.certitem.view.tooltip;"
+			    />
+		    </hbox>
+		</row>
+		-->
+	    </rows>
+	</grid>
+    </vbox>
+</overlay>

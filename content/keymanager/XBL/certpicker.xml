@@ -1,0 +1,2474 @@
+<?xml version="1.0"?>
+<!-- @(#) $Id: certpicker.xml,v 1.49 2012/10/07 17:19:57 subrata Exp $ -->
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is Avaya Labs Research, Avaya Inc. Code.
+   -
+   - The Initial Developer of the Original Code is
+   - Subrata Mazumdar, Avaya Labs Research, Avaya Inc.
+   - Portions created by the Initial Developer are Copyright (C) 2007.
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Subrata Mazumdar (mazum@avaya.com)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+
+
+<bindings id="certpickerBindings"
+    xmlns="http://www.mozilla.org/xbl"
+    xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    xmlns:xbl="http://www.mozilla.org/xbl">
+
+    <binding id="cert-base">
+	<!--
+	<resources>
+	    <stylesheet src="chrome://keymanager/skin/kmbindings.css"/>
+	</resources>
+	-->
+
+	<content>
+	</content>
+
+	<implementation>
+	    <field name="mMaxLogLevel">4</field>
+	    <field name="mLogDebugLevel">8</field>
+	    <field name="mLogTraceLevel">6</field>
+	    <field name="mLogErrorLevel">2</field>
+
+	    <method name="refresh">
+		<body>
+		<![CDATA[
+		]]>
+		</body>
+	    </method>
+	    <method name="reset">
+		<body>
+		<![CDATA[
+		]]>
+		</body>
+	    </method>
+
+	    <method name="Log">
+		<parameter name="level"/>
+		<parameter name="message"/>
+		<body>
+		<![CDATA[
+		if (level > this.mMaxLogLevel) {
+		    return;
+		}
+		dump("LOG(" + level + ") :  " + message + "\n");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="LogDebug">
+		<parameter name="message"/>
+		<body>
+		<![CDATA[
+		this.Log(this.mLogDebugLevel, message);
+		]]>
+		</body>
+	    </method>
+
+	    <method name="LogTrace">
+		<parameter name="message"/>
+		<body>
+		<![CDATA[
+		this.Log(this.mLogTraceLevel, message);
+		]]>
+		</body>
+	    </method>
+
+	    <method name="LogError">
+		<parameter name="message"/>
+		<body>
+		<![CDATA[
+		this.Log(this.mLogErrorLevel, message);
+		]]>
+		</body>
+	    </method>
+
+	    <method name="trim">
+		<parameter name="aStr"/>
+		<body>
+		<![CDATA[
+		// var newStr = (new java.lang.String(aStr)).trim();
+		// return newStr;
+		if (!aStr) {
+		    return aStr;
+		}
+		var sInString = aStr.replace( /^\s+/g, "" ); // strip leading whitespace
+		return sInString.replace( /\s+$/g, "" ); // strip trailing whitespace
+		]]>
+		</body>
+	    </method>
+
+	</implementation>
+    </binding>
+
+
+    <binding id="pk11tokentypeBinding"
+    	>
+	<resources>
+	</resources>
+	<!-- content, property, method and event descriptions go here -->
+	<content>
+	    <xul:menulist anonid="pk11token.type"
+		xbl:inherits="value=tokentype,hidden=tokentypehidden,disabled,tooltiptext=tokentypetooltiptext,crop=tokencrop,sizetopopup,src,maximumwidth,maxwidth=tokenmaxwidth,minwidth=tokenminwidth"
+		tooltiptext="Select Token Type"
+		crop="end"
+		sizetopopup="always"
+		zvalue="all"
+		maximumwidth="200"
+		oncommand="getBindingParent(this).handleTokenTypeChange(this, event)"
+		>
+		<xul:menupopup>
+		    <xul:menuitem anonid="pk11token.type.all"
+			xbl:inherits="label=alltokenlabel"
+			label="All Tokens"
+			value="all"
+			/>
+		    <xul:menuitem anonid="pk11token.type.soft"
+			xbl:inherits="label=softtokenlabel"
+			label="Soft Tokens Only"
+			value="softtoken"
+			/>
+		    <xul:menuitem anonid="pk11token.type.hard"
+			xbl:inherits="label=hardtokenlabel"
+			label="Hard Tokens Only"
+			value="hardtoken"
+			/>
+		</xul:menupopup>
+	    </xul:menulist>
+	</content>
+	<implementation>
+	    <field name="mTokenTypeMenuElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "pk11token.type");
+	    </field>
+
+	    <property name="disabled"
+		onget="return this.getAttribute('disabled');"
+		onset="if (val) {this.setAttribute('disabled', true);}
+			else {this.removeAttribute('disabled');}
+			return val;"
+		/>
+	    <property name="value"
+		onget="return this.mTokenTypeMenuElem.value;"
+		onset="this.mTokenTypeMenuElem.value=val;
+			this.handleTokenTypeChange(this.mTokenTypeMenuElem);
+			return val;"
+		/>
+
+	    <property name="tokentype"
+		onget="return this.value;"
+		onset="this.value=val;
+			return val;"
+		/>
+
+	    <method name="refresh">
+		<body>
+		<![CDATA[
+		if (this.mTokenTypeMenuElem.selectedIndex < 0) {
+		    if (this.mTokenTypeMenuElem.selectedItem) {
+			var tmpValue = this.mTokenTypeMenuElem.value;
+			this.mTokenTypeMenuElem.value = "";
+			this.mTokenTypeMenuElem.value = tmpValue;
+		    }
+		    else {
+		    	this.mTokenTypeMenuElem.selectedIndex = 0;
+			var tmpValue = this.getAttribute("tokentype");
+			if (!tmpValue) {
+			    tmpValue = this.getAttribute("value");
+			}
+			if (tmpValue) {
+			    this.mTokenTypeMenuElem.value = tmpValue;
+			}
+			else {
+		    	    this.mTokenTypeMenuElem.selectedIndex = 0;
+			}
+		    }
+		}
+		this.handleTokenTypeChange(this.mTokenTypeMenuElem);
+		]]>
+		</body>
+	    </method>
+	    <method name="handleTokenTypeChange">
+		<parameter name="aTokenTypeMenuElem"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		// this.LogTrace("pk11tokentypeBinding.handleTokenTypeChange():......................Start.");
+		// this.LogTrace("pk11tokentypeBinding.handleTokenTypeChange():......................End.");
+		]]>
+		</body>
+	    </method>
+
+	</implementation>
+    </binding>
+
+    <binding id="x509certtypeBinding"
+    	>
+	<resources>
+	</resources>
+	<!-- content, property, method and event descriptions go here -->
+	<content>
+	    <xul:menulist anonid="certpicker.cert.type"
+		xbl:inherits="value,hidden,hidden,disabled,tooltiptext,crop,maxwidth,minwidth"
+		xvalue="user"
+		tooltiptext="Select certificate owner type(User, Other, Server, CA)"
+		oncommand="getBindingParent(this).handleX509CertTypeMenuChange(this, event)"
+		>
+		<xul:menupopup>
+		    <xul:menuitem anonid="certpicker.cert.type.user.all"
+			    xbl:inherits="label=usertypelabel,disabled=usertypedisabled"
+			    label="User Certs"
+			    value="user"
+			    typevalue="2"
+			    />
+		    <xul:menuitem anonid="certpicker.cert.type.user.selfsigned"
+			    xbl:inherits="label=selfsignedlabel,disabled=usertypedisabled"
+			    label="Self-Signed User Certs"
+			    value="user_selfsigned"
+			    typevalue="2"
+			    />
+		    <xul:menuitem anonid="certpicker.cert.type.user.casigned"
+			    xbl:inherits="label=signeduserlabel,disabled=usertypedisabled"
+			    label="CA-Signed User Certs"
+			    value="user_casigned"
+			    typevalue="2"
+			   />
+		    <xul:menuitem anonid="certpicker.cert.type.email"
+			    xbl:inherits="label=emailtypelabel,disabled=emailtypedisabled"
+			    label="Other User Certs"
+			    value="email"
+			    typevalue="4"
+			   />
+		    <xul:menuitem anonid="certpicker.cert.type.server"
+			    xbl:inherits="label=servertypelabel,disabled=servertypedisabled"
+			    label="Server Certs"
+			    value="server"
+			    typevalue="8"
+			   />
+		    <xul:menuitem anonid="certpicker.cert.type.ca"
+			    xbl:inherits="label=catypelabel,disabled=catypedisabled"
+			    label="CA Certs"
+			    value="ca"
+			    typevalue="1"
+			   />
+		</xul:menupopup>
+	    </xul:menulist>
+	</content>
+	<implementation>
+	    <field name="mX509CertTypeMenuElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certpicker.cert.type");
+	    </field>
+	    <field name="mX509CertTypeUserElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certpicker.cert.type.user.all");
+	    </field>
+
+	    <property name="disabled"
+		onget="return this.getAttribute('disabled');"
+		onset="if (val) {this.setAttribute('disabled', true);}
+			else {this.removeAttribute('disabled');}
+			return val;"
+		/>
+
+	    <property name="value"
+		onget="return this.mX509CertTypeMenuElem.value;"
+		onset="this.mX509CertTypeMenuElem.value=val;
+			this.handleX509CertTypeMenuChange(this.mX509CertTypeMenuElem);
+			return val;"
+		/>
+
+
+	    <property name="x509certtype"
+		onget="return this.value;"
+		onset="this.value=val;
+			return val;"
+		/>
+
+	    <property name="certtype"
+		onget="return this.value;"
+		onset="this.value=val;
+			return val;"
+		/>
+
+	    <property name="certtypevalue"
+		onget="if (this.mX509CertTypeMenuElem.selectedItem) {
+			    return this.mX509CertTypeMenuElem.selectedItem.getAttribute('typevalue');
+			}
+			else {
+			    return null;
+			}"
+		>
+		<setter>
+		<![CDATA[
+		var menuItemElem = null;
+		if (val) {
+		    if (val == "2") {
+		    	menuItemElem = this.mX509CertTypeUserElem
+		    }
+		    else {
+                        var /* NodeList */ menuItemList = this.mX509CertTypeMenuElem.getElementsByAttribute("typevalue", val);
+		        if (menuItemList.length > 0) {
+		    	    menuItemElem = menuItemList.item(0);
+		        }
+		    }
+		}
+		if (!menuItemElem) {
+		    this.mX509CertTypeMenuElem.selectedIndex = -1;
+		    return val;
+		}
+
+		this.mX509CertTypeMenuElem.selectedItem=menuItemElem;
+		this.handleX509CertTypeMenuChange(this.mX509CertTypeMenuElem);
+
+		return val;
+		]]>
+		</setter>
+	    </property>
+
+	    <method name="refresh">
+		<body>
+		<![CDATA[
+		// dump("x509certtypeBinding:refresh(): this.mX509CertTypeMenuElem.selectedIndex: " + this.mX509CertTypeMenuElem.selectedIndex + "\n");
+		if (this.mX509CertTypeMenuElem.selectedIndex < 0) {
+		    if (this.mX509CertTypeMenuElem.selectedItem) {
+			var tmpValue = this.mX509CertTypeMenuElem.selectedItem.value;
+			// dump("x509certtypeBinding:refresh(): tmpValue(1): " + tmpValue + "\n");
+			this.mX509CertTypeMenuElem.value = "";
+			this.mX509CertTypeMenuElem.value = tmpValue;
+		    }
+		    else {
+			var tmpValue = this.getAttribute("value");
+			if (!tmpValue) {
+			    tmpValue = this.getAttribute("certtype");
+			}
+			// dump("x509certtypeBinding:refresh(): tmpValue(2): " + tmpValue + "\n");
+			if (!tmpValue) {
+			    tmpValue = "user";
+			    this.setAttribute("certtype", "user");
+			}
+			this.mX509CertTypeMenuElem.value = tmpValue;
+		    }
+		}
+		// dump("x509certtypeBinding:refresh(): this.mX509CertTypeMenuElem.selectedIndex: " + this.mX509CertTypeMenuElem.selectedIndex + "\n");
+		this.handleX509CertTypeMenuChange(this.mX509CertTypeMenuElem);
+		// dump("x509certtypeBinding:refresh(): certtypevalue: " + this.certtypevalue + "\n");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="handleX509CertTypeMenuChange">
+		<parameter name="aX509CertTypeMenuElem"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		]]>
+		</body>
+	    </method>
+
+	</implementation>
+    </binding>
+
+    <binding id="certpickerBinding"
+	extends="#cert-base"
+	>
+	    <!--
+	extends="chrome://keymanager/content/XBL/certpicker.xml#cert-base"
+	<resources>
+	</resources>
+	    -->
+	<!-- content, property, method and event descriptions go here -->
+	<content>
+	    <xul:hbox
+	        align="center"
+		pack="start"
+		>
+		<xul:hbox align="center" pack="start">
+		    <xul:pk11tokentype anonid="certpicker.pk11token.type"
+			xbl:inherits="tokentype,tokentypehidden,disabled,tokentypetooltiptext,tokencrop,sizetopopup,src,maximumwidth,tokenmaxwidth,tokenminwidth"
+			oncommand="getBindingParent(this).handlePK11TokenTypeChange(this, event)"
+		    	/>
+
+		    <xul:x509certtype anonid="certpicker.cert.type"
+			xbl:inherits="value=certtype,hidden=certtypehidden,disabled=certtypedisabled,tooltiptext=certtypetooltiptext,crop=certtypecrop,maxwidth=certtypemaxwidth,minwidth=certtypeminwidth,selfsignedlabel,usertypedisabled,signeduserlabel,usertypelabel,emailtypelabel,emailtypedisabled,servertypelabel,servertypedisabled,catypelabel,catypedisabled"
+			tooltiptext="Select certificate owner type(User, Other, Server, CA)"
+			oncommand="getBindingParent(this).handleX509CertTypeChange(this, event.target)"
+		    	/>
+
+		    <xul:hbox
+		    	xbl:inherits="hidden=certusagehidden"
+			hidden="true"
+			oncommand="getBindingParent(this).handleCertUsageValueChange(event.target, event)"
+			>
+			<xul:certusagemenu anonid="certpicker.cert.usage"
+			    xbl:inherits="value=certusage,hidden=certusagehidden,disabled=certusagedisabled,tooltiptext=usagetooltiptext,caonly=usagecaonly,noncaonly=usagenoncaonly"
+			    />
+		    </xul:hbox>
+		</xul:hbox>
+		<xul:hbox
+			xbl:inherits="hidden=cadnhidden"
+			hidden="true"
+			>
+			<xul:label value="CA DN"
+			    xbl:inherits="value=cadnlabel"
+			    />
+			<xul:textbox anonid="certpicker.cert.issuer.dn"
+			    xbl:inherits="value=cadn,disabled,tooltiptext=cadntooltiptext"
+			    onchange="getBindingParent(this).handleCADnChange(this)"
+			    />
+		</xul:hbox>
+		<xul:hbox
+		    pack="start"
+		    align="center"
+		    >
+		    <xul:menulist anonid="certpicker.cert.menulist.nickname"
+			xbl:inherits="value,disabled=certmenudisabled,tooltiptext=menutooltiptext,editable,readonly,crop=certmenucrop,maxwidth=certmenumaxwidth,minwidth=certmenuminwidth"
+			readonly="true"
+			editable="true"
+			oncommand="getBindingParent(this).nickNameMenuListChanged(this, event.target)"
+			>
+			<xul:menupopup>
+			</xul:menupopup>
+		    </xul:menulist>
+		    <xul:button anonid="certpicker.cert.view"
+			xbl:inherits="label=viewlabel,tooltiptext=viewtooltiptext,hidden=viewhidden,disabled=viewdisabled"
+			hidden="true"
+	  		label="View Cert"
+  		      	tooltiptext="Click here to view the selected cert"
+	       		oncommand="getBindingParent(this).viewSelectedCert(event);"
+			/>
+		</xul:hbox>
+		<children includes="button"/>
+		<xul:prefutil anonid="certpicker.cert.prefutil" collapsed="true"/>
+	    </xul:hbox>
+	</content>
+	<implementation>
+	    <field name="secmoddb">
+		Components.classes["@mozilla.org/security/pkcs11moduledb;1"]
+			.getService(Components.interfaces.nsIPKCS11ModuleDB);
+	    </field>
+	    <field name="mTokenDB">
+		Components.classes["@mozilla.org/security/pk11tokendb;1"]
+			.getService(Components.interfaces.nsIPK11TokenDB);
+	    </field>
+	    <field name="mX509CertDB">
+		Components.classes["@mozilla.org/security/x509certdb;1"]
+			.getService(Components.interfaces.nsIX509CertDB);
+	    </field>
+	    <!--
+	    <field name="mKeyManager">
+		/* alrIKeyManager */
+		Components.classes["@avaya.com/pkm/keymanager;1"]
+			.getService(Components.interfaces.alrIKeyManager);
+	    </field>
+	    -->
+
+	    <field name="mIsInitialized">false</field>
+
+	    <field name="pkcs11ModuleObjList">
+	    </field>
+
+	    <field name="mPrefUtil">
+		document.getAnonymousElementByAttribute(this, "anonid", "certpicker.cert.prefutil");
+	    </field>
+	    <field name="mPK11TokenTypeElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certpicker.pk11token.type");
+	    </field>
+	    <field name="mPK11TokenType"/>
+
+	    <field name="mX509CertTypeElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certpicker.cert.type");
+	    </field>
+	    <field name="mX509CertTypeValue"/>
+	    <field name="isSelfSigned"/>
+
+	    <field name="mCertUsageMenuElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certpicker.cert.usage");
+	    </field>
+	    <field name="mCertUsage">
+	    -1
+	    </field>
+
+	    <field name="caDNPatternElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certpicker.cert.issuer.dn");
+	    </field>
+	    <field name="caDNPattern"/>
+
+	    <field name="mNickNameMenuListElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certpicker.cert.menulist.nickname");
+	    </field>
+
+	    <field name="certViewElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certpicker.cert.view");
+	    </field>
+
+	    <property name="selectedCert">
+		<getter>
+		<![CDATA[
+		return this.getSelectedCert();
+		]]>
+		</getter>
+		<setter>
+		<![CDATA[
+		if (!val) {
+		    this.mNickNameMenuListElem.selectedIndex = -1;
+		    return val;
+		}
+		this.initWithCert(val);
+		return val;
+		]]>
+		</setter>
+	    </property>
+
+	    <property name="selectedNickName" readonly="true">
+		<getter>
+		<![CDATA[
+		var seletedCert = this.getSelectedCert();	
+		var nickname = "";
+		if (seletedCert) {
+		    nickname = this.getSelectedCert().nickname;
+		}
+		return nickname;
+		]]>
+		</getter>
+	    </property>
+	    <property name="selectedIndex"
+		onget="return this.mNickNameMenuListElem.selectedIndex;"
+		onset="return this.mNickNameMenuListElem.selectedIndex=val; return val;"
+		/>
+	    <property name="selectedItem" readonly="true"
+		onget="return this.mNickNameMenuListElem.selectedItem;"
+		/>
+	    <property name="certListMenu" readonly="true"
+		onget="return this.mNickNameMenuListElem;"
+		/>
+	    <property name="nickNameMenu" readonly="true"
+		onget="return this.mNickNameMenuListElem;"
+		/>
+	    <property name="tokentype">
+		<getter>
+		<![CDATA[
+		return this.mPK11TokenTypeElem.tokentype;
+		]]>
+		</getter>
+		<setter>
+		<![CDATA[
+		this.mPK11TokenTypeElem.tokentype = val;
+		this.handlePK11TokenTypeChange(this.mPK11TokenTypeElem);
+		return val;
+		]]>
+		</setter>
+	    </property>
+
+	    <property name="certtype">
+		<getter>
+		<![CDATA[
+		return this.mX509CertTypeElem.x509certtype;
+		]]>
+		</getter>
+		<setter>
+		<![CDATA[
+		this.mX509CertTypeElem.value = val;
+		this.handleX509CertTypeChange(this.mX509CertTypeElem);
+		return val;
+		]]>
+		</setter>
+	    </property>
+
+	    <property name="certusage">
+		<getter>
+		<![CDATA[
+		return this.mCertUsageMenuElem.value;
+		]]>
+		</getter>
+		<setter>
+		<![CDATA[
+		this.mCertUsageMenuElem.value = val;
+		this.handleCertUsageValueChange(this.mCertUsageMenuElem);
+		return val;
+		]]>
+		</setter>
+	    </property>
+
+	    <property name="cadn">
+		<getter>
+		<![CDATA[
+		return this.caDNPatternElem.value;
+		]]>
+		</getter>
+		<setter>
+		<![CDATA[
+		this.caDNPatternElem.value = val;
+		this.handleCADnChange(this.caDNPatternElem);
+		return val;
+		]]>
+		</setter>
+	    </property>
+
+	    <property name="includeTokenInfo"
+		onget="return this.hasAttribute('includeTokenInfo');"
+		onset="if (val == true) this.setAttribute('includeTokenInfo',true);
+			   else this.removeAttribute('includeTokenInfo');
+			   return val;"
+		/>
+	    <property name="value">
+		<getter>
+		<![CDATA[
+		return this.mNickNameMenuListElem.value;
+		]]>
+		</getter>
+		<setter>
+		<![CDATA[
+		this.LogDebug("certpickerBinding.value.set(): mNickNameMenuListElem.value: " + this.mNickNameMenuListElem.value + " " + 
+			"value: " + val + " " + 
+			""
+			);
+		this.setAttribute('value',val);
+		this.mNickNameMenuListElem.value = val;
+		this.nickNameMenuListChanged(this.mNickNameMenuListElem, this.mNickNameMenuListElem.selectedItem);
+		return val;
+		]]>
+		</setter>
+	    </property>
+	    <property name="disabled">
+		onget="return this.hasAttribute('disabled');"
+		<getter>
+		<![CDATA[
+		return this.hasAttribute('disabled');
+		]]>
+		</getter>
+		<setter>
+		<![CDATA[
+		if (val) {
+		    this.setAttribute('disabled',true);
+
+		    this.setAttribute('certusagedisabled',true);
+		    // this.mCertUsageMenuElem.setAttribute('disabled',true);
+
+		    // this.mX509CertTypeElem.setAttribute('disabled',true);
+		    this.setAttribute('certtypedisabled',true);
+
+		    this.mNickNameMenuListElem.disabled = true;
+		}
+		else {
+		    this.removeAttribute('disabled');
+
+		    // this.mCertUsageMenuElem.removeAttribute('disabled');
+		    this.removeAttribute('certusagedisabled');
+
+		    // this.mX509CertTypeElem.removeAttribute('disabled');
+		    this.removeAttribute('certtypedisabled');
+
+		    this.mNickNameMenuListElem.disabled = false;
+		}
+		return val;
+		]]>
+		</setter>
+	    </property>
+	    <property name="certusagedisabled"
+		onget="return this.hasAttribute('certusagedisabled');"
+		onset="if (val) {
+			    this.setAttribute('certusagedisabled',true);
+			    this.mCertUsageMenuElem.setAttribute('disabled',true);
+			}
+			else {
+			    this.removeAttribute('certusagedisabled');
+			    this.mCertUsageMenuElem.removeAttribute('disabled');
+			}
+			return val;"
+		 />
+
+
+	    <constructor>
+		<![CDATA[
+		this.LogTrace("certpickerBinding.constructor():......................Start.");
+
+
+		// this.mMaxLogLevel = 9;
+
+		this.refresh();
+
+		// this.mMaxLogLevel = 4;
+
+		this.LogTrace("certpickerBinding.constructor():......................End.");
+		]]>
+	    </constructor>
+
+	    <method name="firstTimeInit">
+		<body>
+		<![CDATA[
+		this.LogTrace("certpickerBinding.firstTimeInit():......................Start.");
+
+		/*
+		this.mPK11TokenTypeElem = document.getAnonymousElementByAttribute(this, "anonid", "certpicker.pk11token.type");
+		this.mX509CertTypeElem = document.getAnonymousElementByAttribute(this, "anonid", "certpicker.cert.type");
+		*/
+
+		this.mPK11TokenTypeElem.refresh();
+
+		var certUsage = this.getAttribute("certusage");
+		this.LogDebug("certpickerBinding.firstTimeInit(): certUsage : " + certUsage);
+
+		this.mCertUsageMenuElem.refresh();
+		this.handleCertUsageValueChange(this.mCertUsageMenuElem, null, true);
+
+		// this.mX509CertTypeElem.x509certtype = "user";
+		this.mX509CertTypeElem.refresh();
+		this.initForX509CertTypeChange(this.mX509CertTypeElem, null, true);
+
+		this.handleCADnChange(this.caDNPatternElem, true);
+
+		this.mNickNameMenuListElem.value = "";
+		this.mNickNameMenuListElem.selectedIndex = -1;
+
+		this.LogTrace("certpickerBinding.firstTimeInit():......................End.");
+		]]>
+		</body>
+	    </method>
+
+
+	    <method name="refresh">
+		<body>
+		<![CDATA[
+		// this.mMaxLogLevel = 9;
+		this.LogTrace("certpickerBinding.refresh():......................Start.");
+
+		if (!this.mIsInitialized) {
+		    try {
+		    	this.firstTimeInit();
+		    	this.mIsInitialized = true;
+		    } catch (ex) {
+			this.LogError("certpickerBinding.refresh(): this.firstTimeInit() failed - ex: " + ex);
+			return;
+		    }
+		}
+		// this.mMaxLogLevel = 4;
+
+		this.initNickNameMenuList(
+			this.mNickNameMenuListElem,
+			this.mPK11TokenTypeElem.tokentype,
+			this.mX509CertTypeValue,
+			this.caDNPattern,
+			this.isSelfSigned,
+			this.mCertUsage
+			);
+		this.LogDebug("certpickerBinding.refresh(): " + 
+			"aPK11TokenType: " + this.mPK11TokenTypeElem.tokentype + " " + 
+			"aX509CertType: " + this.mX509CertTypeValue + " " + 
+			"issuerSubjectDN: " + this.caDNPattern + " " + 
+			"includeSelfSigned: " + this.isSelfSigned + " " + 
+			"aCertUsage: " + this.mCertUsage + " " + 
+			"\n");
+		this.nickNameMenuListChanged(
+			this.mNickNameMenuListElem,
+			this.mNickNameMenuListElem.selectedItem
+			);
+
+		this.LogTrace("certpickerBinding.refresh():......................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="getX509CertType">
+		<parameter name="aCert"/>
+		<body>
+		<![CDATA[
+
+		if (!aCert) {
+		    return null;
+		}
+
+		var x509Cert2 = aCert.QueryInterface(Components.interfaces.nsIX509Cert2);
+		var x509CertTypeValue = 0;
+		try {
+		    x509CertTypeValue = x509Cert2.certType;
+		} catch (ex) {}
+
+		var x509CertType = null;
+		switch(x509CertTypeValue) {
+		    case Components.interfaces.nsIX509Cert.CA_CERT:
+			x509CertType = "ca";
+		        break;
+		    case Components.interfaces.nsIX509Cert.USER_CERT:
+			x509CertType = "user";
+		        break;
+		    case Components.interfaces.nsIX509Cert.EMAIL_CERT:
+			x509CertType = "email";
+		        break;
+		    case Components.interfaces.nsIX509Cert.SERVER_CERT:
+			x509CertType = "server";
+		        break;
+		    default:
+		        break;
+		}
+		this.LogDebug("certpickerBinding.getX509CertType(): x509CertTypeValue: " + x509CertTypeValue + "x509CertType: " + x509CertType);
+		return x509CertType;
+		]]>
+		</body>
+	    </method>
+
+
+	    <method name="initWithParams">
+		<parameter name="aCertType"/>
+		<parameter name="aCertUsage"/>
+		<parameter name="aCertCADn"/>
+		<parameter name="aCert"/>
+		<body>
+		<![CDATA[
+		// this.mMaxLogLevel = 9;
+		this.LogTrace("certpickerBinding.initWithParams():......................Start.");
+
+		this.LogTrace("certpickerBinding.initWithParams(): aCertType: " + aCertType + " aCertUsage: |" + aCertUsage  + "| aCertCADn: |" + aCertCADn + "| aCert: " + (aCert? aCert.nickname : ""));
+
+		if (aCertType && (aCertType != "")) {
+		    this.LogTrace("certpickerBinding.initWithParams():......................10.");
+		    this.mX509CertTypeElem.value = aCertType;
+	    	    this.handleX509CertTypeChange(this.mX509CertTypeElem, null, true);
+		}
+		if (aCertUsage || (aCertUsage == "")) {
+		    this.LogTrace("certpickerBinding.initWithParams():......................20.");
+		    this.mCertUsageMenuElem.value = aCertUsage;
+	    	    this.handleCertUsageValueChange(this.mCertUsageMenuElem, null, true);
+		}
+		// if (aCertCADn || (aCertCADn == "")) {
+		if (aCertCADn) {
+		    this.LogTrace("certpickerBinding.initWithParams():......................30.");
+		    this.caDNPatternElem.value = aCertCADn;
+	    	    this.handleCADnChange(this.caDNPatternElem, true);
+		}
+		this.refresh();
+
+		if (aCert) {
+		    this.initWithCert(aCert, aCertType);
+		}
+		else {
+		    this.selectedCert = null;
+		}
+
+		this.LogTrace("certpickerBinding.initWithParams():......................End.");
+		// this.mMaxLogLevel = 4;
+		]]>
+		</body>
+	    </method>
+
+
+	    <method name="initWithCert">
+		<parameter name="aCert"/>
+		<parameter name="aCertType"/>
+		<body>
+		<![CDATA[
+		// this.mMaxLogLevel = 9;
+		this.LogTrace("certpickerBinding.initWithCert():......................Start.");
+
+		if (!aCert) {
+		    this.LogTrace("certpickerBinding.initWithCert():..................End(0).");
+		    return false;
+		}
+
+		var prevCertType = this.certtype;
+
+		var certTypeList = [];
+		do {
+		    if (aCertType) {
+		        certTypeList = [aCertType];
+		        break;
+		    }
+
+		    if (this.getAttribute("certtypedisabled")) {
+		    	certTypeList = [this.certtype];
+			break;
+		    }
+
+		    var x509CertType = this.getX509CertType(aCert);
+		    if (x509CertType) {
+		        certTypeList = [x509CertType];
+			break;
+		    }
+
+		    // Find cert in  all types of cert.
+		    certTypeList = [this.certtype, "user", "server", "email", "ca"];
+		} while (0);
+
+		var selectedMenuItem = null;
+		for (var k = 0; k < certTypeList.length; k++) {
+		    var certType = certTypeList[k];
+		    this.LogDebug("certpickerBinding.initWithCert(): k: " + k + " certType: " + certType);
+		    this.certtype = certType;
+
+		    var /* NodeList */ menuItemNodeList = this.mNickNameMenuListElem.getElementsByTagName("menuitem");
+		    if (menuItemNodeList.length <= 0) {
+		    	menuItemNodeList = this.mNickNameMenuListElem.getElementsByTagName("xul:menuitem");
+		    }
+		    selectedMenuItem = null;
+		    for (var i = 0; i < menuItemNodeList.length; i++) {
+		        var menuItem = menuItemNodeList.item(i);
+		        var menuItemCert = menuItem.certRef;
+		        if (!menuItemCert) {
+			    continue;
+		        }
+		        if (aCert.equals(menuItemCert)) {
+			    selectedMenuItem = menuItem;
+			    break;
+		        }
+		        if (aCert.dbKey == menuItemCert.dbKey){
+			    selectedMenuItem = menuItem;
+			    break;
+		        }
+		        /*
+		        if ((aCert.subjectName == menuItemCert.subjectName) &&
+			    (aCert.issuerName == menuItemCert.issuerName)) {
+			    selectedMenuItem = menuItem;
+			    break;
+		        }
+		        */
+		    }
+		    if (selectedMenuItem) {
+			this.mNickNameMenuListElem.selectedItem = selectedMenuItem;
+		        break;
+		    }
+		}
+		if (!selectedMenuItem) {
+		    this.LogError("initWithCert(): couldn't find cert in menu: " + aCert.nickname);
+		    this.certtype = prevCertType;
+
+		    // this.mMaxLogLevel = 4;
+		    return false;
+		}
+		this.LogDebug("initWithCert(): found cert in menu: " + selectedMenuItem.certRef.nickname);
+
+		// this.mNickNameMenuListElem.selectedItem = selectedMenuItem;
+		this.nickNameMenuListChanged(this.mNickNameMenuListElem, this.mNickNameMenuListElem.selectedItem);
+
+		this.LogTrace("certpickerBinding.initWithCert(" + aCert.nickname + "):......................End.");
+		// this.mMaxLogLevel = 4;
+		return true;
+		]]>
+		</body>
+	    </method>
+
+	    <!--
+	    <method name="refreshNickNameMenuList">
+		<body>
+		<![CDATA[
+		this.refresh();
+		]]>
+		</body>
+	    </method>
+	    -->
+
+	    <method name="handlePK11TokenTypeChange">
+		<parameter name="aPK11TokenTypeElem"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("certpickerBinding.handlePK11TokenTypeChange():......................Start.");
+
+		// this.mPK11TokenType = aPK11TokenTypeElem.value;
+		this.refresh();
+
+		this.LogTrace("certpickerBinding.handlePK11TokenTypeChange():......................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <!--
+	    <method name="initForTokenTypeChange">
+		<parameter name="aPK11TokenTypeElem"/>
+		<parameter name="ev"/>
+		<parameter name="aSkipMenuListRefresh"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("certpickerBinding.initForTokenTypeChange():......................Start.");
+
+		// this.mPK11TokenType = aPK11TokenTypeElem.value;
+		this.LogDebug("certpickerBinding.initForTokenTypeChange(): aPK11TokenTypeElem.tokentype: " +  aPK11TokenTypeElem.tokentype);
+	    
+		if (aSkipMenuListRefresh == true) {
+		    return;
+		}
+		this.refresh();
+	    
+		this.LogTrace("certpickerBinding.initForTokenTypeChange():......................End.");
+		]]>
+		</body>
+	    </method>
+	    -->
+
+	    <method name="handleX509CertTypeChange">
+		<parameter name="aX509CertTypeElem"/>
+		<parameter name="ev"/>
+		<parameter name="skipMenuListRefresh"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("certpickerBinding.handleX509CertTypeChange(): ....................End.");
+
+		this.initForX509CertTypeChange(aX509CertTypeElem, ev, skipMenuListRefresh);
+
+		this.LogTrace("certpickerBinding.handleX509CertTypeChange(): ....................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="initForX509CertTypeChange">
+		<parameter name="aX509CertTypeElem"/>
+		<parameter name="ev"/>
+		<parameter name="skipMenuListRefresh"/>
+		<body>
+		<![CDATA[
+		const nsIX509Cert = Components.interfaces.nsIX509Cert;
+	    
+		this.LogTrace("certpickerBinding.initForX509CertTypeChange(): ....................Start.");
+	    
+		var certType = aX509CertTypeElem.x509certtype;
+		var certTypeValue = aX509CertTypeElem.certtypevalue;
+		this.LogDebug("certpickerBinding.initForX509CertTypeChange(): " + 
+					" certType: " + certType +
+					" certTypeValue: " + certTypeValue +
+					"");
+	    
+		var certUsageCAOnly = false;
+		this.isSelfSigned = null;
+
+		this.mX509CertTypeValue = Components.interfaces.nsIX509Cert.USER_CERT;
+		if (certType == "user_selfsigned") {
+		    this.isSelfSigned = true;
+		    certUsageCAOnly = this.getAttribute("usagecaonly");
+		}
+		else if (certType == "user_casigned") {
+		    this.isSelfSigned = false;
+		    certUsageCAOnly = this.getAttribute("usagecaonly");
+		}
+		else if (certType == "user") {
+		    certUsageCAOnly = this.getAttribute("usagecaonly");
+		}
+		else if (certType == "email") {
+		    this.mX509CertTypeValue = nsIX509Cert.EMAIL_CERT;
+		}
+		else if (certType == "server") {
+		    this.mX509CertTypeValue = nsIX509Cert.SERVER_CERT;
+		}
+		else if (certType == "ca") {
+		    this.mX509CertTypeValue = nsIX509Cert.CA_CERT;
+		    certUsageCAOnly = true;
+		}
+	    
+		this.mCertUsageMenuElem.removeAttribute("noncaonly");
+		this.mCertUsageMenuElem.removeAttribute("caonly");
+		if (certUsageCAOnly) {
+		    this.mCertUsageMenuElem.setAttribute("caonly", true);
+		}
+		else {
+		    this.mCertUsageMenuElem.setAttribute("noncaonly", true);
+		}
+		// this.mCertUsageMenuElem.refresh();
+	    
+		this.LogDebug("certpickerBinding.initForX509CertTypeChange(): " + 
+					" certType: " + certType +
+				" mX509CertTypeValue: " + this.mX509CertTypeValue + 
+				" isSelfSigned: " + this.isSelfSigned + 
+				"");
+		if (skipMenuListRefresh == true) {
+		    return;
+		}
+		this.refresh();
+	    
+		this.LogTrace("certpickerBinding.initForX509CertTypeChange(): ....................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="handleCertUsageValueChange">
+		<parameter name="aCertUsageMenuElem"/>
+		<parameter name="ev"/>
+		<parameter name="skipMenuListRefresh"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("certpickerBinding.handleCertUsageValueChange(): ....................Start.");
+
+		this.mCertUsage = aCertUsageMenuElem.certUsage;
+
+		if (skipMenuListRefresh == true) {
+		    return;
+		}
+
+		this.refresh();
+
+		this.LogTrace("certpickerBinding.handleCertUsageValueChange(): ....................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="handleCADnChange">
+		<parameter name="targetElem"/>
+		<parameter name="skipMenuListRefresh"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("certpickerBinding.handleCADnChange(): ....................Start.");
+		this.caDNPattern = targetElem.value;
+		if (this.caDNPattern == "") {
+		    this.caDNPattern = null;
+		}
+		if (skipMenuListRefresh == true) {
+		    return;
+		}
+
+		this.refresh();
+
+		this.LogTrace("certpickerBinding.handleCADnChange(): ....................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="getFilteredCertNickNameList">
+		<parameter name="aPK11TokenType"/>
+		<parameter name="aX509CertType"/>
+		<parameter name="issuerSubjectDN"/>
+		<parameter name="includeSelfSigned"/>
+		<parameter name="aCertUsage"/>
+		<body>
+		<![CDATA[
+		// this.mMaxLogLevel = 9;
+		this.LogTrace("certpickerBinding.getFilteredCertNickNameList():....................Start.");
+
+		this.LogDebug("certpickerBinding.getFilteredCertNickNameList(): " + 
+			"aPK11TokenType: " + aPK11TokenType + " " + 
+			"aX509CertType: " + aX509CertType + " " + 
+			"issuerSubjectDN: " + issuerSubjectDN + " " + 
+			"includeSelfSigned: " + includeSelfSigned + " " + 
+			"");
+		
+		const nsIX509Cert = Components.interfaces.nsIX509Cert;
+
+		var pkcs11ModuleList = this.getPKCS11ModuleList(false);
+		this.LogDebug("certpickerBinding.getFilteredCertNickNameList(): pkcs11ModuleList.length: " + pkcs11ModuleList.length); 
+	    
+		var certNickNameKeyMap = new Array();
+	    
+		var certCntObj = new Object();
+		var certNameListObj = new Object();
+		this.mX509CertDB.findCertNicknames(null, aX509CertType, certCntObj, certNameListObj);
+	    
+		var certCnt = certCntObj.value;
+		var certNameList = certNameListObj.value;
+	    
+		this.LogDebug("certpickerBinding.getFilteredCertNickNameList(): certNameList.length: " + certNameList.length);
+		if (certNameList.length <= 0) {
+		    return certNickNameKeyMap;
+		}
+
+		var j = 0;
+		for (var k = 0; k < certNameList.length; k++) {
+		    this.LogDebug("certpickerBinding.getFilteredCertNickNameList(): certNameList[" + k + "]: " + certNameList[k]);
+	    
+		    if (certNameList[k] == null) {
+			continue;
+		    }
+		    // Each item in certNameList is in the following format :
+		    //   <delim-1-char><token-name><delim-1-char><nick-name><delim-1-char><db-key>
+		    // Extract the delimiter  character first, then use it 
+		    // split the indexed item into three (four) parts: 
+		    //   <delim>[token-name]<delim>nickname<delim>dbKey
+		    if (certNameList[k].length < 1) {
+		       continue;
+		    }
+		    var delim = certNameList[k].substring(0, 1);
+	    
+		    var certNameItems = certNameList[k].split(delim);
+		    /*
+		    for (var l = 0; l < certNameItems.length; l++) {
+			alert("    [" + k + "," + l +  "]: " + certNameItems[l]);
+		    }
+		    */
+		    this.LogDebug("delim: " + delim + " certNameItems.length: " + certNameItems.length);
+		    if (certNameItems.length <= 1) {
+		       continue;
+		    }
+		    var nickName = certNameItems[certNameItems.length - 2];
+		    if (certNameItems.length > 3) {
+			nickName = certNameItems[1] + ":" + nickName;
+		    }
+		    var dbKey = certNameItems[certNameItems.length - 1];
+		    if (dbKey == null) {
+			this.LogError("certpickerBinding.getFilteredCertNickNameList(): couldn't extract dbKey from certName.");
+			continue;
+		    }
+		    // Get the Reference to the cert using the DbKey
+		    var certRef = null;
+		    try {
+			certRef = this.mX509CertDB.findCertByDBKey(dbKey , null);
+		    } catch (ex) {
+		    	this.LogError("certpickerBinding.getFilteredCertNickNameList(): findCertByDBKey() failed - ex: " + ex);
+		    }
+		    if (certRef == null) {
+		    	this.LogError("certpickerBinding.getFilteredCertNickNameList(): findCertByDBKey() failed.");
+		       continue;
+		    }
+		    this.LogDebug("getFilteredCertNickNameList(): k: " + k + " certRef: " + certRef);
+	    
+		    if (aPK11TokenType == "hardtoken") {
+			if (!this.isHardwareToken(certRef)) {
+			    this.LogDebug("getFilteredCertNickNameList(): cert[" + k + "] because it is not a hard-token.");
+		   	    continue;
+			}
+		    }
+		    else if (aPK11TokenType == "softtoken") {
+			if (this.isHardwareToken(certRef)) {
+			    this.LogDebug("getFilteredCertNickNameList(): cert[" + k + "] because it is not a soft-token.");
+		   	    continue;
+			}
+		    }
+	    
+		    this.LogDebug("certpickerBinding.getFilteredCertNickNameList():aCertUsage: " + aCertUsage);
+		    if (aCertUsage &&  (aCertUsage >= 0)) {
+		        this.LogTrace("certpickerBinding.getFilteredCertNickNameList(): ....................x10.");
+			try {
+			    var verificationResult = certRef.verifyForUsage(aCertUsage);
+			    if (verificationResult != nsIX509Cert.VERIFIED_OK) {
+			        this.LogDebug("getFilteredCertNickNameList(): certRef.verifyForUsage(" + aCertUsage + ") failed for cert[" + k + "]");
+			   	this.LogDebug("getFilteredCertNickNameList(): Discarding cert[" + k + "] \n" + 
+			   		"  certRef.subjectName:\t" + certRef.subjectName + "\n" +
+			   		"  aCertUsage:   \t" + aCertUsage + "\n" + 
+					"  verificationResult:\t" + verificationResult + "\n" 
+					);
+			        continue;
+			    }
+			} catch (ex) {
+			    this.LogError("certpickerBinding.getFilteredCertNickNameList(): verification failed - for cert[" + k + "] - ex: " + ex);
+			    continue;
+			}
+		    }
+		    this.LogTrace("certpickerBinding.getFilteredCertNickNameList(): ....................x15.");
+
+	    
+		    // Filter based on the Issuer(CA) subject DN (if it is present) for user cert
+		    if (aX509CertType == Components.interfaces.nsIX509Cert.USER_CERT) {
+			// If cert issuer matches issuerSubjectDN in filter 
+			if (issuerSubjectDN && (issuerSubjectDN != "") && (issuerSubjectDN != certRef.issuerName)) {
+			    // If cert subject and issuer does not match (i.e. if it is self-signed), ignore it
+			    if (certRef.subjectName != certRef.issuerName) {
+			        this.LogDebug("certpickerBinding.getFilteredCertNickNameList(): Discarding\n" + 
+			   		"  issuerSubjectDN:   \t" + issuerSubjectDN + "\n" + 
+					"  certRef.issuerName:\t" + certRef.issuerName + "\n" + 
+			   		"  certRef.subjectName:\t" + certRef.subjectName + "\n"
+					);
+			        continue;
+			    }
+			    // If includeSelfSigned is false or null, ignore it
+			    if (!includeSelfSigned) {
+			        this.LogDebug("certpickerBinding.getFilteredCertNickNameList(): Discarding\n" + 
+			   		"  issuerSubjectDN:   \t" + issuerSubjectDN + "\n" + 
+					"  certRef.issuerName:\t" + certRef.issuerName + "\n" + 
+			   		"  certRef.subjectName:\t" + certRef.subjectName + "\n"
+					);
+			        continue;
+			    }
+			}
+	    
+			// Filter self-signed certificates based on includeSelfSigned flag.
+			if ((issuerSubjectDN == null) || (issuerSubjectDN == "")) {
+			    if (includeSelfSigned != null) {
+			        if (includeSelfSigned) {
+		   	            if (certRef.subjectName != certRef.issuerName) {
+			                continue;
+			            }
+			        }
+			        else {
+		   	            if (certRef.subjectName == certRef.issuerName) {
+			                continue;
+			            }
+			        }
+			    }
+			}
+		    }
+		    else {
+		        this.LogTrace("certpickerBinding.getFilteredCertNickNameList(): ....................x20.");
+			this.LogDebug("certpickerBinding.getFilteredCertNickNameList(): issuerSubjectDN: " + issuerSubjectDN + " certRef.issuerName: " + certRef.issuerName);
+		    	// Filter based on CA-signed cert and Issuer subject DN matches issuerSubjectDN param
+		    	if (issuerSubjectDN && (issuerSubjectDN != "") && (issuerSubjectDN != certRef.issuerName)) {
+		    	    continue;
+		    	}
+		    }
+		    // var subjectName = certRef.subjectName;
+		    this.LogDebug("certpickerBinding.getFilteredCertNickNameList(): nickName: " + nickName + " dbKey: " + dbKey);
+	    
+		    var certNickNameKeyItem = new Object();
+		    certNickNameKeyItem.nickName	= certRef.nickname;
+		    certNickNameKeyItem.dbKey	= dbKey;
+		    certNickNameKeyItem.cert	= certRef;
+	    
+		    certNickNameKeyMap[j] = certNickNameKeyItem; j++;
+		}
+	    
+		this.LogTrace("certpickerBinding.getFilteredCertNickNameList():....................End.");
+		// this.mMaxLogLevel = 4;
+		return certNickNameKeyMap;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="removeNonCAUserCerts">
+		<body>
+		<![CDATA[
+		this.LogTrace("signothercertparamsBinding.removeNonCAUserCerts():................Start.");
+
+		if (!this.isUserCertType) {
+		    return;
+		}
+
+	        // We have to  manually temove non-CA user cert becuase 
+	        // NSS considers all self-signed cert as Root cert which in turn is considered as CA cert.
+
+                var certListMenuElem = this.certListMenu;
+
+	        var /* NodeList */ menuItemNodeList = certListMenuElem.getElementsByTagName("xul:menuitem");
+	        if (menuItemNodeList.length <= 0) {
+	            menuItemNodeList = certListMenuElem.getElementsByTagName("menuitem");
+	        }
+        
+	        var foundCACert = false;
+	        for (var i = (menuItemNodeList.length -1); i >= 0; i--) {
+	            var menuItem = menuItemNodeList.item(i);
+	            var menuItemX509Cert = menuItem.certRef;
+	            if (!menuItemX509Cert) {
+		        certListMenuElem.removeItemAt(i);
+	    	        continue;
+	            }
+	             this.LogDebug("CRLCreateBasicForm.removeNonCACerts(): i: " + i + " nickName: " + menuItemX509Cert.nickname);
+        
+	            var /* nsIPersistentProperties */ certProps;
+	            certProps = Components.classes["@mozilla.org/persistent-properties;1"]
+				        .createInstance(Components.interfaces.nsIPersistentProperties);
+	            this.mKeyManager.exportX509v3CertExtnToProperties(menuItemX509Cert, "basicConstraints", certProps);
+        
+                    var basicConstraintCA = false;
+	            try {
+		        var basicConstraintActive = certProps.getStringProperty("basicConstraints");
+		        if (basicConstraintActive == "true") {
+		            var basicConstraintCAStr = certProps.getStringProperty("basicConstraints-cA-radio");
+		            if (basicConstraintCAStr == "true") {
+		    	        basicConstraintCA = true;
+		            }
+		        }
+	             } catch (ex) {}
+	             this.LogDebug("initCASignerCertProps(): removeNonCACerts: nickName: " + menuItemX509Cert.nickname + " basicConstraintCA: " + basicConstraintCA + "");
+	             if (!basicConstraintCA) {
+	     	        if (certListMenuElem.selectedIndex == i) {
+		            certListMenuElem.selectedIndex = -1;
+		        }
+		        certListMenuElem.removeItemAt(i);
+	    	        continue;
+	             }
+	             foundCACert = true;
+    	        }
+
+	        if (!foundCACert) {
+	            certListMenuElem.selectedIndex = -1;
+	        }
+        
+		this.LogTrace("signothercertparamsBinding.removeNonCAUserCerts():................End.");
+		]]>
+		</body>
+	    </method>
+
+
+	    <method name="initNickNameMenuList">
+		<parameter name="aNickNameMenuListElem"/>
+		<parameter name="aPK11TokenType"/>
+		<parameter name="aX509CertType"/>
+		<parameter name="issuerSubjectDN"/>
+		<parameter name="includeSelfSigned"/>
+		<parameter name="aCertUsage"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("certpickerBinding.initNickNameMenuList():....................Start.");
+		this.LogDebug("certpickerBinding.initNickNameMenuList(): " + 
+			"aPK11TokenType: " + aPK11TokenType + " " + 
+			"aX509CertType: " + aX509CertType + " " + 
+			"issuerSubjectDN: " + issuerSubjectDN + " " + 
+			"includeSelfSigned: " + includeSelfSigned + " " + 
+			"aCertUsage: " + aCertUsage + " " + 
+			"selectedIndex: " + aNickNameMenuListElem.selectedIndex + " " + 
+			"value: " + aNickNameMenuListElem.value + " " + 
+			"\n");
+
+		var lastItemLabel = "";
+		if (aNickNameMenuListElem.selectedIndex >= 0) {
+		    if (aNickNameMenuListElem.selectedItem) {
+			// lastItemLabel = aNickNameMenuListElem.selectedItem.label;
+			lastItemLabel = aNickNameMenuListElem.value;
+		    }
+		    if (lastItemLabel == null) {
+		    	lastItemLabel = "";
+		    }
+		}
+		if (lastItemLabel == "") {
+		    var prefId = this.id;
+		    if (!prefId) {
+			prefId = this.getAttribute("anonid");
+		    }
+		    if (prefId) {
+			prefId = "extensions." + prefId + ".cert";
+		        this.LogDebug("initNickNameMenuList(): prefId: " + prefId);
+			lastItemLabel = this.mPrefUtil.getPrefStringValue(prefId);
+			if (lastItemLabel == null) {
+			    lastItemLabel = "";
+			}
+		    }
+		}
+		this.LogDebug("certpickerBinding.initNickNameMenuList(): " + prefId + " lastItemLabel: >" + lastItemLabel + "<");
+	    
+		aNickNameMenuListElem.removeAllItems();
+		aNickNameMenuListElem.selectedIndex = -1;
+		aNickNameMenuListElem.value = "";
+	    
+		var certNickNameKeyMap = this.getFilteredCertNickNameList(
+					aPK11TokenType,
+					aX509CertType,
+					issuerSubjectDN,
+					includeSelfSigned,
+					aCertUsage
+					);
+		this.LogDebug("certpickerBinding.initNickNameMenuList(): certNickNameKeyMap.length: " + certNickNameKeyMap.length);
+		if (certNickNameKeyMap.length <= 0) {
+		    aNickNameMenuListElem.disabled = true;
+		    this.LogDebug("initNickNameMenuList(): " + this.id + ":  zero-length list for selected certs.");
+		    this.LogDebug("certpickerBinding.initNickNameMenuList(): " + 
+			"aPK11TokenType: " + aPK11TokenType + " " + 
+			"aX509CertType: " + aX509CertType + " " + 
+			"issuerSubjectDN: " + issuerSubjectDN + " " + 
+			"includeSelfSigned: " + includeSelfSigned + " " + 
+			"aCertUsage: " + aCertUsage + " " + 
+			"selectedIndex: " + aNickNameMenuListElem.selectedIndex + " " + 
+			"value: " + aNickNameMenuListElem.value + " " + 
+			"\n");
+		    return;
+		}
+		if (!this.getAttribute("disabled")) {
+		    aNickNameMenuListElem.disabled = false;
+		}
+	    
+		var selectedIndex = -1;
+		var /* Menuitem */ selectedItem = null;
+		var /* Menuitem */ menuItemNode = null;
+		var i = 0;
+		for (i = 0; i < certNickNameKeyMap.length; i++) {
+		    var certNickNameKeyItem = certNickNameKeyMap[i];
+	    
+		    var nickName = certNickNameKeyItem.nickName;
+		    var dbKey = certNickNameKeyItem.dbKey;
+	    
+		    if ((nickName == null) || (dbKey == null)) {
+			continue;
+		    }
+		    // menuItemNode = aNickNameMenuListElem.appendItem(nickName, dbKey);
+		    menuItemNode = aNickNameMenuListElem.appendItem(nickName, nickName);
+		    menuItemNode.dbKey = dbKey;
+		    menuItemNode.certRef = certNickNameKeyItem.cert;
+
+		    /*
+		    try {
+		    var alrX509Cert = this.mKeyManager.getALRX509Cert(certNickNameKeyItem.cert);
+		    alrX509Cert.test1();
+		    } catch (ex) {
+		    	dump("mKeyManager.getALRX509Cert() failed - ex: " + ex + "\n");
+		    }
+		    */
+		    
+		    var certSubjName = certNickNameKeyItem.cert.subjectName;
+		    if (certSubjName) {
+			var menuItemCert = certNickNameKeyItem.cert;
+		    	var menuItemTooltip = "";
+			menuItemTooltip += "Subject: " + certSubjName;
+			menuItemTooltip += " | " + "Issuer: " + menuItemCert.issuerName;
+			menuItemTooltip += " | " + "SN: " + menuItemCert.serialNumber;
+			menuItemTooltip += " | " + "Token: " + menuItemCert.tokenName;
+		    	menuItemNode.setAttribute("tooltiptext", menuItemTooltip);
+		    }
+	    
+		    if (i == 0) {
+			selectedIndex = i;
+			selectedItem = menuItemNode;
+		    }
+		    if (lastItemLabel == nickName) {
+			selectedIndex = i;
+			selectedItem = menuItemNode;
+		    }
+		}
+		if (selectedIndex >= 0) {
+		    aNickNameMenuListElem.selectedIndex = selectedIndex;
+		    // aNickNameMenuListElem.selectedItem = selectedItem;
+		}
+		/*
+		this.LogDebug("certpickerBinding.initNickNameMenuList(): " + 
+			" selectedItem: " + (aNickNameMenuListElem.selectedItem?aNickNameMenuListElem.selectedItem.label : "") +
+			" (" +  selectedIndex + "/" + i + ")");
+		*/
+
+		if (aNickNameMenuListElem.selectedIndex < 0) {
+		    this.certViewElem.hidden = true;
+		}
+
+		this.LogTrace("certpickerBinding.initNickNameMenuList():....................End.");
+		return;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="nickNameMenuListChanged">
+		<parameter name="menuListElem"/>
+		<parameter name="selectedItemElem"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("certpickerBinding.nickNameMenuListChanged(): .......................Start.");
+
+		this.LogDebug("certpickerBinding.nickNameMenuListChanged(): " + this.id);
+	    
+		if ((menuListElem.selectedIndex < 0) || (menuListElem.selectedItem == null)) {
+		    this.certViewElem.hidden = true;
+		    return;
+		}
+		if ((menuListElem.value == null) || (menuListElem.value == "")) {
+		    this.certViewElem.hidden = true;
+		    return;
+		}
+		this.certViewElem.hidden = false;
+	    
+	    
+		var selectedCert = this.getSelectedCert();
+		if (selectedCert == null) {
+		    this.LogDebug("certpickerBinding.nickNameMenuListChanged(): NULL selectedCert.");
+		}
+		if ((selectedCert != null) && (this.includeTokenInfo == true)) {
+		    var tokenInfoObj = this.getCertTokenInfo(selectedCert);
+		    if (tokenInfoObj != null) {
+			/*
+			this.LogDebug("certpickerBinding.nickNameMenuListChanged(): getCertTokenInfo(): " + 
+				"    module: " + tokenInfoObj.module.name + "\n" + 
+				"    moduleLib: " + tokenInfoObj.module.libName + "\n" + 
+				"    slotId: " + tokenInfoObj.slotId + " " + 
+				"    slot: " + tokenInfoObj.slot.name + "\n" + 
+				"    token: " + tokenInfoObj.token.tokenName + "\n" + 
+				"    cert.tokenName: " + selectedCert.tokenName + "\n" + 
+				"");
+			*/
+			selectedItemElem.tokenInfo = tokenInfoObj;
+		    }
+		}
+		if (selectedCert) {
+		    var certPickerId = this.id;
+		    if (!certPickerId) {
+			certPickerId = this.getAttribute("anonid");
+		    }
+		    this.LogDebug("certpickerBinding.nickNameMenuListChanged(): " + (certPickerId + ".cert") + " nickname: " + selectedCert.nickname);
+		    if (certPickerId) {
+			var certPickerPrefId = "extensions." + certPickerId + ".cert";
+			this.mPrefUtil.setPrefStringValue(certPickerPrefId, selectedCert.nickname);
+		    }
+		}
+		this.LogTrace("certpickerBinding.nickNameMenuListChanged(): .......................End.");
+		return;
+		]]>
+		</body>
+	    </method>
+
+
+	    <method name="getSelectedCert">
+		<body>
+		<![CDATA[
+		if (this.mNickNameMenuListElem.selectedIndex < 0) {
+		    this.LogDebug("certpickerBinding.getSelectedCert(): selectedIndex < 0 ");
+		    return null;
+		}
+		if (this.mNickNameMenuListElem.selectedItem == null) {
+		    this.LogError("certpickerBinding.getSelectedCert(): selectedItem == null. ");
+		    return null;
+		}
+
+		var cert = this.mNickNameMenuListElem.selectedItem.certRef;
+
+		this.LogDebug("certpickerBinding.getSelectedCert(): cert: " + cert);
+		return cert;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="getSelectedCertToken">
+		<body>
+		<![CDATA[
+		var selectedCert = this.getSelectedCert();
+		if (!selectedCert) {
+		    return null;
+		}
+
+		var pk11Token = this.getToken(selectedCert);
+		return pk11Token;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="isUserCertType">
+		<body>
+		<![CDATA[
+		var certType = this.certtype;
+		this.LogDebug("certpickerBinding.isUserCertType(): certType: " + certType);
+
+		if ((certType == "user") || (certType == "user_selfsigned") || (certType == "user_casigned")) {
+		    return true;
+		}
+		return false;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="viewSelectedCert">
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		// http://books.mozdev.org/html/mozilla-chp-5-sect-3.html#mozilla-CHP-5-SECT-3.1
+		if (ev) {
+		    ev.stopPropagation();
+		}
+		var cert = this.getSelectedCert();
+		return this.viewCert(cert);
+		]]>
+		</body>
+	    </method>
+
+	    <method name="viewCert">
+		<parameter name="cert"/>
+		<body>
+		<![CDATA[
+		if (!cert) {
+		    return false;
+		}
+		var cd = Components.classes["@mozilla.org/nsCertificateDialogs;1"].
+				getService(Components.interfaces.nsICertificateDialogs);
+		cd.viewCert(window, cert);
+		return true;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="getToken">
+		<parameter name="aCert"/>
+		<body>
+		<![CDATA[
+
+		if (!aCert) {
+		    return null;
+		}
+
+		/*
+		var keyTokenName = aCert.tokenName;
+		this.LogDebug("certpickerBinding.getToken(): keyTokenName: " + keyTokenName);
+		*/
+
+		var /* nsIPK11Token */ token = this.mTokenDB.findTokenByName(aCert.tokenName);
+		return token;
+
+		]]>
+		</body>
+	    </method>
+
+	    <method name="loginToCertToken">
+		<parameter name="aCert"/>
+		<parameter name="force"/>
+		<body>
+		<![CDATA[
+		var /* nsIPK11Token */ token = null;
+		if (aCert) {
+		    token = this.mTokenDB.findTokenByName(aCert.tokenName);
+		}
+		else {
+		    token = this.mTokenDB.getInternalKeyToken();
+		}
+		var forceLogin = ((force == null) ? false : force);
+		if (token.needsLogin() || !(token.needsUserInit)) {
+		    token.login(forceLogin);
+		}
+		return;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="loginAllTokens">
+		<parameter name="force"/>
+		<body>
+		<![CDATA[
+
+		this.LogTrace("certpickerBinding.loginAllTokens("+ force + "):.............Start.");
+
+		var forceLogin = ((force == null) ? false : force);
+		var slotnames = new Array();
+
+		// var tokendb = Components.classes["@mozilla.org/security/pk11tokendb;1"].getService(Components.interfaces.nsIPK11TokenDB);
+		var tokenList = this.mTokenDB.listTokens();
+		try {
+		    for ( ; !tokenList.isDone(); tokenList.next()) {
+			var enumElement = tokenList.currentItem();
+			var /* nsIPK11Token */ token = enumElement.QueryInterface(Components.interfaces.nsIPK11Token);
+			if (token.needsLogin() || !(token.needsUserInit)) {
+			    slotnames[slotnames.length] = token.tokenName;
+			    this.LogDebug("certpickerBinding.loginAllTokens(): login-to token: " + token.tokenName);
+			    token.login(forceLogin);
+			}
+		    }
+		} catch(ex) {
+		    // this.LogError("certpickerBinding.getTokenNameList(): failed to get Tokens - " + ex);
+		}
+
+		this.LogTrace("certpickerBinding.loginAllTokens("+ force + "):.............End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="isHardwareToken">
+		<parameter name="cert"/>
+		<body>
+		<![CDATA[
+		var /* nsIPK11Token */ keyToken = this.getToken(cert);
+		if (!keyToken) {
+		    return false;
+		}
+		var hardwareToken = false;
+		if ((keyToken != null) && (keyToken.isHardwareToken() == true)) {
+		    hardwareToken = true;
+		}
+		return hardwareToken;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="createModuleObject">
+		<parameter name="moduleRef"/>
+		<parameter name="slotRefList"/>
+		<body>
+		<![CDATA[
+		var moduleObj = new Object();
+		moduleObj.module = moduleRef;
+		moduleObj.slotList = slotRefList;
+
+		return moduleObj;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="browseCryptoDeviceList">
+		<body>
+		<![CDATA[
+		// Copied from .../mozilla/security/manager/pki/resources/content/device_manager.js
+
+		this.LogTrace("certpickerBinding.browseCryptoDeviceList(): ...............Start.");
+	    
+	    
+		var /* nsIPKCS11ModuleDB */ xsecmoddb;
+		xsecmoddb = Components.classes["@mozilla.org/security/pkcs11moduledb;1"].
+					getService(Components.interfaces.nsIPKCS11ModuleDB);
+		var /* nsIEnumerator */ modules = xsecmoddb.listModules();
+		var done = false;
+		try {
+		    modules.isDone();
+		} catch (e) { done = true; }
+		while (!done) {
+		    var /* nsIPKCS11Module */ module = null;
+		    module = modules.currentItem().QueryInterface(Components.interfaces.nsIPKCS11Module);
+		    if (module) {
+			var slotnames = [];
+			var slotRefList = [];
+			var /* nsIEnumerator */ slots = module.listSlots();
+			var slots_done = false;
+			this.LogDebug("certpickerBinding.browseCryptoDeviceList(): " + "module: " + module.name);
+			try {
+			    slots.isDone();
+			} catch (e) { slots_done = true; }
+	    
+			while (!slots_done) {
+			    var /* nsIPKCS11Slot */ slot = null;
+	       	            try {
+			        slot = slots.currentItem().QueryInterface(Components.interfaces.nsIPKCS11Slot);
+		            } catch (e) { slot = null; }
+			    // in the ongoing discussion of whether slot names or token names
+			    // are to be shown, I've gone with token names because NSS will
+			    // prefer lookup by token name.  However, the token may not be
+			    // present, so maybe slot names should be listed, while token names
+			    // are "remembered" for lookup?
+		            slotRefList[slotRefList.length] = slot;
+		            if (slot != null) {
+			        if (slot.tokenName)
+			  	    slotnames[slotnames.length] = slot.tokenName;
+			        else
+			            slotnames[slotnames.length] = slot.name;
+			        this.LogDebug("certpickerBinding.browseCryptoDeviceList(): " + "    slot: " + slot.name);
+			    }
+		            try {
+			         slots.next();
+			    } catch (e) { slots_done = true; }
+			}
+			// AddModule(module, slotRefList);
+			this.pkcs11ModuleObjList[this.pkcs11ModuleObjList.length] = this.createModuleObject(module, slotRefList);
+		    }
+		    try {
+			modules.next();
+		    } catch (e) { done = true; }
+		}
+		this.LogTrace("certpickerBinding.browseCryptoDeviceList(): ...............End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="getPKCS11ModuleList">
+		<parameter name="reload"/>
+		<body>
+		<![CDATA[
+		if (!reload && this.pkcs11ModuleObjList) {
+		    return this.pkcs11ModuleObjList;
+		}
+		this.pkcs11ModuleObjList = [];
+		this.browseCryptoDeviceList();
+		return this.pkcs11ModuleObjList;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="getCertTokenInfo">
+		<parameter name="aCert"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("certpickerBinding.getCertTokenInfo(" + aCert.nickname + "): .....................Start.");
+
+		var tokenInfoObj = null;
+		if (aCert == null) {
+		    this.LogError("certpickerBinding.getCertTokenInfo(): null aCert.");
+		    return null;
+		}
+	    
+		var /* nsIPKCS11Module */ moduleRef;
+		var /* nsIPKCS11Slot */ slotRef;
+		var /* nsIPK11Token */ tokenRef;
+	    
+		var pkcs11ModuleList = this.getPKCS11ModuleList(false);
+	    
+	    
+		this.LogDebug("certpickerBinding.getCertTokenInfo(): pkcs11ModuleList.length: " + pkcs11ModuleList.length);
+	    
+		for (var i = 0; i < pkcs11ModuleList.length; i++) {
+		    var moduleObj = pkcs11ModuleList[i];
+		    moduleRef = moduleObj.module;
+		    this.LogDebug("certpickerBinding.getCertTokenInfo(): module: " + moduleRef.name);
+		    var slotList = moduleObj.slotList;
+		    if (slotList == null) {
+		    	continue;
+		    }
+		    this.LogDebug("certpickerBinding.getCertTokenInfo(): slotList.length: " + slotList.length);
+		    for (var slotId = 0; slotId < slotList.length; slotId++) {
+			slotRef = slotList[slotId];
+			if (slotRef == null) {
+			    continue;
+			}
+			/*
+			this.LogDebug("certpickerBinding.getCertTokenInfo(): " + "    slot: " + slotRef.name);
+			*/
+			tokenRef = slotRef.getToken();
+			if (tokenRef == null) {
+			    continue;
+			}
+			/*
+			this.LogDebug("certpickerBinding.getCertTokenInfo(): " + "    token: " + tokenRef.tokenName);
+			*/
+			if (!tokenRef.needsLogin()) {
+			    continue;
+			}
+	    
+			/*
+			this.LogDebug("certpickerBinding.getCertTokenInfo(): " + 
+				"    module: " + moduleRef.name + "\n" + 
+				"    moduleLib: " + moduleRef.libName + "\n" + 
+				"    slotId: " + slotId + " " + 
+				"    slot: " + slotRef.name + "\n" + 
+				"    token: " + tokenRef.tokenName + "\n" + 
+				"    aCert.tokenName: " + aCert.tokenName + "\n" + 
+				"");
+			*/
+			if (tokenRef.tokenName != aCert.tokenName) {
+			    continue;
+			}
+	    
+			var keyId = null;
+			tokenInfoObj = new Object();
+			tokenInfoObj.module = moduleRef;
+			tokenInfoObj.slotId = slotId;
+			tokenInfoObj.slot = slotRef;
+			tokenInfoObj.token = tokenRef;
+			tokenInfoObj.keyId = keyId;
+		    	return tokenInfoObj;
+		    }
+		}
+	    
+		this.LogTrace("certpickerBinding.getCertTokenInfo(): .....................End.");
+		return tokenInfoObj;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="reset">
+		<parameter name="cert"/>
+		<body>
+		<![CDATA[
+		]]>
+		</body>
+	    </method>
+
+	    <method name="disableCertTypeItem">
+		<parameter name="certTypeList"/>
+		<body>
+		<![CDATA[
+		]]>
+		</body>
+	    </method>
+
+	    <method name="adaptNickName">
+		<parameter name="aCert"/>
+		<parameter name="keepTokenName"/>
+		<parameter name="nameSuffix"/>
+		<body>
+		<![CDATA[
+		var tmpCert = aCert;
+		if (!tmpCert) {
+		    tmpCert = this.selectedCert;
+		    if (!tmpCert) {
+			return null;
+		    }
+		}
+
+		var tmpStrList = null; 
+		var newNickName = tmpCert.nickname;
+		if (!newNickName || ((newNickName == "") || (newNickName == "(no nickname)"))) {
+		    // return null;
+		    newNickName = tmpCert.commonName;
+		}
+
+		if (!keepTokenName) {
+		    // Remove the token name 
+		    if (newNickName.indexOf(":") >= 0) {
+			tmpStrList = tmpCert.nickname.split(":");
+			if (tmpStrList.length > 1) {
+			    newNickName = tmpStrList[1];
+			}
+		    }
+		}
+		if (newNickName.indexOf("=") >= 0) {
+		    // If the DN was used to create the nickname 
+		    newNickName = tmpCert.commonName;
+		    tmpStrList = newNickName.split(" ");
+		    newNickName = tmpStrList[0];
+		}
+	    
+		newNickName = newNickName.replace(/\./g, "_");
+		newNickName = newNickName.replace(/-/g, "_");
+		newNickName = newNickName.replace(/:/g, "_");
+		newNickName = newNickName.replace(/\W/g,"");
+
+		newNickName = newNickName.replace(/__/g, "_");
+		newNickName = newNickName.replace(/^_/, "");
+	    
+		// this.LogDebug("certpickerBinding.adaptCertNickName(): newNickName: " + newNickName);
+	    
+		if (nameSuffix && (nameSuffix.length > 0)) {
+		    newNickName += "_" + nameSuffix;
+		}
+	    
+		this.LogDebug("certpickerBinding.adaptCertNickName(): newNickName: " + newNickName);
+
+		return newNickName;
+		]]>
+		</body>
+	    </method>
+
+	</implementation>
+    </binding>
+
+    <binding id="certitemBinding"
+	extends="#cert-base"
+    	>
+	<resources>
+	</resources>
+	<!-- content, property, method and event descriptions go here -->
+	<content>
+	    <xul:hbox pack="start" align="start" flex="1">
+	        <xul:x509certtype anonid="certitem.cert.type"
+		    xbl:inherits="value=certtype,hidden=certtypehidden,disabled=certtypedisabled,tooltiptext=certtypetooltiptext,crop=certtypecrop,maxwidth=certtypemaxwidth,minwidth=certtypeminwidth,selfsignedlabel,usertypedisabled,signeduserlabel,usertypelabel,emailtypelabel,emailtypedisabled,servertypelabel,servertypedisabled,catypelabel,catypedisabled"
+		    disabled="true"
+	    	    />
+		<xul:textbox anonid="certitem.cert.nickname"
+		    xbl:inherits="value,disabled,tooltiptext,tooltiptext=certtooltiptext"
+  		    tooltiptext="Certificate nick name"
+  		    defaulttooltiptext="Place holder for certificate nick name - not yet intialized"
+		    readonly="true"
+		    />
+		<xul:button anonid="certitem.cert.view"
+		    xbl:inherits="label=viewlabel,tooltiptext=viewtooltiptext,hidden=viewhidden,disabled"
+	  	    label="View Cert"
+  		    tooltiptext="Click here to view the cert"
+	       	    oncommand="getBindingParent(this).viewCert();"/>
+		<!--
+		<xul:button anonid="certitem.cert.import"
+		    xbl:inherits="label=importlabel,tooltiptext=importtooltiptext,hidden=importhidden,disabled"
+		    hidden="true"
+	  	    label="Import Cert"
+  		    tooltiptext="Click here to import the temporray cert"
+	       	    oncommand="getBindingParent(this).importCert(ev);"
+		    />
+		-->
+	    </xul:hbox>
+	</content>
+	<implementation>
+	    <field name="mTokenDB">
+		Components.classes["@mozilla.org/security/pk11tokendb;1"].getService(Components.interfaces.nsIPK11TokenDB);
+	    </field>
+	    <field name="mX509CertTypeElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certitem.cert.type");
+	    </field>
+	    <field name="mCertNickNameElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certitem.cert.nickname");
+	    </field>
+	    <field name="mCertViewElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certitem.cert.view");
+	    </field>
+	    <!--
+	    <field name="mCertImportElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certitem.cert.import");
+	    </field>
+	    -->
+	    <field name="mX509CertObj"/>
+	    <field name="mX509CertTypeValue"/>
+	    <field name="mX509CertType"/>
+	    <field name="mTempCert"/>
+
+	    <property name="cert">
+		<getter>
+		<![CDATA[
+		return this.mX509CertObj;
+		]]>
+		</getter>
+		<setter>
+		<![CDATA[
+
+		// this.mCertImportElem.hidden = true;
+
+		this.mX509CertObj = val;
+		if (val) {
+		    var tempCert = true;
+		    /*
+		    try {
+		    	tempCert = this.mKeyManager.isTemporaryCert(val);
+		    } catch (ex) {}
+		    */
+
+		    var x509CertTypeValue = 0;
+		    try {
+		    	var x509Cert2 = val.QueryInterface(Components.interfaces.nsIX509Cert2);
+		        x509CertTypeValue = x509Cert2.certType;
+		    } catch (ex) {}
+		    this.mX509CertTypeValue = x509CertTypeValue;
+		    this.mTempCert = tempCert;
+		    // dump("certitemBinding.cert.set(): tempCert: " + tempCert + " x509CertTypeValue: " + x509CertTypeValue + "\n");
+
+		    var certtypehidden = this.getAttribute("certtypehidden");
+		    if (!certtypehidden || (certtypehidden == "false")) {
+		        if (x509CertTypeValue > 0) {
+		            this.mX509CertTypeElem.certtypevalue = ("" + x509CertTypeValue);
+		            this.mX509CertType = this.mX509CertTypeElem.x509certtype;
+		            // dump("certitemBinding.cert.set(): x509CertTypeValue: " + x509CertTypeValue + " mX509CertType: " + this.mX509CertType + "\n");
+
+		    	    this.mX509CertTypeElem.hidden = false;
+			}
+			else {
+		    	    this.mX509CertTypeElem.hidden = true;
+			}
+		    }
+
+		    this.mCertNickNameElem.value = val.nickname;
+		    var certSubjName = val.subjectName;
+		    if (certSubjName) {
+		    	var certItemTooltip = "";
+			certItemTooltip += "Subject: " + certSubjName;
+			certItemTooltip += " | " + "Issuer: " + val.issuerName;
+			certItemTooltip += " | " + "SN: " + val.serialNumber;
+			certItemTooltip += " | " + "Token: " + val.tokenName;
+			certItemTooltip += " | " + "Expires: " + val.validity.notAfterLocalTime;
+		    	this.mCertNickNameElem.setAttribute("tooltiptext", certItemTooltip);
+		    }
+
+		    this.mCertViewElem.hidden = false;
+		}
+		else {
+		    this.mX509CertTypeValue = 0;
+		    this.mX509CertType = null;
+		    this.mTempCert = true;
+
+		    var certtypehidden = this.getAttribute("certtypehidden");
+		    if (!certtypehidden || (certtypehidden == "false")) {
+		    	this.mX509CertTypeElem.hidden = true;
+		    }
+
+		    this.mCertNickNameElem.value = '';
+		    var defTooltip = this.mCertNickNameElem.getAttribute("defaulttooltiptext");
+		    this.mCertNickNameElem.setAttribute("tooltiptext", defTooltip);
+
+		    this.mCertViewElem.hidden = true;
+		}
+		// dump("certitemBinding.cert.set(): x509CertTypeValue: " + x509CertTypeValue + "\n");
+		return val;
+		]]>
+		</setter>
+	    </property>
+	    <property name="nickName" readonly="true"
+		onget="return this.value;"
+		/>
+	    <property name="value" readonly="true"
+		onget="if (this.mCertNickNameElem.value == '') { return null;} return this.mCertNickNameElem.value;"
+		/>
+	    <property name="certtypevalue" readonly="true"
+		onget="return this.mX509CertTypeValue;"
+		/>
+	    <property name="isusercert" readonly="true"
+		onget="return (this.mX509CertTypeValue == Components.interfaces.nsIX509Cert.USER_CERT);"
+		/>
+	    <property name="iscacert" readonly="true"
+		onget="return (this.mX509CertTypeValue == Components.interfaces.nsIX509Cert.CA_CERT);"
+		/>
+	    <property name="istempcert"
+		onget="return this.mTempCert;"
+		onset="this.mTempCert=val;return val;"
+		/>
+	    <constructor>
+		<![CDATA[
+		this.refresh();
+		]]>
+	    </constructor>
+
+	    <method name="refresh">
+		<body>
+		<![CDATA[
+		var certtypehidden = this.getAttribute("certtypehidden");
+		/*
+		if (certtypehidden && (certtypehidden == "false")) {
+		    this.removeAttribute("certtypehidden");
+		}
+		*/
+		if (!certtypehidden) {
+		    if (!this.getAttribute("showcerttype")) {
+		        this.setAttribute("certtypehidden", true);
+		    }
+		}
+		this.cert = null;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="viewCert">
+		<body>
+		<![CDATA[
+		if (!this.cert) {
+		    return false;
+		}
+		var cd = Components.classes["@mozilla.org/nsCertificateDialogs;1"].
+				getService(Components.interfaces.nsICertificateDialogs);
+		cd.viewCert(window, this.cert);
+		return true;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="adaptNickName">
+		<parameter name="keepTokenName"/>
+		<parameter name="nameSuffix"/>
+		<body>
+		<![CDATA[
+		var tmpCert = this.cert;
+		if (!tmpCert) {
+		    tmpCert = this.cert;
+		    if (!tmpCert) {
+			return null;
+		    }
+		}
+
+		var tmpStrList = null; 
+		var newNickName = tmpCert.nickname;
+		if (!newNickName || ((newNickName == "") || (newNickName == "(no nickname)"))) {
+		    // return null;
+		    newNickName = tmpCert.commonName;
+		}
+
+		if (!keepTokenName) {
+		    // Remove the token name 
+		    if (newNickName.indexOf(":") >= 0) {
+			tmpStrList = tmpCert.nickname.split(":");
+			if (tmpStrList.length > 1) {
+			    newNickName = tmpStrList[1];
+			}
+		    }
+		}
+		if (newNickName.indexOf("=") >= 0) {
+		    // If the DN was used to create the nickname 
+		    newNickName = tmpCert.commonName;
+		    tmpStrList = newNickName.split(" ");
+		    newNickName = tmpStrList[0];
+		}
+	    
+		newNickName = newNickName.replace(/\./g, "_");
+		newNickName = newNickName.replace(/-/g, "_");
+		newNickName = newNickName.replace(/:/g, "_");
+		newNickName = newNickName.replace(/\W/g,"");
+
+		newNickName = newNickName.replace(/__/g, "_");
+		newNickName = newNickName.replace(/^_/, "");
+	    
+		// this.LogDebug("adaptCertNickName(): newNickName: " + newNickName);
+	    
+		if (nameSuffix && (nameSuffix.length > 0)) {
+		    newNickName += "_" + nameSuffix;
+		}
+	    
+		return newNickName;
+		]]>
+		</body>
+	    </method>
+
+	</implementation>
+    </binding>
+
+    <binding id="tokenmenulistBinding"
+	extends="#cert-base"
+        >
+	<resources>
+	</resources>
+	<!-- content, property, method and event descriptions go here -->
+	    <!--
+	    <xul:textbox anonid="tokenmenulist.name" flex="1"
+		xbl:inherits="value=tokenname,disabled,nametooltiptext"
+		readonly="true"
+		hidden="true"
+		/>
+	    -->
+	<content>
+	    <xul:menulist anonid="tokenmenulist.menulist"
+		xbl:inherits="value,disabled,tooltiptext"
+		oncommand="getBindingParent(this).onTokenMenuChange(this, event)"
+		>
+		<xul:menupopup/>
+	    </xul:menulist>
+	</content>
+	    <!--
+	    <xul:button anonid="tokenmenulist.view"
+		xbl:inherits="label=viewlabel,tooltiptext=viewtooltiptext,hidden=viewhidden,disabled"
+	  	label="View Cert"
+  		tooltiptext="Click here to view the cert"
+	       	oncommand="getBindingParent(this).viewCert();"/>
+	    -->
+	<implementation>
+	    <!--
+	    <field name="tokenNameElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "tokenmenulist.name");
+	    </field>
+	    -->
+	    <field name="mTokenMenuListElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "tokenmenulist.menulist");
+	    </field>
+	    <field name="mPK11Token"/>
+
+	    <property name="tokenMenu" readonly="true"
+		onget="return this.mTokenMenuListElem"
+		/>
+
+	    <property name="token" readonly="true">
+		<getter>
+		<![CDATA[
+		    return this.mPK11Token;
+		]]>
+		</getter>
+		<setter>
+		<![CDATA[
+		    if (val) {
+		        this.value = val.tokenName;
+		    }
+		    else {
+		    	this.mTokenMenuListElem.selectedIndex = -1;
+			this.mPK11Token = null;
+		    }
+		    return val;
+		]]>
+		</setter>
+	    </property>
+
+	    <property name="value"
+		onget="return this.mTokenMenuListElem.value;"
+		onset="this.mTokenMenuListElem.value=val; this.onTokenMenuChange(this.mTokenMenuListElem); return val;"
+		/>
+
+	    <property name="tokenName"
+		onget="return this.value;"
+		onset="this.value=val;return val;"
+		/>
+
+	    <constructor>
+		<![CDATA[
+		// this.mMaxLogLevel = 9;
+
+		this.mPK11Token = null;
+		this.refresh();
+		]]>
+	    </constructor>
+
+	    <method name="refresh">
+		<body>
+		<![CDATA[
+		this.LogTrace("tokenmenulistBinding.refresh() ........Start.");
+
+		this.initTokenMenuList();
+
+		if (this.mTokenMenuListElem.selectedIndex >= 0) {
+		    this.onTokenMenuChange(this.mTokenMenuListElem);
+		}
+
+		this.LogTrace("tokenmenulistBinding.refresh() ........End.");
+		]]>
+		</body>
+	    </method>
+
+
+	    <method name="initTokenMenuList">
+		<body>
+		<![CDATA[
+		this.LogTrace("tokenmenulistBinding.initTokenMenuList() ........Start.");
+
+		var tokendb = Components.classes["@mozilla.org/security/pk11tokendb;1"].
+					getService(Components.interfaces.nsIPK11TokenDB);
+	    
+		var lastItemLabel = this.mTokenMenuListElem.value;
+	    
+		this.mTokenMenuListElem.removeAllItems();
+		this.mTokenMenuListElem.selectedIndex = -1;
+		this.mTokenMenuListElem.value = "";
+	    
+		var tokenList = tokendb.listTokens();
+	    
+		var tokenCnt = 0;
+		var selectedIndex = -1;
+		var /* Menuitem */ selectedItem = null;
+		var /* Menuitem */ menuItemNode = null;
+		try {
+		    for ( ; !tokenList.isDone(); tokenList.next()) {
+			var enumElement = tokenList.currentItem();
+			var token = enumElement.QueryInterface(Components.interfaces.nsIPK11Token);
+			if (token.needsLogin() || !(token.needsUserInit)) {
+			    menuItemNode = this.mTokenMenuListElem.appendItem(token.tokenName, token.tokenName);
+			    menuItemNode.token = token;
+			    if (tokenCnt == 0) {
+			        selectedIndex = tokenCnt;
+			        selectedItem = menuItemNode;
+			    }
+			    if (lastItemLabel == token.tokenName) {
+			        selectedIndex = tokenCnt;
+			        selectedItem = menuItemNode;
+			    }
+			    tokenCnt++;
+		        }
+		    }
+		} catch(ex){}
+		this.LogDebug("tokenmenulistBinding.initTokenMenuList(): tokenCnt: " + tokenCnt + " selectedIndex: " + selectedIndex + "\n");
+
+		if (selectedIndex >= 0) {
+		    this.mTokenMenuListElem.selectedIndex = selectedIndex;
+		}
+	    
+		if (tokenCnt <= 1) {
+		    this.mTokenMenuListElem.disabled = true;
+		}
+		else {
+		    if (!this.getAttribute("disabled")) {
+		    	this.mTokenMenuListElem.disabled = false;
+		    }
+		}
+	    
+		this.LogTrace("tokenmenulistBinding.initTokenMenuList() ........End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="onTokenMenuChange">
+		<parameter name="aTokenMenuElem"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("tokenmenulistBinding.onTokenMenuChange() ........Start.");
+
+		if (aTokenMenuElem.selectedIndex < 0) {
+		    this.mPK11Token = null;
+		    return;
+		}
+
+		this.mPK11Token = aTokenMenuElem.selectedItem.token;
+
+		this.LogTrace("tokenmenulistBinding.onTokenMenuChange() ........End.");
+		]]>
+		</body>
+	    </method>
+
+	</implementation>
+    </binding>
+
+    <binding id="certpickertestBinding">
+	<resources>
+	</resources>
+	<!-- content, property, method and event descriptions go here -->
+	<content>
+            <xul:certpicker anonid="xmldsigffext.form.sign.signer.nickName.menulist"
+                xbl:inherits="disabled=readonly,value=signerNickName,certtypehidden=signcerttypehidden,certusage=signcertusage,certusagehidden=signcertusagehidden,certusagedisabled=signcertusagedisabled"
+                xtokentypehidden="true"
+                certtype="user"
+                certtypedisabled="true"
+                certusage="ObjectSigner"
+                certusagehidden="false"
+                certusagedisabled="true"
+                viewhidden="false"
+                includeTokenInfo="true"
+                sigParamName="signerNickName"
+                xoncommand="getBindingParent(this).signerNickNameMenuListChanged(this, event, 'xmldsigffext.form.sign.signer');"
+                />
+	</content>
+
+	<implementation>
+	</implementation>
+    </binding>
+
+</bindings>
+

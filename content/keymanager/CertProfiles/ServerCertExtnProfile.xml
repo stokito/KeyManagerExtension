@@ -1,0 +1,178 @@
+<CertProfile
+    >
+    <profileItem name="profileusertype" value="server"/>
+    <profileItem name="dnsName" value=""/>
+    <profileItem name="ipAddress" value=""/>
+
+    <profileItem name="firstName" value=""/>
+    <!--
+    <profileItem name="email_type" value="rfc1274"/>
+    <profileItem name="email" value="hhhh"/>
+    <profileItem name="org_unit" value="jjjjjjj"/>
+    -->
+    <profileItem name="org_unit" value=""/>
+    <profileItem name="org" value=""/>
+    <profileItem name="locality" value=""/>
+    <profileItem name="state" value=""/>
+    <profileItem name="country" value=""/>
+    <profileItem name="dc" value=""/>
+    <!--
+    <profileItem name="locality" value="Lincroft"/>
+    <profileItem name="state" value="NJ"/>
+    <profileItem name="country" value="US"/>
+    <profileItem name="subject" value="MAIL=hhhh,CN=XXXX U1234,OU=jjjjjjj,O=MyOrg,L=Lincroft,ST=NJ,C=US"/>
+    -->
+
+    <!--
+    <profileItem name="nickName" value="XXXX"/>
+    -->
+    <profileItem name="keysize" value="1024"/>
+    <profileItem name="keytype" value="rsa"/>
+    <!--
+    <profileItem name="sigAlgorithm" value="SHA1"/>
+    <profileItem name="keytype" value="dsa"/>
+    <profileItem name="keytype" value="ec"/>
+    <profileItem name="ecCurveName" value="secp384r1"/>
+    -->
+
+    <profileItem name="version" value="3"/>
+    <profileItem name="ver-3" value="true"/>
+
+    <profileItem name="serial" value="auto"/>
+    <profileItem name="serial-auto" value="true"/>
+    <!--
+    <profileItem name="serial" value="input"/>
+    <profileItem name="serial_value" value="0085af2beb"/>
+    -->
+
+    <profileItem name="validity" value="auto"/>
+    <profileItem name="validity_auto" value="true"/> 
+    <!--
+    <profileItem name="validity_months" value="true"/> 
+    <profileItem name="validity_days" value="true"/> 
+    <profileItem name="validityDuration" value="1"/> 
+    -->
+    <!--
+    <profileItem name="validity" value="input"/>
+    <profileItem name="validity_input" value="true"/> 
+    <profileItem name="notAfter" value="100406224034EST"/>
+    <profileItem name="notBefore" value="070406224034EST"/>
+    -->
+
+
+    <!-- X.509 Standard Extensions -->
+
+    <profileItem name="basicConstraints" value="true"/>
+    <profileItem name="basicConstraints-crit" value="true"/>
+    <!--
+    <profileItem name="basicConstraints-cA-radio" value="true"/>
+    <profileItem name="basicConstraints-pathLengthConstraint-text" value="04"/>
+    <profileItem name="basicConstraints-pathLengthConstraint" value="true"/>
+    -->
+
+    <profileItem name="keyUsage" value="true"/>
+    <profileItem name="keyUsage-crit" value="true"/>
+    <profileItem name="keyUsage-dataEncipherment" value="true"/>
+    <profileItem name="keyUsage-keyEncipherment" value="true"/>
+    <profileItem name="keyUsage-nonRepudiation" value="true"/>
+    <profileItem name="keyUsage-keyAgreement" value="true"/>
+    <profileItem name="keyUsage-digitalSignature" value="true"/>
+    <!--
+    <profileItem name="keyUsage-cRLSign" value="true"/>
+    <profileItem name="keyUsage-keyCertSign" value="true"/>
+    -->
+
+    <profileItem name="extKeyUsage" value="true"/>
+    <profileItem name="extKeyUsage-crit" value="true"/>
+    <profileItem name="extKeyUsage-serverAuth" value="true"/>
+    <!--
+    <profileItem name="extKeyUsage-clientAuth" value="true"/>
+    <profileItem name="extKeyUsage-codeSign" value="true"/>
+    <profileItem name="extKeyUsage-emailProtect" value="true"/>
+    <profileItem name="extKeyUsage-NS-govtApproved" value="true"/>
+    <profileItem name="extKeyUsage-ocspResponder" value="true"/>
+    <profileItem name="extKeyUsage-timeStamp" value="true"/>
+    -->
+
+    <profileItem name="subjectKeyIdentifier" value="true"/>
+    <profileItem name="subjectKeyIdentifier-crit" value="true"/>
+
+    <profileItem name="authorityKeyIdentifier" value="true"/>
+    <profileItem name="authorityKeyIdentifier-crit" value="true"/>
+    <profileItem name="authorityKeyIdentifier-radio-keyIdentifier" value="true"/>
+    <!--
+    <profileItem name="authorityKeyIdentifier-radio-nameserialno" value="true"/>
+    -->
+
+    <!--
+    <profileItem name="SubAltName" value="true"/>
+    <profileItem name="SubAltName-crit" value="true"/>
+    <profileItem name="SubAltNameSelect0" value="myserver.mydomain.com - 3"/>
+    <profileItem name="SubAltName-text" value="myserver.mydomain.com - 3"/>
+    <profileItem name="SubAltName-display-text" value="dnsName:myserver.mydomain.com"/>
+    <profileItem name="SubAltNameSelect0" value="admin@mydomain.com - 2"/>
+    <profileItem name="SubAltNameSelect1" value="192.168.2.1 - 8"/>
+    <profileItem name="SubAltNameSelect2" value="myserver.mydomain.com - 3"/>
+    <profileItem name="SubAltName-text" value="admin@mydomain.com - 2|192.168.2.1 - 8|myserver.mydomain.com - 3"/>
+    <profileItem name="SubAltName-display-text" value="rfc822Name:admin@mydomain.com|ipAddress:192.168.2.1|dnsName:myserver.mydomain.com"/>
+    -->
+
+    <!--
+    <profileItem name="IssuerAltName" value="true"/>
+    <profileItem name="IssuerAltName-crit" value="true"/>
+    <profileItem name="IssuerAltNameSourceRadio-auto" value="true"/>
+    <profileItem name="IssuerAltName-text" value="mazum@avaya.com - 2|192.168.2.1 - 8"/>
+    <profileItem name="IssuerAltName-display-text" value="rfc822Name:mazum@avaya.com|ipAddress:192.168.2.1"/>
+    -->
+
+    <!--
+    <profileItem name="NameConstraints" value="true"/>
+    <profileItem name="NameConstraints-crit" value="true"/>
+    <profileItem name="NameConstraints-text" value=""/>
+    -->
+
+    <!-- Netscape Extensions -->
+    <profileItem name="netscape-cert-type" value="true"/>
+    <profileItem name="netscape-cert-type-crit" value="true"/>
+    <profileItem name="netscape-cert-type-smime" value="true"/>
+    <profileItem name="netscape-cert-type-ssl-client" value="true"/>
+    <profileItem name="netscape-cert-type-ssl-server" value="true"/>
+    <!--
+    <profileItem name="netscape-cert-type-object-signing-ca" value="true"/>
+    <profileItem name="netscape-cert-type-object-signing" value="true"/>
+    <profileItem name="netscape-cert-type-smime-ca" value="true"/>
+    <profileItem name="netscape-cert-type-ssl-ca" value="true"/>
+    -->
+
+    <!--
+    <profileItem name="netscape-base-url" value="true"/>
+    <profileItem name="netscape-base-url-crit" value="true"/>
+    <profileItem name="netscape-base-url-text" value="http://home.mazumdar.net/cert/base"/>
+
+    <profileItem name="netscape-ca-policy-url" value="true"/>
+    <profileItem name="netscape-ca-policy-url-crit" value="true"/>
+    <profileItem name="netscape-ca-policy-url-text" value="http://home.mazumdar.net/ca/policy"/>
+
+    <profileItem name="netscape-ca-revocation-url" value="true"/>
+    <profileItem name="netscape-ca-revocation-url-crit" value="true"/>
+    <profileItem name="netscape-ca-revocation-url-text" value="http://home.mazumdar.net/ca/revocation"/>
+
+    <profileItem name="netscape-cert-renewal-url" value="true"/>
+    <profileItem name="netscape-cert-renewal-url-crit" value="true"/>
+    <profileItem name="netscape-cert-renewal-url-text" value="http://home.mazumdar.net/ca/renewal"/>
+
+    <profileItem name="netscape-comment" value="true"/>
+    <profileItem name="netscape-comment-crit" value="true"/>
+    <profileItem name="netscape-comment-text" value="This is a comment."/>
+
+    <profileItem name="netscape-revocation-url" value="true"/>
+    <profileItem name="netscape-revocation-url-crit" value="true"/>
+    <profileItem name="netscape-revocation-url-text" value="http://home.mazumdar.net/revocation/"/>
+
+    <profileItem name="netscape-ssl-server-name" value="true"/>
+    <profileItem name="netscape-ssl-server-name-crit" value="true"/>
+    <profileItem name="netscape-ssl-server-name-text" value="home.mazumdar.net"/>
+    -->
+
+</CertProfile>
+

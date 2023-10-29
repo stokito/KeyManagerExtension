@@ -1,0 +1,183 @@
+<?xml version="1.0"?>
+<!-- @(#) $Id: exportFormatTypeDialog.xul,v 1.2 2009/12/02 07:10:51 subrata Exp $ -->
+
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is Avaya Labs Research, Avaya Inc. Code.
+   -
+   - The Initial Developer of the Original Code is
+   - Subrata Mazumdar, Avaya Labs Research, Avaya Inc.
+   - Portions created by the Initial Developer are Copyright (C) 2007.
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Subrata Mazumdar (mazum@avaya.com)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+
+<!DOCTYPE dialog
+    	[
+	<!ENTITY % crltool.dtd SYSTEM "chrome://keymanager/locale/crltool.dtd">
+	%crltool.dtd;
+	<!ENTITY % keyManager.dtd SYSTEM "chrome://keymanager/locale/keyManager.dtd">
+	%keyManager.dtd;
+	]>
+
+<dialog id="keymgr.crltool.export.win"
+  title="&keymgr.crltool.export.win.title;"
+  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"      
+  style="width: 30em;"
+  persist="screenX screenY width height"
+  buttons="accept,cancel"
+  ondialogaccept="return X509CRLExportFormatDialog.acceptExportFormat();"
+  ondialogcancel="return X509CRLExportFormatDialog.cancelExportFormat();"
+  onload="X509CRLExportFormatDialog.onLoad();">
+
+    <script type="application/x-javascript" src="chrome://keymanager/content/tools/crltool/exportFormatTypeDialog.js"/>
+
+    <groupbox flex="1">
+        <caption class="header" label="&keymgr.key.export.format.label;"/>
+        <grid>
+	    <columns>
+	        <column/>
+	        <column/>
+	    </columns>
+	    <rows>
+	        <row
+		    align="center"
+		    >
+		    <label value="&keymgr.key.export.format.type.label;"/>
+                    <groupbox
+			orient="horizontal"
+			pack="start" align="start"
+		    	>
+                        <radiogroup id="keymgr.key.export.format.type" 
+            		    zpersist="selectedIndex"
+              		    onclick="X509CRLExportFormatDialog.handleKeyExportFormatTypeGroupChange(this, event)"
+            	    	    >
+            		    <grid>
+            		        <columns>
+            		            <column/>
+            		            <column/>
+            		        </columns>
+            		        <rows>
+            		            <row>
+                                        <radio id="keymgr.key.export.format.type.x509crl"
+            		                    label="&keymgr.key.export.format.type.x509crl.label;"
+            		                    tooltiptext="&keymgr.key.export.format.type.x509crl.tooltip;"
+  		                  	    selected="true"
+              		                    value="x509crl"
+              		                    group="keymgr.key.export.format.type"
+					    />
+                                        <radio id="keymgr.key.export.format.type.pkcs7"
+            		                    label="&keymgr.key.export.format.type.pkcs7.label;"
+            		                    tooltiptext="&keymgr.key.export.format.type.pkcs7.tooltip;"
+              		                    value="pkcs7"
+              		                    group="keymgr.key.export.format.type"
+					    />
+            		            </row>
+            		            <row>
+            		            </row>
+            		        </rows>
+            		    </grid>
+                        </radiogroup>
+                    </groupbox>
+	        </row>
+	        <row
+		    align="center"
+		    >
+		    <spacer/>
+		    <spacer/>
+	        </row>
+
+	        <row
+		    align="center"
+		    >
+		    <label value="&keymgr.key.export.format.encoding.label;"/>
+                    <groupbox
+			orient="horizontal"
+			pack="start" align="start"
+		    	>
+                        <radiogroup id="keymgr.key.export.format.encoding" flex="1"
+  		            onclick="X509CRLExportFormatDialog.handleExportFormatEncodingChange(this, event)"
+	    	            >
+  	                    <hbox pack="start" align="start">
+                                <radio id="keymgr.key.export.format.encoding.base64"
+		                  label="&keymgr.key.export.format.encoding.base64.label;"
+		                  tooltiptext="&keymgr.key.export.format.encoding.base64.tooltip;"
+  		                  selected="true"
+  		                  value="base64"
+  		                  group="keymgr.key.export.format.encoding"/>
+                                <radio id="keymgr.key.export.format.encoding.der"
+		                  label="&keymgr.key.export.format.encoding.der.label;"
+		                  tooltiptext="&keymgr.key.export.format.encoding.der.tooltip;"
+  		                  value="der"
+  		                  group="keymgr.key.export.format.encoding"/>
+  	                    </hbox>
+                        </radiogroup>
+                    </groupbox>
+	        </row>
+
+	        <row id="keymgr.key.export.cert.include.certchain.row"
+		    hidden="true"
+		    align="center"
+		    >
+		    <spacer/>
+                    <hbox id="keymgr.key.export.cert.include.certchain.hbox"
+			pack="start" align="start"
+		    	>
+	                <checkbox id="keymgr.key.export.cert.include.certchain"
+		            label="&keymgr.key.export.cert.include.certchain.label;"
+		            tooltiptext="&keymgr.key.export.cert.include.certchain.tooltip;"
+		            checked="false"
+		            />
+                    </hbox>
+	        </row>
+
+	        <row id="keymgr.key.export.file.view.row"
+		    hidden="true"
+		    >
+		    <spacer/>
+                    <hbox id="keymgr.key.export.file.view.hbox"
+			pack="start" align="start"
+		    	>
+	                <checkbox id="keymgr.key.export.file.view"
+		            label="&keymgr.key.export.file.view.label;"
+		            tooltiptext="&keymgr.key.export.file.view.tooltip;"
+		            checked="false"
+		            />
+                    </hbox>
+	        </row>
+
+	    </rows>
+	</grid>
+    </groupbox>
+</dialog>
+

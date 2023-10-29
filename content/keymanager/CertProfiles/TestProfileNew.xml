@@ -1,0 +1,58 @@
+<?xml version="1.0"?> 
+
+<CertProfile
+    baseProfileType="basicconstraints"
+    ybaseProfileType="custom"
+    baseProfileFilePath="/home/subrata/Projects/XUL/extensions/avpki/kmgui/resources/content/keymanager/CertProfiles/BasicContraintsOnlyExtnProfile.xml"
+    zbaseProfileType="customuri"
+    baseProfileURI="file:///home/subrata/Projects/XUL/extensions/avpki/kmgui/resources/content/keymanager/CertProfiles/BasicContraintsOnlyExtnProfile.xml"
+    >
+
+    <!--
+    <profileItem name="version" value="3"/> 
+    <profileItem name="version_3" value="true"/> 
+
+    <profileItem name="basicConstraints" value="true"/> 
+    <profileItem name="basicConstraints-crit" value="true"/> 
+    -->
+
+    <profileItem name="keyUsage" value="true"/>
+    <profileItem name="keyUsage-crit" value="true"/>
+    <profileItem name="keyUsage-digitalSignature" value="true"/>
+    <profileItem name="keyUsage-keyEncipherment" value="true"/>
+    <profileItem name="keyUsage-dataEncipherment" value="true"/>
+    <profileItem name="keyUsage-keyAgreement" value="true"/>
+    <!--  
+    <profileItem name="keyUsage-keyCertSign" value="true"/>
+    <profileItem name="keyUsage-cRLSign" value="true"/>
+    <profileItem name="keyUsage-nonRepudiation" value="true"/>
+    -->  
+    <profileItem name="extKeyUsage" value="true"/>
+    <profileItem name="extKeyUsage-crit" value="true"/>
+    <profileItem name="extKeyUsage-clientAuth" value="true"/>
+    <profileItem name="extKeyUsage-codeSign" value="true"/>
+    <profileItem name="extKeyUsage-emailProtect" value="true"/>
+    <!--  
+    <profileItem name="extKeyUsage-serverAuth" value="true"/>
+    <profileItem name="extKeyUsage-timeStamp" value="true"/>
+    <profileItem name="extKeyUsage-ocspResponder" value="true"/>
+    <profileItem name="extKeyUsage-NS-govtApproved" value="true"/>
+    -->  
+
+    <profileItem name="subjectKeyIdentifier" value="true"/>
+    <profileItem name="subjectKeyIdentifier-crit" value="true"/>
+
+    <!--
+    <profileItem name="authorityKeyIdentifier" value="true"/>
+    <profileItem name="authorityKeyIdentifier-crit" value="true"/>
+    <profileItem name="authorityKeyIdentifier-radio-keyIdentifier" value="true"/>
+    <profileItem name="authorityKeyIdentifier-radio-nameserialno" value="true"/>
+    -->
+
+    <profileItem name="netscape-cert-type" value="true"/>
+    <profileItem name="netscape-cert-type-crit" value="true"/>
+    <profileItem name="netscape-cert-type-smime" value="true"/>
+    <profileItem name="netscape-cert-type-object-signing" value="true"/>
+    <profileItem name="netscape-cert-type-ssl-client" value="true"/>
+</CertProfile>
+

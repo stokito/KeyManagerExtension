@@ -1,0 +1,689 @@
+<?xml version="1.0"?>
+<!-- @(#) $Id: JKSManageCert.xul,v 1.13 2012/01/18 03:30:48 subrata Exp $ -->
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is Avaya Labs Research, Avaya Inc. Code.
+   -
+   - The Initial Developer of the Original Code is
+   - Subrata Mazumdar, Avaya Labs Research, Avaya Inc.
+   - Portions created by the Initial Developer are Copyright (C) 2007.
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Subrata Mazumdar (mazum@avaya.com)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://keymanager/skin/kmbindings.css" type="text/css"?>
+<?xml-stylesheet href="chrome://keymanager/skin/datetimebindings.css" type="text/css"?>
+
+<!DOCTYPE wizard
+	[
+	<!ENTITY % jksmanagecert.dtd SYSTEM "chrome://keymanager/locale/jksmanagecert.dtd">
+	%jksmanagecert.dtd;
+	]>
+
+<wizard id="keymgr.jksmanagecert.wizard"
+    xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    windowtype="avaya:jksmanagecert"
+    title="&keymgr.jksmanagecert.wizard.title;"
+    flex="1"
+    onwizardfinish="return JKSManageCertWizard.finishWizard(this);"
+    onwizardcancel="return JKSManageCertWizard.cancelWizard(this);"
+    persist="width height screenX screenY"
+    >
+
+    <script type="application/x-javascript" src="chrome://keymanager/content/tools/jksmanagecert/JKSManageCert.js"/>
+
+    <wizardpage
+	pageid="keymgr.jksmanagecert.selectks.wizardpage"
+	description="&keymgr.jksmanagecert.selectks.wizardpage.label;"
+	onpageshow="return JKSManageCertWizard.selectKeyStorePageShow(this);"
+	onpageadvanced="return JKSManageCertWizard.selectKeyStorePageAdvanced(this);"
+	next="keymgr.jksmanagecert.createcsr.wizardpage"
+	>
+	<grid flex="1">
+	    <columns>
+		<column/>
+		<column flex="1"/>
+	    </columns>
+	    <rows>
+		<row
+		    align="center"
+		    >
+		    <label value="&keymgr.jksmanagecert.selectks.keystore.label;"/> 
+		    <hbox
+			align="start"
+			pack="start"
+			>
+			<checkbox id="keymgr.jksmanagecert.selectks.new"
+			    label="&keymgr.jksmanagecert.selectks.new.label;"
+			    tooltiptext="&keymgr.jksmanagecert.selectks.new.tooltip;"
+			    oncommand="JKSManageCertWizard.handleKeyStoreNewChange(this, event);"
+			    />
+			<deck id="keymgr.jksmanagecert.selectks.keystore.deck"
+			    flex="1"
+			    >
+			    <fileselector id="keymgr.jksmanagecert.selectks.keystore"
+			    	flex="1"
+				persist="value"
+			        formathidden="true"
+			        fileMode="open"
+			        fileDialogMsg="Choose Java Key Store"
+			        fileTypeMsg="Java Key Store"
+			        fileTypeFilters="*.jks;"
+			        filetooltiptext="&keymgr.jksmanagecert.selectks.keystore.tooltip;"
+			        browselabel="&keymgr.jksmanagecert.file.browse.label;"
+			        browsetooltiptext="&keymgr.jksmanagecert.selectks.keystore.browse.tooltip;"
+			        xvalue="/tmp/KeyManager/JKS/cacerts.jks"
+			        oncommand="JKSManageCertWizard.handleKeyStoreFilePickerChange(this, event);"
+			        onchange="JKSManageCertWizard.handleKeyStoreFilePickerChange(this, event);"
+			        onpopuphiding="JKSManageCertWizard.handleKeyStoreFilePickerChange(this, event);"
+			        />
+			    <fileselector id="keymgr.jksmanagecert.selectks.keystore.new"
+			    	flex="1"
+				xpersist="value"
+			        formathidden="true"
+			        fileMode="save"
+			        fileDialogMsg="Choose Java Key Store"
+			        fileTypeMsg="Java Key Store"
+			        fileTypeFilters="*.jks;"
+			        filetooltiptext="&keymgr.jksmanagecert.selectks.keystore.tooltip;"
+			        browselabel="&keymgr.jksmanagecert.file.browse.label;"
+			        browsetooltiptext="&keymgr.jksmanagecert.selectks.keystore.browse.tooltip;"
+			        xvalue="/tmp/KeyManager/JKS/cacerts.jks"
+			        oncommand="JKSManageCertWizard.handleKeyStoreNewFilePickerChange(this, event);"
+			        onchange="JKSManageCertWizard.handleKeyStoreFNewilePickerChange(this, event);"
+			        onpopuphiding="JKSManageCertWizard.handleKeyStoreNewFilePickerChange(this, event);"
+			        />
+			</deck>
+		    </hbox>
+		</row>
+
+		<row
+		align="center"
+		    >
+		    <label value="&keymgr.jksmanagecert.selectks.storetype.label;"/> 
+		    <hbox
+			pack="start"
+			>
+			<menulist id="keymgr.jksmanagecert.selectks.storetype"
+			    tooltiptext="&keymgr.jksmanagecert.selectks.storetype.tooltip;"
+			    persist="value"
+			    >
+			    <menupopup>
+			        <menuitem id="keymgr.jksmanagecert.selectks.storetype.jks"
+				    label="&keymgr.jksmanagecert.selectks.storetype.jks.label;"
+				    value="jks"
+				    />
+			        <menuitem id="keymgr.jksmanagecert.selectks.storetype.jcejks"
+				    label="&keymgr.jksmanagecert.selectks.storetype.jcejks.label;"
+				    value="jceks"
+				    />
+			    </menupopup>
+			</menulist>
+		    </hbox>
+		</row>
+
+		<row
+		    align="center"
+		    >
+		    <label value="&keymgr.jksmanagecert.selectks.storepass.label;"/> 
+		    <hbox
+			pack="start"
+			>
+			<textbox id="keymgr.jksmanagecert.selectks.storepass"
+			    type="password"
+			    xvalue="changeit"
+			    tooltiptext="&keymgr.jksmanagecert.selectks.storepass.tooltip;"
+			    onchange="JKSManageCertWizard.handleStorePassChange(this, event);"
+			    onmouseout="JKSManageCertWizard.handleStorePassChange(this, event);"
+			    onkeyup="JKSManageCertWizard.handleStorePassChange(this, event);"
+			    />
+		    </hbox>
+		</row>
+
+		<row
+		    align="center"
+		    >
+		    <label value="&keymgr.jksmanagecert.selectks.tasktype.label;"/> 
+		    <groupbox 
+			orient="horizontal"
+			pack="start"
+			>
+			<radiogroup id="keymgr.jksmanagecert.selectks.tasktype"
+			    xorient="horizontal"
+			    oncommand="JKSManageCertWizard.handleInputCertTypeChange(this, event);"
+			    >
+			    <radio id="keymgr.jksmanagecert.selectks.tasktype.new"
+			        label="&keymgr.jksmanagecert.selectks.tasktype.new.label;"
+			        tooltiptext="&keymgr.jksmanagecert.selectks.tasktype.new.tooltip;"
+			        value="newcert"
+			        group="keymgr.jksmanagecert.selectks.tasktype"
+			        />
+			    <radio id="keymgr.jksmanagecert.selectks.tasktype.alias"
+			        label="&keymgr.jksmanagecert.selectks.tasktype.alias.label;"
+			        tooltiptext="&keymgr.jksmanagecert.selectks.tasktype.alias.tooltip;"
+			        selected="true"
+			        value="alias"
+			        group="keymgr.jksmanagecert.selectks.tasktype"
+			        />
+			    <radio id="keymgr.jksmanagecert.selectks.tasktype.import"
+			        label="&keymgr.jksmanagecert.selectks.tasktype.import.label;"
+			        tooltiptext="&keymgr.jksmanagecert.selectks.tasktype.import.tooltip;"
+			        value="importcert"
+			        group="keymgr.jksmanagecert.selectks.tasktype"
+			        />
+			</radiogroup>
+		    </groupbox> 
+		</row>
+
+	    </rows>
+	</grid>
+    </wizardpage>
+
+    <wizardpage
+	pageid="keymgr.jksmanagecert.createcert.wizardpage"
+	description="&keymgr.jksmanagecert.createcert.wizardpage.label;"
+	onpageshow="return JKSManageCertWizard.createCertPageShow(this);"
+	onpageadvanced="return JKSManageCertWizard.createCertPageAdvanced(this);"
+	next="keymgr.jksmanagecert.createcsr.wizardpage"
+	>
+	<grid flex="1">
+	    <columns>
+		<column/>
+		<column flex="1"/>
+	    </columns>
+	    <rows>
+		<row id="keymgr.jksmanagecert.createcert.alias.row"
+		    align="center"
+		    >
+		    <label value="&keymgr.jksmanagecert.createcert.alias.label;"/>
+		    <hbox
+			pack="start"
+			>
+			<textbox id="keymgr.jksmanagecert.createcert.alias"
+			    tooltiptext="&keymgr.jksmanagecert.createcert.alias.tooltip;"
+			    onchange="JKSManageCertWizard.handleCreateCertAliasChange(this, event);"
+			    onkeyup="JKSManageCertWizard.handleCreateCertAliasChange(this, event);"
+			    />
+		    </hbox>
+		</row>
+		<row id="keymgr.jksmanagecert.createcert.subjectdn.row"
+		    align="center"
+		    >
+		    <label value="&keymgr.jksmanagecert.createcert.subjectdn.label;"/> 
+		    <hbox
+			pack="start"
+			>
+			<textbox id="keymgr.jksmanagecert.createcert.subjectdn"
+			    flex="1"
+			    tooltiptext="&keymgr.jksmanagecert.createcert.subjectdn.tooltip;"
+			    onchange="JKSManageCertWizard.handleCreateCertDNChange(this, event);"
+			    onkeyup="JKSManageCertWizard.handleCreateCertDNChange(this, event);"
+			    />
+		    	<button 
+			    label="&keymgr.jksmanagecert.createcert.subjectdn.format.label;"
+			    tooltiptext="&keymgr.jksmanagecert.createcert.subjectdn.format.tooltip;"
+			    oncommand="JKSManageCertWizard.formatSubjectDN(this, event);"
+			    />
+		    </hbox>
+		</row>
+
+		<row id="keymgr.jksmanagecert.createcert.keytype.row"
+		    align="center"
+		    >
+		    <label value="&keymgr.jksmanagecert.createcert.keytype.label;"/> 
+		    <hbox
+			pack="start"
+			>
+			<keytype id="keymgr.jksmanagecert.createcert.keytype"
+			    echidden="true"
+			    tooltiptext="&keymgr.jksmanagecert.createcert.keytype.tooltip;"
+			    oncommand="JKSManageCertWizard.handleCreateCertKeyTypeChange(this, event);"
+			    />
+		    </hbox>
+		</row>
+
+		<row id="keymgr.jksmanagecert.createcert.keysize.row"
+		    align="center"
+		    >
+		    <label value="&keymgr.jksmanagecert.createcert.keysize.label;"/> 
+		    <hbox
+			pack="start"
+			>
+			<keysize id="keymgr.jksmanagecert.createcert.keysize"
+			    tooltiptext="&keymgr.jksmanagecert.createcert.keysize.tooltip;"
+			    oncommand="JKSManageCertWizard.handleCreateCertKeySizeChange(this, event);"
+			    />
+		    </hbox>
+		</row>
+
+		<row id="keymgr.jksmanagecert.createcert.sigalg.row"
+		    align="center"
+		    >
+		    <label value="&keymgr.jksmanagecert.createcert.sigalg.label;"/> 
+		    <hbox
+			pack="start"
+			>
+			<hashalgmenu id="keymgr.jksmanagecert.createcert.sigalg"
+			    value="SHA1"
+			    tooltiptext="&keymgr.jksmanagecert.createcert.sigalg.tooltip;"
+			    oncommand="JKSManageCertWizard.handleCreateCertSigAlgChange(this, event);"
+			    />
+		    </hbox>
+		</row>
+
+		<row id="keymgr.jksmanagecert.createcert.expireson.row"
+		    align="center"
+		    >
+		    <label value="&keymgr.jksmanagecert.createcert.expireson.label;"/> 
+		    <hbox
+			pack="start"
+			>
+			<datetimepicker id="keymgr.jksmanagecert.createcert.expireson"
+			    xtimevalue="00:00:00"
+			    xdateonly="true"
+			    hidevalue="true"
+			    tooltiptext="&keymgr.jksmanagecert.createcert.expireson.tooltip;"
+			    onchange="JKSManageCertWizard.handleCreateCertExpiresOnChange(this, event);"
+			    oncommand="JKSManageCertWizard.handleCreateCertExpiresOnChange(this, event);"
+			    />
+		    </hbox>
+		</row>
+
+		<row id="keymgr.jksmanagecert.createcert.validitydays.row"
+		    align="center"
+		    >
+		    <label value="&keymgr.jksmanagecert.createcert.validitydays.label;"/> 
+		    <hbox
+			pack="start"
+			>
+			<textbox id="keymgr.jksmanagecert.createcert.validitydays"
+			    type="number"
+			    min="1"
+			    size="8"
+			    tooltiptext="&keymgr.jksmanagecert.createcert.validitydays.tooltip;"
+			    onchange="JKSManageCertWizard.handleCreateCertValidityChange(this, event);"
+			    />
+		    </hbox>
+		</row>
+
+	    </rows>
+	</grid>
+    </wizardpage>
+
+
+    <wizardpage
+	pageid="keymgr.jksmanagecert.createcsr.wizardpage"
+	description="&keymgr.jksmanagecert.createcsr.wizardpage.label;"
+	onpageshow="return JKSManageCertWizard.createCSRPageShow(this);"
+	onpageadvanced="return JKSManageCertWizard.createCSRPageAdvanced(this);"
+	next="keymgr.jksmanagecert.signcert.wizardpage"
+	>
+	<grid flex="1">
+	    <columns>
+		<column/>
+		<column flex="1"/>
+	    </columns>
+	    <rows>
+
+		<row
+		    align="center"
+		    hidden="true"
+		    >
+		    <spacer/>
+		    <fileselector id="keymgr.jksmanagecert.selectks.listout"
+			fileMode="save"
+			/>
+		</row>
+
+		<row id="keymgr.jksmanagecert.createcsr.aliaslist.row"
+		    align="center"
+		    >
+		    <label value="&keymgr.jksmanagecert.createcsr.aliaslist.label;"/> 
+		    <hbox
+			pack="start"
+			>
+			<menulist id="keymgr.jksmanagecert.createcsr.aliaslist"
+			    persist="value"
+			    tooltiptext="&keymgr.jksmanagecert.createcsr.aliaslist.tooltip;"
+			    oncommand="JKSManageCertWizard.handleAliasListChange(this, event);"
+			    >
+			    <menupopup>
+			    </menupopup>
+			</menulist>
+		    </hbox>
+		</row>
+
+		<row
+		    align="center"
+		    >
+		    <spacer/>
+		    <textbox id="keymgr.jksmanagecert.createcsr.alias.certinfo"
+			flex="1"
+			readonly="true"
+			rows="6" cols="60" multiline="true"
+			style="overflow:auto; font-size: 8pt; font-family: Courier"
+			/>
+		</row>
+
+		<row
+		    align="center"
+		    >
+		    <label value="&keymgr.jksmanagecert.createcsr.certreq.label;"/> 
+		    <fileselector id="keymgr.jksmanagecert.createcsr.certreq"
+			ascii="true"
+			formatlabel="&keymgr.jksmanagecert.file.format.base64.label;"
+			formattooltiptext="&keymgr.jksmanagecert.file.format.base64.tooltip;"
+			fileMode="save"
+			fileDialogMsg="Choose PKCS#10 CSR File for User Key"
+			fileTypeMsg="PKCS#10 CSR File"
+			fileTypeFilters="*.csr; *.p10"
+			filetooltiptext="&keymgr.jksmanagecert.createcsr.certreq.tooltip;"
+			browselabel="&keymgr.jksmanagecert.file.browse.label;"
+			browsetooltiptext="&keymgr.jksmanagecert.createcsr.certreq.browse.tooltip;"
+			/>
+		</row>
+	    </rows>
+	</grid>
+    </wizardpage>
+
+    <wizardpage
+	pageid="keymgr.jksmanagecert.signcert.wizardpage"
+	description="&keymgr.jksmanagecert.signcert.wizardpage.label;"
+	onpageshow="return JKSManageCertWizard.signCertPageShow(this);"
+	onpageadvanced="return JKSManageCertWizard.signCertPageAdvanced(this);"
+	next="keymgr.jksmanagecert.importcertparam.wizardpage"
+	>
+	<grid flex="1">
+	    <columns>
+		<column/>
+		<column flex="1"/>
+	    </columns>
+	    <rows>
+		<row
+		    align="center"
+		    >
+		    <label value="&keymgr.jksmanagecert.signcert.certreq.label;"/> 
+		    <fileitem id="keymgr.jksmanagecert.signcert.certreq"
+			    ascii="true"
+			    formatlabel="&keymgr.jksmanagecert.file.format.base64.label;"
+			    />
+		</row>
+		<row
+		    align="center"
+		    >
+		    <label value="&keymgr.jksmanagecert.signcert.certpicker.label;"/> 
+		    <hbox
+			pack="start"
+			>
+			<certpicker id="keymgr.jksmanagecert.signcert.certpicker"
+			    tokentypehidden="true"
+			    disabled="true"
+			    certtype="user"
+			    viewlabel="&keymgr.jksmanagecert.cert.view.label;"
+			    viewhidden="false"
+			    viewtooltiptext="&keymgr.jksmanagecert.signcert.certpicker.tooltip;"
+			    oncommand="JKSManageCertWizard.handleSignerCertPickerChange(this, event);"
+			    />
+		    </hbox>
+		</row>
+		<row
+		    align="center"
+		    >
+		    <label value="&keymgr.jksmanagecert.signcert.certout.label;"/>
+		    <fileselector id="keymgr.jksmanagecert.signcert.certout"
+			ascii="true"
+			formatlabel="&keymgr.jksmanagecert.file.format.base64.label;"
+			formattooltiptext="&keymgr.jksmanagecert.file.format.base64.tooltip;"
+			fileMode="save"
+			fileDialogMsg="Choose X.509 Cert File"
+			fileTypeMsg="X.509 Cert File"
+			fileTypeFilters="*.pem; *.crt; *.cer; *.der;"
+			filetooltiptext="&keymgr.jksmanagecert.signcert.certout.tooltip;"
+			browselabel="&keymgr.jksmanagecert.file.browse.label;"
+			browsetooltiptext="&keymgr.jksmanagecert.signcert.certout.browse.tooltip;"
+			onchange="JKSManageCertWizard.handleSignCertFilePickerChange(this, event);"
+			oncommand="JKSManageCertWizard.handleSignCertFilePickerChange(this, event);"
+			onpopuphiding="JKSManageCertWizard.handleSignCertFilePickerChange(this, event);"
+			/>
+		</row>
+	    </rows>
+	</grid>
+    </wizardpage>
+
+    <wizardpage
+	pageid="keymgr.jksmanagecert.importcertparam.wizardpage"
+	description="&keymgr.jksmanagecert.importcertparam.wizardpage.label;"
+	onpageshow="return JKSManageCertWizard.importCertParamPageShow(this);"
+	onpageadvanced="return JKSManageCertWizard.importCertParamPageAdvanced(this);"
+	next="keymgr.jksmanagecert.importcert.wizardpage"
+	>
+	<grid flex="1">
+	    <columns>
+		<column/>
+		<column flex="1"/>
+	    </columns>
+	    <rows>
+		<row
+		    align="center"
+		    >
+		    <label value="&keymgr.jksmanagecert.importcertparam.sourcetype.label;"/>
+		    <radiogroup id="keymgr.jksmanagecert.importcertparam.sourcetype"
+			orient="horizontal"
+			pack="start"
+			oncommand="JKSManageCertWizard.handleImportCertSourceTypeChange(this, event);"
+			>
+			<radio id="keymgr.jksmanagecert.importcertparam.sourcetype.certpicker"
+			    label="&keymgr.jksmanagecert.importcertparam.sourcetype.certpicker.label;"
+			    tooltiptext="&keymgr.jksmanagecert.importcertparam.sourcetype.certpicker.tooltip;"
+			    selected="true"
+			    value="certpicker"
+			    group="keymgr.jksmanagecert.importcertparam.sourcetype"
+			    />
+			<radio id="keymgr.jksmanagecert.importcertparam.sourcetype.file"
+			    label="&keymgr.jksmanagecert.importcertparam.sourcetype.file.label;"
+			    tooltiptext="&keymgr.jksmanagecert.importcertparam.sourcetype.file.tooltip;"
+			    value="file"
+			    group="keymgr.jksmanagecert.importcertparam.sourcetype"
+			    />
+		    </radiogroup>
+		</row>
+
+		<row
+		    align="center"
+		    >
+		    <spacer/>
+		    <deck id="keymgr.jksmanagecert.importcertparam.source.deck"
+			pack="start"
+			>
+			<certpicker id="keymgr.jksmanagecert.importcertparam.certpicker"
+			    tokentypehidden="true"
+			    certtype="server"
+			    viewlabel="&keymgr.jksmanagecert.cert.view.label;"
+			    viewhidden="false"
+			    viewtooltiptext="&keymgr.jksmanagecert.importcertparam.certpicker.tooltip;"
+			    oncommand="JKSManageCertWizard.handleImportCertPickerChange(this, event);"
+			    />
+			<fileselector id="keymgr.jksmanagecert.importcertparam.filepicker"
+			    persist="value"
+			    ascii="true"
+			    formatlabel="Base64"
+			    fileMode="open"
+			    fileDialogMsg="Select X.509 Cert file"
+			    fileTypeMsg="X.509 Cert file"
+			    fileTypeFilters="*.cer; *.pem; *.crt"
+			    filetooltiptext="&keymgr.jksmanagecert.importcertparam.filepicker.tooltip;"
+			    browselabel="&keymgr.jksmanagecert.file.browse.label;"
+			    browsetooltiptext="&keymgr.jksmanagecert.importcertparam.filepicker.browse.tooltip;"
+			    onchange="JKSManageCertWizard.handleImportCertFilePickerChange(this, event);"
+			    oncommand="JKSManageCertWizard.handleImportCertFilePickerChange(this, event);"
+			    onpopuphiding="JKSManageCertWizard.handleImportCertFilePickerChange(this, event);"
+			    />
+		    </deck>
+		</row>
+		<row
+		    align="center"
+		    >
+		    <spacer/>
+		    <hbox 
+			pack="start"
+			>
+			<checkbox id="keymgr.jksmanagecert.importcertparam.includecertchain"
+			    label="Include Cert Chain"
+			    />
+		    </hbox>
+		</row>
+	    </rows>
+	</grid>
+    </wizardpage>
+
+    <wizardpage
+	pageid="keymgr.jksmanagecert.importcert.wizardpage"
+	description="&keymgr.jksmanagecert.importcert.wizardpage.label;"
+	onpageshow="return JKSManageCertWizard.importCertPageShow(this);"
+	onpageadvanced="return JKSManageCertWizard.importCertPageAdvanced(this);"
+	next="keymgr.jksmanagecert.final.wizardpage"
+	>
+	<vbox>
+	    <jkscertchaingrid id="keymgr.jksmanagecert.importcert.grid"
+	        />
+	    <fileselector id="keymgr.jksmanagecert.importcert.outfile"
+	        fileMode="save"
+	        hidden="true"
+	        />
+	    <fileselector id="keymgr.jksmanagecert.importcert.resultfile"
+	        fileMode="save"
+	        hidden="true"
+	        />
+	</vbox>
+	<!--
+	<grid flex="1">
+	    <columns>
+		<column/>
+		<column flex="1"/>
+	    </columns>
+	    <rows>
+		<row
+		    align="center"
+		    >
+		    <label value="&keymgr.jksmanagecert.importcert.cert.label;"/> 
+		    <groupbox>
+			<hbox
+			    pack="start"
+			    >
+			    <certitem id="keymgr.jksmanagecert.importcert.cert"
+			        />
+			</hbox>
+			<fileitem id="keymgr.jksmanagecert.importcert.file"
+			    flex="1"
+			    formatlabel="&keymgr.jksmanagecert.file.format.base64.label;"
+			    />
+		    </groupbox>
+		</row>
+		<row
+		    align="center"
+		    >
+		    <label value="&keymgr.jksmanagecert.importcert.alias.label;"/> 
+		    <hbox
+			pack="start"
+			>
+			<textbox id="keymgr.jksmanagecert.importcert.alias"
+			    tooltiptext="&keymgr.jksmanagecert.importcert.alias.tooltip;"
+			    />
+		    </hbox>
+		</row>
+	    </rows>
+	</grid>
+	-->
+    </wizardpage>
+
+    <wizardpage
+	pageid="keymgr.jksmanagecert.final.wizardpage"
+	description="&keymgr.jksmanagecert.final.wizardpage.label;"
+	onpageshow="return JKSManageCertWizard.finalPageShow(this);"
+	onpageadvanced="return JKSManageCertWizard.finalPageAdvanced(this);"
+	>
+	<vbox>
+	<textbox id="keymgr.jksmanagecert.final.result"
+	    flex="1"
+	    readonly="true"
+	    rows="6" cols="60" multiline="true"
+	    style="overflow:auto; font-size: 8pt; font-family: Courier"
+	    />
+	<grid flex="1">
+	    <columns>
+		<column/>
+		<column flex="1"/>
+	    </columns>
+	    <rows>
+		<row id="keymgr.jksmanagecert.final.aliaslist.row"
+		    align="center"
+		    >
+		    <label value="&keymgr.jksmanagecert.createcsr.aliaslist.label;"/> 
+		    <hbox
+			pack="start"
+			>
+			<menulist id="keymgr.jksmanagecert.final.aliaslist"
+			    persist="value"
+			    tooltiptext="&keymgr.jksmanagecert.createcsr.aliaslist.tooltip;"
+			    oncommand="JKSManageCertWizard.handleKSCertAliasChange(this, event);"
+			    >
+			    <menupopup>
+			    </menupopup>
+			</menulist>
+		    </hbox>
+		</row>
+		<row
+		    align="center"
+		    >
+		    <spacer/>
+		    <textbox id="keymgr.jksmanagecert.final.alias.certinfo"
+			flex="1"
+			readonly="true"
+			rows="6" cols="60" multiline="true"
+			style="overflow:auto; font-size: 8pt; font-family: Courier"
+			/>
+		</row>
+	    </rows>
+	</grid>
+	</vbox>
+    </wizardpage>
+
+
+    <wizardpage
+	pageid="keymgr.jksmanagecert.error.wizardpage"
+	description="&keymgr.jksmanagecert.error.wizardpage.label;"
+	onpageshow="return JKSManageCertWizard.errorPageShow(this);"
+	>
+    </wizardpage>
+
+</wizard>
+

@@ -1,0 +1,37 @@
+<?xml version="1.0"?> 
+<CertProfile> 
+    <profileItem name="keytype" value="ec"/>
+
+    <profileItem name="basicConstraints" value="true"/> 
+    <profileItem name="basicConstraints-crit" value="true"/> 
+
+    <profileItem name="keyUsage" value="true"/>
+    <profileItem name="keyUsage-crit" value="true"/>
+    <profileItem name="keyUsage-digitalSignature" value="true"/>
+    <profileItem name="keyUsage-keyEncipherment" value="true"/>
+    <profileItem name="keyUsage-dataEncipherment" value="false"/>
+    <profileItem name="keyUsage-keyAgreement" value="false"/>
+    <!--  
+    <profileItem name="keyUsage-keyCertSign" value="true"/>
+    <profileItem name="keyUsage-cRLSign" value="true"/>
+    <profileItem name="keyUsage-nonRepudiation" value="true"/>
+    -->  
+    <profileItem name="extKeyUsage" value="true"/>
+    <profileItem name="extKeyUsage-crit" value="true"/>
+    <profileItem name="extKeyUsage-codeSign" value="true"/>
+    <profileItem name="extKeyUsage-clientAuth" value="false"/>
+    <profileItem name="extKeyUsage-emailProtect" value="false"/>
+    <!--  
+    <profileItem name="extKeyUsage-serverAuth" value="true"/>
+    <profileItem name="extKeyUsage-timeStamp" value="true"/>
+    <profileItem name="extKeyUsage-ocspResponder" value="true"/>
+    <profileItem name="extKeyUsage-NS-govtApproved" value="true"/>
+    -->  
+
+    <profileItem name="netscape-cert-type" value="true"/>
+    <profileItem name="netscape-cert-type-crit" value="true"/>
+    <profileItem name="netscape-cert-type-object-signing" value="true"/>
+    <profileItem name="netscape-cert-type-smime" value="false"/>
+    <profileItem name="netscape-cert-type-ssl-client" value="false"/>
+</CertProfile>
+

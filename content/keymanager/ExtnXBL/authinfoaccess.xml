@@ -1,0 +1,576 @@
+<?xml version="1.0"?>
+<!-- @(#) $Id: authinfoaccess.xml,v 1.5 2009/04/21 03:41:03 subrata Exp $ -->
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is Avaya Labs Research, Avaya Inc. Code.
+   -
+   - The Initial Developer of the Original Code is
+   - Subrata Mazumdar, Avaya Labs Research, Avaya Inc.
+   - Portions created by the Initial Developer are Copyright (C) 2007.
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Subrata Mazumdar (mazum@avaya.com)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+<!DOCTYPE bindings
+    	[
+	<!ENTITY % certManager.dtd SYSTEM "chrome://pippki/locale/certManager.dtd">
+	%certManager.dtd;
+	<!ENTITY % keyManager.dtd SYSTEM "chrome://keymanager/locale/keyManager.dtd">
+	%keyManager.dtd;
+	]>
+
+<bindings id="crldistrpointsBindings"
+    xmlns="http://www.mozilla.org/xbl"
+    xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    xmlns:xbl="http://www.mozilla.org/xbl">
+
+
+    <binding id="accessdescriptionBinding"
+	extends="chrome://keymanager/content/ExtnXBL/certextn.xml#certextnbaseBinding"
+        >
+        <!--
+        <resources>
+    	    <script type="application/x-javascript" src="chrome://keymanager/content/GeneralNameItem.js"/>
+        </resources>
+        -->
+    	<!-- content, property, method and event descriptions go here -->
+    	<content>
+	    <xul:groupbox flex="1">
+            <xul:grid flex="1" anonid="keymgr.stdx509ext.aia.accessdesc.grid"
+		onchange="getBindingParent(this).computeAccessDescriptionValue(this, event);"
+		oncommand="getBindingParent(this).computeAccessDescriptionValue(this, event);"
+	    	> 
+                <xul:columns>
+                    <xul:column/>
+                    <xul:column flex="1"/>
+                </xul:columns>
+                <xul:rows>
+          	    <xul:row align="center">
+                        <xul:label value="&keymgr.stdx509ext.aia.accessdesc.method.label;"/> 
+			<xul:hbox pack="start"
+			    >
+          	        <xul:menulist anonid="keymgr.stdx509ext.aia.accessdesc.method"
+		    	    xbl:inherits="value=methodvalue,hidden=methodhidden,disabled=methoddisabled,tooltiptext=resontooltip"
+			    >
+		    	    <xul:menupopup>
+			        <xul:menuitem anonid="keymgr.stdx509ext.aia.accessdesc.method.caIssuers"
+				    xbl:inherits="hidden=subjauthaccessinfo"
+				    label="caIssuers"
+				    value="caIssuers"
+				    selected="true"
+				    oidvalue="1.3.6.1.5.5.7.48.2"
+			    	    />
+			        <xul:menuitem anonid="keymgr.stdx509ext.aia.accessdesc.method.ocsp"
+				    xbl:inherits="hidden=subjauthaccessinfo"
+				    label="ocsp"
+				    value="ocsp"
+				    oidvalue="1.3.6.1.5.5.7.48.1"
+			    	    />
+			        <xul:menuitem anonid="keymgr.stdx509ext.aia.accessdesc.method.caRepository"
+				    xbl:inherits="hidden=authaccessinfo"
+				    label="caRepository"
+				    value="caRepository"
+				    oidvalue="1.3.6.1.5.5.7.48.5"
+			    	    />
+			        <xul:menuitem anonid="keymgr.stdx509ext.aia.accessdesc.method.timeStamping"
+				    xbl:inherits="hidden=authaccessinfo"
+				    label="timeStamping"
+				    value="timeStamping"
+				    oidvalue="1.3.6.1.5.5.7.48.3"
+			    	    />
+		    	    </xul:menupopup>
+		    	</xul:menulist>
+			</xul:hbox>
+                    </xul:row>
+          	    <xul:row align="center">
+                        <xul:label value="&keymgr.stdx509ext.aia.accessdesc.location.label;"/> 
+          	        <xul:generalnamesimple anonid="keymgr.stdx509ext.aia.accessdesc.location"
+			    xbl:inherits="type=locationtype,typetooltip=locationtypetooltip,typedisabled=locationtypedisabled,valuetooltip=locationvaluetooltip,valuedisabled=locationvaluedisabled,namevalue=location,certPropName=locationCertPropName,readonly,namesearchparam=locationnamesearchparam"
+  	  	    	    namesearchparam="keymgr.stdx509ext.aia.accessdesc.location"
+			    valuetooltip="Enter Access Location"
+			    type="uri"
+			    />
+                    </xul:row>
+                </xul:rows>
+            </xul:grid>
+	    </xul:groupbox>
+    	</content>
+	<implementation>
+	    <field name="mBaseExtnElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.stdx509ext.aia.accessdesc.grid");
+	    </field>
+	    <field name="mMethodElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.stdx509ext.aia.accessdesc.method");
+	    </field>
+	    <field name="mLocationElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.stdx509ext.aia.accessdesc.location");
+	    </field>
+
+	    <property name="method"
+	        onget="return this.mMethodElem.value;"
+	        onset="this.mMethodElem.value=val; return val;"
+		/>
+	    <property name="methodoid" readonly="true"
+	        onget="return this.mMethodElem.getAttribute('oidvalue');"
+		/>
+	    <property name="location"
+	        onget="return this.mLocationElem.typedvalue;"
+	        onset="this.mMethodElem.typedvalue=val; return val;"
+		/>
+
+	    <property name="value">
+	        <getter>
+		<![CDATA[
+		this.computeAccessDescriptionValue();
+		return this.mFormattedValue;
+		]]>
+	        </getter>
+	        <setter>
+		<![CDATA[
+		this.updateAuthInfoAccessValue(val);
+		return val;
+		]]>
+	        </setter>
+	    </property>
+
+	    <property name="readonly"
+	        onget="return this.mBaseExtnElem.readonly;"
+	    	onset="this.mBaseExtnElem.readonly = val;
+		       this.setReadonly(this.mBaseExtnElem, val);
+	    	       if (val) {
+		       	this.setAttribute('readonly',true);
+		       }
+                       else {
+		       	this.removeAttribute('readonly');
+		       	this.refresh();
+		       }
+			this.mLocationElem.readonly = val;
+		       	return val;"
+		/>
+
+	    <constructor>
+		<![CDATA[
+		// this.mMaxLogLevel = 9;
+		this.LogTrace("accessdescriptionBinding.constructor():......................Start.");
+
+		this.reset();
+
+		this.LogTrace("accessdescriptionBinding.constructor():......................End.");
+		]]>
+	    </constructor>
+
+	    <method name="refresh">
+	        <body>
+		<![CDATA[
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="reset">
+	        <body>
+		<![CDATA[
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="computeAccessDescriptionValue">
+	        <body>
+		<![CDATA[
+		this.LogTrace("accessdescriptionBinding.computeAccessDescriptionValue():......................Start.");
+
+		this.mFormattedValue = "";
+		if (this.mMethodElem.selectedItem && (this.mMethodElem.selectedItem.value != "")) {
+		    this.mFormattedValue += this.mMethodElem.selectedItem.getAttribute("oidvalue");
+		}
+		if (this.mLocationElem.namevalue && (this.mLocationElem.namevalue != "")) {
+		    if (this.mFormattedValue != "") {
+		    	this.mFormattedValue += "&";
+		    }
+		    this.mFormattedValue += this.mLocationElem.typedvalue;
+		}
+		this.LogDebug("accessdescriptionBinding.computeAccessDescriptionValue(): this.mFormattedValue:\n" + this.mFormattedValue + "");
+
+		this.LogTrace("accessdescriptionBinding.computeAccessDescriptionValue():......................End.");
+                return true;
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="updateAuthInfoAccessValue">
+		<parameter name="aNewValue"/>
+	        <body>
+		<![CDATA[
+		this.LogTrace("accessdescriptionBinding.updateAuthInfoAccessValue():......................Start.");
+
+		this.mFormattedValue = aNewValue;
+
+		this.LogTrace("accessdescriptionBinding.updateAuthInfoAccessValue():......................End.");
+                return true;
+		]]>
+	        </body>
+	    </method>
+
+
+	    <method name="toCertProps">
+		<parameter name="aCertProps"/>
+	        <body>
+		<![CDATA[
+		this.computeAccessDescriptionValue();
+		this.certExtnToProps(this.mBaseExtnElem, aCertProps);
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="updateCertProps">
+		<parameter name="aCertProps"/>
+	        <body>
+		<![CDATA[
+		this.updateCertExtnProps(this.mBaseExtnElem, aCertProps);
+		this.refresh();
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="mergeCertProps">
+		<parameter name="aCertProps"/>
+	        <body>
+		<![CDATA[
+		this.updateCertExtnProps(this.mBaseExtnElem, aCertProps, true);
+		this.refresh();
+		]]>
+	        </body>
+	    </method>
+
+	</implementation>
+    </binding>
+
+    <binding id="authinfoaccesssyntaxBinding"
+	extends="chrome://keymanager/content/ExtnXBL/certextn.xml#certextnbaseBinding"
+        >
+        <!--
+        <resources>
+    	    <script type="application/x-javascript" src="chrome://keymanager/content/GeneralNameItem.js"/>
+        </resources>
+        -->
+    	<!-- content, property, method and event descriptions go here -->
+    	<content>
+	    <xul:vbox anonid="certextn.stdx509extn.authinfoaccesssyntax"
+		flex="1"
+	    	>
+	        <xul:hbox
+		    flex="1"
+		    >
+	            <xul:listbox anonid="certextn.stdx509extn.authinfoaccesssyntax.list"
+			xbl:inherits="label=listlabel,tooltiptext=listtooltip,rows"
+		        rows="3"
+		        flex="1"
+			>
+	            </xul:listbox>
+	            <xul:vbox anonid="keymgr.cert.csr.form.tab.stdx509ext.authinfoaccesssyntax.cmds"
+		      xbl:inherits="hidden=readonly"
+		      pack="start"
+		      >
+	              <xul:button anonid="keymgr.cert.csr.form.tab.stdx509ext.authinfoaccesssyntax.add"
+			  xbl:inherits="label=addlabel,tooltiptext=addtooltip"
+		          label="&keymgr.cert.csr.form.tab.stdx509ext.authinfoaccesssyntax.add.label;"
+		    	  oncommand="getBindingParent(this).addNewItemToList(event);"
+			  /> 
+	              <xul:button anonid="keymgr.cert.csr.form.tab.stdx509ext.authinfoaccesssyntax.remove"
+			  xbl:inherits="label=removelabel,tooltiptext=removetooltip"
+		          label="&keymgr.cert.csr.form.tab.stdx509ext.authinfoaccesssyntax.remove.label;"
+		    	  oncommand="getBindingParent(this).deleteItemFromList(event);"
+			  /> 
+	            </xul:vbox>
+	        </xul:hbox>
+	        <xul:hbox collapsed="true">
+	            <xul:textbox anonid="certextn.stdx509extn.authinfoaccesssyntax.value"
+			xbl:inherits="certPropName=authinfoaccesssyntaxCertPropName,value=authinfoaccesssyntaxValue"
+		    	collapsed="true" readonly="true"
+		    	certPropName="crlDistributionPoints-value"
+			/>
+	        </xul:hbox>
+	    </xul:vbox>
+    	</content>
+	<implementation>
+	    <field name="mBaseExtnElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certextn.stdx509extn.authinfoaccesssyntax");
+	    </field>
+	    <field name="mExtnValueItemListElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certextn.stdx509extn.authinfoaccesssyntax.list");
+	    </field>
+	    <field name="mExtnValueElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certextn.stdx509extn.authinfoaccesssyntax.value");
+	    </field>
+
+	    <property name="value" readonly="true"
+		onget="this.computeExtnValue(); return this.mExtnValueElem.value;"
+	        onset="this.mExtnValueElem.value=val; this.updateValueList();return val;"
+		/>
+
+	    <property name="readonly"
+	        onget="return this.mBaseExtnElem.readonly;"
+	    	onset="this.mBaseExtnElem.readonly = val;
+		       this.setReadonly(this.mBaseExtnElem, val);
+	    	       if (val) {
+		       	this.setAttribute('readonly',true);
+		       }
+                       else {
+		       	this.removeAttribute('readonly');
+		       	this.refresh();
+		       }
+		       return val;"
+		/>
+
+	    <constructor>
+		<![CDATA[
+		// this.mMaxLogLevel = 9;
+		this.LogTrace("authinfoaccesssyntaxBinding.constructor():......................Start.");
+
+		this.refresh();
+
+		this.LogTrace("authinfoaccesssyntaxBinding.constructor():......................End.");
+		]]>
+	    </constructor>
+
+	    <method name="refresh">
+	        <body>
+		<![CDATA[
+		this.removeAllItemsFromList();
+		if (this.mExtnValueElem.value != "") {
+		    this.updateValueList();
+		}
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="removeAllItemsFromList">
+	        <body>
+		<![CDATA[
+		for (var i = (this.mExtnValueItemListElem.getRowCount() - 1); i >= 0; i--) {
+		    this.mExtnValueItemListElem.removeItemAt(i);
+		}
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="reset">
+	        <body>
+		<![CDATA[
+		this.LogTrace("authinfoaccesssyntaxBinding.reset():......................Start.");
+
+		this.removeAllItemsFromList();
+
+		this.mExtnValueElem.value = "";
+
+		this.LogTrace("authinfoaccesssyntaxBinding.reset():......................End.");
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="computeExtnValue">
+	        <body>
+		<![CDATA[
+                this.LogTrace("authinfoaccesssyntaxBinding.computeExtnValue():...........................Start."); 
+                // Format:  <value-1>|<value-2>|.........|<value-n>
+
+
+                var extnValueListText = "";
+                var rowCount = this.mExtnValueItemListElem.getRowCount();
+                this.LogDebug("authinfoaccesssyntaxBinding.computeExtnValue(): rowCount: " + rowCount + ""); 
+                for (var i = 0; i < rowCount; i++) {
+    	            var rowItemElem = this.mExtnValueItemListElem.getItemAtIndex(i);
+		    if (i > 0) {
+    	            	extnValueListText += "|";
+		    }
+	            extnValueListText += rowItemElem.value;
+
+                }
+		this.LogDebug("authinfoaccesssyntaxBinding.computeExtnValue(): extnValueListText: " + extnValueListText + "");
+                this.mExtnValueElem.value = extnValueListText;
+
+                this.LogTrace("authinfoaccesssyntaxBinding.computeExtnValue():...........................End."); 
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="addFormattedItemValueToList">
+		<parameter name="aFormattedItemValue"/>
+	        <body>
+		<![CDATA[
+                var listItem = this.mExtnValueItemListElem.appendItem(aFormattedItemValue, aFormattedItemValue);
+
+		listItem.setAttribute("tooltiptext", aFormattedItemValue);
+		this.mExtnValueItemListElem.selectItem(listItem);
+		this.mExtnValueItemListElem.ensureElementIsVisible(listItem);
+
+                this.computeExtnValue();
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="addFormattedItemsToList">
+		<parameter name="aFormattedItemsStr"/>
+	        <body>
+		<![CDATA[
+		this.mExtnValueElem.value = aFormattedItemsStr;
+		this.refresh();
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="updateValueList">
+	        <body>
+		<![CDATA[
+		// this.mMaxLogLevel = 9;
+
+                this.LogDebug("authinfoaccesssyntaxBinding.updateValueList(): extnValueText: "  + this.mExtnValueElem.value + "");
+                this.LogDebug("extnValueDisplayText: "  + this.mExtnValueElem.value + "");
+
+                var extnValueItemList = this.mExtnValueElem.value.split("|");
+                if (extnValueItemList.length <= 0) {
+    	            return;
+                }
+                this.LogDebug("authinfoaccesssyntaxBinding.updateValueList(): extnValueItemList.length: "  + extnValueItemList.length + "");
+                for (var i = 0; i < extnValueItemList.length; i++) {
+    	            var extnValueItemValue = extnValueItemList[i];
+	            if (extnValueItemValue == "") {
+	                continue;
+	            }
+	            var extnValueItemName = extnValueItemValue;
+	            if (i <= extnValueItemList.length) {
+    	                extnValueItemName = extnValueItemList[i];
+	            }
+	            this.LogDebug("authinfoaccesssyntaxBinding.updateValueList(): extnValueItemName: "  + extnValueItemName + " extnValueItemValue: " + extnValueItemValue + "");
+		    // this.addFormattedItemValueToList(extnValueItemValue);
+		    var listItem = this.mExtnValueItemListElem.appendItem(extnValueItemValue, extnValueItemValue);
+		    listItem.setAttribute("tooltiptext", extnValueItemValue);
+                }
+
+		// this.mMaxLogLevel = 4;
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="addItemToList">
+		<parameter name="aMethod"/>
+		<parameter name="aLocation"/>
+	        <body>
+		<![CDATA[
+		// TODO: 
+		var formattedItemValue = "";
+		this.addFormattedItemValueToList(formattedItemValue);
+                return 1;
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="addNewItemToList">
+	        <body>
+		<![CDATA[
+                var argc = 0;
+    		var params = Components.classes["@mozilla.org/embedcomp/dialogparam;1"].
+    			createInstance(Components.interfaces.nsIDialogParamBlock);
+                params.SetInt(0, argc);
+
+                window.openDialog('chrome://keymanager/content/ExtnXBL/AccessDescription.xul', "",
+                    			'chrome,centerscreen,resizable,modal', params);
+
+                var retVal = params.GetInt(0);
+                if (retVal == 0) { // Selected Cancel or failed.
+                   return 0;
+                }
+
+                var extnItemListValueStr = params.GetString(0);
+                if (extnItemListValueStr == null) {
+                   return 0;
+                }
+
+                this.LogDebug("authinfoaccesssyntaxBinding.addNewItemToList(): " + 
+                		"extnItemListValueStr: " + extnItemListValueStr + " " + 
+				"");
+
+		this.addFormattedItemValueToList(extnItemListValueStr);
+
+                return 1;
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="deleteItemFromList">
+	        <body>
+		<![CDATA[
+                this.mExtnValueItemListElem.removeItemAt(this.mExtnValueItemListElem.selectedIndex);
+                this.mExtnValueItemListElem.selectedIndex = -1;
+                this.mExtnValueItemListElem.clearSelection();
+            
+                this.computeExtnValue();
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="toCertProps">
+		<parameter name="aCertProps"/>
+	        <body>
+		<![CDATA[
+		// this.mMaxLogLevel = 9;
+
+		this.computeExtnValue();
+		this.certExtnToProps(this.mBaseExtnElem, aCertProps);
+
+		// this.mMaxLogLevel = 4;
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="updateCertProps">
+		<parameter name="aCertProps"/>
+	        <body>
+		<![CDATA[
+		this.updateCertExtnProps(this.mBaseExtnElem, aCertProps);
+		this.refresh();
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="mergeCertProps">
+		<parameter name="aCertProps"/>
+	        <body>
+		<![CDATA[
+		this.updateCertExtnProps(this.mBaseExtnElem, aCertProps, true);
+		this.refresh();
+		]]>
+	        </body>
+	    </method>
+
+	</implementation>
+    </binding>
+
+</bindings>
+

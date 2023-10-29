@@ -1,0 +1,65 @@
+<?xml version="1.0"?> 
+<CertProfile
+    > 
+
+    <profileItem name="version" value="3"/> 
+    <profileItem name="version_3" value="true"/> 
+
+    <!--
+    <profileItem name="serial" value="auto"/> 
+    <profileItem name="serial-auto" value="true"/> 
+    -->
+
+    <profileItem name="basicConstraints" value="true"/> 
+    <profileItem name="basicConstraints-crit" value="true"/> 
+    <profileItem name="basicConstraints-cA-radio" value="false"/> 
+    <profileItem name="basicConstraints-pathLengthConstraint" value="false"/> 
+
+    <profileItem name="keyUsage" value="false"/>
+    <!--  
+    <profileItem name="keyUsage-crit" value="true"/>
+    <profileItem name="keyUsage-digitalSignature" value="true"/>
+    <profileItem name="keyUsage-keyEncipherment" value="true"/>
+    <profileItem name="keyUsage-dataEncipherment" value="true"/>
+    <profileItem name="keyUsage-keyAgreement" value="true"/>
+    <profileItem name="keyUsage-keyCertSign" value="true"/>
+    <profileItem name="keyUsage-cRLSign" value="true"/>
+    <profileItem name="keyUsage-nonRepudiation" value="true"/>
+    -->  
+    <profileItem name="extKeyUsage" value="false"/>
+    <!--
+    <profileItem name="extKeyUsage-crit" value="true"/>
+    <profileItem name="extKeyUsage-clientAuth" value="true"/>
+    <profileItem name="extKeyUsage-codeSign" value="true"/>
+    <profileItem name="extKeyUsage-emailProtect" value="true"/>
+    <profileItem name="extKeyUsage-serverAuth" value="true"/>
+    <profileItem name="extKeyUsage-timeStamp" value="true"/>
+    <profileItem name="extKeyUsage-ocspResponder" value="true"/>
+    <profileItem name="extKeyUsage-NS-govtApproved" value="true"/>
+    -->  
+
+    <profileItem name="subjectKeyIdentifier" value="false"/>
+    <profileItem name="authorityKeyIdentifier" value="false"/>
+    <profileItem name="SubAltName" value="false"/>
+    <profileItem name="IssuerAltName" value="false"/>
+    <profileItem name="NameConstraints" value="false"/>
+
+    <!--
+    <profileItem name="proxyCertInfo" value="false"/>
+    <profileItem name="vomsAttrCertList" value="false"/>
+    <profileItem name="globusSAMLAssertion" value="false"/>
+    -->  
+
+    <profileItem name="Logotype" value="false"/>
+    <profileItem name="wlanssid" value="false"/>
+
+    <profileItem name="netscape-cert-type" value="false"/>
+    <!--
+    <profileItem name="netscape-cert-type-crit" value="false"/>
+    <profileItem name="netscape-cert-type-smime" value="false"/>
+    <profileItem name="netscape-cert-type-object-signing" value="false"/>
+    <profileItem name="netscape-cert-type-ssl-client" value="false"/>
+    -->
+
+</CertProfile>
+

@@ -1,0 +1,144 @@
+<CertProfile>
+
+    <profileItem name="name" value=""/>
+    <profileItem name="email_type" value="rfc1274"/>
+    <profileItem name="email" value=""/>
+    <profileItem name="org_unit" value=""/>
+    <profileItem name="org" value=""/>
+    <profileItem name="locality" value=""/>
+    <profileItem name="state" value=""/>
+    <profileItem name="country" value=""/>
+    <profileItem name="dc" value=""/>
+    <profileItem name="uid" value=""/>
+    <profileItem name="subject" value=""/>
+    <profileItem name="nickName" value=""/>
+    <!--
+    -->
+
+    <profileItem name="keysize" value="1024"/>
+    <profileItem name="keytype" value="rsa"/>
+    <profileItem name="sigAlgorithm" value="SHA1"/>
+    <!--
+    <profileItem name="keytype" value="dsa"/>
+    <profileItem name="keytype" value="ec"/>
+    <profileItem name="ecCurveName" value="secp384r1"/>
+    -->
+
+    <profileItem name="version" value="3"/>
+    <profileItem name="ver-3" value="true"/>
+
+    <profileItem name="serial" value="auto"/>
+    <profileItem name="serial-auto" value="true"/>
+    <profileItem name="serial_value" value=""/>
+    <!--
+    <profileItem name="serial" value="input"/>
+    -->
+
+    <profileItem name="validity" value="auto"/>
+    <profileItem name="validity_auto" value="true"/> 
+    <profileItem name="validity_months" value=""/> 
+    <profileItem name="validity_days" value=""/> 
+    <profileItem name="notAfter" value=""/>
+    <profileItem name="notBefore" value=""/>
+    <!--
+    <profileItem name="validity_months" value="true"/> 
+    <profileItem name="validity_days" value="true"/> 
+    <profileItem name="validityDuration" value="1"/> 
+    <profileItem name="validity" value="input"/>
+    <profileItem name="notAfter" value="100406224034EST"/>
+    <profileItem name="notBefore" value="070406224034EST"/>
+    -->
+
+    <!-- X.509 Standard Extensions -->
+
+    <profileItem name="basicConstraints" value="false"/>
+    <profileItem name="basicConstraints-cA-radio" value="false"/>
+    <profileItem name="basicConstraints-crit" value="false"/>
+    <profileItem name="basicConstraints-pathLengthConstraint" value="false"/>
+    <profileItem name="basicConstraints-pathLengthConstraint-text" value=""/>
+
+    <profileItem name="keyUsage" value="false"/>
+    <profileItem name="keyUsage-crit" value="false"/>
+    <profileItem name="keyUsage-cRLSign" value="false"/>
+    <profileItem name="keyUsage-dataEncipherment" value="false"/>
+    <profileItem name="keyUsage-digitalSignature" value="false"/>
+    <profileItem name="keyUsage-keyAgreement" value="false"/>
+    <profileItem name="keyUsage-keyCertSign" value="false"/>
+    <profileItem name="keyUsage-keyEncipherment" value="false"/>
+    <profileItem name="keyUsage-nonRepudiation" value="false"/>
+
+    <profileItem name="extKeyUsage" value="false"/>
+    <profileItem name="extKeyUsage-clientAuth" value="false"/>
+    <profileItem name="extKeyUsage-codeSign" value="false"/>
+    <profileItem name="extKeyUsage-crit" value="false"/>
+    <profileItem name="extKeyUsage-emailProtect" value="false"/>
+    <profileItem name="extKeyUsage-NS-govtApproved" value="false"/>
+    <profileItem name="extKeyUsage-ocspResponder" value="false"/>
+    <profileItem name="extKeyUsage-serverAuth" value="false"/>
+    <profileItem name="extKeyUsage-timeStamp" value="false"/>
+
+    <profileItem name="subjectKeyIdentifier" value="false"/>
+    <profileItem name="subjectKeyIdentifier-crit" value="false"/>
+
+    <profileItem name="authorityKeyIdentifier" value="false"/>
+
+    <profileItem name="SubAltName" value="false"/>
+    <profileItem name="SubAltName-crit" value="false"/>
+    <profileItem name="SubAltName-display-text" value=""/>
+    <profileItem name="SubAltNameSelect0" value=""/>
+    <profileItem name="SubAltNameSelect1" value=""/>
+    <profileItem name="SubAltName-text" value=""/>
+
+    <profileItem name="IssuerAltName" value="false"/>
+
+    <profileItem name="NameConstraints" value="false"/>
+    <profileItem name="privKeyUsagePeriod" value="false"/>
+
+    <profileItem name="proxyCertInfo" value="false"/>
+    <profileItem name="vomsAttrCertList" value="false"/>
+    <profileItem name="globusSAMLAssertion" value="false"/>
+
+    <profileItem name="Logotype" value="false"/>
+    <profileItem name="wlanssid" value="false"/>
+
+    <!-- Netscape Extensions -->
+    <profileItem name="netscape-cert-type" value="false"/>
+    <profileItem name="netscape-cert-type-crit" value="false"/>
+    <profileItem name="netscape-cert-type-object-signing-ca" value="false"/>
+    <profileItem name="netscape-cert-type-object-signing" value="false"/>
+    <profileItem name="netscape-cert-type-smime-ca" value="false"/>
+    <profileItem name="netscape-cert-type-smime" value="false"/>
+    <profileItem name="netscape-cert-type-ssl-ca" value="false"/>
+    <profileItem name="netscape-cert-type-ssl-client" value="false"/>
+    <profileItem name="netscape-cert-type-ssl-server" value="false"/>
+
+    <profileItem name="netscape-base-url" value="false"/>
+    <profileItem name="netscape-base-url-crit" value="false"/>
+    <profileItem name="netscape-base-url-text" value=""/>
+
+    <profileItem name="netscape-ca-policy-url" value="false"/>
+    <profileItem name="netscape-ca-policy-url-crit" value="false"/>
+    <profileItem name="netscape-ca-policy-url-text" value=""/>
+
+    <profileItem name="netscape-ca-revocation-url" value="false"/>
+    <profileItem name="netscape-ca-revocation-url-crit" value="false"/>
+    <profileItem name="netscape-ca-revocation-url-text" value=""/>
+
+    <profileItem name="netscape-cert-renewal-url" value="false"/>
+    <profileItem name="netscape-cert-renewal-url-crit" value="false"/>
+    <profileItem name="netscape-cert-renewal-url-text" value=""/>
+
+    <profileItem name="netscape-comment" value="false"/>
+    <profileItem name="netscape-comment-crit" value="false"/>
+    <profileItem name="netscape-comment-text" value=""/>
+
+    <profileItem name="netscape-revocation-url" value="false"/>
+    <profileItem name="netscape-revocation-url-crit" value="false"/>
+    <profileItem name="netscape-revocation-url-text" value=""/>
+
+    <profileItem name="netscape-ssl-server-name" value="false"/>
+    <profileItem name="netscape-ssl-server-name-crit" value="false"/>
+    <profileItem name="netscape-ssl-server-name-text" value=""/>
+
+</CertProfile>
+

@@ -1,0 +1,1308 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD><TITLE>Mozilla/Firefox Add-on for Key
+Generation, Certificate Enrollment, CRL Signing and Identity and
+Authority Delegation</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+<META content="Microsoft FrontPage 4.0" name=GENERATOR></HEAD>
+<BODY 
+style="FONT-SIZE: 12pt; FONT-FAMILY: Trade Gothic, Verdana, Arial, Helvetica, sans-serif" 
+bgColor=#ffffff>
+ 
+ 
+<h2><a name="MOZILLA_KEY_GEN">Key Manager Tool – </a><a name="MOZILLA_KEY_GEN">Firefox
+Add-on for </a>Key Generation, Certificate Enrollment, CRL Signing and Identity and
+Authority Delegation</h2>
+ 
+ 
+<h3 style="line-height: 100%; word-spacing: 0; margin-top: 0; margin-bottom: 0"><span style="font-family: Times New Roman; mso-fareast-font-family: Times New Roman; mso-ansi-language: EN-US; mso-fareast-language: EN-US; mso-bidi-language: AR-SA"><font size="4">&nbsp;<b><span style="mso-bidi-font-size: 10.0pt; font-family: Times New Roman; mso-fareast-font-family: Times New Roman; mso-ansi-language: EN-US; mso-fareast-language: EN-US; mso-bidi-language: AR-SA">Subrata Mazumdar,
+Avaya Labs Research, </span></b><span style="mso-bidi-font-size: 10.0pt; font-family: Times New Roman; mso-fareast-font-family: Times New Roman; mso-ansi-language: EN-US; mso-fareast-language: EN-US; mso-bidi-language: AR-SA"><o:p>
+          </o:p>
+ Avaya Inc. &nbsp;</span></font></span></h3>
+<p style="line-height: 100%; word-spacing: 0; margin-top: 0; margin-bottom: 0">&nbsp;</p>
+<h3 style="line-height: 100%; word-spacing: 0; margin-top: 0; margin-bottom: 0"><br>
+</h3>
+<h3 style="line-height: 100%; word-spacing: 0; margin-top: 0; margin-bottom: 0">&nbsp;</h3>
+<h3 style="line-height: 100%; word-spacing: 0; margin-top: 0; margin-bottom: 0">Table
+of Contents</h3>
+<p style="line-height: 100%; word-spacing: 0; margin-top: 0; margin-bottom: 0">&nbsp;</p>
+<p style="line-height: 100%; word-spacing: 0; margin-top: 0; margin-bottom: 0"><a href="#Introduction&nbsp;">Introduction&nbsp;</a></p>
+<p style="line-height: 100%; word-spacing: 0; margin-top: 0; margin-bottom: 0"><a href="#KeyManagerArchOverview">Overview of KeyManager Tool&nbsp;</a></p>
+<p style="line-height: 100%; word-spacing: 0; margin-top: 0; margin-bottom: 0"><font face="Arial"><a href="#KEYMANAGER_HOWTO">How to Use
+the Tools in&nbsp; Key Manager Add-On</a></font></p>
+<p style="line-height: 100%; word-spacing: 0; margin-top: 0; margin-bottom: 0"><font face="Arial"><a href="#PKI_TASKS">Instructions</a></font><a href="#PKI_TASKS"><font face="Arial">
+for PKI
+    Related Tasks</font> </a></p>
+<p style="line-height: 100%; word-spacing: 0; margin-top: 0; margin-bottom: 0"><a href="HOWTO_SETUP_PersonalCA.html">How to Use
+Key Manager Tool As Personal CA</a></p>
+<p style="line-height: 100%; word-spacing: 0; margin-top: 0; margin-bottom: 0"><a href="#RelatedInfo">Related&nbsp;
+Information</a>&nbsp;</p>
+<p style="line-height: 100%; word-spacing: 0; margin-top: 0; margin-bottom: 0">&nbsp;</p>
+<h3 style="line-height: 100%; word-spacing: 0; margin-top: 0; margin-bottom: 0"><br>
+</h3>
+<h3 style="line-height: 100%; word-spacing: 0; margin-top: 0; margin-bottom: 0">&nbsp;</h3>
+<p/>
+<h3 style="line-height: 100%; word-spacing: 0; margin-top: 0; margin-bottom: 0"><a name="Introduction&nbsp;">Introduction&nbsp;</a></h3>
+<p style="line-height: 100%; word-spacing: 0; margin-top: 0; margin-bottom: 0"><br>
+	KeyManager is a stand alone PKI tool for key generation  and certificate enrollment. It is built on top Mozilla NSS and PSM code base of
+<a href="http://www.mozilla.org/projects/security/pki/"> Open Source PKI Projects</a>.  We have extended the Certificate Manager wizard
+in Mozilla   PSM and added the capability for key generation and SCEP based   certificate enrollment. Currently, PSM allows import and export  of keys but does not provide interface for local key generation.  Our extension enables Mozilla PSM to act as key management tool. In addition, the tool supports signing of proxy certificates for  delegation of authorities and provides XUL based GUI for signing  archive files.&nbsp;</p>
+<p style="line-height: 100%; word-spacing: 0; margin-top: 0; margin-bottom: 0"><br>
+	KeyManager tool has following features:&nbsp;</p>
+<ul>
+  <li>
+    <p style="line-height: 100%; word-spacing: 0; margin-top: 0; margin-bottom: 0">Generation of keys and X.509 based self-signed certificate&nbsp;</li>
+  <li>
+    <p style="line-height: 100%; word-spacing: 0; margin-top: 0; margin-bottom: 0">Generation of PKCS#10 based Certificate Signing Requests (CSR)&nbsp;</li>
+  <li>
+    <p style="line-height: 100%; word-spacing: 0; margin-top: 0; margin-bottom: 0">SCEP based Certificate enrollment with Certificate
+    Authority</li>
+  <li>
+    <p style="line-height: 100%; word-spacing: 0; margin-top: 0; margin-bottom: 0">Signing
+    of CRLs</li>
+  <li>
+    <p style="line-height: 100%; word-spacing: 0; margin-top: 0; margin-bottom: 0">Signing of archive files, including XPI files (like signtool in Mozilla NSS)&nbsp;&nbsp;</li>
+  <li>
+    <p style="line-height: 100%; word-spacing: 0; margin-top: 0; margin-bottom: 0">Signing of Proxy Certificate (RFC 3820) and other users' certificates&nbsp;</li>
+  <li>
+    <p style="line-height: 100%; word-spacing: 0; margin-top: 0; margin-bottom: 0">Signing and verification of Attribute certificates (RFC3281)&nbsp;&nbsp;</li>
+  <li>
+    <p style="line-height: 100%; word-spacing: 0; margin-top: 0; margin-bottom: 0">Generation of keys and certificates for OpenSSL based applications&nbsp;</li>
+</ul>
+<h3>&nbsp;</h3>
+<h3><a name="KeyManagerArchOverview">Overview of KeyManager Tool</a></h3>
+<p>The Key Manager tool has two components: an XPCOM IDL based component to
+interact with Mozilla NSS libraries (labeled as KeyManager) and XUL based
+component to provide GUI to the user (labeled as KM-XUL). XUL GUI component in
+turn is embedded within existing XUL based PSM GUI and uses the XPCOM interface
+of both the existing PSM components as well as the newly defined Key Manager
+component.&nbsp;</p>
+<div align="center">
+  <center>
+  <table border="1" cellpadding="12" width="38%">
+    <tr>
+      <td width="100%"><img border="0" src="images/KeyManager_Arch_PSM.png" width="338" height="525"></td>
+    </tr>
+  </table>
+  </center>
+</div>
+<p class="MsoNormal">Although we could have used the NSS for Java (<a href="http://www.mozilla.org/projects/security/pki/jss/"><span style="font-family:Verdana">JSS</span></a>)
+API&nbsp;<span style="mso-field-code:
+&quot; REF _Ref149554973 \\w \\h &quot;"> <!--[if gte mso 9]><xml>
+ <w:data>08D0C9EA79F9BACE118C8200AA004BA90B02000000080000000E0000005F005200650066003100340039003500350034003900370033000000</w:data>
+</xml><![endif]-->
+</span>for key management, we decided to implement a similar set of API using
+XPCOM IDL because of usability. In our first implementation, we have used JSS
+API for key management. But we faced number of issues that made it difficult to
+use JSS for the KeyManager tool.&nbsp; First, the JSS was not part standard
+Firefox distribution (version lower than 1.5) <span style="mso-spacerun:yes">&nbsp;</span>so
+we had to create an installer for jar files of JSS so that it is placed in the
+appropriate Firefox install directory or Java “ext” directory. We also had
+to modify the PATH and LIBRARY environment variables to add the location of the
+JSS shared (DLL) libraries. Finally, we had to configure Java policy file so
+that Java security manager allows&nbsp;JSS API to use the Mozilla certificate DB
+as key store. The Java policy file can be changed using only Java &quot;<span style="font-family:&quot;Courier New&quot;">policytool</span>&quot;
+which is difficult to find and requires expert knowledge in Java security. In
+order to simplify these tasks, we had to implement a custom security manager so
+that we can appropriate and limited permission.</p>
+<p class="MsoNormal">In addition, NSS API does not support multiple read-write
+clients at the same time.&nbsp; Thus, the Mozilla XPCOM library could not import
+changes to certificate DB done using an external tool (such as JSS) while
+browser is still in use. As a result, the keys created using JSS API did not
+show up on the XPCOM based GUI unless the browser is restarted.</p>
+<p class="MsoNormal">In order to avoid the various security related issues, we
+have decided to use the JavaScript which allows setting of security privileges
+interactively. We found that allowing permission for XPCOM API in JavaScript is
+much more intuitive and user friendly. We have created a set of API in XPCOM IDL
+for KeyManager so that we can leverage the JavaScript security configuration
+capabilities. These XPCOM IDL based interfaces is similar to the Java API for
+JSS.</p>
+<h4>XPCOM-IDL based Components of Key Manager&nbsp;</h4>
+<div align="center">
+  <center>
+  <table border="1" cellpadding="12" width="38%">
+    <tr>
+      <td width="100%"><img border="0" src="images/KeyManager_Arch_XPCOM.png" width="434" height="468"></td>
+    </tr>
+  </table>
+  </center>
+</div>
+<p>XPCOM implementation of the Key Manager tool consists of a set of
+sub-components: KeyManager, PKCS10, SCEP. Each of these components provides
+their own XPCOM IDL based interface. The IDL interfaces are implemented using
+C++. The XPCOM components of KeyManager tool interacts with Mozilla NSS using
+both the XPCOM interface for PSM as well as directly with the NSS interface. The
+main reason for using NSS libraries directly is that Mozilla PSM&nbsp; exports
+only limited subset of functionality of NSS which in turn exports a small subset
+of its total capabilities as API.&nbsp;</p>
+<p>&nbsp;</p>
+<h2><b><font face="Arial"> XUL-based KeyManager Tool GUI <a name="CertManagerExtSnapshot">:</a>&nbsp;</font></b>
+</h2>
+<p>The KeyManager tool GUI extends the existing certificate manager GUI Mozilla
+PSM. The tool adds a separate tab for managing the keys. This new tab is same as
+for the user certificate tab but with additional buttons for managing life-cycle
+of keys.&nbsp;
+</p>
+<div align="center">
+  <center>
+  <table border="1" cellpadding="12" width="38%">
+    <tr>
+      <td width="100%"><img border="0" src="images/KeyManager_YourKeysTab.png"></td>
+    </tr>
+  </table>
+  </center>
+</div>
+<p:colorscheme
+ colors="#FFFFFF,#000000,#000000,#CC0000,#F8E69F,#009999,#5B6689,#687E36"/>
+<p class="MsoNormal">In order to support capability for key generation, we have
+defined a new tab, called “Your Keys”, (as shown in <span style="mso-field-code:&quot; REF _Ref148346742 \\w \\h &quot;">Figure
+above</span>.) for key management and added it to existing certificate manager. The
+&quot;Your Keys&quot; tab reuses the certificate tree from the &quot;Your
+Certificates&quot; tab. This is why we always associate a self-signed
+certificate when we create new pair of keys so that we do not need new
+GUI for keys. Without a pubic key certificate, it is very difficult to list the
+keys using NSS API.&nbsp; The key management related commands are invoked using
+the buttons at bottom row of the &quot;Your Keys&quot; tab. The buttons at the
+top row are inherited from the user certificate management tab. The buttons at
+the bottom row are related to key-management and supports capabilities of the
+&quot;certutil&quot; command line tool.&nbsp;</p>
+<p class="MsoNormal">All the command buttons in the &quot;Your Keys&quot; tab is
+context sensitive like buttons in other tabs. <span style="mso-spacerun:yes">&nbsp;</span>&nbsp;
+The &quot;Generate CSR&quot; button is active all the time and it is used to
+bring up Certificate Signing Request form. If this command is invoked without
+selecting a certificate entry, then a new key-pair is generated, and a
+self-signed certificate is created before generating the CSR.<span style="mso-spacerun:yes">&nbsp;
+</span>The&nbsp;&nbsp; &quot;Generate Self Sign Cert&quot; button is used to
+create a new key-pair and then associate a self-signed certificate. The
+“Export” button allows us to export the keys to an external file in PKCS#12
+format (same behavior as the backup button) and the public key certificates in
+X.509 and PKCS#7 format. The &quot;SCEP Client&quot; button launches the SCEP
+client wizard for sending the CSR to a remote CA for enrollment.&nbsp;If the
+“Generate CSR” button is invoked without selecting any certificate entry,
+then the CSR form can be sent to remote CA in the using PKCS#10 CSR, or CRMF
+based message (like the existing KEYGEN html tag) or using the SCEP client. The
+&quot;Sign (Proxy) certificate&quot; button launches the wizard for signing CSR
+from other entities using the keys displayed on the “Your Keys” tab. If the
+public key certificate&nbsp;for the selected key has appropriate extensions
+(basic constraint, key usage etc.) for signing certificates as CA then wizard
+signs the certificate like any other CA. If the selected certificate does not
+have key usage for CA, then wizard presents the form for signing proxy
+certificate and automatically set the proxy certificate extension in the signed
+certificate. <span style="mso-spacerun:yes">&nbsp;</span></p>
+<p>&nbsp;</p>
+    <h3 style="margin-top: 0"><b><a name="NSSOpenSSLSync">NSS and OpenSSL
+    Keys/Certificates Synchronization Tool</a></b></h3>
+<p style="line-height: 100%; margin-top: 2; margin-bottom: 1">This tool can be
+used to back up keys/certificates for OpenSSL based application into Mozilla NSS
+based Certificate database.&nbsp;This tool can also be used to manage life-cycle
+of keys/certs using the browser and then synchronize with the existing keys/certs
+for OpenSSL based application. This tool has following restrictions:
+<ul>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">works for both
+    <b>FIPS</b> and <b>non-FIPS</b> configuration
+of the internal module.&nbsp;&nbsp;</li>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Imports only
+    PBE_SHA1_3DES based encrypted private key generated by OpenSSL tools&nbsp;</li>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">OpenSSL tool
+    cannot read PEM formatted OpenSSL specific private key (typically generated
+    using 'openssl rsa' command ) generated using NSS API&nbsp;</li>
+</ul>
+<p class="MsoNormal">The following figure describes the process that is used to
+mount (load) external soft-tokens (either PKCS#8 file, PKCS#12 file or
+soft-token DB from another application):&nbsp;</p>
+<div align="center">
+  <center>
+<table border="1" width="106">
+  <tr>
+    <td width="97">
+      <p align="center"><img border="0" src="images/NSS_OpenSSL_SyncArch.png" width="912" height="658"></p>
+    </td>
+  </tr>
+</table>
+  </center>
+</div>
+<p style="line-height: 100%; margin-top: 2; margin-bottom: 1">&nbsp;
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">&nbsp;</p>
+<p style="line-height: 100%; margin-top: 2; margin-bottom: 1">&nbsp;
+    <h3 style="margin-top: 0"><b><a name="OpenSSLAppCertConfig">Configuration Tool for OpenSSL-based
+    Applications</a>&nbsp;</b></h3>
+<p class="MsoNormal">The OpenSSL<span style="mso-field-code:&quot; REF _Ref149973766 \\w \\h &quot;">
+<!--[if gte mso 9]><xml>
+ <w:data>08D0C9EA79F9BACE118C8200AA004BA90B02000000080000000E0000005F005200650066003100340039003900370033003700360036000000</w:data>
+</xml><![endif]-->
+</span>based application typically uses a configuration file to specify the
+information about the files for keys and certificates.<span style="mso-spacerun:yes">&nbsp;
+</span>Typically, the user has to use OpenSSL command line tool to generate keys
+and certificates and then specify the path to the files for keys and
+certificates in a configuration file to be used by the OpenSSL based
+application. This whole process is quite tedious and complex unless it is
+automated using a script. Still, the certificate enrollment process using
+another command line tool is quite difficult, error-prone, and requires expert
+level knowledge.<span style="mso-spacerun:yes">&nbsp; </span>It is even harder
+to configure the OpenSSL application for smart card because OpenSSL expects
+“key-id” of the private key instead of any information in the certificate.
+In addition, OpenSSL only loads the private key and expects that the associated
+public key certificate has to be loaded separately from a file. Since we have
+already automated the generation of keys and certificate enrollment in our
+KeyManager tool, we have added another wizard for generating the configuration
+files for keys and certificates used in Open SSL based applications.&nbsp;<span style="mso-spacerun:yes">&nbsp;</span></p>
+<div align="center">
+  <center>
+<table border="1">
+  <tr>
+    <td width="100%">
+      <p align="center"><img border="0" src="images/KeyManager_OpenSSL_Globus_HT_Config.png" width="932" height="645"></p>
+    </td>
+  </tr>
+</table>
+  </center>
+</div>
+<p class="MsoNormal">The OpenSSL Key configuration tool will automatically
+generate the appropriate configuration file (either in PKCS#8 or PKCS#12
+format), X.509 public key certificate file. There will not <span style="mso-spacerun:yes">&nbsp;</span>be
+any need to use command line tool available in OpenSSL for key generation. As
+shown in <span style="mso-field-code:&quot; REF _Ref148866620 \\r \\h &quot;">Figure
+24<!--[if gte mso 9]><xml>
+ <w:data>08D0C9EA79F9BACE118C8200AA004BA90B02000000080000000E0000005F005200650066003100340038003800360036003600320030000000</w:data>
+</xml><![endif]-->
+</span>, this tool will let a user choose type of key he is going to use. The
+available options are Private Key, PKCS#12 and Engine for smart card. Depending
+on type of token used for the key, a user can generate files for Private Key as
+well as PKCS#12 format. For smart card (called engine in OpenSSL), the tool will
+automatically extract information for the path to PKCS11 library, and private
+key id and generate the off-card public key signed X.509 certificate.</p>
+<p style="margin-top:1.5pt;margin-right:0in;margin-bottom:.75pt;margin-left:
+0in"><!--[if supportFields]><span style='font-family:Verdana'><span
+style='mso-element:field-begin'></span></span><span
+style='mso-spacerun:yes'> </span>REF _Ref149623796 \w \h <span
+style='font-family:Verdana'><span style='mso-element:field-separator'></span></span><![endif]-->
+Figure 25<span style="font-family:Verdana"><!--[if gte mso 9]><xml>
+ <w:data>08D0C9EA79F9BACE118C8200AA004BA90B02000000080000000E0000005F005200650066003100340039003600320033003700390036000000</w:data>
+</xml><![endif]-->
+</span><!--[if supportFields]><span style='font-family:Verdana'><span
+style='mso-element:field-end'></span></span><![endif]-->
+<span style="font-family:
+Verdana"> describes the template for configuration files for OpenSSL based
+applications. Each form field is mapped as </span>an entry containing the name
+and value of the filed.<span style="mso-spacerun:yes">&nbsp; </span>The
+configuration file can hold more than one type of key information. The field
+“KEY_FILE_TYPE” determines which key configuration, among “PRIV_ KEY”,
+“PKCS_12” and “ENGINE” is going to be selected.<span style="mso-spacerun:yes">&nbsp;
+</span>Typically, an application will read this file, load the key information
+and then initialize the Open SSL context using the appropriate API call based on
+the selected key type. <span style="font-family:Verdana"><o:p>
+</o:p>
+</span></p>
+<div align="center">
+  <table class="MsoNormalTable" border="1" cellpadding="0" width="72%" style="mso-cellspacing: 1.5pt; margin-left: -6.15pt">
+    <tr style="mso-yfti-irow:0;mso-yfti-firstrow:yes;mso-yfti-lastrow:yes;
+  height:257.25pt">
+      <td width="99%" style="height: 257.25pt; padding: .75pt">
+        <p style="mso-layout-grid-align: none; text-autospace: none; line-height: 100%; margin-top: 0; margin-bottom: 0"><font face="Courier New" size="1"><span style="color: windowtext"><i>#
+        Choose from one of following: GENERIC | CURL | OPENSSL | XML<o:p>
+        </i>
+        </o:p>
+        </span></font></p>
+        <p style="mso-layout-grid-align: none; text-autospace: none; line-height: 100%; margin-top: 0; margin-bottom: 0"><font face="Courier New" size="1"><span style="color: windowtext">TARGET_APPS
+        = GENERIC<o:p>
+        </o:p>
+        </span></font></p>
+        <p style="mso-layout-grid-align: none; text-autospace: none; line-height: 100%; margin-top: 0; margin-bottom: 0"><font face="Courier New" size="1"><span style="color: windowtext"><o:p>
+        &nbsp;</o:p>
+        </span></font></p>
+        <p style="mso-layout-grid-align: none; text-autospace: none; line-height: 100%; margin-top: 0; margin-bottom: 0"><font face="Courier New" size="1"><span style="color: windowtext"><i>#
+        CA certificates related paths</i> <o:p>
+        </o:p>
+        </span></font></p>
+        <p style="mso-layout-grid-align: none; text-autospace: none; line-height: 100%; margin-top: 0; margin-bottom: 0"><font face="Courier New" size="1"><span style="color: windowtext"><b>CA_FILE_PATH</b><span style="mso-tab-count: 1; color: windowtext">&nbsp;&nbsp;
+        </span>= <o:p>
+        </o:p>
+        </span></font></p>
+        <p style="mso-layout-grid-align: none; text-autospace: none; line-height: 100%; margin-top: 0; margin-bottom: 0"><font face="Courier New" size="1"><span style="color: windowtext"><b>CA_FILE_FORMAT</b><span style="mso-tab-count: 1">
+        </span>= PEM<o:p>
+        </o:p>
+        </span></font></p>
+        <p style="mso-layout-grid-align: none; text-autospace: none; line-height: 100%; margin-top: 0; margin-bottom: 0"><font face="Courier New" size="1"><span style="color: windowtext"><b>CA_DIR_PATH</b><span style="mso-tab-count: 1; color: windowtext">&nbsp;&nbsp;&nbsp;
+        </span>= E:/OSSL_APP_CERTS/CADIR<o:p>
+        </o:p>
+        </span></font></p>
+        <p style="mso-layout-grid-align: none; text-autospace: none; line-height: 100%; margin-top: 0; margin-bottom: 0"><font face="Courier New" size="1"><span style="color: windowtext"><o:p>
+        &nbsp;</o:p>
+        </span></font></p>
+        <p style="mso-layout-grid-align: none; text-autospace: none; line-height: 100%; margin-top: 0; margin-bottom: 0"><font face="Courier New" size="1"><span style="color: windowtext">#
+        Choose from one of following: EMBEDDED | PRIV_KEY | PKCS12 | ENGINE<o:p>
+        </o:p>
+        </span></font></p>
+        <p style="mso-layout-grid-align: none; text-autospace: none; line-height: 100%; margin-top: 0; margin-bottom: 0"><font face="Courier New" size="1"><span style="color: windowtext"><b>KEY_FILE_TYPE</b><span style="mso-tab-count: 1; color: windowtext">
+        </span>= ENGINE <o:p>
+        </o:p>
+        </span></font></p>
+        <p style="mso-layout-grid-align: none; text-autospace: none; line-height: 100%; margin-top: 0; margin-bottom: 0"><font face="Courier New" size="1"><span style="color: windowtext"><o:p>
+        &nbsp;</o:p>
+        </span></font></p>
+        <p style="mso-layout-grid-align: none; text-autospace: none; line-height: 100%; margin-top: 0; margin-bottom: 0"><font face="Courier New" size="1"><span style="color: windowtext"><i>#
+        OPENSSL Private key/Cert Parameters<o:p>
+        </i>
+        </o:p>
+        </span></font></p>
+        <p style="mso-layout-grid-align: none; text-autospace: none; line-height: 100%; margin-top: 0; margin-bottom: 0"><font face="Courier New" size="1"><span style="color: windowtext"><b>PRIVATE_KEY_PASSWORD_FILE_PATH</b>
+        = E:/OSSL_APP_CERTS/subrata_priv_key_password.txt<o:p>
+        </o:p>
+        </span></font></p>
+        <p style="mso-layout-grid-align: none; text-autospace: none; line-height: 100%; margin-top: 0; margin-bottom: 0"><font face="Courier New" size="1"><span style="color: windowtext"><b>PRIVATE_KEY_FILE_PATH</b><span style="mso-tab-count: 1; color: windowtext"><b>&nbsp;</b>&nbsp;&nbsp;&nbsp;&nbsp;
+        </span>= E:/OSSL_APP_CERTS/subrata_priv_key_base64.pk8<o:p>
+        </o:p>
+        </span></font></p>
+        <p style="mso-layout-grid-align: none; text-autospace: none; line-height: 100%; margin-top: 0; margin-bottom: 0"><font face="Courier New" size="1"><span style="color: windowtext"><b>PRIVATE_KEY_FILE_FORMAT</b><span style="mso-tab-count: 1; color: windowtext"><b>&nbsp;</b>&nbsp;&nbsp;
+        </span>= PEM<span style="mso-spacerun: yes; color: windowtext">&nbsp; </span><o:p>
+        </o:p>
+        </span></font></p>
+        <p style="mso-layout-grid-align: none; text-autospace: none; line-height: 100%; margin-top: 0; margin-bottom: 0"><font face="Courier New" size="1"><span style="color: windowtext"><b>PUBLIC_KEY_CERT_PATH</b><span style="mso-tab-count: 1; color: windowtext">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        </span>= E:/OSSL_APP_CERTS/subrata_x509_base64.cer<o:p>
+        </o:p>
+        </span></font></p>
+        <p style="mso-layout-grid-align: none; text-autospace: none; line-height: 100%; margin-top: 0; margin-bottom: 0"><font face="Courier New" size="1"><span style="color: windowtext"><b>PUBLIC_KEY_FILE_FORMAT</b><span style="mso-tab-count: 1; color: windowtext">&nbsp;&nbsp;&nbsp;&nbsp;
+        </span>= PEM<span style="mso-spacerun: yes; color: windowtext">&nbsp; </span><o:p>
+        </o:p>
+        </span></font></p>
+        <p style="mso-layout-grid-align: none; text-autospace: none; line-height: 100%; margin-top: 0; margin-bottom: 0"><font face="Courier New" size="1"><span style="color: windowtext"><o:p>
+        &nbsp;</o:p>
+        </span></font></p>
+        <p style="mso-layout-grid-align: none; text-autospace: none; line-height: 100%; margin-top: 0; margin-bottom: 0"><font face="Courier New" size="1"><span style="color: windowtext"><i>#
+        PKCS#12 Related Parameters<o:p>
+        </i>
+        </o:p>
+        </span></font></p>
+        <p style="mso-layout-grid-align: none; text-autospace: none; line-height: 100%; margin-top: 0; margin-bottom: 0"><font face="Courier New" size="1"><span style="color: windowtext"><b>PKCS12_PASSWORD_FILE_PATH</b>
+        = E:/OSSL_APP_CERTS/Subrata_pkcs12_password.txt<o:p>
+        </o:p>
+        </span></font></p>
+        <p style="mso-layout-grid-align: none; text-autospace: none; line-height: 100%; margin-top: 0; margin-bottom: 0"><font face="Courier New" size="1"><span style="color: windowtext">PKCS12_FILE_PATH<span style="mso-spacerun: yes; color: windowtext">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        </span>= E:/OSSL_APP_CERTS/subrata_pkcs12_key_der.p12<o:p>
+        </o:p>
+        </span></font></p>
+        <p style="mso-layout-grid-align: none; text-autospace: none; line-height: 100%; margin-top: 0; margin-bottom: 0"><font face="Courier New" size="1"><span style="color: windowtext"><o:p>
+        &nbsp;</o:p>
+        </span></font></p>
+        <p style="mso-layout-grid-align: none; text-autospace: none; line-height: 100%; margin-top: 0; margin-bottom: 0"><font face="Courier New" size="1"><span style="color: windowtext"><i>#
+        PKCS#11 Engine related parameters<o:p>
+        </i>
+        </o:p>
+        </span></font></p>
+        <p style="mso-layout-grid-align: none; text-autospace: none; line-height: 100%; margin-top: 0; margin-bottom: 0"><font face="Courier New" size="1"><span style="color: windowtext"><b>PKCS11_ENGINE_ID</b><span style="mso-spacerun: yes; color: windowtext">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        </span>= pkcs11<o:p>
+        </o:p>
+        </span></font></p>
+        <p style="mso-layout-grid-align: none; text-autospace: none; line-height: 100%; margin-top: 0; margin-bottom: 0"><font face="Courier New" size="1"><span style="color: windowtext"><b>PKCS11_KEY_ID</b><span style="mso-tab-count: 1; color: windowtext">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        </span>=<span style="mso-spacerun: yes; color: windowtext">&nbsp; </span>00:45<o:p>
+        </o:p>
+        </span></font></p>
+        <p style="mso-layout-grid-align: none; text-autospace: none; line-height: 100%; margin-top: 0; margin-bottom: 0"><font face="Courier New" size="1"><span style="color: windowtext"><b>ENGINE_PASSWORD_FILE_PATH</b>
+        = E:/OSSL_APP_CERTS/engine_password.txt<o:p>
+        </o:p>
+        </span></font></p>
+        <p style="mso-layout-grid-align: none; text-autospace: none; line-height: 100%; margin-top: 0; margin-bottom: 0"><font face="Courier New" size="1"><span style="color: windowtext"><b>PKCS11_SO_PATH</b><span style="mso-tab-count: 1; color: windowtext">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        </span>= E:/OPENSC/Smart card bundle/engine_pkcs11.dll<o:p>
+        </o:p>
+        </span></font></p>
+        <p style="mso-layout-grid-align: none; text-autospace: none; line-height: 100%; margin-top: 0; margin-bottom: 0"><font face="Courier New" size="1"><span style="color: windowtext"><b>PKCS11_MODULE_PATH</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        = E:/OPENSC/Smart card bundle/opensc-pkcs11.dll<o:p>
+        </o:p>
+        </span></font></p>
+        <p style="mso-layout-grid-align: none; text-autospace: none; line-height: 100%; margin-top: 0; margin-bottom: 0"><font face="Courier New" size="1"><span style="color: windowtext"><i>#
+        Off Card Public key certificate for the private key in the smart card.<o:p>
+        </i>
+        </o:p>
+        </span></font></p>
+        <p style="mso-layout-grid-align: none; text-autospace: none; line-height: 100%; margin-top: 0; margin-bottom: 0"><font face="Courier New" size="1"><span style="color: windowtext"><b>PKCS11_PUBLIC_KEY_CERT_PATH</b>
+        = E:/OSSL_APP_CERTS/subrata_pkcs11_base64.cer</span></font></p>
+        <p style="mso-layout-grid-align: none; text-autospace: none; line-height: 100%; margin-top: 0; margin-bottom: 0"><span style="font-size:8.0pt;font-family:&quot;Courier New&quot;;color:windowtext"><o:p>
+        </o:p>
+        </span></td>
+    </tr>
+  </table>
+</div>
+<p class="MsoNormal">This tool is available under &quot;<b>Key Manager Tool
+    Box</b>&quot; menu. Alternatively, you can invoke it in the command line
+    with <b><i>chrome</i></b> option) as
+    follows:</p>
+    <ul>
+      <li>
+        <p style="line-height: 100%; margin-top: 2; margin-bottom: 1"><font size="2"><b><i>firefox [-P &quot;CertTester&quot;] -chrome <font face="Courier">chrome://keymanager/content/opensslkeyconf.xul</font></i></b></font></li>
+    </ul>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">You can also launch the
+    OpenSSL configuration tool &nbsp; by typing in &quot;<i><font face="Courier"><b>chrome://keymanager/content/</b></font></i><font size="2"><b><i><font face="Courier">opensslkeyconf</font></i></b></font><i><font face="Courier"><b>.xul</b></font></i>&quot;
+              in the browser's location bar.</p>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Use <a href="images/Keymanager_OSSL_Conf_Tool_Engine.PNG">this
+    link </a>to view the GUI form of the tool for exporting smart card related
+    key and certificate to configuration file for OpenSSL based applications.</p>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">&nbsp;</p>
+<p class="MsoNormal" style="text-align: justify; text-indent: -9.0pt; mso-list: l21 level1 lfo28; tab-stops: list .25in; line-height: 100%; margin-left: .25in; margin-top: 2; margin-bottom: 0">&nbsp;
+       
+</p>
+       
+          <hr>
+<h3><font face="Arial">How to </font><a NAME="KEYMANAGER_HOWTO"><font face="Arial">Use
+the Tools in&nbsp; Key Manager Add-On&nbsp; :</font></a></h3>
+<ul>
+            <li><b>(Required for Windows) Install <a href="http://www.microsoft.com/downloads/info.aspx?na=47&p=3&SrcDisplayLang=en&SrcCategoryId=&SrcFamilyId=766a6af7-ec73-40ff-b072-9112bab119c2&u=details.aspx%3ffamilyid%3dA5C84275-3B97-4AB7-A40D-3802B2AF5FC2%26displaylang%3den">Microsoft
+  Visual C++ 2008 SP1 Redistributable Package (x86)</a>&nbsp;&nbsp;</b>
+              <p>&nbsp;
+            <li><b>(Optional) We highly recommend</b> that you install&nbsp; the
+              &quot;KeyManager&quot; Add-On using a
+              different profile than your default Firefox profile :
+              <ul>
+                <li>Windows:
+                  <ul>
+                    <li>Run the profile manager : <font face="Courier New">"C:\Program Files\Mozilla
+                      Firefox\firefox.exe&quot; /p</font></li>
+                    <li>Create a new profile&nbsp;(&quot;CertTester&quot; in our
+                      case)</li>
+                    <li>Invoke the <a href="firefoxCertTester.bat.txt">following
+                      batch
+                      script</a> (modify the profile name in it)&nbsp;</li>
+                    <li>
+                      <table border="1">
+                        <tr>
+                          <td width="100%">
+                            <pre>set MOZ_NO_REMOTE=1
+&quot;C:\Program Files\Mozilla Firefox\firefox.exe&quot; /console /P &quot;CertTester&quot;</pre>
+                          </td>
+                        </tr>
+                      </table>
+                    </li>
+                  </ul>
+                </li>
+                <li>Linux :
+                  <ul>
+                    <li>run &quot;<font face="Courier New">firefox -ProfileManager</font>&quot;
+                      to create the profile&nbsp;</li>
+                    <li>run &quot;<font face="Courier New">firefox -P
+                      &lt;profile-name&gt;</font>&quot;</li>
+                  </ul>
+                  <p>&nbsp;
+                </li>
+              </ul>
+            </li>
+            <li><b>(Optional) Make sure</b> that the <b>"Mozilla Internal PKCS#11 Module"</b>
+		            is already <b> initialized</b> and is protected by a password.
+              <ul>
+                <li>You can use the following method in Windows to initialize the
+			    internal Software security device:&nbsp;
+                  <ul>
+                    <li> <font face="Courier New">Tools--&gt;Options--&gt;Advanced--&gt;Security--&gt;Security
+              Devices (on windows)</font></li>
+                    <li><font face="Courier New">Edit--&gt;Preferences--&gt;Advanced--&gt;Security--&gt;Security
+              Devices (on Linux)</font></li>
+                  </ul>
+                  <p>&nbsp;</li>
+              </ul>
+            </li>
+            <li><b>(Required) Enable</b> <font face="Courier New"><b><i>codebase_principal_support</i></b></font>&nbsp;
+              in browser preference:&nbsp;
+              <ul>
+                <li>In Firefox location bar, type<font face="Courier New"> <tt>about:config</tt></font>.
+                  When the new window comes up, type <tt>&quot;signed.applets.codebase_principal_support&quot;
+                  </tt>in the filter bar. The property named: <tt>&quot;signed.applets.codebase_principal_support&quot;
+                  </tt>will be displayed. Select the property and then
+                  &quot;right click&quot; on it, select <b><i> toggle</i></b>&nbsp; to convert
+                  (the
+                  <b><i>boolean)</i></b>
+                  value to &quot;<b><i>true</i></b>&quot;. This option adds
+                  support for interactive
+                  security configuration for signed applets and JavaScript
+                  in your browser.</li>
+                <li>(<b>Optional</b>) You may also want to enable following
+                  preferences for debugging purpose.&nbsp;
+                  <ul>
+                    <li><font face="Courier New">javascript.options.showInConsole
+                      = true</font></li>
+                    <li><font face="Courier New">browser.dom.window.dump.enabled
+                      = true</font></li>
+                    <li>For more info, see <a href="http://kb.mozillazine.org/Setting_up_extension_development_environment">http://kb.mozillazine.org/Setting_up_extension_development_environment</a></li>
+                  </ul>
+                </li>
+              </ul>
+              <p>&nbsp;
+      <li>
+        <p align="left">The <b> KeyManager tool</b> will appear as a menu-item under
+        &quot;<font face="Courier New"><b>KeyManager Tool Box</b></font>&quot; menu which is
+        under &quot;<font face="Courier"><b>Tools</b></font>&quot; menu in the
+        (Firefox) browser toolbar.</li>
+</ul>
+        <p align="left">&nbsp;
+<ul>
+      <li>
+        <p align="left"><b>Launch</b> the <b> KeyManager</b> tool by selecting the menu-item
+        for &quot;<b>Key Manager</b>&quot;
+        <ul>
+          <li>Select the Key manager menu item as follows:</li>
+        </ul>
+                  <ul>
+                    <li><font face="Courier New"><b>Tools--&gt;KeyManager Tool
+                      Box --&gt;Key Manager</b></font></li>
+                  </ul>
+  </li>
+            <li>Alternatively, you can launch the Key Manager by typing in &quot;<i><font face="Courier"><b>chrome://keymanager/content/keyManager.xul</b></font></i>&quot;
+              (for FF2) or &quot;<i><font face="Courier"><b>chrome://keymanager/content/keyManagerFF3.xul</b></font></i>&quot;
+              (for FF3) in the browser's location bar&nbsp;
+  <li>You can also start the tool at the command line (with <b><i>chrome</i></b>
+    option) as follows:&nbsp;
+    <ul>
+      <li><i><b><font size="2">firefox </font></b></i><font size="2"><b><i>[-P
+        &quot;CertTester&quot;]&nbsp; </i></b></font><i><b><font size="2">-chrome
+        <font face="Courier">chrome://keymanager/content/keyManager.xul (for
+        FF2)&nbsp;</font></font></b></i></li>
+      <li><i><b><font size="2">firefox </font></b></i><font size="2"><b><i>[-P
+        &quot;CertTester&quot;]&nbsp; </i></b></font><i><b><font size="2">-chrome
+        <font face="Courier">chrome://keymanager/content/keyManagerFF3.xul (for
+        FF3)&nbsp;</font></font></b></i></li>
+    </ul>
+    <p>&nbsp;
+  </li>
+</ul>
+<ul>
+  <li>We now support three types of CA servers for PKCS#10 based enrollment of certificates :&nbsp;
+    <ul>
+      <li><i>Any SCEP based CA Server&nbsp;</i></li>
+      <li><i>A custom PKCS#10 based CA server&nbsp;</i>
+        <p style="margin-top: 0">It just signs certificates based
+        on PKCS#10 CSR. It does not do any other functions related to CA.&nbsp;</li>
+      <li><i>Microsoft Certificate Service based CA</i>.&nbsp;</li>
+      <li>We would also like to support <a href="http://ejbca.sourceforge.net/">EjbCA</a>
+        and <a href="http://www.openca.org/">OpenCA </a>based Certificate
+        Authority in future.&nbsp;</li>
+    </ul>
+  </li>
+</ul>
+    <p>&nbsp;
+    <h3>Other Tools Related to Key Management Using KeyManager Add-On</h3>
+<ol>
+  <li>
+    <p style="margin-top: 0"> <b>Simple Certificate Enrollment Protocol</b>  (<b>SCEP</b>)
+    <p style="margin-top: 0">We have implemented a <b>Simple Certificate Enrollment Protocol</b> (SCEP) Client
+    for communication with Certificate Authorities. This tool is available under &quot;<b>Key Manager Tool
+    Box</b>&quot; menu. Alternatively, you can invoke it in the command line
+    with <b><i>chrome</i></b> option) as
+    follows:
+    <ul>
+      <li>
+        <p style="margin-top: 0"><font size="2"><b><i>firefox [-P &quot;CertTester&quot;] -chrome <font face="Courier">chrome://keymanager/content/scepClientWizard.xul&nbsp;</font></i></b></font></li>
+    </ul>
+    <p style="margin-top: 0">You can also launch the SCEP Client&nbsp; by typing in &quot;<i><font face="Courier"><b>chrome://keymanager/content/</b></font></i><font size="2"><b><i><font face="Courier">scepClientWizard.</font></i></b></font><i><font face="Courier"><b>.xul</b></font></i>&quot;
+              in the browser's location bar.</p>
+    <p style="margin-top: 0">&nbsp;</li>
+  <li>
+    <p style="margin-top: 0"><b>Configuration Tool for OpenSSL-based
+    applications&nbsp;</b></p>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">A tool for generating
+    configuration files for keys and certificates used in OpenSSL based
+    applications. This tool is available under &quot;<b>Key Manager Tool
+    Box</b>&quot; menu. Alternatively, you can invoke it in the command line
+    with <b><i>chrome</i></b> option) as
+    follows:
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">&nbsp;
+    <ul>
+      <li>
+        <p style="line-height: 100%; margin-top: 2; margin-bottom: 1"><font size="2"><b><i>firefox [-P &quot;CertTester&quot;] -chrome <font face="Courier">chrome://keymanager/content/opensslkeyconf.xul</font></i></b></font></li>
+    </ul>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">&nbsp;</p>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">You can also launch the
+    OpenSSL configuration tool &nbsp; by typing in &quot;<i><font face="Courier"><b>chrome://keymanager/content/</b></font></i><font size="2"><b><i><font face="Courier">opensslkeyconf</font></i></b></font><i><font face="Courier"><b>.xul</b></font></i>&quot;
+              in the browser's location bar.</p>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Use <a href="images/Keymanager_OSSL_Conf_Tool_Engine.PNG">this
+    link </a>to view the GUI form of the tool for exporting smart card related
+    key and certificate to configuration file for OpenSSL based applications.</p>
+<ol>
+  <li>
+    <p>&nbsp;</p>
+  </li>
+</ol>
+  </li>
+  <li>
+    <p style="margin-top: 0"><b>Archive File Signing Tool</b></p>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">This tool for
+    signing archive files and&nbsp; it is based on the <font face="Courier New">signtool</font>
+    in Mozilla NSS.&nbsp;&nbsp; This tool is available under &quot;<b>Key Manager Tool
+    Box</b>&quot; menu. Alternatively, you can invoke it in the command line
+    with <b><i>chrome</i></b> option) as
+    follows:
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">&nbsp;
+    <ul>
+      <li>
+        <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">&nbsp;<font size="2"><b><i>firefox
+        [-P &quot;CertTester&quot;] -chrome <font face="Courier">chrome://xpsigntoolext/content/XPSignToolForm.xul</font></i></b></font></li>
+    </ul>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">&nbsp;</p>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">You can also launch
+    this tool by typing in &quot;<font size="2"><b><i><font face="Courier">chrome://xpsigntoolext/content/XPSignToolForm.xul</font></i></b></font>&quot;
+              in the browser's location bar.</p>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">&nbsp;</p>
+    <p style="margin-top: 0">&nbsp;
+  </li>
+  <li>
+        <p style="margin-top: 0"><b>Attribute Certificate Generation Tool</b>
+  <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">This tool for
+  creating signed attribute certificate. This tool is available under &quot;<b>Key Manager Tool
+    Box</b>&quot; menu. Alternatively, you can invoke it in the command line
+    with <b><i>chrome</i></b> option) as
+    follows:
+  <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">&nbsp;
+    <ul>
+      <li>
+        <p style="line-height: 100%; margin-top: 2; margin-bottom: 1"><font size="2"><b><i>firefox [-P &quot;CertTester&quot;] -chrome
+        <font face="Courier">chrome://attrcertext/content/AttrcertForm.xul</font></i></b></font></li>
+    </ul>
+  <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">&nbsp;</p>
+  <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">You can also launch
+  this tool by typing in &quot;<font size="2"><b><i><font face="Courier">chrome://attrcertext/content/AttrcertForm.xul</font></i></b></font>&quot;
+              in the browser's location bar.</p>
+  </li>
+</ol>
+<p class="MsoNormal" style="text-align: justify; text-indent: -9.0pt; mso-list: l21 level1 lfo28; tab-stops: list .25in; line-height: 100%; margin-left: .25in; margin-top: 2; margin-bottom: 0">&nbsp;
+       
+</p>
+       
+          <hr>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">&nbsp;</p>
+    <h3 style="line-height: 100%; margin-top: 2; margin-bottom: 1"><font face="Arial"><a name="Instructions for PKI Related Tasks">Instructions
+    for PKI
+    Related Tasks</a></font><a NAME="PKI_TASKS"><font face="Arial">:</font></a></h3>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">&nbsp;</p>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">This document
+    only describes some general info about using this tool. Most of the context
+    related help messages are embedded as XUL <i>tooltips</i> for the various
+    GUI elements. The <i>tooltips</i> are displayed when you hover the mouse
+    pointer over a textbox, choice element, menu-list, buttons or any XUL
+    elements.&nbsp;</p>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">&nbsp;</p>
+    <h4 style="line-height: 100%; margin-top: 2; margin-bottom: 1">Create
+    Self-signed Cert:</h4>
+<ol>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Open Key
+    Manager Dialog Window (<b>Tools --&gt; Key Manager Tool Box --&gt; KeyManager</b>)</li>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Select the
+    &quot;<b>Your Key</b>&quot; tab</li>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Click on the
+    &quot;<b>Generate Self-Signed Cert</b>&quot; button to open dialog window
+    for creating self-signed certificate&nbsp;</li>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Select a
+    &quot;pre-defined&quot; Certificate Profile using the profile menu. Profile
+    menu has an option for copying information from an existing
+    certificate.&nbsp;</li>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Click
+    the&nbsp; &quot;<b>Advanced</b>&quot; button if you want to specify or
+    modify the certificate extensions</li>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">&nbsp;</li>
+</ol>
+<p style="line-height: 100%; margin-top: 2; margin-bottom: 1"><b>Note On EC Keys</b>:&nbsp;<p style="line-height: 100%; margin-top: 2; margin-bottom: 1">You
+can not create self-signed certificate with Elliptic Curve (EC)&nbsp; key types.
+Actually, you cannot do any task with EC keys that require signing with private
+keys: create self-signed certificate, generate PKCS#10 CSR, enroll certificate
+using KEYGEN tag, enroll/renew using SCEP client, etc. The signing with EC keys
+is explicitly disabled in NSS modules of all Mozilla applications.&nbsp; For
+more info on this topic, please visit the following links:&nbsp;
+<blockquote>
+  <p style="line-height: 100%; margin-top: 2; margin-bottom: 1"><font SIZE="2" face="Courier New"><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=367577">https://bugzilla.mozilla.org/show_bug.cgi?id=367577</a></font></p>
+  <p style="line-height: 100%; margin-top: 2; margin-bottom: 1"><font size="2"><a href="http://groups.google.com/group/mozilla.dev.tech.crypto/browse_thread/thread/bb4cb04db4c4312b">http://groups.google.com/group/mozilla.dev.tech.crypto/browse_thread/thread/bb4cb04db4c4312b</a>&nbsp;</font></p>
+</blockquote>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">&nbsp;
+    <h4 style="line-height: 100%; margin-top: 2; margin-bottom: 1">Generate
+    PKCS#10 CSR:</h4>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">&nbsp;</p>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">If a
+    certificate does not already exist:&nbsp;</p>
+<ol>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Open Key
+    Manager Dialog Window (<b><font face="Courier New">Tools --&gt; Key Manager Tool Box --&gt;
+    KeyManager</font></b>)</li>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Make sure that
+    no certificate is selected in the &quot;<b>Your Key</b>&quot; tab (select an
+    org-row in the tree or click refresh button to clear selection)</li>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Click on the
+    &quot;<b><font face="Courier New">Generate CSR</font></b>&quot; button to generate
+    <b> key-pair and a self-signed certificate</b>&nbsp;</li>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Another&nbsp;
+    dialog window will open and follow the dialog window to generate PKCS#10 CSR.&nbsp;</li>
+</ol>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">If a
+    certificate already exists:&nbsp;</p>
+<ol>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Open Key
+    Manager Dialog Window (<b><font face="Courier New">Tools --&gt; Key Manager Tool Box --&gt;
+    KeyManager</font></b>)</li>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Select&nbsp;
+    the &quot;<b><font face="Courier New">Your Key</font></b>&quot; tab</li>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Select the
+    desired <b><font face="Courier New">certificate</font></b> in the tab</li>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Click on the
+    &quot;<font face="Courier New"><b>Generate CSR</b></font>&quot;&nbsp; button and follow the newly opened
+    dialog&nbsp; window to generate PKCS# 10 CSR</li>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Alternatively,
+    you can click on the &quot;<b><font face="Courier New">Export</font></b>&quot; button, then select
+    &quot;<b><font face="Courier New">PKCS#10</font></b>&quot; radio button in the newly opened dialog window, click
+    OK, and finally select the file to save the generated CSR.</li>
+</ol>
+<h4 style="line-height: 100%; margin-top: 2; margin-bottom: 1">&nbsp;</h4>
+<h4 style="line-height: 100%; margin-top: 2; margin-bottom: 1">Exporting
+of&nbsp; X.509
+Certificates :&nbsp;</h4>
+<p style="line-height: 100%; margin-top: 2; margin-bottom: 1">You can export the
+selected X.509 certificate and associated private key in a number of data
+formats as shown in the figure below:&nbsp;</p>
+<div align="center">
+  <center>
+  <table border="1" cellpadding="12" width="38%">
+    <tr>
+      <td width="100%"><img border="0" src="images/KeyManager_CertExportFormat.png"></td>
+    </tr>
+  </table>
+  </center>
+</div>
+<p style="line-height: 100%; margin-top: 2; margin-bottom: 1">&nbsp;</p>
+<p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Here are the steps
+that you have to follow to export Keys/certificates:&nbsp;</p>
+<ol>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Open Key
+    Manager Dialog Window (<b><font face="Courier New">Tools --&gt; Key Manager Tool Box --&gt;
+    KeyManager</font></b>)</li>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Select&nbsp;
+    the &quot;<b><font face="Courier New">Your Key</font></b>&quot; tab</li>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Select the
+    desired <b><font face="Courier New">certificate</font></b> in the tab</li>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Click on the
+    &quot;<b>Export&quot;</b> button that opens the above dialog for choosing
+    data and encoding format</li>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">The browser
+    prompts you for &quot;<b>output file path</b>&quot; to save the exported
+    data - select the file name and directory.&nbsp;</li>
+</ol>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">&nbsp;
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">&nbsp;
+<h4 style="line-height: 100%; margin-top: 2; margin-bottom: 1">Signing of XPI
+Files and other types of archive files :&nbsp;</h4>
+<p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Archive sign tool
+provides an XUL based GUI for command line based signtool in Mozilla-NSS.&nbsp;</p>
+<p style="line-height: 100%; margin-top: 2; margin-bottom: 1">&nbsp;</p>
+<div align="center">
+  <center>
+  <table border="1" cellpadding="12" width="38%">
+    <tr>
+      <td width="100%"><img border="0" src="images/KeyManager_ArchiveSignTool_SignTab.png"></td>
+    </tr>
+  </table>
+  </center>
+</div>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">&nbsp;
+<ol>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Open Archive
+    file signing dialog window (<b>Tools --&gt; Key Manager Tool Box --&gt;
+    Archive File (XPI) Signing Tool </b>)</li>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Select the
+    &quot;<b>Sign Archive</b>&quot; tab&nbsp;</li>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Select the
+    &quot;<b>XPI</b>&quot; radio button for the &quot;<b>Archive Type</b>&quot;</li>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Select the
+    &quot;<b>File</b>&quot; radio button for the &quot;<b>Input Archive File</b>&quot;</li>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Click the
+    &quot;<b>Browse</b>&quot; button to select the XPI file to be signed&nbsp;</li>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Select the
+    &quot;<b>Signer Certificate</b>&quot; using the menu item. In order to sign
+    XPI file you must have &quot;code signing certificate&quot; with the associated
+    private key in the browser's Cert-DB.&nbsp;&nbsp;</li>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Optionally,
+    select the Output file. If this field is empty, a file name is automatically
+    generated&nbsp;</li>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Click the
+    &quot;<b>Sign</b>&quot; button</li>
+</ol>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">For a more
+    detailed description, please view Didier Steven's article on this topic: <a href="http://blog.didierstevens.com/2009/01/01/howto-add-a-digital-signature-to-a-firefox-add-on/">Howto: Add a Digital Signature to a Firefox Add-on</a>
+<p style="line-height: 100%; margin-top: 2; margin-bottom: 1">&nbsp;</p>
+<p style="line-height: 100%; margin-top: 2; margin-bottom: 1">&nbsp;</p>
+<p style="line-height: 100%; margin-top: 2; margin-bottom: 1">&nbsp;</p>
+<h4 style="line-height: 100%; margin-top: 2; margin-bottom: 1">Enable
+Certificate Enrolment Wizard:</h4>
+<ol>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Do
+    &quot;<font face="Courier New"><b>Tools</b></font>&quot; --&gt; &quot;<b><font face="Courier New">Add On</font></b>&quot; to open the Add-On dialog window</li>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Select the
+    entry for &quot;<b><font face="Courier New"> Key Manager</font></b>&quot; Add-On&nbsp;</li>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Click on the
+    &quot;<b><font face="Courier New">Options</font></b>&quot;&nbsp; (or <b><font face="Courier New">Preferences</font></b>) button to open Preferences dialog
+    window</li>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Select the
+    &quot;<b><font face="Courier New">Key Manager Tool</font></b>&quot; tab to display a list of options&nbsp;&nbsp;</li>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Check the
+    checkbox o the right of &quot;<b><font face="Courier New">Enable Cert Enrollment Wizard</font></b>&quot;&nbsp;</li>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Close the
+    dialog windows&nbsp;</li>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Restart
+    Browser&nbsp;</li>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">You will find
+    the &quot;<b><font face="Courier New">Certificate Enrollment Wizard</font></b>&quot; menu item in the
+    &quot;<b><font face="Courier New">Key Manager Tool Box</font></b>&quot; menu under
+    <b><font face="Courier New"> Tools</font></b> Menu&nbsp;</li>
+</ol>
+<p style="line-height: 100%; margin-top: 2; margin-bottom: 1">&nbsp;</p>
+<h4 style="line-height: 100%; margin-top: 2; margin-bottom: 1">Enable Mounting
+of External Soft-Token DB:</h4>
+<p style="line-height: 100%; margin-top: 2; margin-bottom: 1">This option allows
+you to mount the certificates and keys from other Mozilla Applications (Thuderbird
+etc) or any Mozilla NSS complaint certificate DB.&nbsp;&nbsp;</p>
+<ol>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Do
+    &quot;<font face="Courier New"><b>Tools</b></font>&quot; --&gt; &quot;<b><font face="Courier New">Add On</font></b>&quot; to open the Add-On dialog window</li>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Select the
+    entry for &quot;<b><font face="Courier New">Key Manager</font></b>&quot; Add-On&nbsp;</li>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Click on the
+    &quot;<b><font face="Courier New">Options</font></b>&quot;&nbsp; (or <b><font face="Courier New">Preferences</font></b>) button to open Preferences dialog
+    window</li>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Select the
+    &quot;<b><font face="Courier New">Key Manager Tool</font></b>&quot; tab to display a list of options&nbsp;</li>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Check the
+    checkbox on the right of &quot;<b><font face="Courier New">Enable External NSS Soft-token
+    Manager</font></b>&quot;&nbsp;</li>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Close the
+    dialog windows&nbsp;</li>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Restart
+    Browser&nbsp;</li>
+</ol>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">When you open
+    the <b><font face="Courier New">Device Manager</font></b> dialog window
+    (<b><font face="Courier New">Tools --&gt; Options (Edit
+    --&gt; Preferences) --&gt; Advanced --&gt;&nbsp; Encryption --&gt; Software
+    Security devices</font></b>), and then select the &quot;<b><font face="Courier New">Internal PKCS#11
+    module</font></b>&quot; or any element under it in the device tree, the buttons
+    for mounting the external soft-token will be displayed on the right.&nbsp;
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">&nbsp;
+<div align="center">
+  <center>
+  <table border="1" cellpadding="12" width="38%">
+    <tr>
+      <td width="100%"><img border="0" src="images/KeyManager_DeviceManager_Overlay.png"></td>
+    </tr>
+  </table>
+  </center>
+</div>
+<p style="line-height: 100%; margin-top: 2; margin-bottom: 1">&nbsp;</p>
+<p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Alternatively, you
+can open the <b><font face="Courier New">Device Manager</font></b> dialog window
+as follows:&nbsp;</p>
+<blockquote>
+  <ul>
+    <li>
+      <p style="line-height: 100%; margin-top: 2; margin-bottom: 1"><b><font face="Courier New">Tools --&gt; Key Manager Tool Box --&gt;
+    KeyManager --&gt; &quot;Security Devices&quot;</font></b></li>
+  </ul>
+</blockquote>
+<p style="line-height: 100%; margin-top: 2; margin-bottom: 1">&nbsp;</p>
+<h4 style="line-height: 100%; margin-top: 2; margin-bottom: 1">Enable
+OpenSSH-Client Dialog Window:</h4>
+<p style="line-height: 100%; margin-top: 2; margin-bottom: 1">This option allows
+you to open SSH connection in a terminal window. The SSH client uses keys
+directly from the browser key/cert database without any conversion.&nbsp;</p>
+<p style="line-height: 100%; margin-top: 2; margin-bottom: 1">This option is very much restricted to
+Linux distribution, like Fedora, that supports NSS patch for OpenSSH. You must
+make sure that OpenSSH client on your machine supports reading keys from NSS
+database.&nbsp;</p>
+<p style="line-height: 100%; margin-top: 2; margin-bottom: 1">&nbsp;</p>
+<blockquote>
+<p style="line-height: 100%; margin-top: 2; margin-bottom: 1"><b>Note</b>: T<b>his
+OpenSSH client option is not supported on Windows platform</b>.&nbsp;</p>
+<p style="line-height: 100%; margin-top: 2; margin-bottom: 1"><b>Note:</b> Maybe
+one common option for all platforms is to use NSS-patched version of nxssh
+(which is part of nxclient) when it is available. NX-client is available on
+Linux/Mac/Windows platforms.&nbsp;</p>
+</blockquote>
+<ol>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Do
+    &quot;<font face="Courier New"><b>Tools</b></font>&quot; --&gt; &quot;<font face="Courier"><b>Add On</b></font>&quot; to open the Add-On dialog window</li>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Select the
+    entry for &quot;<b>Key Manager</b>&quot; Add-On&nbsp;</li>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Click on the
+    &quot;<font face="Courier New"><b>Options</b></font>&quot;&nbsp; (or <font face="Courier New"><b>Preferences</b></font>) button to open Preferences dialog
+    window</li>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Select the
+    &quot;<font face="Courier"><b>SSH Client</b></font>&quot; tab to display a list of options&nbsp;</li>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Check the
+    checkbox &quot;<font face="Courier New"><b>Enable OpenSSH-2 Client</b></font>&quot;;&nbsp;</li>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Edit the '<font face="Courier New"><b>SHELL
+    Command Path</b></font>' if your platform does not support '<font face="Courier New">bash</font>'</li>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Edit the '<font face="Courier New"><b>Terminal
+    Command Pat</b>h</font>' to your preferred terminal command; The SSH-client is
+    tested with following terminal commands: <font face="Courier New"><b>xterm</b>,
+    <b>
+    gnome-terminal</b> and <b> konsole</b></font>.</li>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Edit the '<font face="Courier New"><b>OpenSSH-2
+    Command Path</b></font>' to path for your preferred '<font face="Courier New"><b>openssh</b></font>'
+    executable. You must test selected <font face="Courier New"><b>openssh</b></font>
+    executable for accessing keys from&nbsp; NSS DB. You can use the following
+    command to test the support for NSS in openssh : <font face="Courier New"><b>openssh
+    -o 'usenss yes'</b> <b> localhost</b></font>. For more info, locate and read the <font face="Courier New">README.nss</font>
+    file which is part of the NSS-patched&nbsp; opnessh distribution.&nbsp;</li>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Close the
+    dialog windows&nbsp;</li>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Restart
+    Browser&nbsp;</li>
+</ol>
+<p style="line-height: 100%; margin-top: 2; margin-bottom: 1">You can open the <b>OpenSSH
+Client</b> dialog window either from the browser's <b> Tools</b> menu or from the
+<b>
+KeyManager</b> tool :</p>
+<ul>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1"><font face="Courier New"><b>Tools
+    -&gt; Key Manager Tool Box -&gt; OpenSSH Client&nbsp;</b></font></li>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1"><font face="Courier New"><b>Tools
+    -&gt; Key Manager Tool Box -&gt; Key Manager -&gt; OpenSSH Client</b></font></li>
+</ul>
+<div align="center">
+  <center>
+  <table border="1" cellpadding="12" width="38%">
+    <tr>
+      <td width="100%"><img border="0" src="images/KeyManager_OpenSSH_ClientDialog.png"></td>
+    </tr>
+  </table>
+  </center>
+</div>
+<p style="line-height: 100%; margin-top: 2; margin-bottom: 1">&nbsp;</p>
+<p style="line-height: 100%; margin-top: 2; margin-bottom: 1">&nbsp;</p>
+<p style="line-height: 100%; margin-top: 2; margin-bottom: 1">You can also use
+the &quot;<font face="Courier New"><b>Export</b></font>&quot; button of the <b> KeyManager</b> tool to generate public-key
+string used in the <font face="Courier New">$HOME/.ssh/authorized_keys</font> file on the server side.&nbsp;</p>
+<ul>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1"><font face="Courier New"><b>Tools
+    -&gt; Key Manager Tool Box -&gt; key Manager -&gt; Export -&gt; OpenSSH2
+    Public Key.</b></font></li>
+</ul>
+    <h3 style="line-height: 100%; margin-top: 2; margin-bottom: 1">&nbsp;</h3>
+    <h3 style="line-height: 100%; margin-top: 2; margin-bottom: 1">&nbsp;</h3>
+    <h3 style="line-height: 100%; margin-top: 2; margin-bottom: 1">Enable the
+    Java Keystore manger tool options :&nbsp;</h3>
+<p class="MsoNormal"><span style="mso-bookmark: CAProfile_SignServerCert">This
+option allows you&nbsp; to use Key Manager to sign certificates in Java key
+stores. The tool will allow you to select the key/certificates in Java key store
+using the alias and do all that is necessary to sign the certificate using the
+CA's key in browser's certificate DB. It will extract a PKCS#10 CSR using, then
+sign the certificate using Key Manager's certificate signing tool and then
+import back into the Java key store.&nbsp;</span></p>
+<p class="MsoNormal"><span style="mso-bookmark: CAProfile_SignServerCert"><b><i>Note</i>:
+This feature is only supported on Linux/Mac-OSX platforms.&nbsp;</b></span></p>
+<ol>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Do
+    &quot;<font face="Courier New"><b>Tools</b></font>&quot; --&gt; &quot;<font face="Courier"><b>Add On</b></font>&quot; to open the Add-On dialog window</li>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Select the
+    entry for &quot;<b>Key Manager</b>&quot; Add-On&nbsp;</li>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Click on the
+    &quot;<font face="Courier New"><b>Options</b></font>&quot;&nbsp; (or <font face="Courier New"><b>Preferences</b></font>) button to open Preferences dialog
+    window</li>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Select the
+    &quot;<b>Key Manager Tool</b>&quot; tab to display a list of options&nbsp;</li>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Check the
+    checkbox for &quot;<b>Enable Java Keystore Cert</b>&quot;;</li>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Select the
+    &quot;<b>JKS Manage Cert Tool</b>&quot; tab to display a list of options&nbsp;</li>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Edit the '<font face="Courier New"><b>SHELL
+    Command&quot; </b> Path</font> if your platform does not support '<font face="Courier New">bash</font>'</li>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Edit the 'J<b>AVA_HOME</b>'
+    path&nbsp;</li>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Edit the '<font face="Courier New"><b>Java
+    Version</b></font>'&nbsp;</li>
+</ol>
+<p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Note: f
+        the <b>SHELL</b> and <b>JAVA_HOME</b> environment variable is already
+        set, then preference will be automatically set to those values.&nbsp;
+<ol>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Open Java Key
+    store Manger Wizard&nbsp;&nbsp;<p style="line-height: 100%; margin-top: 2; margin-bottom: 1"><b><font face="Courier New">Tools --&gt; Key Manager Tool Box --&gt;
+    Manage Certs in Java Key store</font></b><p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Alternatively,<p style="line-height: 100%; margin-top: 2; margin-bottom: 1"><b>Toolbar</b>
+    for KeyManager --&gt; Open the menu in &quot;<b>Security Devices</b>&quot;
+    --&gt; select the &quot;<b>Manage certs in JKS</b>&quot; menu item&nbsp;<p style="line-height: 100%; margin-top: 2; margin-bottom: 1">&nbsp;</li>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Specify&nbsp; the
+    key store parameter&nbsp; using the browse button :
+    <ul>
+      <li>
+        <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">&quot;Key
+        Store&quot; file path (use the browse button to select an existing file
+        or location of new file&quot;; if you want to create new Keystore, then
+        check the &quot;New&quot; checkbox and then select browse to select the
+        location and name of the file</li>
+      <li>
+        <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Key store
+        type&nbsp;</li>
+      <li>
+        <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Key store
+        password&nbsp;</li>
+      <li>
+        <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Type of
+        task - generate a new key-pair and then sign it, sign a certificate for
+        an existing key-pair or import X.509 certificate</li>
+      <li>
+        <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">&nbsp;</li>
+    </ul>
+<p style="line-height: 100%; margin-top: 2; margin-bottom: 1">&nbsp;</p>
+<div align="center">
+  <center>
+  <table border="1" cellpadding="12" width="38%">
+    <tr>
+      <td width="100%"><img border="0" src="images/KeyManager_JKS_SelectKeyStore.png" width="850" height="450"></td>
+    </tr>
+  </table>
+  </center>
+</div>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">&nbsp;</li>
+</ol>
+
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">&nbsp;</p>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">&nbsp;</p>
+    <h4 style="line-height: 100%; margin-top: 2; margin-bottom: 1"><b>Launch CRL
+    Signing Tool</b>:</h4>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">The
+    CRL signing tool overlays a set of buttons on top of browser's existing CRL
+    Manager. The CRL signing tool provides XUL GUI
+    for what you can do using the command-line '<a href="http://www.mozilla.org/projects/security/pki/nss/tools/crlutil.html"><font face="Courier New">crlutil</font></a>'
+    tool of <a href="http://www.mozilla.org/projects/security/pki/nss/">Moizlla-NSS</a>.&nbsp;</p>
+<div align="center">
+  <center>
+  <table border="1" cellpadding="12" width="38%">
+    <tr>
+      <td width="100%"><img border="0" src="images/KeyManager_CRLSignTool_Overlay.png"></td>
+    </tr>
+  </table>
+  </center>
+</div>
+<p>You can launch the CRL Signing tool as follows:</p>
+<ul>
+  <li>&quot;<b>Tools</b> --&gt; <b>Key Manager Tool Box</b> --&gt; <b>KeyManager</b>&quot;
+    and&nbsp;</li>
+  <li>select the &quot;<b>Your Keys</b>&quot; tab and&nbsp;</li>
+  <li>finally click on the &quot;<b>CRL Manager</b>&quot; button to open the
+    browser's CRL Manager dialog window.</li>
+</ul>
+<p>In that window you will see a set of buttons within a red rectangular box.
+These buttons can be used to <i><b>create</b></i>, <b><i>view</i></b>, <i><b>modify</b></i>,
+<i><b>export</b></i> and <b><i>load</i></b> CRLs.&nbsp;</p>
+<p>The &quot;Create&quot; dialog will filter and present only those CA
+certificates that have private key in browser's Cert-DB.</p>
+<font SIZE="2">
+<p>&nbsp;</p>
+<h4 style="line-height: 100%; margin-top: 2; margin-bottom: 1"><b>Signing of
+Update Manifest (update.rdf) file </b>:</h4>
+</font>
+<p style="line-height: 100%; margin-top: 2; margin-bottom: 1">The Update Manifest
+can be signed using our XPI signing Tool. It uses the keys/certificate from
+browser's certificate database. Our tool can be considered as an alternative to
+the Mozilla's <a href="https://developer.mozilla.org/en/McCoy">McCoy</a> tool
+which requires you to use a keystore external to browser's certificate/key
+DB.&nbsp;</p>
+<font SIZE="2">
+<p style="line-height: 100%; margin-top: 2; margin-bottom: 1">&nbsp;</p>
+</font>
+<p style="line-height: 100%; margin-top: 2; margin-bottom: 1">The Signing of
+update manifest (update.rdf) file is a two-step process:&nbsp;</p>
+<ol>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">You add an
+    &quot;<a href="https://developer.mozilla.org/en/Install_Manifests#updateKey">updateKey</a>&quot;
+    element to the <a href="https://developer.mozilla.org/en/Install_Manifests">install.rdf</a>
+    file. The <a href="https://developer.mozilla.org/en/Install_Manifests#updateKey">updateKey</a>
+    is the base-64 formatted public key of the signing certificate.&nbsp;</li>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Sign the <a href="https://developer.mozilla.org/User:Andreas_Wuest/Update_Manifests">update.rdf
+    </a>file using the private key associated with the public-key in the <font face="Courier New">
+    updateKey</font> element of the <font face="Courier New"> install.rdf</font> file.</li>
+</ol>
+<font SIZE="2">
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">&nbsp;
+</font>
+<ol>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Open Archive
+    file signing dialog window (<b>Tools --&gt; Key Manager Tool Box --&gt;
+    Archive File (XPI) Signing Tool </b>)</li>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Select the
+    &quot;<b>Sign Update RDF</b>&quot; tab&nbsp;</li>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Select the
+    &quot;<b>Add/Modify Update Key</b>&quot; tab</li>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Enter the path
+    to the <font face="Courier New"> install.rdf </font> file - it could be an <b>XPI</b> file that contains the
+    install.rdf, a <b>directory</b> or <b>file</b> path of the install.rdf
+    file.&nbsp;</li>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Information
+    related to the <i><font face="Courier New">updateURL</font></i> and <i><font face="Courier New">updateKey</font></i> elements will be
+    displayed</li>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Check the
+    &quot;<b>Modify</b>&quot; option to add/modify the updateKey element if it
+    the checkbox is visible</li>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Click the
+    &quot;<b>Add Update Key</b>&quot; or &quot;<b>Modify Update Key</b>&quot;.&nbsp;
+<font SIZE="2">
+<p style="line-height: 100%; margin-top: 2; margin-bottom: 1">&nbsp;</li>
+</font>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Select the
+    &quot;<b>Sign Update RDF</b>&quot; tab</li>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Choose or
+    enter&nbsp; the &quot;Update RDF file&quot;&nbsp;</li>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Information
+    about the &quot;Target Apps&quot; (i.e. Firefox, Thunderbird, etc.) will be
+    displayed&nbsp;</li>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">If the <b>Update
+    Link</b> URL is non-HTTPS then you have to enter the path to the <b>XPI file</b>
+    for computation of the value for the &quot;<b>updateHash</b>&quot; element -
+    the values of the <b>updateHash</b> element is automatically computed based
+    on the selected <b>Hash Algorithm</b> or it can computed by clicking on the
+    &quot;<b>Compute Hash</b>&quot; button</li>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">The &quot;<b>Singing
+    cert</b>&quot; is pre-selected based on the updateKey in the install.rdf
+    file&nbsp;</li>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Click the
+    &quot;<b>Sign</b>&quot; button - the value of the signature element will be
+    displayed&nbsp;</li>
+  <li>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">Optionally,
+    you click the <b>Verify</b> button to check the validity of the signature</li>
+</ol>
+<font SIZE="2">
+<p>&nbsp;</p>
+</font>
+<h3 style="line-height: 100%; margin-top: 2; margin-bottom: 1"><a href="HOWTO_SETUP_PersonalCA.html">How to Use
+Key Manager Tool As Personal CA</a></h3>
+<p style="line-height: 100%; margin-top: 2; margin-bottom: 1">&nbsp;</p>
+<p style="line-height: 100%; margin-top: 2; margin-bottom: 1">&nbsp;</p>
+<p style="line-height: 100%; margin-top: 2; margin-bottom: 1">&nbsp;</p>
+<p style="line-height: 100%; margin-top: 2; margin-bottom: 1">&nbsp;</p>
+<p style="line-height: 100%; margin-top: 2; margin-bottom: 1">More to come in
+future ...&nbsp;</p>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">&nbsp;</p>
+<p class="MsoNormal" style="text-align: justify; text-indent: -9.0pt; mso-list: l21 level1 lfo28; tab-stops: list .25in; line-height: 100%; margin-left: .25in; margin-top: 2; margin-bottom: 0">&nbsp;
+       
+</p>
+       
+          <hr>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">&nbsp;</p>
+<h3 style="line-height: 100%; word-spacing: 0; margin-top: 0; margin-bottom: 0"><b>	<a name="RelatedInfo">Related&nbsp;
+Information</a></b>:&nbsp;</h3>
+<p style="line-height: 100%; word-spacing: 0; margin-top: 0; margin-bottom: 0">&nbsp;</p>
+<ol>
+  <li>
+    <p style="line-height: 100%; word-spacing: 0; margin-top: 0; margin-bottom: 0">Key
+    Manager Tool Firefox Add-on:&nbsp; <a href="https://addons.mozilla.org/en-US/firefox/addon/4471">https://addons.mozilla.org/en-US/firefox/addon/4471</a>.&nbsp;</li>
+  <li>
+    <p style="line-height: 100%; word-spacing: 0; margin-top: 0; margin-bottom: 0"><a href="http://pubs.research.avayalabs.com/pdfs/ALR-2006-044.pdf">Key Manager Tool – Firefox Add-on for Key Generation, Certificate Enrollment, CRL Signing and Identity and Authority
+    Delegation</a>, Avaya Labs Technical Report #
+    ALR-2006-044, October 2006.</li>
+  <li>
+    <p style="line-height: 100%; word-spacing: 0; margin-top: 0; margin-bottom: 0"><a href="http://pubs.research.avayalabs.com/pdfs/ALR-2007-023.pdf">On-Demand Provisioning of Proxy Certificate for Delegating Identity to Grid-based
+    Portals</a>, Avaya Labs Technical Report#
+    ALR-2007-023, July 2007.</li>
+  <li>
+    <p style="line-height: 100%; word-spacing: 0; margin-top: 0; margin-bottom: 0"><a href="HOWTO_SETUP_PersonalCA.html">How to Use
+    Key Manager Tool as Personal CA</a>, Avaya Labs Technical Report, February
+    2009.&nbsp;</li>
+</ol>
+<p style="line-height: 100%; word-spacing: 0; margin-top: 0; margin-bottom: 0">&nbsp;
+</p>
+<p style="line-height: 100%; word-spacing: 0; margin-top: 0; margin-bottom: 0">&nbsp;
+</p>
+<p style="line-height: 100%; word-spacing: 0; margin-top: 0; margin-bottom: 0">&nbsp;
+</p>
+<p style="line-height: 100%; word-spacing: 0; margin-top: 0; margin-bottom: 0">&nbsp;
+</p>
+    <p style="line-height: 100%; margin-top: 2; margin-bottom: 1">&nbsp;</p>
+<div align="left">
+  <table width="100%">
+    <tr>
+      <td width="100%"><font face="Trade Gothic, Verdana, Arial, Helvetica, sans-serif"><small> 
+        <SCRIPT language=JavaScript1.2>
+      <!--
+      if (Date.parse(document.lastModified) > 0) {
+        document.write('last modified: ' + document.lastModified);
+      }
+      //-->
+      </SCRIPT><BR/>
+        Contact: <a href="mailto:mazum@research.avayalabs.com">Subrata Mazumdar</a></small></font></td>
+    </tr>
+  </table>
+</div>
+</BODY></HTML>

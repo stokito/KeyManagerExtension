@@ -1,0 +1,1281 @@
+<?xml version="1.0"?>
+<!-- @(#) $Id: x509v3certificate.xml,v 1.40 2012/10/03 23:09:41 subrata Exp $ -->
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is Avaya Labs Research, Avaya Inc. Code.
+   -
+   - The Initial Developer of the Original Code is
+   - Subrata Mazumdar, Avaya Labs Research, Avaya Inc.
+   - Portions created by the Initial Developer are Copyright (C) 2007.
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Subrata Mazumdar (mazum@avaya.com)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+
+<!DOCTYPE bindings SYSTEM "chrome://keymanager/locale/keyManager.dtd">
+
+<bindings id="x509v3certificateBindings"
+    xmlns="http://www.mozilla.org/xbl"
+    xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    xmlns:xbl="http://www.mozilla.org/xbl">
+
+
+    <binding id="x509v3certificateBinding"
+	extends="chrome://keymanager/content/ExtnXBL/certextn.xml#certextnbaseBinding"
+	>
+	<resources>
+	<!--
+    	    <script type="application/x-javascript" src="chrome://keymanager/content/BrowserPrefUtil.js"/>
+	    <stylesheet src="chrome://keymanager/skin/kmbindings.css"/>
+	-->
+	</resources>
+		      <!--
+		    <children includes="tab"/>
+		      -->
+	<!-- content, property, method and event descriptions go here -->
+	<content>
+	    <xul:tabbox anonid="keymgr.cert.csr.form.tabbox" flex="1">
+		<xul:tabs anonid="keymgr.cert.csr.form.tabs" xflex="1" xalign="start">
+		    <xul:tab anonid="keymgr.cert.csr.form.tab.params"
+			xbl:inherits="hidden=paramhidden"
+			label="&keymgr.cert.csr.form.tab.basic.title;"
+			/>
+		    <xul:tab anonid="keymgr.cert.csr.form.tab.x509v1cert"
+			xbl:inherits="hidden=x509v1certhidden"
+			label="&keymgr.cert.csr.form.tab.general.title;"
+			/>
+		    <xul:tab anonid="keymgr.cert.csr.form.tab.stdx509ext"
+			xbl:inherits="hidden=stdx509exthidden"
+		      	label="&keymgr.cert.csr.form.tab.stdx509ext.title;"
+			/>
+		    <xul:tab anonid="keymgr.cert.csr.form.tab.nsx509ext"
+			xbl:inherits="hidden=nsx509exthidden"
+			label="&keymgr.cert.csr.form.tab.nsx509ext.title;"
+			/>
+		    <xul:tab anonid="keymgr.cert.csr.form.tab.proxyx509ext"
+			xbl:inherits="hidden=proxyx509exthidden"
+			label="&keymgr.cert.csr.form.tab.proxyx509ext.title;"
+			/>
+		        <xul:toolbarbutton anonid="keymgr.cert.csr.form.tabs.cmd.basic"
+			    xbl:inherits="hidden=paramhidden"
+			    label="&keymgr.cert.csr.form.tab.cmd.basic.title;"
+			    oncommand="getBindingParent(this).showBasicCSRForm(this, event);"
+		    	    />
+		        <xul:toolbarbutton anonid="keymgr.cert.csr.form.tabs.cmd.advanced"
+			    xbl:inherits="hidden=paramhidden"
+			    label="&keymgr.cert.csr.form.tab.cmd.advanced.title;"
+			    oncommand="getBindingParent(this).showAdvancedCSRForm(this, event);"
+		    	    />
+		</xul:tabs>
+		    <!--
+		    <hbox pack="start"
+		        >
+		    </hbox>
+		    <xul:tab anonid="keymgr.cert.csr.form.tab.cmd.basic"
+			xbl:inherits="hidden=paramhidden"
+			label="&keymgr.cert.csr.form.tab.cmd.basic.title;"
+			oncommand="getBindingParent(this).showBasicCSRForm(this, event);"
+			/>
+		    <xul:tab anonid="keymgr.cert.csr.form.tab.cmd.advanced"
+			xbl:inherits="hidden=paramhidden"
+			label="&keymgr.cert.csr.form.tab.cmd.advanced.title;"
+			hidden="true"
+			oncommand="getBindingParent(this).showAdvancedCSRForm(this, event);"
+			/>
+		    -->
+		<xul:tabpanels anonid="keymgr.cert.csr.form.tabpanels" flex="1">
+		    <xul:tabpanel
+			flex="1"
+		    	xposition="1"
+			>
+			<xul:vbox anonid="keymgr.cert.csr.form.tabpanel.params.vbox" flex="1"
+			    style="overflow:auto; height:600px;"
+			    >
+			    <xul:hbox
+			        align="start"
+			        pack="start"
+				>
+			        <xul:checkbox anonid="keymgr.cert.csr.form.tabpanel.x509cert.params.selfsignoption"
+				    xbl:inherits="checked=selfsigncert,hidden=selfsigncerthidden"
+		                    label="Is Self-Sign?"
+			            checked="true"
+				    oncommand="getBindingParent(this).isSelfSignOptionParamChanged(this, event);"
+			            /> 
+			    </xul:hbox>
+			    <xul:selfsignedcertgenparams anonid="keymgr.cert.csr.form.tabpanel.x509cert.params.selfsign"
+				xbl:inherits="profile,profilehidden,profiledisabled,profiletooltip,profilepathtooltip,profilepathbrowsetooltip,profilepathwidth,customprofilepath,profilecertnickname,profilecerttokentype,profiletokentypehidden,profilecerttype,profilecertusage,profilecertusagehidden,profileusagecaonly,profileusagenoncaonly,profilecertviewhidden,profilecertsubject,profilecertspki,profilecertall,profilecertx509v3extns"
+				profilecerttype="user"
+				profilecertspki="true"
+				profilecertx509v3extns="true"
+			        oncommand="getBindingParent(this).handleSignCertParamChange(this, event)"
+			        onchange="getBindingParent(this).handleSignCertParamChange(this, event)"
+			        />
+			    <xul:signothercertparams anonid="keymgr.cert.csr.form.tabpanel.x509cert.params.signothercert"
+				xbl:inherits="isproxysigning,isproxysigninghidden,iscacert,iscacerthidden,signertokentype,signercerttype,signercertusage,signercertusagehidden,signercertusagedisabled,signeralias,profile,profilehidden,profiledisabled,profiletooltip,profilepathtooltip,profilepathbrowsetooltip,profilepathwidth,customprofilepath,profilecertnickname,profilecerttokentype,profiletokentypehidden,profilecerttype,profilecertusage,profilecertusagehidden,profileusagecaonly,profileusagenoncaonly,profilecertviewhidden,profilecertsubject,profilecertspki,profilecertall,profilecertx509v3extns,csrdatasourcefile,csrdatasourcecert,csrdatasourcebase64,csrdatasourceobj"
+				collapsed="true"
+				profilecerttype="server"
+			        oncommand="getBindingParent(this).handleSignCertParamChange(this, event)"
+			        onchange="getBindingParent(this).handleSignCertParamChange(this, event)"
+			        />
+		    	</xul:vbox>
+		    </xul:tabpanel>
+		    <xul:tabpanel
+			flex="1"
+		    	xposition="2"
+			>
+			<xul:vbox anonid="keymgr.cert.csr.form.tabpanel.v1cert.vbox" flex="1"
+			    style="overflow:auto; height:600px;"
+			    >
+			    <xul:x509v1certificate anonid="keymgr.cert.csr.form.tabpanel.x509cert.v1cert"
+			        />
+		    	</xul:vbox>
+		    </xul:tabpanel>
+		    <xul:tabpanel
+			flex="1"
+		    	xposition="3"
+			>
+			<xul:vbox anonid="keymgr.cert.csr.form.tabpanel.x509cert.std.ext.vbox" flex="1"
+			    style="overflow:auto; height:600px;"
+			    >
+			    <xul:x509certstdextensions anonid="keymgr.cert.csr.form.tabpanel.x509cert.std.extensions"
+			        />
+			</xul:vbox>
+		    </xul:tabpanel>
+		    <xul:tabpanel
+			flex="1"
+		    	xposition="4"
+			>
+			<xul:vbox anonid="keymgr.cert.csr.form.tabpanel.x509cert.ns.ext.vbox" flex="1"
+			    style="overflow:auto; height:600px;"
+			    >
+			    <xul:x509certnsextensions anonid="keymgr.cert.csr.form.tabpanel.x509cert.ns.extensions"
+			        />
+			</xul:vbox>
+		    </xul:tabpanel>
+		    <xul:tabpanel
+			flex="1"
+		    	xposition="5"
+			>
+			<xul:vbox anonid="keymgr.cert.csr.form.tabpanel.x509cert.proxy.ext.vbox" flex="1"
+			    style="overflow:auto; height:600px;"
+			    >
+			    <xul:x509certproxyextensions anonid="keymgr.cert.csr.form.tabpanel.x509cert.proxy.extensions"
+			        />
+			</xul:vbox>
+		    </xul:tabpanel>
+		</xul:tabpanels>
+	    </xul:tabbox>
+	</content>
+		    <!--
+		    <xul:tabpanel position="6" flex="1">
+			<xul:vbox anonid="keymgr.cert.csr.form.tabpanel.cmd.basic" flex="1"/>
+		    </xul:tabpanel>
+		    <xul:tabpanel position="7" flex="1">
+			<xul:vbox anonid="keymgr.cert.csr.form.tabpanel.cmd.advanced" flex="1"/>
+		    </xul:tabpanel>
+		    -->
+
+	<!--
+		    <children includes="tabpanel"/>
+		    TODO: Add separate tab for proxy certificate extensions
+	-->
+
+	<implementation>
+	    <field name="mTabboxElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.cert.csr.form.tabbox");
+	    </field>
+	    <field name="mTabsElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.cert.csr.form.tabs");
+	    </field>
+	    <field name="mTabPrimaryElem">
+	    </field>
+	    <field name="mTabCertParamElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.cert.csr.form.tab.params");
+	    </field>
+	    <field name="mTabSelfSignedCertParamsElem">
+		this.mTabCertParamElem
+	    </field>
+	    <field name="mTabCertv1AttributesElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.cert.csr.form.tab.x509v1cert");
+	    </field>
+	    <field name="mTabStdExtensionsElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.cert.csr.form.tab.stdx509ext");
+	    </field>
+	    <field name="mTabNSExtensionsElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.cert.csr.form.tab.nsx509ext");
+	    </field>
+	    <field name="mTabProxyExtensionsElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.cert.csr.form.tab.proxyx509ext");
+	    </field>
+	    <!--
+	    <field name="mTabCmdBasicElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.cert.csr.form.tab.cmd.basic");
+	    </field>
+	    <field name="mTabCmdAdvancedElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.cert.csr.form.tab.cmd.advanced");
+	    </field>
+	    -->
+	    <field name="mTabsCmdBasicElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.cert.csr.form.tabs.cmd.basic");
+	    </field>
+	    <field name="mTabsCmdAdvancedElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.cert.csr.form.tabs.cmd.advanced");
+	    </field>
+	    <field name="mTabpanelsElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.cert.csr.form.tabpanels");
+	    </field>
+	    <field name="mIsSelfSignOptionParamElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.cert.csr.form.tabpanel.x509cert.params.selfsignoption");
+	    </field>
+	    <field name="mSelfSignedCertParamsElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.cert.csr.form.tabpanel.x509cert.params.selfsign");
+	    </field>
+	    <field name="mSignOtherCertParamsElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.cert.csr.form.tabpanel.x509cert.params.signothercert");
+	    </field>
+	    <field name="mSignCertParamsElem">
+	    </field>
+	    <field name="mX509v1CertElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.cert.csr.form.tabpanel.x509cert.v1cert");
+	    </field>
+	    <field name="mX509CertStdExtenionsElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.cert.csr.form.tabpanel.x509cert.std.extensions");
+	    </field>
+	    <field name="mX509CertNSExtenionsElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.cert.csr.form.tabpanel.x509cert.ns.extensions");
+	    </field>
+	    <field name="mX509CertProxyExtenionsElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.cert.csr.form.tabpanel.x509cert.proxy.extensions");
+	    </field>
+
+	    <property name="readonly"
+		onget="return this.hasAttribute('readonly');"
+		onset="if (val) this.setAttribute('readonly',true);
+		       else this.removeAttribute('readonly');
+		       this.mSignCertParamsElem.readonly=val;
+		       this.mX509v1CertElem.readonly=val;
+		       this.mX509CertStdExtenionsElem.readonly=val;
+		       this.mX509CertNSExtenionsElem.readonly=val;
+		       this.mX509CertProxyExtenionsElem.readonly=val;
+		       return val;"
+		/>
+	    <property name="signCertParams" readonly="true"
+		onget="return this.mSignCertParamsElem;"
+		/>
+
+	    <property name="customProfilePath"
+		onget="return this.mSignCertParamsElem.customProfilePath;"
+		onset="this.mSignCertParamsElem.customProfilePath=val;
+		       return val;"
+		/>
+	    <property name="profilecert"
+		onget="return this.mSignCertParamsElem.profilecert;"
+		onset="this.mSignCertParamsElem.profilecert=val;
+		       return val;"
+		/>
+	    <property name="profilexmldoc"
+		onget="return this.mSignCertParamsElem.profilexmldoc;"
+		onset="this.mSignCertParamsElem.profilexmldoc=val;
+		       return val;"
+		/>
+	    <property name="profilexmldata"
+		onget="return this.mSignCertParamsElem.profilexmldata;"
+		onset="this.mSignCertParamsElem.profilexmldata=val;
+		       return val;"
+		/>
+
+	    <constructor>
+		<![CDATA[
+		// this.mMaxLogLevel = 9;
+		this.LogTrace("x509v3certificateBinding.constructor():......................Start.");
+
+		this.refresh();
+
+		this.LogTrace("x509v3certificateBinding.constructor():......................End.");
+		]]>
+	    </constructor>
+
+	    <method name="refresh">
+		<body>
+		<![CDATA[
+		this.LogTrace("x509v3certificateBinding.refresh():......................Start.");
+
+		// Enable control for elements of Certificate in various tabs.
+		this.activateAll(true);
+
+		// Enable/Disable based on the attribute values
+		var disabledx509v3certtags = this.getAttribute("disabledx509v3certtags");
+		this.activateTaggedItemList(disabledx509v3certtags, false);
+
+		var disabledx509v1certtags = this.getAttribute("disabledx509v1certtags");
+		this.mX509v1CertElem.activateTaggedItemList(disabledx509v1certtags, false);
+
+		var disabledx509v3stdexttags = this.getAttribute("disabledx509v3stdexttags");
+		this.mX509CertStdExtenionsElem.activateTaggedItemList(disabledx509v3stdexttags, false);
+
+		var disabledx509v3proxyexttags = this.getAttribute("disabledx509v3proxyexttags");
+		this.mX509CertProxyExtenionsElem.activateTaggedItemList(disabledx509v3proxyexttags, false);
+
+		var disabledx509v3nsexttags = this.getAttribute("disabledx509v3nsexttags");
+		this.mX509CertNSExtenionsElem.activateTaggedItemList(disabledx509v3nsexttags, false);
+
+		var enabledx509v1certtags = this.getAttribute("enabledx509v1certtags");
+		this.mX509v1CertElem.activateTaggedItemList(enabledx509v1certtags, true);
+
+		var enabledx509v3stdexttags = this.getAttribute("enabledx509v3stdexttags");
+		this.mX509CertStdExtenionsElem.activateTaggedItemList(enabledx509v3stdexttags, true);
+
+		var enabledx509v3proxyexttags = this.getAttribute("enabledx509v3proxyexttags");
+		this.mX509CertProxyExtenionsElem.activateTaggedItemList(enabledx509v3proxyexttags, true);
+
+		var enabledx509v3nsexttags = this.getAttribute("enabledx509v3nsexttags");
+		this.mX509CertNSExtenionsElem.activateTaggedItemList(enabledx509v3nsexttags, true);
+
+
+		// Finally, initialize the parameters 
+		this.isSelfSignOptionParamChanged(this.mIsSelfSignOptionParamElem);
+
+                this.LogDebug("x509v3certificateBinding.refresh(): this.profile: " + this.getAttribute("profile") + "");
+
+		// Depeding upon paramhidden attribute show/hide the various tabs.
+		var hideParamTab = this.getAttribute("paramhidden");
+		if (hideParamTab) {
+		    // this.mTabCertParamElem.hidden = true;
+		    // this.mTabPrimaryElem = this.mTabCertv1AttributesElem;
+
+		    // this.showAdvancedCSRForm(this.mTabCmdAdvancedElem);
+		    this.showAdvancedCSRForm(this.mTabsCmdAdvancedElem);
+
+		    // Hide the basic tab too.
+		    // this.mTabCmdBasicElem.hidden = true;
+		    this.mTabsCmdBasicElem.hidden = true;
+
+		}
+		else {
+		    this.mTabPrimaryElem = this.mTabCertParamElem;
+		    // this.showBasicCSRForm(this.mTabCmdBasicElem);
+		    this.showBasicCSRForm(this.mTabsCmdBasicElem);
+		}
+
+
+		this.LogTrace("x509v3certificateBinding.refresh():......................End.");
+
+		]]>
+		</body>
+	    </method>
+
+	    <method name="initForNewSelfSignedCert">
+		<body>
+		<![CDATA[
+		this.LogTrace("x509v3certificateBinding.initForNewSelfSignedCert():...................Start.");
+
+		this.mSelfSignedCertParamsElem.reset();
+		this.reset();
+
+	    	this.setAttribute("selfsigncert", "true");
+	    	this.setAttribute("selfsigncmd", "new");
+	    	this.removeAttribute("paramhidden");
+	    	this.setAttribute("disabledx509v1certtags", "subject,x509certsubject,subjectpublickeyinfo");
+
+		this.refresh();
+
+		var subjAltNameProps = this.mSelfSignedCertParamsElem.getSubjectAltNameParamProps();
+		this.mX509CertStdExtenionsElem.updateCertProps(subjAltNameProps);
+
+		this.LogTrace("x509v3certificateBinding.initForNewSelfSignedCert():...................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="initForRenewSelfSignedCert">
+		<parameter name="aSelfSignCert"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("x509v3certificateBinding.initForRenewSelfSignedCert():...................Start.");
+
+		this.mSelfSignedCertParamsElem.reset();
+		this.reset();
+
+	    	this.setAttribute("profile", "noextensions");
+	    	this.setAttribute("selfsigncert", "true");
+	    	this.setAttribute("selfsigncmd", "renew");
+	    	this.setAttribute("disabledx509v1certtags", "subjectpublickeyinfo");
+	    	this.setAttribute("paramhidden", "true");
+
+		this.refresh();
+
+		if (!aSelfSignCert) {
+		    this.LogTrace("x509v3certificateBinding.initForRenewSelfSignedCert():...............End(1).");
+		    return;
+		}
+    		this.updateCert(aSelfSignCert);
+
+		this.LogTrace("x509v3certificateBinding.initForRenewSelfSignedCert():...................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="initForPkcs10CSR">
+		<parameter name="aSelfSignCert"/>
+		<body>
+		<![CDATA[
+		this.mSelfSignedCertParamsElem.reset();
+		this.reset();
+
+	    	this.setAttribute("profile", "noextensions");
+	    	this.setAttribute("selfsigncert", "true");
+	    	this.setAttribute("selfsigncmd", "pkcs10csr");
+	    	this.setAttribute("disabledx509v1certtags", "subjectpublickeyinfo");
+	    	this.setAttribute("paramhidden", "true");
+
+		this.refresh();
+		if (!aSelfSignCert) {
+		    return;
+		}
+    		this.updateCert(aSelfSignCert);
+		]]>
+		</body>
+	    </method>
+
+	    <method name="initForCASignedCert">
+		<parameter name="aSignerCert"/>
+		<parameter name="aCSRDataSourceObj"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("initForCASignedCert():...................Start.");
+
+		this.mSignOtherCertParamsElem.reset();
+		this.reset();
+
+	    	this.setAttribute("selfsigncert", "false");
+	    	this.setAttribute("isproxysigning", "false");
+	    	this.removeAttribute("paramhidden");
+	    	// this.setAttribute("disabledx509v1certtags", "subject,x509certsubject,subjectpublickeyinfo");
+	    	this.setAttribute("disabledx509v1certtags", "subject,subjectpublickeyinfo");
+
+		if (aCSRDataSourceObj) {
+		    if (aCSRDataSourceObj instanceof Components.interfaces.nsIX509Cert) {
+			var csrDataSourceCert = aCSRDataSourceObj.QueryInterface(Components.interfaces.nsIX509Cert);
+		    	this.mSignOtherCertParamsElem.csrdataobj = csrDataSourceCert;
+		    }
+		    else if (aCSRDataSourceObj instanceof Components.interfaces.nsIFile) {
+			var csrDataSourceFile = aCSRDataSourceObj.QueryInterface(Components.interfaces.nsIFile);
+		    	this.mSignOtherCertParamsElem.csrdataobj = csrDataSourceFile;
+		    }
+		}
+
+		if (aSignerCert) {
+		    this.mSignOtherCertParamsElem.signerCert = aSignerCert;
+		}
+		this.mSignOtherCertParamsElem.refresh();
+
+		this.refresh();
+
+		this.LogTrace("initForCASignedCert():...................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="initForCASignedCertWithCSRFile">
+		<parameter name="aSignerCert"/>
+		<parameter name="aPkcs10CSRInFilePath"/>
+		<parameter name="aIsCSRFileBase64"/>
+		<parameter name="aCertOutFilePath"/>
+		<parameter name="aIsCertFileAscii"/>
+		<parameter name="aIncludeIssuerCertChain"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("x509v3certificateBinding.initForCASignedCertWithCSRFile(): ................Start.");
+
+		this.mSignOtherCertParamsElem.reset();
+		this.reset();
+
+	    	this.setAttribute("selfsigncert", "false");
+	    	this.setAttribute("isproxysigning", "false");
+	    	this.removeAttribute("paramhidden");
+	    	// this.setAttribute("disabledx509v1certtags", "subject,x509certsubject,subjectpublickeyinfo");
+	    	this.setAttribute("disabledx509v1certtags", "subject,subjectpublickeyinfo");
+
+		dump("x509v3certificateBinding.initForCASignedCertWithCSRFile(): aIncludeIssuerCertChain: " + aIncludeIssuerCertChain + "\n");
+    		this.mSignOtherCertParamsElem.initForCASignedCertWithCSRFile(
+    			aSignerCert,
+			aPkcs10CSRInFilePath, aIsCSRFileBase64,
+			aCertOutFilePath, aIsCertFileAscii, aIncludeIssuerCertChain
+			);
+
+		this.refresh();
+
+		this.LogTrace("x509v3certificateBinding.initForCASignedCertWithCSRFile(): ................End.");
+		]]>
+		</body>
+	    </method>
+
+
+	    <method name="initForSignedProxyCert">
+		<parameter name="aSignerCert"/>
+		<parameter name="aCSRDataSourceObj"/>
+		<parameter name="aProxyCommonName"/>
+		<body>
+		<![CDATA[
+		// this.mMaxLogLevel = 9;
+		this.LogTrace("x509v3certificateBinding.initForSignedProxyCert(): ................Start.");
+
+		this.LogTrace("x509v3certificateBinding.initForSignedProxyCert(): aSignerCert: " + aSignerCert);
+		this.LogTrace("x509v3certificateBinding.initForSignedProxyCert(): aCSRDataSourceObj: " + aCSRDataSourceObj);
+		this.LogTrace("x509v3certificateBinding.initForSignedProxyCert(): aProxyCommonName: " + aProxyCommonName);
+
+		this.mSignOtherCertParamsElem.reset();
+		this.reset();
+		
+	    	this.setAttribute("selfsigncert", "false");
+	    	this.setAttribute("isproxysigning", "true");
+	    	this.removeAttribute("paramhidden");
+	    	this.setAttribute("disabledx509v1certtags", "subject,x509certsubject,subjectpublickeyinfo");
+	    	this.setAttribute("disabledx509v3certtags", "x509certnsextensions");
+	    	this.setAttribute("enabledx509v3nsexttags", "nscerttype");
+
+		if (aCSRDataSourceObj) {
+		    if (aCSRDataSourceObj instanceof Components.interfaces.nsIX509Cert) {
+			var csrDataSourceCert = aCSRDataSourceObj.QueryInterface(Components.interfaces.nsIX509Cert);
+			this.LogTrace("x509v3certificateBinding.initForSignedProxyCert(): csrDataSourceCert: " + csrDataSourceCert.nickname);
+		    	this.mSignOtherCertParamsElem.csrdataobj = csrDataSourceCert;
+		    }
+		    else if (aCSRDataSourceObj instanceof Components.interfaces.nsIFile) {
+			var csrDataSourceFile = aCSRDataSourceObj.QueryInterface(Components.interfaces.nsIFile);
+		    	this.mSignOtherCertParamsElem.csrdataobj = csrDataSourceFile;
+		    }
+		}
+		else {
+		    if (aProxyCommonName && (aProxyCommonName != "")) {
+		    	this.mSignOtherCertParamsElem.proxyCommonName = aProxyCommonName;
+		    }
+		}
+		if (aSignerCert) {
+		    this.mSignOtherCertParamsElem.signerCert = aSignerCert;
+		}
+		this.mSignOtherCertParamsElem.refresh();
+		this.refresh();
+
+		this.LogTrace("x509v3certificateBinding.initForSignedProxyCert(): ................End.");
+		// this.mMaxLogLevel = 4;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="initForSignedProxyCertWithCSRFile">
+		<parameter name="aSignerCert"/>
+		<parameter name="aPkcs10CSRInFilePath"/>
+		<parameter name="aIsCSRFileBase64"/>
+		<parameter name="aProxyCommonName"/>
+		<parameter name="aCertOutFilePath"/>
+		<parameter name="aIsCertFileAscii"/>
+		<parameter name="aIncludeIssuerCertChain"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("x509v3certificateBinding.initForSignedProxyCertWithCSRFile(): ................Start.");
+
+		this.mSignOtherCertParamsElem.reset();
+		this.reset();
+
+		
+	    	this.setAttribute("selfsigncert", "false");
+	    	this.setAttribute("isproxysigning", "true");
+	    	this.removeAttribute("paramhidden");
+	    	this.setAttribute("disabledx509v1certtags", "subject,x509certsubject,subjectpublickeyinfo");
+	    	this.setAttribute("disabledx509v3certtags", "x509certnsextensions");
+	    	this.setAttribute("enabledx509v3nsexttags", "nscerttype");
+
+		// dump("x509v3certificateBinding.initForSignedProxyCertWithCSRFile(): aIncludeIssuerCertChain: " + aIncludeIssuerCertChain + "\n");
+		
+    		this.mSignOtherCertParamsElem.initForSignedProxyCertWithCSRFile(
+    			aSignerCert,
+			aPkcs10CSRInFilePath, aIsCSRFileBase64,
+			aProxyCommonName,
+			aCertOutFilePath, aIsCertFileAscii, aIncludeIssuerCertChain
+			);
+
+		this.refresh();
+
+    		var subjectProps = Components.classes["@mozilla.org/persistent-properties;1"]
+                    			.createInstance(Components.interfaces.nsIPersistentProperties);
+		this.mSignOtherCertParamsElem.mSubjectElem.toCertProps(subjectProps);
+		// this.dumpProperties(subjectProps, "subjectProps");
+		this.mX509v1CertElem.updateSubjectCertProps(subjectProps);
+
+		this.LogTrace("x509v3certificateBinding.initForSignedProxyCertWithCSRFile(): ................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="isSelfSignOptionParamChanged">
+		<parameter name="aIsSelfSignOptionParamElem"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		// this.mMaxLogLevel = 9;
+		this.LogTrace("x509v3certificateBinding.isSelfSignOptionParamChanged(): ................Start.");
+
+		if (aIsSelfSignOptionParamElem.checked) {
+		    this.LogTrace("x509v3certificateBinding.isSelfSignOptionParamChanged(): ........10.");
+
+		    this.mSelfSignedCertParamsElem.collapsed = false;
+		    this.mSignOtherCertParamsElem.collapsed = true;
+		    this.mSignCertParamsElem = this.mSelfSignedCertParamsElem;
+
+		    this.mX509CertStdExtenionsElem.activateCertItem("basicconstraints", true);
+
+		    this.mX509CertStdExtenionsElem.activateCertItem("proxycert", false);
+		    this.mX509CertStdExtenionsElem.activateCertItem("vomsattrcertlist", false);
+		    this.mX509CertStdExtenionsElem.activateCertItem("globusamlassertion", false);
+
+		    this.mX509CertProxyExtenionsElem.activateTaggedItemList("proxycert,vomsattrcertlist,globusamlassertion", false);
+		    this.LogTrace("x509v3certificateBinding.isSelfSignOptionParamChanged(): ........18.");
+		}
+		else {
+		    this.LogTrace("x509v3certificateBinding.isSelfSignOptionParamChanged(): ........20.");
+
+		    this.mSelfSignedCertParamsElem.collapsed = true;
+		    this.mSignOtherCertParamsElem.collapsed = false;
+		    this.mSignCertParamsElem = this.mSignOtherCertParamsElem;
+
+		    if (this.mSignOtherCertParamsElem.isproxysigning) {
+		    	this.mX509CertStdExtenionsElem.activateCertItem("proxycert", false);
+		    	this.mX509CertStdExtenionsElem.activateCertItem("vomsattrcertlist", true);
+		    	this.mX509CertStdExtenionsElem.activateCertItem("globusamlassertion", true);
+		    }
+		    else {
+		    	this.mX509CertStdExtenionsElem.activateCertItem("proxycert", false);
+		    	this.mX509CertStdExtenionsElem.activateCertItem("vomsattrcertlist", false);
+		    	this.mX509CertStdExtenionsElem.activateCertItem("globusamlassertion", false);
+		    }
+		    this.mX509CertProxyExtenionsElem.activateTaggedItemList("proxycert,vomsattrcertlist,globusamlassertion", false);
+
+		    this.LogTrace("x509v3certificateBinding.isSelfSignOptionParamChanged(): ........28.");
+		}
+		this.LogTrace("x509v3certificateBinding.isSelfSignOptionParamChanged(): ........50.");
+
+		this.reset();
+		this.LogTrace("x509v3certificateBinding.isSelfSignOptionParamChanged(): ........60.");
+
+    		var /* nsIPersistentProperties */ signCertParamProps;
+    		signCertParamProps = Components.classes["@mozilla.org/persistent-properties;1"].
+                    		createInstance(Components.interfaces.nsIPersistentProperties);
+		if (this.mIsSelfSignOptionParamElem.checked) {
+		    this.LogTrace("x509v3certificateBinding.isSelfSignOptionParamChanged(): ........70.");
+		    this.activateDefaultSelfSignCertProfile();
+	    	    this.mSelfSignedCertParamsElem.toCertProps(signCertParamProps);
+
+		    this.initSignCertParamChange(this.mSelfSignedCertParamsElem, signCertParamProps, "selfsigncsr", null);
+		    this.LogTrace("x509v3certificateBinding.isSelfSignOptionParamChanged(): ........78.");
+		}
+		else {
+		    // this.activateDefaultSelfSignCertProfile();
+	    	    this.mSignOtherCertParamsElem.toCertProps(signCertParamProps);
+		    this.initSignCertParamChange(this.mSignOtherCertParamsElem, signCertParamProps, "isproxysign", null);
+		}
+
+		this.LogTrace("x509v3certificateBinding.isSelfSignOptionParamChanged(): ................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="mergeSignCertParam">
+		<parameter name="aCertProps"/>
+		<parameter name="aSourceTagName"/>
+		<parameter name="aMergeType"/>
+		<body>
+		<![CDATA[
+		if (this.mIsSelfSignOptionParamElem.checked) {
+		    this.initSignCertParamChange(this.mSelfSignedCertParamsElem, aCertProps, aSourceTagName, aMergeType);
+		}
+		else {
+		    this.initSignCertParamChange(this.mSignOtherCertParamsElem, aCertProps, aSourceTagName, aMergeType);
+		}
+		]]>
+		</body>
+	    </method>
+
+	    <method name="initSignCertParamChange">
+		<parameter name="aSignCertParamsElem"/>
+		<parameter name="aCertProps"/>
+		<parameter name="aSourceTagName"/>
+		<parameter name="aMergeType"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("x509v3certificateBinding.initSignCertParamChange(" + aSourceTagName + "): ................Start.");
+		// this.mX509v1CertElem.dumpProperties(aCertProps, "x509v3certificateBinding.initSignCertParamChange(): aCertProps");
+
+		if (aSourceTagName == "subject") {
+		    this.mX509v1CertElem.mergeCertProps(aCertProps);
+		}
+		else if (aSourceTagName == "subjectaltname") {
+		    this.mX509CertStdExtenionsElem.updateCertProps(aCertProps);
+		}
+		else if (aSourceTagName == "x509certprofile") {
+		    this.mSignCertParamsElem.updateCertProps(aCertProps);
+		    this.mSignCertParamsElem.toCertProps(aCertProps);
+		    this.updateCertProps(aCertProps);
+		}
+		else if (aSourceTagName == "isproxysign") {
+		    this.reset();
+		    this.LogDebug("x509v3certificateBinding.initSignCertParamChange(): this.mSignOtherCertParamsElem.isproxysigning: " + this.mSignOtherCertParamsElem.isproxysigning);
+
+		    if (this.mSignOtherCertParamsElem.isproxysigning) {
+		    	this.mX509CertStdExtenionsElem.activateCertItem("basicconstraints", false);
+
+		    	this.mX509CertStdExtenionsElem.activateCertItem("proxycert", true);
+		    	this.mX509CertStdExtenionsElem.activateCertItem("vomsattrcertlist", true);
+		    	this.mX509CertStdExtenionsElem.activateCertItem("globusamlassertion", true);
+		    }
+		    else {
+		    	this.mX509CertStdExtenionsElem.activateCertItem("basicconstraints", true);
+
+		    	this.mX509CertStdExtenionsElem.activateCertItem("proxycert", false);
+		    	this.mX509CertStdExtenionsElem.activateCertItem("vomsattrcertlist", false);
+		    	this.mX509CertStdExtenionsElem.activateCertItem("globusamlassertion", false);
+		    }
+		    this.mX509CertProxyExtenionsElem.activateTaggedItemList("proxycert,vomsattrcertlist,globusamlassertion", this.mSignOtherCertParamsElem.isproxysigning);
+
+		    this.mSignCertParamsElem.updateCertProps(aCertProps);
+		    // this.mSignCertParamsElem.toCertProps(aCertProps);
+		    this.updateCertProps(aCertProps);
+		}
+		else if (aSourceTagName == "casignercert") {
+		    // We import X.509 standard extension for CA signer cert
+		    if (aMergeType == "update") {
+		        if (this.mSignOtherCertParamsElem.isproxysigning) {
+		    	    this.mX509v1CertElem.updateCertProps(aCertProps);
+		    	    this.mX509CertProxyExtenionsElem.updateCertProps(aCertProps);
+			}
+		    	this.mX509CertStdExtenionsElem.updateCertProps(aCertProps);
+		    }
+		    else {
+		        if (this.mSignOtherCertParamsElem.isproxysigning) {
+		    	    this.mX509v1CertElem.mergeCertProps(aCertProps);
+		    	    this.mX509CertProxyExtenionsElem.mergeCertProps(aCertProps);
+			}
+		    	this.mX509CertStdExtenionsElem.mergeCertProps(aCertProps);
+		    }
+		}
+		else if (aSourceTagName == "proxysignercert") {
+		    // We import X.509 standard extensions, proxy cert info and subject 
+		    // from signer cert
+		    this.mX509v1CertElem.updateCertProps(aCertProps);
+		    this.mX509CertStdExtenionsElem.updateCertProps(aCertProps);
+		    this.mX509CertProxyExtenionsElem.updateCertProps(aCertProps);
+		}
+		else if (aSourceTagName == "pkcs10csrdata") {
+		    this.reset();
+		    this.mSignCertParamsElem.updateCertProps(aCertProps);
+		    // this.mSignCertParamsElem.toCertProps(aCertProps);
+		    this.updateCertProps(aCertProps);
+		}
+		else {
+		    this.mX509v1CertElem.mergeCertProps(aCertProps);
+		}
+
+		this.LogTrace("x509v3certificateBinding.initSignCertParamChange(" + aSourceTagName + "): ................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="handleSignCertParamChange">
+		<parameter name="aSignCertParamsElem"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("x509v3certificateBinding.handleSignCertParamChange(): ................Start.");
+
+		if (!ev) {
+		    return;
+		}
+		var modifiedCertProps = ev.certProps;
+		if (!modifiedCertProps) {
+		    return;
+		}
+
+		this.initSignCertParamChange(aSignCertParamsElem, modifiedCertProps, ev.sourcetagname, ev.mergetype);
+
+		this.LogTrace("x509v3certificateBinding.handleSignCertParamChange(): ................End.");
+		return;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="activateSelfSignCertProfile">
+		<parameter name="aExtnProfileType"/>
+		<parameter name="aCustomExtnProfileFilePath"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("x509v3certificateBinding.activateSelfSignCertProfile(" + aExtnProfileType + "): ................Start.");
+
+		this.mSignCertParamsElem.activateCertProfile(aExtnProfileType, aCustomExtnProfileFilePath);
+		var certProps = this.mSignCertParamsElem.getExtnProfileProps();
+		this.updateCertProps(certProps);
+
+		this.LogTrace("x509v3certificateBinding.activateSelfSignCertProfile(): ................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="activateDefaultSelfSignCertProfile">
+		<parameter name="aNewCert"/>
+		<body>
+		<![CDATA[
+
+		this.LogTrace("x509v3certificateBinding.activateDefaultSelfSignCertProfile(): ................Start.");
+
+		// var profileType = "noextensions";
+		// var profileType = "sig_dataencipherment";
+		// var profileType = "dataencipherment";
+		// var profileType = "basicconstraints";
+
+		var profileType = this.getAttribute("profile");
+		this.LogDebug("x509v3certificateBinding.activateDefaultSelfSignCertProfile(): profile: " + profileType + "");
+		if (!profileType) {
+		    profileType = "basicconstraints";
+		    if (aNewCert) {
+		        profileType = "sig_dataencipherment";
+		    }
+		}
+		this.activateSelfSignCertProfile(profileType);
+
+		this.LogTrace("x509v3certificateBinding.activateDefaultSelfSignCertProfile(): ................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="validateParams">
+		<body>
+		<![CDATA[
+		this.LogTrace("x509v3certificateBinding.validateParams(): ................Start.");
+
+		// Validate params only for self-signed certificates.
+		if (this.mIsSelfSignOptionParamElem.checked) {
+            	    var alias = this.mSelfSignedCertParamsElem.alias;
+            	    var commonName = this.mSelfSignedCertParamsElem.commonName;
+            	    var uid = this.mSelfSignedCertParamsElem.uid;
+            	    var subjectDNSuffix = this.mSelfSignedCertParamsElem.subjectDNSuffix;
+            	    var subjectDN = this.mSelfSignedCertParamsElem.subjectDN;
+
+    	    	    if ((alias == "") || (subjectDN == "") || ((commonName == "") && (uid == "") && (subjectDNSuffix == ""))) {
+			this.LogError("x509v3certificateBinding.validateParams(): Inavalid/Incomplete subject RDN values - may be alias, commonName, or subject values are missing.");
+		    	return false;
+		    }
+		    return true;
+		}
+
+		this.LogTrace("x509v3certificateBinding.validateParams(): ................End.");
+		return true;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="hideCertExtensionTabs">
+		<body>
+		<![CDATA[
+		var isProxySigning = (!this.mIsSelfSignOptionParamElem.checked && this.mSignOtherCertParamsElem.isproxysigning);
+		this.displayAdvancedCertTabs(false, false, isProxySigning);
+		]]>
+		</body>
+	    </method>
+
+	    <method name="showCertExtensionTabs">
+		<body>
+		<![CDATA[
+		var isProxySigning = (!this.mIsSelfSignOptionParamElem.checked && this.mSignOtherCertParamsElem.isproxysigning);
+		this.displayAdvancedCertTabs(true, false, isProxySigning);
+		]]>
+		</body>
+	    </method>
+
+	    <method name="displayAdvancedCertTabs">
+		<parameter name="show"/>
+		<parameter name="aIncludeGeneralTab"/>
+		<parameter name="aIsProxySigning"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("x509v3certificateBinding.displayAdvancedCertTabs(): .............Start.");
+		// dump("x509v3certificateBinding.displayAdvancedCertTabs(): aIsProxySigning: " + aIsProxySigning + "\n");
+
+		if (show) {
+		    this.LogTrace("x509v3certificateBinding.displayAdvancedCertTabs(): .............20.");
+		    if (aIncludeGeneralTab) {
+			this.mTabCertv1AttributesElem.hidden = false;
+		    }
+		    this.mTabStdExtensionsElem.hidden = false;
+		    this.mTabNSExtensionsElem.hidden = false;
+		    this.mTabProxyExtensionsElem.hidden = !aIsProxySigning;
+		}
+		else {
+		    this.LogTrace("x509v3certificateBinding.displayAdvancedCertTabs(): .............10.");
+		    if (aIncludeGeneralTab) {
+			this.mTabCertv1AttributesElem.hidden = true;
+		    }
+		    this.mTabNSExtensionsElem.hidden = true;
+		    this.mTabStdExtensionsElem.hidden = true;
+		    this.mTabProxyExtensionsElem.hidden = true;
+		}
+		this.LogTrace("x509v3certificateBinding.displayAdvancedCertTabs(): .............End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="showBasicCSRForm">
+		<parameter name="aTabsCmdBasicElem"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("x509v3certificateBinding.showBasicCSRForm(): .............Start.");
+		if (ev) {
+		    ev.stopPropagation();
+		}
+
+		// Hide the basic tab
+		// this.mTabCmdBasicElem.hidden = true;
+		this.mTabsCmdBasicElem.hidden = true;
+
+		// Show the Advanced tab
+		// this.mTabCmdAdvancedElem.hidden = false;
+		this.mTabsCmdAdvancedElem.hidden = false;
+
+		this.LogTrace("x509v3certificateBinding.showBasicCSRForm(): this.mTabPrimaryElem : " + this.mTabPrimaryElem + "");
+		this.LogDebug("x509v3certificateBinding.showBasicCSRForm(): this.mTabCertv1AttributesElem : " + this.mTabCertv1AttributesElem + "");
+		// Select the Basic Profile tab just to make sure that
+		// we do not land up with the only advanced tab.
+		if (this.mTabPrimaryElem) {
+		    this.mTabboxElem.selectedTab = this.mTabPrimaryElem;
+		}
+		else {
+		    this.mTabboxElem.selectedTab = this.mTabCertv1AttributesElem;
+		}
+
+		this.LogTrace("x509v3certificateBinding.showBasicCSRForm(): .............10.");
+		
+		// Hide the certifcate attribute and extensions related tabs,
+		// include general attribute tab too
+		var includeGeneralTab = !(this.mTabPrimaryElem == this.mTabCertv1AttributesElem);
+		var isProxySigning = (!this.mIsSelfSignOptionParamElem.checked && this.mSignOtherCertParamsElem.isproxysigning);
+		this.displayAdvancedCertTabs(false, includeGeneralTab, isProxySigning);
+
+		this.LogTrace("x509v3certificateBinding.showBasicCSRForm(): .............End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="showAdvancedCSRForm">
+		<parameter name="aTabsCmdAdvancedElem"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("x509v3certificateBinding.showAdvancedCSRForm(): .............Start.");
+
+		if (ev) {
+		    ev.stopPropagation();
+		}
+
+		// Hide the Advanced command tab
+		// this.mTabCmdAdvancedElem.hidden = true;
+		this.mTabsCmdAdvancedElem.hidden = true;
+
+		// Show the certifcate attribute and extensions related tabs,
+		// include general attribute tab too
+		var includeGeneralTab = !(this.mTabPrimaryElem == this.mTabCertv1AttributesElem);
+		var isProxySigning = (!this.mIsSelfSignOptionParamElem.checked && this.mSignOtherCertParamsElem.isproxysigning);
+		this.displayAdvancedCertTabs(true, true, isProxySigning);
+
+		// Show the basic command tab 
+		// this.mTabCmdBasicElem.hidden = false;
+		this.mTabsCmdBasicElem.hidden = false;
+	    
+		// Since the selected "Advanced" tab is a dummy tab and we are not going to show it,
+		// select the Certifcate General Attribute tab so that user feels something has changed.
+		this.mTabboxElem.selectedTab = this.mTabCertv1AttributesElem;
+	    
+		this.LogTrace("x509v3certificateBinding.showAdvancedCSRForm(): .............End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="updateCert">
+		<parameter name="aCert"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("x509v3certificateBinding.updateCert():....................Start.");
+
+		if (!aCert) {
+		    return;
+		}
+		this.LogTrace("x509v3certificateBinding.updateCert():....................10.");
+
+		var /* alrIKeyManager */ keyManager = Components.classes["@avaya.com/pkm/keymanager;1"].
+			    getService(Components.interfaces.alrIKeyManager);
+		var certProps = keyManager.exportCertToPropertiesByX509Cert(aCert);
+		if (!certProps) {
+		    return;
+		}
+
+		// this.mX509CertNSExtenionsElem.dumpProperties(certProps, "x509v3certificateBinding.updateCert");
+
+		this.mX509v1CertElem.updateCertProps(certProps, aCert);
+		this.mX509CertStdExtenionsElem.updateCertProps(certProps, aCert);
+		this.mX509CertNSExtenionsElem.updateCertProps(certProps, aCert);
+		if (this.mSignOtherCertParamsElem.isproxysigning) {
+		    this.mX509CertProxyExtenionsElem.updateCertProps(certProps, aCert);
+		}
+
+		this.LogTrace("x509v3certificateBinding.updateCert():....................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="reset">
+		<body>
+		<![CDATA[
+		this.mX509v1CertElem.reset();
+		this.mX509CertStdExtenionsElem.reset();
+		this.mX509CertNSExtenionsElem.reset();
+		if (this.mSignOtherCertParamsElem.isproxysigning) {
+		    this.mX509CertProxyExtenionsElem.reset();
+		}
+		]]>
+		</body>
+	    </method>
+
+	    <method name="toCertProps">
+		<parameter name="aCertProps"/>
+		<body>
+		<![CDATA[
+		this.mX509v1CertElem.toCertProps(aCertProps);
+		this.mX509CertStdExtenionsElem.toCertProps(aCertProps);
+		this.mX509CertNSExtenionsElem.toCertProps(aCertProps);
+		if (this.mSignOtherCertParamsElem.isproxysigning) {
+		    this.mX509CertProxyExtenionsElem.toCertProps(aCertProps);
+		}
+		]]>
+		</body>
+	    </method>
+
+	    <method name="updateCertProps">
+		<parameter name="aCertProps"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("x509v3certificateBinding.updateCertProps():....................Start.");
+
+		// this.mX509CertNSExtenionsElem.dumpProperties(aCertProps, "x509v3certificateBinding.updateCertProps(): aCertProps: ");
+
+		// this.mSignCertParamsElem.updateCertProps(aCertProps);
+		// this.mSignCertParamsElem.toCertProps(aCertProps);
+
+		this.mX509v1CertElem.updateCertProps(aCertProps);
+		this.mX509CertStdExtenionsElem.updateCertProps(aCertProps);
+		this.mX509CertNSExtenionsElem.updateCertProps(aCertProps);
+		if (this.mSignOtherCertParamsElem.isproxysigning) {
+		    this.mX509CertProxyExtenionsElem.updateCertProps(aCertProps);
+		}
+
+		this.LogTrace("x509v3certificateBinding.updateCertProps():....................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="updateX509v1CertParam">
+		<parameter name="aCertProps"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("x509v3certificateBinding.updateX509v1CertProps():....................Start.");
+		this.mSignCertParamsElem.mergeCertProps(aCertProps);
+		this.mSignCertParamsElem.toCertProps(aCertProps);
+
+		this.mX509v1CertElem.updateCertProps(aCertProps);
+
+		this.LogTrace("x509v3certificateBinding.updateX509v1CertProps():....................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="mergeCertProps">
+		<parameter name="aCertProps"/>
+		<body>
+		<![CDATA[
+		this.mX509v1CertElem.mergeCertProps(aCertProps);
+		this.mX509CertStdExtenionsElem.mergeCertProps(aCertProps);
+		this.mX509CertNSExtenionsElem.mergeCertProps(aCertProps);
+		if (this.mSignOtherCertParamsElem.isproxysigning) {
+		    this.mX509CertProxyExtenionsElem.mergeCertProps(aCertProps);
+		}
+
+		// this.refresh();
+		]]>
+		</body>
+	    </method>
+	    <method name="mergeX509v1CertProps">
+		<parameter name="aCertProps"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("x509v3certificateBinding.mergeX509v1CertProps():....................Start.");
+
+		this.mSignCertParamsElem.mergeCertProps(aCertProps);
+		this.mSignCertParamsElem.toCertProps(aCertProps);
+
+		this.mX509v1CertElem.mergeCertProps(aCertProps);
+
+		this.LogTrace("x509v3certificateBinding.mergeX509v1CertProps():....................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="activateTaggedItemList">
+		<parameter name="aTagNameListStr"/>
+		<parameter name="aStatusFlag"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("x509v3certificateBinding.activateTaggedItemList(" + aTagNameListStr + "):....................Start.");
+		if (!aTagNameListStr) {
+		    return;
+		}
+		var tagNameList = aTagNameListStr.split(",");
+		if (tagNameList.length <= 0) {
+		    return;
+		}
+		for (var i = 0; i < tagNameList.length; i++) {
+		    // var nsTagName = "xul:" + tagNameList[i];
+		    var nsTagName = this.trim(tagNameList[i]);
+		    this.activateCertItem(nsTagName, aStatusFlag); 
+		}
+		this.LogTrace("x509v3certificateBinding.activateTaggedItemList(" + aTagNameListStr + "):....................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="activateAll">
+		<parameter name="aStatusFlag"/>
+		<body>
+		<![CDATA[
+		var tagNameList = "x509v1certificate,x509certstdextensions,x509certnsextensions";
+		if (this.mSignOtherCertParamsElem.isproxysigning) {
+		    tagNameList += ",x509certproxyextensions";
+		}
+		this.activateTaggedItemList(tagNameList, aStatusFlag);
+		]]>
+		</body>
+	    </method>
+
+	    <method name="activateCertItem">
+		<parameter name="aItemTagName"/>
+		<parameter name="aStatusFlag"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("x509v3certificateBinding.activateCertItem(" + aItemTagName + "):....................Start.");
+
+                var /* NodeList */ certItemNodeList = this.mTabpanelsElem.getElementsByTagName(aItemTagName);
+		if (certItemNodeList.length <= 0) {
+		    if (aItemTagName.indexOf("xul:") < 0) {
+		    	var tagName = "xul:" + aItemTagName;
+		        certItemNodeList = this.mTabpanelsElem.getElementsByTagName(tagName);
+		    }
+		}
+		this.LogDebug("x509v3certificateBinding.activateCertItem(): certItemNodeList.length: " + certItemNodeList.length + "");
+                for (var i = 0; i < certItemNodeList.length; i++) {
+	            var certItemElem = certItemNodeList.item(i);
+		    this.LogDebug("x509v3certificateBinding.activateCertItem(" + aItemTagName + "): certItemElem.tagName: " + certItemElem.tagName + "");
+		    certItemElem.readonly = !aStatusFlag;
+		    return true;
+		}
+		this.LogTrace("x509v3certificateBinding.activateCertItem(" + aItemTagName + "):................10.");
+
+		var retVal;
+		retVal = this.mX509v1CertElem.activateCertItem(aItemTagName, aStatusFlag);
+		if (retVal) {
+		    return retVal;
+		}
+		this.LogTrace("x509v3certificateBinding.activateCertItem(" + aItemTagName + "):................20.");
+
+		retVal = this.mX509CertStdExtenionsElem.activateCertItem(aItemTagName, aStatusFlag);
+		if (retVal) {
+		    return retVal;
+		}
+		this.LogTrace("x509v3certificateBinding.activateCertItem(" + aItemTagName + "):................30.");
+
+		if (this.mSignOtherCertParamsElem.isproxysigning) {
+		    retVal = this.mX509CertProxyExtenionsElem.activateCertItem(aItemTagName, aStatusFlag);
+		    this.LogTrace("x509v3certificateBinding.activateCertItem(" + aItemTagName + "):....................40.");
+		    if (retVal) {
+		        return retVal;
+		    }
+		}
+
+
+		retVal = this.mX509CertNSExtenionsElem.activateCertItem(aItemTagName, aStatusFlag);
+		this.LogTrace("x509v3certificateBinding.activateCertItem(" + aItemTagName + "):....................50.");
+
+		this.LogTrace("x509v3certificateBinding.activateCertItem(" + aItemTagName + "):................End.");
+		return retVal;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="doResetCertExtensions">
+		<body>
+		<![CDATA[
+		this.reset();
+		// this.doDumpCertExtensions();
+		]]>
+		</body>
+	    </method>
+
+	    <method name="doDumpCertExtensions">
+		<body>
+		<![CDATA[
+		var certProps = Components.classes["@mozilla.org/persistent-properties;1"]
+					.createInstance(Components.interfaces.nsIPersistentProperties);
+
+		this.toCertProps(certProps);
+		this.dumpProperties(certProps, "Cert Properties");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="doToggleReadonly">
+		<body>
+		<![CDATA[
+		this.mX509v1CertElem.readonly = !this.mX509CertStdExtenionsElem.readonly;
+		this.mX509CertStdExtenionsElem.readonly = !this.mX509CertStdExtenionsElem.readonly;
+		this.mX509CertNSExtenionsElem.readonly = !this.mX509CertNSExtenionsElem.readonly;
+		this.mX509CertProxyExtenionsElem.readonly = !this.mX509CertProxyExtenionsElem.readonly;
+		]]>
+		</body>
+	    </method>
+
+	</implementation>
+    </binding>
+
+</bindings>
+

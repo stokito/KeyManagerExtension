@@ -1,0 +1,192 @@
+<?xml version="1.0"?>
+
+<!-- @(#) $Id: keymanagerFirstrun.xul,v 1.5 2012/01/26 04:28:20 subrata Exp $ -->
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is Avaya Labs Research, Avaya Inc. Code.
+   -
+   - The Initial Developer of the Original Code is
+   -     Subrata Mazumdar, Avaya Labs Research, Avaya Inc.
+   - Portions created by the Initial Developer are Copyright (C) 2007.
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Subrata Mazumdar (mazum@avaya.com)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+
+
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+
+<!DOCTYPE overlay SYSTEM "chrome://keymanager/locale/keyManager.dtd">
+
+<overlay id="xmldsigffext.firstrun.overlay.win"
+    xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    >
+
+<script type="application/x-javascript">
+<![CDATA[
+/*
+Source: http://developer.mozilla.org/en/docs/Code_snippets:On_page_load#Running_code_on_an_extension.27s_first_run_or_after_an_extension.27s_update
+*/
+
+if (typeof avpki == 'undefined') {
+    avpki = {};
+}
+if (typeof avpki.keymanager == 'undefined') {
+    avpki.keymanager = {};
+}
+
+avpki.keymanager.KMFirstrunOverlay = {
+
+    debug : false,
+
+    log : function(msg)
+    {
+	if (!avpki.keymanager.KMFirstrunOverlay.debug) {
+	    return;
+	}
+        dump(msg + "\n");
+    },
+
+    getAddOnVersion : function (addOnUUID, callback) {
+	if (Components.interfaces.nsIExtensionManager) {
+            var extensionManager = Components.classes["@mozilla.org/extensions/manager;1"]
+                            .getService(Components.interfaces.nsIExtensionManager);
+
+            // get the add-on version number.
+            var addOnVersion = extensionManager.getItemForID(addOnUUID).version;
+	    callback(addOnVersion);
+	}
+	else {
+	    Components.utils.import("resource://gre/modules/AddonManager.jsm");
+	    AddonManager.getAddonByID(addOnUUID, function(addon){
+	        callback(addon.version);
+	    });
+	}
+    },
+
+    doShowFirstRun : function (addOnVersion) {
+	avpki.keymanager.KMFirstrunOverlay.log("KMFirstrunOverlay.doShowFirstRun():......................Start.");
+	avpki.keymanager.KMFirstrunOverlay.log("KMFirstrunOverlay.doShowFirstRun(): addOnVersion: " + addOnVersion + "");
+
+	var current = addOnVersion;
+
+	const addOnPrefPrefix = "keymgr.";
+	const addOnFirstrunPrefName = "firstrun";
+	const addOnVersionPrefName = "version";
+	const addOnFirstrunDocURL = "chrome://keymanager/content/firstrun/keymanagerFirstrun.html";
+
+        var Prefs = Components.classes["@mozilla.org/preferences-service;1"]
+                   .getService(Components.interfaces.nsIPrefService);
+        Prefs = Prefs.getBranch(addOnPrefPrefix);
+
+        var firstrun = true;
+        var ver = null;
+
+	/*
+        var gExtensionManager = Components.classes["@mozilla.org/extensions/manager;1"]
+                            		.getService(Components.interfaces.nsIExtensionManager);
+        // get the add-on version number.
+        var current = gExtensionManager.getItemForID(extensionUUID).version;
+	*/
+
+        try {
+	    firstrun = Prefs.getBoolPref(addOnFirstrunPrefName);
+	    ver = Prefs.getCharPref(addOnVersionPrefName);
+        } catch(e) {
+	    // avpki.keymanager.KMFirstrunOverlay.log("KMFirstrunOverlay.doShowFirstRun(): failed - e: " + e + "");
+	    // nothing
+        } finally {
+	    if (firstrun) {
+                Prefs.setBoolPref(addOnFirstrunPrefName, false);
+
+                // Insert code for first run here        
+	        window.setTimeout(function(){
+                    if (gBrowser) { // For Firefox/SeaMonkey
+    	                // Source: http://developer.mozilla.org/en/Code_snippets/Tabbed_browser#Opening_a_URL_in_a_new_tab
+    	                // Add tab, then make active
+    	                gBrowser.selectedTab = gBrowser.addTab(addOnFirstrunDocURL);
+                    }
+                    else { // For Thunderbird 
+	                // Source: http://developer.mozilla.org/En/Opening_a_Link_in_the_Default_Browser
+	                var extps = Components.classes["@mozilla.org/uriloader/external-protocol-service;1"]
+                                      .getService(Components.interfaces.nsIExternalProtocolService);
+	                // check whether an external handler for a scheme exist
+	                if (extps.externalProtocolHandlerExists("chrome")) {
+	                    // construct an nsIURI object using the ioservice
+	                    var ioservice = Components.classes["@mozilla.org/network/io-service;1"]
+                                          .getService(Components.interfaces.nsIIOService);
+	                    var uriToOpen = ioservice.newURI(addOnFirstrunDocURL, null, null);
+	                    // now, open it!
+	                    extps.loadURI(uriToOpen, null);
+	                }
+	                else {
+	                    avpki.keymanager.KMFirstrunOverlay.log("KMFirstrunOverlay.doShowFirstRun(): ExternalProtocolHandler does not exists for chorme - using window.open()");
+    	                    window.open(addOnFirstrunDocURL, "_blank", "resizable,toolbar=1,location=1,status=1,scrollbars=1,width=900,height=700");
+	                }
+                    }
+                }, 1500); // Firefox 2 fix - or else tab will get closed
+	    }		
+    
+	    avpki.keymanager.KMFirstrunOverlay.log("KMFirstrunOverlay.doShowFirstRun(): ver: " + ver + " current: " + current + "");
+	    if ((ver != current) && !firstrun) {
+      	        // !firstrun ensures that this section does not get loaded if its a first run.
+                Prefs.setCharPref(addOnVersionPrefName, current);
+
+                // TODO: Insert code if version is different here => upgrade
+	    }
+        }
+	avpki.keymanager.KMFirstrunOverlay.log("KMFirstrunOverlay.doShowFirstRun():......................End.");
+    },
+
+    showFirstRun : function () {
+        const addOnUUID = "{772c690c-ee0f-4c26-bf8c-5e0ed9ae59c4}";
+    	avpki.keymanager.KMFirstrunOverlay.getAddOnVersion(addOnUUID, avpki.keymanager.KMFirstrunOverlay.doShowFirstRun);
+    },
+
+    init: function(){
+	avpki.keymanager.KMFirstrunOverlay.log("KMFirstrunOverlay.init():......................Start.");
+
+    	avpki.keymanager.KMFirstrunOverlay.showFirstRun();
+
+        window.removeEventListener("load",function(){ avpki.keymanager.KMFirstrunOverlay.init(); },true);
+
+	avpki.keymanager.KMFirstrunOverlay.log("KMFirstrunOverlay.init():......................End.");
+    }
+
+};
+
+
+window.addEventListener("load", function(){ avpki.keymanager.KMFirstrunOverlay.init(); },true);
+
+]]>
+</script>
+
+</overlay>
+

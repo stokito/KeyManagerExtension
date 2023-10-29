@@ -1,0 +1,192 @@
+<?xml version="1.0"?>
+<!-- @(#) $Id: keymanagerOptions.xul,v 1.18 2011/02/04 18:54:51 subrata Exp $ -->
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is Avaya Labs Research, Avaya Inc. Code.
+   -
+   - The Initial Developer of the Original Code is
+   - Subrata Mazumdar, Avaya Labs Research, Avaya Inc.
+   - Portions created by the Initial Developer are Copyright (C) 2007.
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Subrata Mazumdar (mazum@avaya.com)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+
+
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+
+<!DOCTYPE prefwindow SYSTEM "chrome://keymanager/locale/keyManager.dtd">
+
+<prefwindow id="keymgr.tool.options.win"
+    xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    title="&keymgr.options.title;"
+    buttons="cancel,accept,help"
+    persist="screenX,screenY"
+    style="overflow:auto"
+    >
+
+<script type="application/x-javascript">
+<![CDATA[
+
+var KeyManagerOptions = {
+
+    logEnabled : false,
+    log : function (msg) 
+    {
+	if (!KeyManagerOptions.logEnabled) {
+	    return;
+	}
+	dump(msg + "\n");
+    },
+    trim : function (aStr) 
+    {
+	if (!aStr) {
+	    return aStr;
+	}
+	var sInString = aStr.replace( /^\s+/g, "" ); // strip leading whitespace
+	return sInString.replace( /\s+$/g, "" ); // strip trailing whitespace
+    },
+
+    init : function () 
+    {
+	KeyManagerOptions.log("KeyManagerOptions.init():................Start.");
+
+	/*
+	var isLinux = (navigator.userAgent.indexOf("Linux") != -1);
+	var isMac = (navigator.userAgent.indexOf("Mac") != -1);
+	*/
+
+	var isWin = (navigator.userAgent.indexOf("Win") != -1);
+	KeyManagerOptions.log("KeyManagerOptions.init(): isWin: " + isWin + "");
+
+	KeyManagerOptions.log("KeyManagerOptions.init():................End.");
+    },
+
+    resetPreference : function (prefId) 
+    {
+	do {
+	    var Prefs = Components.classes["@mozilla.org/preferences-service;1"]
+			.getService(Components.interfaces.nsIPrefService);
+	    try {
+		var prefBranchPrefixId = "";
+		var prefsBranch = Prefs.getBranch(prefBranchPrefixId);
+		if (!prefsBranch) {
+		    break;
+		}
+		prefsBranch.clearUserPref(prefId);
+	    } catch (ex) {
+	    }
+	} while (0);
+    },
+
+    setPreference : function (prefId, prefValue, prefValType) 
+    {
+	do {
+	    var Prefs = Components.classes["@mozilla.org/preferences-service;1"]
+			.getService(Components.interfaces.nsIPrefService);
+	    try {
+		var prefBranchPrefixId = "";
+		var prefsBranch = Prefs.getBranch(prefBranchPrefixId);
+		if (!prefsBranch) {
+		    break;
+		}
+
+		switch(prefValType) {
+		    case "string" : 
+			var prefStringValue = prefValue;
+		        prefsBranch.setCharPref(prefId, prefStringValue);
+		    	break;
+		    case "bool" : 
+			var prefBoolValue = true;
+			if (!prefValue || (prefValue != "true")) {
+			    prefBoolValue = false;
+			}
+		        prefsBranch.setBoolPref(prefId, prefBoolValue);
+		    	break;
+		    case "int" : 
+			var prefIntValue = prefValue;
+		        prefsBranch.setIntPref(prefId, prefIntValue);
+		    	break;
+		}
+	    } catch (ex) {
+	    }
+	} while (0);
+    },
+
+    lastMethod : function () 
+    {
+    }
+}
+
+]]>
+</script>
+
+
+    <prefpane id="keymgr.options.tabpanel.overlay.tool"
+        label="&keymgr.options.tab.tool.label;"
+	src="chrome://keymanager/content/keymanagerToolOptionsOverlay.xul"
+	/>
+    <prefpane id="keymgr.options.tabpanel.overlay.genkeycsr"
+        label="&keymgr.options.tab.genkeycsr.label;"
+	src="chrome://keymanager/content/tools/genkeycsr/genkeycsrOptionsOverlay.xul"
+	/>
+    <prefpane id="keymgr.options.tabpanel.overlay.scepclient"
+        label="&keymgr.options.tab.scepclient.label;"
+	src="chrome://keymanager/content/tools/scepclient/scepclientOptionsOverlay.xul"
+	/>
+    <!--
+    <prefpane id="keymgr.options.tabpanel.overlay.xpsigntoolext"
+        label="&keymgr.options.tab.xpsigntoolext.label;"
+	src="chrome://keymanager/content/tools/xpsigntoolext/xpsigntoolextOptionsOverlay.xul"
+	/>
+    <prefpane id="keymgr.options.tabpanel.overlay.signcert"
+        label="&keymgr.options.tab.signcert.label;"
+	src="chrome://keymanager/content/tools/signcerttool/signcerttoolOptionsOverlay.xul"
+	/>
+    <prefpane id="keymgr.options.tabpanel.overlay.attrcertext"
+        label="&keymgr.options.tab.attrcertext.label;"
+	src="chrome://keymanager/content/tools/attrcertext/attrcertextOptionsOverlay.xul"
+	/>
+    -->
+    <prefpane id="keymgr.options.tabpanel.overlay.sshclient"
+        label="&keymgr.options.tab.sshclient.label;"
+	src="chrome://keymanager/content/tools/sshclient/sshclientOptionsOverlay.xul"
+	/>
+    <prefpane id="keymgr.options.tabpanel.overlay.jksmanagecert"
+        label="&keymgr.options.tab.jksmanagecert.label;"
+	src="chrome://keymanager/content/tools/jksmanagecert/jksmanagecertOptionsOverlay.xul"
+	/>
+  <keyset id="keys">
+    <key keycode="VK_ESCAPE" oncommand="window.close();"/>
+  </keyset>
+
+</prefwindow>
+
+

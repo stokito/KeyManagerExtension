@@ -1,0 +1,308 @@
+<?xml version="1.0"?>
+<!-- @(#) $Id: SSHClientDialog.xul,v 1.6 2009/12/02 07:10:57 subrata Exp $ -->
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is Avaya Labs Research, Avaya Inc. Code.
+   -
+   - The Initial Developer of the Original Code is
+   - Subrata Mazumdar, Avaya Labs Research, Avaya Inc.
+   - Portions created by the Initial Developer are Copyright (C) 2007.
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Subrata Mazumdar (mazum@avaya.com)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+
+
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://keymanager/skin/kmbindings.css" type="text/css"?>
+
+<!--
+<!DOCTYPE window
+	[
+	<!ENTITY % keyManager.dtd SYSTEM "chrome://keymanager/locale/keyManager.dtd">
+	%keyManager.dtd;
+	<!ENTITY % sshclient.dtd SYSTEM "chrome://keymanager/locale/sshclient.dtd">
+	%sshclient.dtd;
+	]>
+-->
+<!DOCTYPE window SYSTEM "chrome://keymanager/locale/sshclient.dtd">
+
+<window id="keymgr.sshclient.dialog.win" 
+    windowtype="avaya:sshclient"
+    xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    title="&keymgr.sshclient.dialog.win.title;"
+    persist="width height screenX screenY"
+    orient="vertical"
+    autostretch="always"
+    onload="SSHClientDialog.initOnLoad();"
+    >
+  
+    <script type="application/x-javascript" src="chrome://keymanager/content/tools/sshclient/SSHClientDialog.js"/>
+  
+  
+    <keyset id="keys">
+	<key id="esc-key" keycode="VK_ESCAPE" oncommand="window.close()"/>
+    </keyset>
+  
+    <vbox
+	flex="1"
+	>
+
+	<grid> 
+	    <columns>
+		<column/>
+		<column flex="1"/>
+	    </columns>
+	    <rows>
+		<row
+		    align="center"
+		    >
+		    <label control="keymgr.sshclient.terminal.filepath"  value="&keymgr.sshclient.terminal.filepath.label;"/>
+		    <!--
+		    <hbox 
+			pack="start"
+			>
+			<textbox id="keymgr.sshclient.terminal"
+			    />
+		    </hbox>
+		    -->
+		    <fileselector id="keymgr.sshclient.terminal.filepath"
+			    formathidden="true"
+			    fileMode="open"
+			    filetooltiptext="&keymgr.sshclient.terminal.filepath.tooltip;"
+			    fileDialogMsg="&keymgr.sshclient.terminal.filepath.dialog.msg;"
+			    xfileTypeMsg="&keymgr.sshclient.terminal.filepath.type.msg;"
+			    xfileTypeFilters="*.acr; *.pem; *.crt"
+			    browselabel="&keymgr.sshclient.file.browser.label;"
+			    browsetooltiptext="&keymgr.sshclient.terminal.filepath.browser.tooltip;"
+			    onpopuphiding="SSHClientDialog.handleTerminalCmdPathChange(this, event);"
+			    oncommand="SSHClientDialog.handleTerminalCmdPathChange(this, event);"
+			    onchange="SSHClientDialog.handleTerminalCmdPathChange(this, event);"
+			    />
+		</row>
+
+		<row
+		    align="center"
+		    >
+		    <label control="keymgr.sshclient.termargs"  value="&keymgr.sshclient.termargs.label;"/>
+		    <textbox id="keymgr.sshclient.termargs"
+			tooltiptext="&keymgr.sshclient.termargs.tooltip;"
+			onchange="SSHClientDialog.handleTextboxChange(this, event)"
+			/>
+		</row>
+
+
+		<row
+		    align="center"
+		    >
+		    <label control="keymgr.sshclient.sshcommand.filepath"  value="&keymgr.sshclient.sshcommand.filepath.label;"/>
+		    <!--
+		    <hbox 
+			pack="start"
+			>
+			<textbox id="keymgr.sshclient.sshcommand"
+			    />
+		    </hbox>
+		    -->
+		    <fileselector id="keymgr.sshclient.sshcommand.filepath"
+			    formathidden="true"
+			    fileMode="open"
+			    filetooltiptext="&keymgr.sshclient.sshcommand.tooltip;"
+			    fileDialogMsg="&keymgr.sshclient.sshcommand.filepath.dialog.msg;"
+			    xfileTypeMsg="&keymgr.sshclient.sshcommand.filepath.type.msg;"
+			    fileTypeFilters="*ssh*"
+			    browselabel="&keymgr.sshclient.file.browser.label;"
+			    browsetooltiptext="&keymgr.sshclient.sshcommand.filepath.browser.tooltip;"
+			    onpopuphiding="SSHClientDialog.handleSSHCmdPathChange(this, event);"
+			    oncommand="SSHClientDialog.handleSSHCmdPathChange(this, event);"
+			    onchange="SSHClientDialog.handleSSHCmdPathChange(this, event);"
+			    />
+		</row>
+
+		<row
+		    align="center"
+		    >
+		    <label control="keymgr.sshclient.sshargs"  value="&keymgr.sshclient.sshargs.label;"/>
+		    <textbox id="keymgr.sshclient.sshargs"
+			tooltiptext="&keymgr.sshclient.sshargs.tooltip;"
+			onchange="SSHClientDialog.handleTextboxChange(this, event)"
+			/>
+		</row>
+
+		<row
+		    align="center"
+		    >
+		    <label control="keymgr.sshclient.pk11token"  value="&keymgr.sshclient.pk11token.label;"/>
+		    <hbox 
+			pack="start"
+			>
+			<checkbox id="keymgr.sshclient.usetoken"
+			    label="&keymgr.sshclient.usetoken.label;"
+			    tooltiptext="&keymgr.sshclient.usetoken.tooltip;"
+			    oncommand="SSHClientDialog.handleUseTokenFlagChange(this, event)"
+			    />
+			<tokenmenulist id="keymgr.sshclient.pk11token"
+			    tooltiptext="&keymgr.sshclient.pk11token.tooltip;"
+			    oncommand="SSHClientDialog.handlePK11TokenMenuChange(this, event)"
+			    />
+		    </hbox>
+		</row>
+
+		<row
+		    align="center"
+		    hidden="true"
+		    >
+		    <label control="keymgr.sshclient.certpicker"  value="&keymgr.sshclient.cert.nickname.label;"/>
+		    <hbox 
+			pack="start"
+			>
+			<certpicker id="keymgr.sshclient.certpicker"
+			    menutooltiptext="&keymgr.sshclient.certpicker.tooltip;"
+			    tokentypehidden="true"
+			    certtype="user"
+			    certtypehidden="true"
+			    certtypedisabled="true"
+			    viewhidden="false"
+			    viewlabel="&keymgr.sshclient.cert.view.label;"
+			    viewtooltiptext="&keymgr.sshclient.certpicker.view.tooltip;"
+			    oncommand="SSHClientDialog.handleKeyCertPickerChange(this, event);"
+			    />
+		    </hbox>
+		</row>
+
+		<row
+		    align="center"
+		    >
+		    <label control="keymgr.sshclient.remote.hostname"  value="&keymgr.sshclient.remote.hostname.label;"/>
+		    <hbox 
+			pack="start"
+			>
+			<textbox id="keymgr.sshclient.remote.hostname"
+			    type="autocomplete" 
+			    persist="value"
+			    autocompletesearchparam="keymgr.sshclient.remote.hostname"
+			    autocompletesearch="form-history" 
+			    xcompletedefaultindex="true"
+			    xcompleteselectedindex="true"
+			    xenablehistory="true"
+			    tooltiptext="&keymgr.sshclient.remote.hostname.tooltip;"
+			    onchange="SSHClientDialog.handleRemoteHostNameChange(this, event)"
+			    onpopuphiding="SSHClientDialog.handleRemoteHostNameChange(this, event)"
+			    />
+		    </hbox>
+		</row>
+
+		<row
+		    align="center"
+		    >
+		    <label control="keymgr.sshclient.remote.portid"  value="&keymgr.sshclient.remote.portid.label;"/>
+		    <hbox 
+			pack="start"
+			>
+			<textbox id="keymgr.sshclient.remote.portid"
+			    type="autocomplete" 
+			    autocompletesearchparam="keymgr.sshclient.remote.portid"
+			    autocompletesearch="form-history" 
+			    xcompletedefaultindex="true"
+			    xcompleteselectedindex="true"
+			    xenablehistory="true"
+			    tooltiptext="&keymgr.sshclient.remote.portid.tooltip;"
+			    onchange="SSHClientDialog.handleRemotePortIdChange(this, event)"
+			    onpopuphiding="SSHClientDialog.handleRemotePortIdChange(this, event)"
+			    />
+		    </hbox>
+		</row>
+
+		<row
+		    align="center"
+		    >
+		    <label control="keymgr.sshclient.remote.userid"  value="&keymgr.sshclient.remote.userid.label;"/>
+		    <hbox 
+			pack="start"
+			>
+			<textbox id="keymgr.sshclient.remote.userid"
+			    type="autocomplete" 
+			    autocompletesearchparam="keymgr.sshclient.remote.userid"
+			    autocompletesearch="form-history" 
+			    xcompletedefaultindex="true"
+			    xcompleteselectedindex="true"
+			    xenablehistory="true"
+			    tooltiptext="&keymgr.sshclient.remote.userid.tooltip;"
+			    onchange="SSHClientDialog.handleRemoteUserIdChange(this, event)"
+			    onpopuphiding="SSHClientDialog.handleRemoteUserIdChange(this, event)"
+			    />
+		    </hbox>
+		</row>
+
+		<row
+		    align="center"
+		    >
+		    <label control="keymgr.sshclient.exec.cmd"  value="&keymgr.sshclient.exec.cmd.label;"/>
+		    <textbox id="keymgr.sshclient.exec.cmd"
+		    	/>
+		</row>
+
+		<!--
+		<row
+		    align="center"
+		    >
+		    <label control="keymgr.sshclient.xxxx"  value="&keymgr.sshclient.xxxx.label;"/>
+		    <hbox 
+			pack="start"
+			>
+			<textbox id="keymgr.sshclient.xxxx"
+			    />
+		    </hbox>
+		</row>
+		-->
+
+	    </rows>
+	</grid>
+
+	<groupbox pack="center" orient="horizontal">
+	    <button id="keymgr.sshclient.cmd.connect"
+		label="&keymgr.sshclient.cmd.connect.label;"
+		tooltiptext="&keymgr.sshclient.cmd.connect.tooltip;"
+		oncommand="SSHClientDialog.sshConnect();"
+		/>
+	    <button id="keymgr.sshclient.cmd.help"
+		label="&keymgr.sshclient.cmd.help.label;"
+		oncommand="SSHClientDialog.help('sshclient');"
+		/>
+	    <button id="keymgr.sshclient.cmd.cancel"
+		label="&keymgr.sshclient.cmd.cancel.label;"
+		oncommand="SSHClientDialog.cancel();"
+		/>
+	</groupbox>
+
+    </vbox>
+
+</window>
+

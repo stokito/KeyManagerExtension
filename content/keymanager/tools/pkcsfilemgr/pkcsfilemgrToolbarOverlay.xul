@@ -1,0 +1,149 @@
+<?xml version="1.0"?>
+<!-- @(#) $Id: pkcsfilemgrToolbarOverlay.xul,v 1.4 2012/01/26 02:49:37 subrata Exp $ -->
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is Avaya Labs Research, Avaya Inc. Code.
+   -
+   - The Initial Developer of the Original Code is
+   - Subrata Mazumdar, Avaya Labs Research, Avaya Inc.
+   - Portions created by the Initial Developer are Copyright (C) 2007.
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Subrata Mazumdar (mazum@avaya.com)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+
+
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+
+<!DOCTYPE overlay SYSTEM "chrome://keymanager/locale/keymanagerOverlay.dtd">
+
+<overlay id="keymanager.toolbar.pkcsfilemgr.overlay"
+    xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    >
+
+    <script type="application/x-javascript" src="chrome://keymanager/content/tools/pkcsfilemgr/pkcsfilemgrToolbarOverlay.js"/>
+
+///////////////////////////////////////////////////////////////////
+// Tools menu.
+///////////////////////////////////////////////////////////////////
+<!-- 
+  Source: http://kb.mozillazine.org/Extension_guidelines
+-->
+
+///////////////////////////////////////////////////////////////////
+// Firefox menu.
+///////////////////////////////////////////////////////////////////
+<!--
+<menupopup id="menu_ToolsPopup">
+-->
+  <menu id="menu_AvLabsKeyManagerToolbox">
+    <menupopup id="menu_AvLabsKeyManagerToolboxPopup">
+        <menuitem id="keymanager.osslkeyconf.form.ff.menuitem"
+	  label="&keymanager.toolbox.menu.osslkeyconf.label;"
+          oncommand="avpki.keymanager.PKCSFileMgrToolbarOverlay.runOsslKeyConfig();"
+          />
+
+        <menuitem id="keymanager.osslkeycertsynctool.form.ff.menuitem"
+	  label="&keymanager.toolbox.menu.osslsynctool.label;"
+          oncommand="avpki.keymanager.PKCSFileMgrToolbarOverlay.runOsslKeyCertSyncTool();"
+          />
+    </menupopup>
+  </menu>
+<!--
+</menupopup>
+-->
+
+
+<!--
+Source: https://developer.mozilla.org/en/Creating_toolbar_buttons
+-->
+<!-- Toolbar -->
+<!--
+<toolbox id="navigator-toolbox">
+-->
+    <toolbar id="keymanager.cmd.toolbar">
+	<!--
+        <toolbarbutton id="keymanager.cmd.toolbar.pkcsfilemgr.conf"
+	    label="&keymanager.cmd.toolbar.pkcsfilemgr.conf.label;"
+	    tooltiptext="&keymanager.cmd.toolbar.pkcsfilemgr.conf.tooltip;"
+            oncommand="avpki.keymanager.PKCSFileMgrToolbarOverlay.runOsslKeyConfig();"
+            />
+        <toolbarbutton id="keymanager.cmd.toolbar.pkcsfilemgr.sync"
+	    label="&keymanager.cmd.toolbar.pkcsfilemgr.sync.label;"
+	    tooltiptext="&keymanager.cmd.toolbar.pkcsfilemgr.sync.tooltip;"
+            oncommand="avpki.keymanager.PKCSFileMgrToolbarOverlay.runOsslKeyCertSyncTool();"
+            />
+	-->
+        <toolbarbutton id="keymanager.cmd.toolbar.pkcsfilemgr.menu"
+	    class=""
+	    type="menu"
+	    label="&keymanager.cmd.toolbar.pkcsfilemgr.menu.label;"
+	    tooltiptext="&keymanager.cmd.toolbar.pkcsfilemgr.menu.tooltip;"
+            >
+	    <menupopup id="keymanager.cmd.toolbar.pkcsfilemgr.menupop">
+        	<menuitem id="keymanager.cmd.toolbar.pkcsfilemgr.devicemanager"
+	    	    label="&keymanager.cmd.toolbar.pkcsfilemgr.devicemanager.label;"
+	    	    tooltiptext="&keymanager.cmd.toolbar.pkcsfilemgr.devicemanager.tooltip;"
+            	    oncommand="avpki.keymanager.PKCSFileMgrToolbarOverlay.openDeviceManager();"
+            	    />
+        	<menuitem id="keymanager.cmd.toolbar.pkcsfilemgr.conf"
+	    	    label="&keymanager.cmd.toolbar.pkcsfilemgr.conf.label;"
+	    	    tooltiptext="&keymanager.cmd.toolbar.pkcsfilemgr.conf.tooltip;"
+            	    oncommand="avpki.keymanager.PKCSFileMgrToolbarOverlay.runOsslKeyConfig();"
+            	    />
+        	<menuitem id="keymanager.cmd.toolbar.pkcsfilemgr.sync"
+	    	    label="&keymanager.cmd.toolbar.pkcsfilemgr.sync.label;"
+	    	    tooltiptext="&keymanager.cmd.toolbar.pkcsfilemgr.sync.tooltip;"
+            	    oncommand="avpki.keymanager.PKCSFileMgrToolbarOverlay.runOsslKeyCertSyncTool();"
+            	    />
+    	    </menupopup>
+    	</toolbarbutton>
+    </toolbar>
+<!--
+</toolbox>
+-->
+
+<!-- Toolbar Element -->
+<!--
+<toolbarpalette id="BrowserToolbarPalette">
+    <toolbaritem id="keymanager-container">
+	<button id="keymanager-pkcsfilemgr-button"
+	    label="&keymanager.cmd.toolbar.pkcsfilemgr.label;"
+	    xpopup="keymanager-pkcsfilemgr-list"
+	    ximage="chrome://keymanager/content/images/arrow-dn.gif"
+	    dir="rtl"
+	    />
+    </toolbaritem>
+</toolbarpalette>
+-->
+
+
+</overlay>
+

@@ -1,0 +1,229 @@
+<?xml version="1.0"?>
+<!-- @(#) $Id: CertEnrollInitProfileOverlay.xul,v 1.9 2012/10/03 14:20:33 subrata Exp $ -->
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is Avaya Labs Research, Avaya Inc. Code.
+   -
+   - The Initial Developer of the Original Code is
+   - Subrata Mazumdar, Avaya Labs Research, Avaya Inc.
+   - Portions created by the Initial Developer are Copyright (C) 2007.
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Subrata Mazumdar (mazum@avaya.com)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://keymanager/skin/kmbindings.css" type="text/css"?>
+
+<!DOCTYPE wizard SYSTEM "chrome://keymanager/locale/certenroll.dtd">
+
+<overlay id="keymgr.certenroll.wizard.initprofile.overlay" 
+    xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    >
+
+    <script type="application/x-javascript" src="chrome://keymanager/content/tools/certenroll/CertEnrollInitProfileOverlay.js"/>
+
+    <wizardpage id="keymgr.certenroll.wizard.page.cert.profile"
+	pageid="keymgr.certenroll.wizard.page.cert.profile"
+	description="&keymgr.certenroll.wizard.page.cert.profile.label;"
+	flex="1"
+	onpageshow="return avpki.keymanager.CertEnrollInitProfileOverlay.selectCertProfilePageShow(this);"
+	onpageadvanced="return avpki.keymanager.CertEnrollInitProfileOverlay.selectCertProfilePageAdvanced(this);"
+	next="keymgr.certenroll.wizard.page.csr"
+	>
+	<grid> 
+	    <columns>
+		<column/>
+		<column flex="1"/>
+	    </columns>
+	    <rows>
+		<row>
+		    <label control="keymgr.certenroll.wizard.page.cert.profile.firstName"
+			value="&keymgr.certenroll.wizard.page.cert.profile.firstName.label;"/>
+		    <textbox id="keymgr.certenroll.wizard.page.cert.profile.firstName" value=""
+			type="autocomplete" 
+			autocompletesearch="form-history" 
+			completeselectedindex="true"
+			autocompletesearchparam="keymgr.certenroll.wizard.page.cert.profile.firstName"
+			persist="value"
+			tooltiptext="&keymgr.certenroll.wizard.page.cert.profile.firstName.tooltip;"
+			onkeyup="if (event.keyCode == 13)
+				{avpki.keymanager.CertEnrollInitProfileOverlay.handleProdCertFirstNameChange(this, event);}"
+			onchange="avpki.keymanager.CertEnrollInitProfileOverlay.handleProdCertFirstNameChange(this, event)"
+			zonselect="avpki.keymanager.CertEnrollInitProfileOverlay.handleProdCertFirstNameChange(this, event)"
+			/>
+		</row>
+
+		<row>
+		    <label control="keymgr.certenroll.wizard.page.cert.profile.lastName"
+			value="&keymgr.certenroll.wizard.page.cert.profile.lastName.label;"/>
+		    <textbox id="keymgr.certenroll.wizard.page.cert.profile.lastName" value=""
+			tooltiptext="&keymgr.certenroll.wizard.page.cert.profile.lastName.tooltip;"
+			type="autocomplete" 
+			autocompletesearch="form-history" 
+			completeselectedindex="true"
+			autocompletesearchparam="keymgr.certenroll.wizard.page.cert.profile.lastName"
+			persist="value"
+			onkeyup="if (event.keyCode == 13)
+				{avpki.keymanager.CertEnrollInitProfileOverlay.handleProdCertLastNameChange(this, event);}"
+			onchange="avpki.keymanager.CertEnrollInitProfileOverlay.handleProdCertLastNameChange(this, event)"
+			zonselect="avpki.keymanager.CertEnrollInitProfileOverlay.handleProdCertLastNameChange(this, event)"
+			/>
+		</row>
+
+		<row>
+		    <label control="keymgr.certenroll.wizard.page.cert.profile.commonName"
+			value="&keymgr.certenroll.wizard.page.cert.profile.commonName.label;"/>
+		    <textbox id="keymgr.certenroll.wizard.page.cert.profile.commonName" value=""
+			tooltiptext="&keymgr.certenroll.wizard.page.cert.profile.commonName.tooltip;"
+			type="autocomplete" 
+			autocompletesearch="form-history" 
+			completeselectedindex="true"
+			autocompletesearchparam="keymgr.certenroll.wizard.page.cert.profile.commonName"
+			persist="value"
+			onkeyup="if (event.keyCode == 13)
+				{avpki.keymanager.CertEnrollInitProfileOverlay.handleProdCertCommonNameChange(this, event);}"
+			onchange="avpki.keymanager.CertEnrollInitProfileOverlay.handleProdCertCommonNameChange(this, event)"
+			zonselect="avpki.keymanager.CertEnrollInitProfileOverlay.handleProdCertCommonNameChange(this, event)"
+			/>
+		</row>
+
+		<row id="keymgr.certenroll.wizard.page.cert.profile.currCert.row" collapsed="true">
+		    <label control="keymgr.certenroll.wizard.page.cert.profile.currCert"
+			value="&keymgr.certenroll.wizard.page.cert.profile.currCert.label;"/>
+		    <vbox
+			pack="start" align="start"
+			>
+			<certitem id="keymgr.certenroll.wizard.page.cert.profile.currCert" />
+			<hbox
+			    pack="start" align="center"
+			    hidden="true"
+			    >
+			    <checkbox id="keymgr.certenroll.wizard.page.cert.profile.currCert.isPresent"
+				label="&keymgr.certenroll.wizard.page.cert.profile.currCert.isPresent.label;"
+				disabled="true"
+				/> 
+			    <checkbox id="keymgr.certenroll.wizard.page.cert.profile.currCert.selfSigned"
+				label="&keymgr.certenroll.wizard.page.cert.profile.currCert.selfSigned.label;"
+				disabled="true"
+				/> 
+			    <!--
+			    <button id="keymgr.certenroll.wizard.page.cert.profile.currCert.view"
+				label="&keymgr.certenroll.wizard.page.cert.profile.currCert.view.label;"
+				oncommand="browseExistingProdCert('keymgr.certenroll.wizard.page.cert.profile.subjectDN');"
+				/>
+			    -->
+			</hbox>
+			<hbox id="keymgr.certenroll.wizard.page.cert.profile.currCert.issuer.hbox"
+			    pack="start" align="center"
+			    hidden="true"
+			    >
+			    <label value="&keymgr.certenroll.wizard.page.cert.profile.currCert.issuerLabel;"/>
+			    <textbox id="keymgr.certenroll.wizard.page.cert.profile.currCert.issuerDN"
+				flex="5"
+				zreadonly="true"
+				/>
+			</hbox>
+		    </vbox>
+		</row>
+
+		<row id="keymgr.certenroll.wizard.page.cert.profile.newKey.row">
+		    <spacer/>
+		    <hbox
+			pack="start" align="center"
+			>
+			<checkbox id="keymgr.certenroll.wizard.page.cert.profile.newKey.generate"
+			    label="&keymgr.certenroll.wizard.page.cert.profile.newKey.generate.label;"
+			    checked="true"
+			    xdisabled="true"
+			    /> 
+		    </hbox>
+		</row>
+		<row id="keymgr.certenroll.wizard.page.cert.profile.token.row">
+		    <label value="&keymgr.certenroll.wizard.page.cert.profile.tokenName.label;"/>
+		    <hbox
+			pack="start" align="start"
+		    	>
+			<label id="keymgr.certenroll.wizard.page.cert.profile.tokenName" value=""/>
+			<tokenmenulist id="keymgr.certenroll.wizard.page.cert.profile.tokenMenuList"
+			    oncommand="avpki.keymanager.CertEnrollInitProfileOverlay.onTokenMenuChange(this, event)"
+			    />
+		    </hbox>
+		</row>
+		<row id="keymgr.certenroll.wizard.page.cert.profile.alias.row">
+		    <label value="&keymgr.certenroll.wizard.page.cert.profile.nickName.label;"/>
+		    <textbox id="keymgr.certenroll.wizard.page.cert.profile.nickName"
+			xreadonly="true"/>
+		</row>
+
+		<row id="keymgr.certenroll.wizard.page.cert.profile.type.row">
+	            <label value="&keymgr.certenroll.wizard.page.cert.profile.type.label;"/>
+		    <hbox
+			pack="start" align="start"
+		    	>
+                        <x509certprofiletype id="keymgr.certenroll.wizard.page.cert.profile.type"
+			    xprofile="basicconstraints"
+			    persist="profile"
+                            oncommand="avpki.keymanager.CertEnrollInitProfileOverlay.handleCertProfileTypeChange(this, event)"
+		            />
+		    </hbox>
+		</row>
+
+		<row id="keymgr.certenroll.wizard.page.cert.profile.subject.row">
+		    <label value="&keymgr.certenroll.wizard.page.cert.profile.subjectDN.label;"/>
+		    <textbox id="keymgr.certenroll.wizard.page.cert.profile.subjectDN"
+			xreadonly="true"
+			onchange="avpki.keymanager.CertEnrollInitProfileOverlay.handleProdCertSubjectChange(this, event)"
+			/>
+		</row>
+	
+		<row id="keymgr.certenroll.wizard.page.cert.profile.outfile.row">
+		    <label value="&keymgr.certenroll.wizard.page.cert.profile.outfile.label;"/>
+		    <hbox
+			pack="start" align="center"
+			>
+		     <filepicker id="keymgr.certenroll.wizard.page.cert.profile.outfile.path"
+		 	flex="2"
+			ascii="true"
+			formathidden="true"
+			fileMode="save"
+			fileDialogMsg="Choose XML file for cert profile"
+			fileTypeMsg="XML File"
+			fileTypeFilters="*.xml"
+			filetooltiptext="&keymgr.certenroll.wizard.page.cert.profile.outfile.tooltip;"
+			browselabel="&keymgr.certenroll.wizard.file.browse.label;"
+			browsetooltiptext="&keymgr.certenroll.wizard.file.browse.tooltip;"
+			/>
+		    </hbox>
+		</row>
+	    </rows>
+	</grid>
+    </wizardpage>
+
+</overlay>

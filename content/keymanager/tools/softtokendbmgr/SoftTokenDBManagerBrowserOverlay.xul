@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- @(#) $Id: SoftTokenDBManagerBrowserOverlay.xul,v 1.7 2012/10/07 17:21:08 subrata Exp $ -->
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is Avaya Labs Research, Avaya Inc. Code.
+   -
+   - The Initial Developer of the Original Code is
+   -     Subrata Mazumdar, Avaya Labs Research, Avaya Inc.
+   - Portions created by the Initial Developer are Copyright (C) 2007.
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Subrata Mazumdar (mazum@avaya.com)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+<?xml-stylesheet href="chrome://keymanager/skin/kmbindings.css" type="text/css"?>
+
+<!--
+Installation instructions: 
+Add the following line in the chrome.manifest file:
+    overlay chrome://browser/content/browser.xul    chrome://keymanager/content/tools/softtokendbmgr/SoftTokenDBManagerBrowserOverlay.xul
+  or 
+    <?xul-overlay href="chrome://keymanager/content/tools/softtokendbmgr/SoftTokenDBManagerBrowserOverlay.xul"?>
+    in the chrome://keymanager/content/keymanagerOverlay.xul  file.
+-->
+
+<!DOCTYPE overlay >
+
+<overlay id="SoftTokenDBManager-BrowserOverlay"
+          xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+    <!--
+    <script type="application/x-javascript" src="chrome://xmldsigffext/content/htmldsig/ExternalSoftTokenInstaller.js"/>
+    -->
+
+<script type="application/x-javascript">
+<![CDATA[
+
+// Install a timeout handler to install the interval routine
+
+var ExternalSoftTokenInstaller = {
+
+	_maxLogLevel: 2,
+	mSoftTokenDbManager: null,
+
+	mSoftTokenDBMgrEnabled: false,
+	mSoftTokenDBInfoList: "",
+
+	log : function(level, msg)
+	{
+	    if (level > this._maxLogLevel) {
+	    	return;
+	    }
+	    dump(msg + "\n");
+	},
+
+	logError : function(msg)
+	{
+	    this.log(2, msg);
+	},
+	logTrace : function(msg)
+	{
+	    this.log(4, msg);
+	},
+	logDebug : function(msg)
+	{
+	    this.log(8, msg);
+	},
+
+	startup : function(ev)
+	{
+	    this.logTrace("ExternalSoftTokenInstaller.startup():.............Start.");
+
+	    this.logTrace("ExternalSoftTokenInstaller.startup():.............End.");
+	},
+
+	init : function()
+	{
+	    // this._maxLogLevel = 9;
+	    this.logTrace("ExternalSoftTokenInstaller.init():.............Start.");
+
+	    var Prefs = Components.classes["@mozilla.org/preferences-service;1"]
+                   		.getService(Components.interfaces.nsIPrefService);
+	    var prefsBranch = Prefs.getBranch("extensions.avpki.softtokendbmgr.");
+
+	    try {
+	    	this.mSoftTokenDBMgrEnabled = prefsBranch.getBoolPref("enabled");
+
+	    	this.mSoftTokenDBInfoList = prefsBranch.getCharPref("dbinfolist");
+		if (!this.mSoftTokenDBInfoList || (this.mSoftTokenDBInfoList == "")) {
+		    this.mSoftTokenDBMgrEnabled = false;
+		}
+	    } catch (e) {
+	    	this.mSoftTokenDBMgrEnabled = false;
+      	    }
+	    this.logDebug("ExternalSoftTokenInstaller.init(): this.mSoftTokenDBMgrEnabled: " + this.mSoftTokenDBMgrEnabled);
+	    this.logDebug("ExternalSoftTokenInstaller.init(): this.mSoftTokenDBInfoList : " + this.mSoftTokenDBInfoList);
+
+	    if (!Components.classes["@avaya.com/pkm/softtokendbmanager;1"]) {
+		this.mSoftTokenDBMgrEnabled = false;
+	    }
+
+	    if (!this.mSoftTokenDBMgrEnabled) {
+	    	this.logTrace("ExternalSoftTokenInstaller.init():.............End(1).");
+	    	return;
+	    }
+
+	    try {
+    	    	this.mSoftTokenDbManager = Components.classes["@avaya.com/pkm/softtokendbmanager;1"]
+		    .getService(Components.interfaces.alrISoftTokenDBManager);
+	    } catch (e) {
+	    	this.logTrace("ExternalSoftTokenInstaller.init():.............End(2).");
+	    	return;
+      	    }
+
+	    var secmoddb = Components.classes["@mozilla.org/security/pkcs11moduledb;1"]
+				.getService(Components.interfaces.nsIPKCS11ModuleDB);
+
+	    // FIPS-enabled internal module does not support external Soft-token DB.
+	    if (secmoddb.isFIPSEnabled) {
+	    	this.logTrace("ExternalSoftTokenInstaller.init():.............End(3).");
+	    	return;
+	    }
+
+	    this.loadExternalSoftTokens(this.mSoftTokenDBInfoList);
+
+	    this.logTrace("ExternalSoftTokenInstaller.init():.............End.");
+	},
+
+	parseExternalSoftTokenDBInfo : function(aSoftTokenDBInfoStr) 
+	{
+		var softTokenDBInfoItem = aSoftTokenDBInfoStr;
+
+	    	var softTokenDBInfoCompList = softTokenDBInfoItem.split(",");
+		if (softTokenDBInfoCompList.length < 2) {
+		    return null;
+		}
+
+		var softTokenDBInfoObj = new Object();
+
+		softTokenDBInfoObj.mSoftTokenDBPath = null;
+		softTokenDBInfoObj.mSoftTokenDBFile = null;
+		softTokenDBInfoObj.mSoftTokenName = null;
+		softTokenDBInfoObj.mSoftTokenCertPrefix = null;
+		softTokenDBInfoObj.mSoftTokenReadOnly = false;
+		softTokenDBInfoObj.mEnableFips = false;
+		softTokenDBInfoObj.mPerformLogin = false;
+		softTokenDBInfoObj.mSoftTokenDisabled = false;
+
+		switch(softTokenDBInfoCompList.length) {
+		    case 5: 
+			if (softTokenDBInfoCompList[4] == "true")  {
+			    softTokenDBInfoObj.mSoftTokenDisabled = true;
+			}
+		    case 4: 
+			if (softTokenDBInfoCompList[3] == "true")  {
+			    softTokenDBInfoObj.mSoftTokenReadOnly = true;
+			}
+		    case 3: 
+			softTokenDBInfoObj.mSoftTokenCertPrefix = softTokenDBInfoCompList[2];
+		    case 2: 
+			softTokenDBInfoObj.mSoftTokenDBPath = softTokenDBInfoCompList[0];
+			softTokenDBInfoObj.mSoftTokenName = softTokenDBInfoCompList[1];
+		    	break;
+		}
+	    	this.logTrace("ExternalSoftTokenInstaller.parseExternalSoftTokenDBInfo(): " + 
+				"mSoftTokenDBPath: "	+ softTokenDBInfoObj.mSoftTokenDBPath + " " + 
+				"mSoftTokenName: "	+ softTokenDBInfoObj.mSoftTokenName + " " + 
+				"mSoftTokenCertPrefix: " + softTokenDBInfoObj.mSoftTokenCertPrefix + " " + 
+				"mSoftTokenReadOnly: "	+ softTokenDBInfoObj.mSoftTokenReadOnly + " " + 
+				"mSoftTokenDisabled: "	+ softTokenDBInfoObj.mSoftTokenDisabled + " " + 
+	    			"");
+
+
+		if (softTokenDBInfoObj.mSoftTokenDisabled) {
+		    return softTokenDBInfoObj;
+		}
+
+    		var softTokenDBFile = Components.classes["@mozilla.org/file/local;1"]
+					.createInstance(Components.interfaces.nsILocalFile);
+		softTokenDBFile.initWithPath(softTokenDBInfoObj.mSoftTokenDBPath);
+		if (softTokenDBFile.exists()) {
+		    softTokenDBInfoObj.mSoftTokenDBFile = softTokenDBFile;
+		}
+		return softTokenDBInfoObj;
+	},
+
+	loadExternalSoftTokens : function(aSoftTokenDBInfoList)
+	{
+	    this.logTrace("ExternalSoftTokenInstaller.loadExternalSoftTokens():.............Start.");
+
+	    var softTokenDBInfoItemList = aSoftTokenDBInfoList.split("|");
+	    if (softTokenDBInfoItemList.length <= 0) {
+	    	return;
+	    }
+	    for (var i = 0; i < softTokenDBInfoItemList.length; i++) {
+		var softTokenDBInfoItem = softTokenDBInfoItemList[i];
+
+		var softTokenDBInfoObj = null;
+		softTokenDBInfoObj  = this.parseExternalSoftTokenDBInfo(softTokenDBInfoItem);
+		if (!softTokenDBInfoObj) {
+		    continue;
+		}
+		if (softTokenDBInfoObj.mSoftTokenDisabled) {
+	    	    this.logDebug("ExternalSoftTokenInstaller.loadExternalSoftTokens(): ignoring softtoken : " + softTokenDBInfoItem + " becuase it is disabled.");
+		    continue;
+		}
+		if (!softTokenDBInfoObj.mSoftTokenDBFile) {
+	    	    this.logDebug("ExternalSoftTokenInstaller.loadExternalSoftTokens(): ignoring softtoken : " + softTokenDBInfoItem + " becuase DB directory does not exist.");
+		    continue;
+		}
+
+		try {
+		    this.mountExternalSoftToken(softTokenDBInfoObj);
+		} catch (ex) {
+	    	    this.logError("ExternalSoftTokenInstaller.loadExternalSoftTokens(): this.mountExternalSoftToken() failed - ex: " + ex);
+		    continue;
+		}
+	    }
+	},
+
+	mountExternalSoftToken : function(aSoftTokenDBInfoObj)
+	{
+	    this.logTrace("ExternalSoftTokenInstaller.mountExternalSoftToken():.............Start.");
+	    var /* nsIPKCS11Slot  */ slot = null;
+	    var /* nsIPK11Token   */ token = null;
+	    try {
+	    	slot = this.mSoftTokenDbManager.mountSoftTokenDBSlot(
+                        	aSoftTokenDBInfoObj.mSoftTokenDBPath,
+                        	aSoftTokenDBInfoObj.mSoftTokenCertPrefix,
+                        	aSoftTokenDBInfoObj.mSoftTokenName,
+				aSoftTokenDBInfoObj.mSoftTokenReadOnly,
+				aSoftTokenDBInfoObj.mEnableFips,
+				aSoftTokenDBInfoObj.mPerformLogin
+				);
+	    	token = slot.getToken();
+	    } catch (ex) {
+		this.logError("ExternalSoftTokenInstaller.mountExternalSoftToken(): this.mSoftTokenDbManager.mountSoftTokenDB() failed - ex: " + ex);
+		return;
+	    }
+	    this.logTrace("ExternalSoftTokenInstaller.mountExternalSoftToken():.............End.");
+	},
+
+	mountExternalSoftTokenX : function(aSoftTokenDBPath, aSoftTokenName, aSoftTokenCertPrefix, aSoftTokenReadOnly)
+	{
+	    this.logTrace("ExternalSoftTokenInstaller.mountExternalSoftToken():.............Start.");
+	    var token = null;
+	    token = this.mSoftTokenDbManager.mountSoftTokenDB(
+                        aSoftTokenDBPath,
+                        aSoftTokenCertPrefix,
+                        aSoftTokenName,
+			aSoftTokenReadOnly,
+			false,
+                        false
+			);
+	    this.logTrace("ExternalSoftTokenInstaller.mountExternalSoftToken():.............End.");
+	}
+}
+
+
+/*
+Source:  Detecting page load: 
+http://developer.mozilla.org/en/docs/Code_snippets:Tabbed_browser#Detecting_page_load
+http://developer.mozilla.org/en/docs/Code_snippets:On_page_load
+*/
+
+window.addEventListener(
+  "load",
+  function (e) {
+    ExternalSoftTokenInstaller.init();
+  },
+  false
+);
+
+]]>
+</script>
+
+ 
+</overlay>
+
+

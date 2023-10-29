@@ -1,0 +1,230 @@
+<?xml version="1.0"?>
+<!-- @(#) $Id: groupattribute.xml,v 1.8 2009/04/16 13:11:53 subrata Exp $ -->
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is Avaya Labs Research, Avaya Inc. Code.
+   -
+   - The Initial Developer of the Original Code is
+   - Subrata Mazumdar, Avaya Labs Research, Avaya Inc.
+   - Portions created by the Initial Developer are Copyright (C) 2007.
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Subrata Mazumdar (mazum@avaya.com)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+
+<!DOCTYPE bindings SYSTEM "chrome://keymanager/locale/keyManager.dtd">
+
+<bindings id="groupattributeBindings"
+    xmlns="http://www.mozilla.org/xbl"
+    xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    xmlns:xbl="http://www.mozilla.org/xbl">
+
+    <binding id="groupattributeBinding"
+	extends="chrome://keymanager/content/ExtnXBL/certextn.xml#certextnbaseBinding"
+        >
+        <!--
+        <resources>
+    	    <script type="application/x-javascript" src="chrome://keymanager/content/ExtnXBL/certextn2props.js"/>
+	    <stylesheet src="chrome://keymanager/skin/kmbindings.css"/>
+        </resources>
+        -->
+    	<!-- content, property, method and event descriptions go here -->
+    	<content>
+	    <xul:certextn anonid="attrcert.attribute.groupattribute"
+	        xbl:inherits="captionlabel,active,activelabel,activetooltip,activePropName,mandatory,mandatorylabel,mandatorytooltip,mandatoryPropName"
+	        captionlabel="Group Attribute"
+		activePropName="group-attribute"
+		criticalhidden="true"
+		mandatoryhidden="true"
+		flex="1"
+		optionsflex="1"
+    		oncommand="getBindingParent(this).handleActivateAttr(this, event)"
+		>
+		<xul:attrsyntax anonid="attrcert.attribute.groupattribute.value"
+		    xbl:inherits="palabel,patype,patypetooltip,patypedisabled,patypehidden,pavaluetooltip,pavaluedisabled,paaddlabel,paaddtooltip,paremovelabel,paremovetooltip,palistlabel,palisttooltip,parows,paCertPropName,panewnamesearchparam,valueslabel,valuesnewvaluetooltip,valueslistlabel,valueslisttooltip,valuesrows,valuesaddlabel,valuesaddtooltip,valuesremovelabel,valuesremovetooltip,valuestextValues,valuestype,valuestypetooltip,valuestypedisabled,readonly,valuesCertPropName"
+		    palabel="Group Policy Authority"
+		    patype="uri"
+		    patypedisabled="true"
+		    pavaluetooltip="(OPTIONAL) Enter the ploicy authority for the group"
+		    panewnamesearchparam="attrcert.attribute.groupattribute.policy.authority"
+		    valueslabel="Group Names"
+		    valuestype="octets"
+		    valueslisttooltip="List of Group Names"
+		    valuesaddtooltip="Use this button to add a new group name (on the left) to the list"
+		    valuesremovetooltip="Use this button to remove the selected group name from the list"
+		    valuessearchparam="attrcert.attribute.groupattribute.values.newvalue"
+
+		    paCertPropName="group-attribute-policy-authority"
+		    valuesCertPropName="group-attribute-values"
+		    />
+	    </xul:certextn>
+    	</content>
+	<implementation>
+	    <field name="mBaseExtnElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "attrcert.attribute.groupattribute");
+	    </field>
+	    <field name="mAttributeValueElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "attrcert.attribute.groupattribute.value");
+	    </field>
+
+	    <property name="active"
+	        onget="return this.mBaseExtnElem.active;"
+	    	onset="this.mBaseExtnElem.active = val;return val;"
+		/>
+
+	    <property name="readonly"
+	        onget="return this.mBaseExtnElem.readonly;"
+	    	onset="this.mBaseExtnElem.readonly = val;
+		       this.setReadonly(this.mBaseExtnElem, val);
+		       this.mAttributeValueElem.readonly=val;
+		       if(!val) {this.refresh();}
+		       return val;"
+		/>
+	    <property name="disabled"
+	        onget="return this.mBaseExtnElem.disabled;"
+	    	onset="this.mBaseExtnElem.disabled = val;return val;"
+		/>
+
+	    <constructor>
+		<![CDATA[
+		// this.LogTrace("groupattributeBinding.constructor():......................Start.\n");
+
+		this.refresh();
+
+		// this.LogTrace("groupattributeBinding.constructor():......................End.\n");
+		]]>
+	    </constructor>
+
+	    <method name="refresh">
+	        <body>
+		<![CDATA[
+		// Force the critical checkbox to be hidden
+		// TODO: do this at the base class for attribute.
+		this.handleActivateAttr();
+		]]>
+	        </body>
+	    </method>
+
+
+	    <method name="reset">
+	        <body>
+		<![CDATA[
+		// this.LogTrace("groupattributeBinding.reset():......................Start.\n");
+
+		this.mAttributeValueElem.reset();
+		this.resetCertExtn(this.mBaseExtnElem);
+		this.mBaseExtnElem.reset();
+
+		// this.LogTrace("groupattributeBinding.reset():......................End.\n");
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="handleActivateAttr">
+		<parameter name="targetElem"/>
+		<parameter name="ev"/>
+	        <body>
+		<![CDATA[
+		this.mBaseExtnElem.removeAttribute("criticalhidden");
+		this.mBaseExtnElem.setAttribute("criticalhidden", true);
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="handlePolicyAuthorityChange">
+		<parameter name="targetElem"/>
+		<parameter name="ev"/>
+	        <body>
+		<![CDATA[
+		]]>
+	        </body>
+	    </method>
+
+
+	    <method name="toCertProps">
+		<parameter name="aCertProps"/>
+	        <body>
+		<![CDATA[
+		if (!this.active) {
+		    return;
+		}
+
+		this.certExtnToProps(this.mBaseExtnElem, aCertProps);
+		this.mAttributeValueElem.toCertProps(aCertProps);
+
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="updateCertProps">
+		<parameter name="aCertProps"/>
+	        <body>
+		<![CDATA[
+
+		this.LogTrace("groupattributeBinding.updateCertProps():......................Start.\n");
+
+		if (! this.containsAnyProperty(this.mBaseExtnElem, aCertProps)) {
+		    return;
+		}
+		this.LogTrace("groupattributeBinding.updateCertProps():......................10.\n");
+
+		this.reset();
+
+		this.updateCertExtnProps(this.mBaseExtnElem, aCertProps);
+		this.mAttributeValueElem.updateCertProps(aCertProps);
+
+		this.refresh();
+
+		this.LogTrace("groupattributeBinding.updateCertProps():......................End.\n");
+		]]>
+	        </body>
+	    </method>
+
+	    <method name="mergeCertProps">
+		<parameter name="aCertProps"/>
+	        <body>
+		<![CDATA[
+		if (! this.containsAnyProperty(this.mBaseExtnElem, aCertProps)) {
+		    return;
+		}
+
+		this.updateCertExtnProps(this.mBaseExtnElem, aCertProps, true);
+		this.mAttributeValueElem.mergeCertProps(aCertProps);
+
+		this.refresh();
+		]]>
+	        </body>
+	    </method>
+
+	</implementation>
+    </binding>
+
+</bindings>
+

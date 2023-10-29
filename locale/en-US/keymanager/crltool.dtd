@@ -1,0 +1,104 @@
+<!ENTITY keymgr.crltool.dialog.win.title		"CRL Signing Tool">
+<!ENTITY keymgr.crltool.options.win.title		"CRL Signing Tool Preferences">
+<!ENTITY keymgr.crltool.export.win.title		"Choose CRL Export Format">
+<!ENTITY keymgr.crltool.version				"0.1.2.20081218">
+
+<!ENTITY keymgr.crlmanager.crl.create.label			"Create">
+<!ENTITY keymgr.crlmanager.crl.create.tooltip			"Click this button to open the dialog window for creating a CRL.">
+<!ENTITY keymgr.crlmanager.crl.view.label			"View">
+<!ENTITY keymgr.crlmanager.crl.view.tooltip			"Click this button to open the dialog window for viewing the details a CRL.">
+<!ENTITY keymgr.crlmanager.crl.edit.label			"Edit">
+<!ENTITY keymgr.crlmanager.crl.edit.tooltip			"Click this button to open the dialog window for editing the details a CRL, addding or removing CRL entries for revoked certs.">
+<!ENTITY keymgr.crlmanager.crl.export.label			"Export">
+<!ENTITY keymgr.crlmanager.crl.export.tooltip			"Click this button to save the selected CRL to a file either in Base64 or DER format.">
+<!ENTITY keymgr.crlmanager.crl.load.label			"Load">
+<!ENTITY keymgr.crlmanager.crl.load.tooltip			"Click this button to load/import CRL data from a local file. The CRL data could be either in Base64 or DER format. This method is an alternative to 'Import' method. The 'Import' method loads CRL data using an URL. The CRL-signer certificate must be in the CERT-DB prior to loading the CRL data.">
+<!ENTITY keymgr.crlmanager.crl.refresh.label			"Refresh">
+<!ENTITY keymgr.crlmanager.crl.refresh.tooltip			"Click this button to refresh the CRL tree.">
+
+<!--
+<!ENTITY keymgr.crltool.view.label			"View">
+<!ENTITY keymgr.crltool.view.tooltip			"Use this button to open the dialog window for viewing the details a CRL.">
+<!ENTITY keymgr.crltool.create.label			"Create">
+<!ENTITY keymgr.crltool.create.tooltip			"Use this button to open the dialog window for creating a new CRL.">
+<!ENTITY keymgr.crltool.edit.label			"Modify">
+<!ENTITY keymgr.crltool.edit.tooltip			"Use this button to open the dialog window for editing the details a CRL, addding or removing CRL entries for revoked certs.">
+<!ENTITY keymgr.crltool.refresh.label			"Refresh">
+<!ENTITY keymgr.crltool.refresh.tooltip			"Use this button to refresh CRL tree.">
+-->
+
+
+<!ENTITY keymgr.crltool.create.crl.cmd.create.label		"Create">
+<!ENTITY keymgr.crltool.create.crl.cmd.view.label		"View">
+<!ENTITY keymgr.crltool.create.crl.cmd.modify.label		"Modify">
+<!ENTITY keymgr.crltool.create.crl.cmd.refresh.label		"Refresh">
+<!ENTITY keymgr.crltool.create.crl.cmd.close.label		"Close">
+<!ENTITY keymgr.crltool.create.crl.cmd.cancel.label		"Cancel">
+<!ENTITY keymgr.crltool.create.crl.cmd.help.label		"Help">
+
+
+<!ENTITY keymgr.crltool.create.crl.cert.view.label		"View Cert">
+<!ENTITY keymgr.crltool.create.crl.cert.view.tooltip		"Click this button to show the selected cert.">
+
+<!ENTITY keymgr.crltool.file.browser.label			"Browse">
+<!ENTITY keymgr.crltool.file.format.base64.label		"Base64">
+<!ENTITY keymgr.crltool.file.format.base64.tooltip		"Base64">
+
+
+<!ENTITY keymgr.crltool.create.crl.ca.cert.label		"CRL Issuer">
+<!ENTITY keymgr.crltool.create.crl.ca.certpicker.tooltip	"The X.509 certificate of the entity who is signing and issuing this CRL. Select the signing cert from list. The Signing cert must have the private key in the CertDB. The X.509 cert should also have active BasicConstraint extension and the 'isCA' bit of the extension must be set to true. If the 'keyUsage' extension is active, then the 'CRLSign' bit must be set to true.">
+<!ENTITY keymgr.crltool.create.crl.version.label          	"Version">
+<!ENTITY keymgr.crltool.create.crl.version.tooltip          	"This optional field describes the version of the encoded CRL. Select the CRL version.">
+<!ENTITY keymgr.crltool.create.crl.version2.label          	"Version2">
+<!ENTITY keymgr.crltool.create.crl.version2.tooltip        	"This is the only version option for CRL">
+<!ENTITY keymgr.crltool.create.crl.token.label			"CRL Token">
+<!ENTITY keymgr.crltool.create.crl.token.tooltip		"Select the PK11 token form the list where you want to store the newly created (issued) CRL.">
+<!ENTITY keymgr.crltool.create.crl.sigAlgName.label		"Signature Algorithm ">
+<!ENTITY keymgr.crltool.create.crl.sigAlgName.tooltip		"The algorithm identifier for the algorithm used to sign the CRL. Select the CRL signature algorithm from the list.">
+<!ENTITY keymgr.crltool.create.crl.lastUpdateDate.label		"Last Update Date ">
+<!ENTITY keymgr.crltool.create.crl.lastUpdateDate.tooltip	"The issue date of this CRL.">
+<!ENTITY keymgr.crltool.create.crl.nextUpdateDate.label		"Next Update Date ">
+<!ENTITY keymgr.crltool.create.crl.nextUpdateDate.tooltip	"(OPTIONAL)The date by which the next CRL will be issued. If you do not specify this value, then remove the date from the text field - make it an  empty string.">
+
+<!ENTITY keymgr.crltool.create.crl.crlNumber.label		"CRL Number">
+<!ENTITY keymgr.crltool.create.crl.crlNumber.none.label		"None">
+<!ENTITY keymgr.crltool.create.crl.crlNumber.none.tooltip	"(OPTIONAL)Select this option if yow do not want any CRL-number. ">
+<!ENTITY keymgr.crltool.create.crl.crlNumber.autogen.label	"Auto-Gen">
+<!ENTITY keymgr.crltool.create.crl.crlNumber.autogen.tooltip	"(OPTIONAL)Select this option if yow want to automatically generate serial number of the CRL">
+<!ENTITY keymgr.crltool.create.crl.crlNumber.input.label	"Use this value:">
+<!ENTITY keymgr.crltool.create.crl.crlNumber.input.tooltip	"(OPTIONAL)Select this option if yow want to specify the the serial number for CRL using the textbox to the right.">
+<!ENTITY keymgr.crltool.create.crl.crlNumber.value.tooltip	"(OPTIONAL)Enter the serial number of the CRL. It is a monotonically increasing sequence number for a given CRL scope and CRL issuer.  The serial number could be either in the Hex or in the Decimal format.">
+
+<!ENTITY keymgr.crltool.create.crl.authKeyId.label		"Use Auth Key ID">
+<!ENTITY keymgr.crltool.create.crl.authKeyId.tooltip		"(OPTIONAL) It is used to identify the public key corresponding to the private key used to sign a CRL.">
+<!ENTITY keymgr.crltool.create.crl.revokedCertSerialNumbers.label	"Revoked Cert Serial Numbers">
+<!ENTITY keymgr.crltool.create.crl.revoked.serial.list.tooltip	"(OPTIONAL) Revoked certificates are listed by their serial numbers. If you specify serial numbers of the revoked cert, you must specify the revocation date below.">
+<!ENTITY keymgr.crltool.create.crl.revoked.serial.newvalue.tooltip	"Enter the serial number of the cert to revoked. The serial number could be either in the Hex or in the Decimal format. Click the 'Add' button to add the number to the list below.">
+<!ENTITY keymgr.crltool.create.crl.cert.browse.label		"Browse">
+<!ENTITY keymgr.crltool.create.crl.cert.browse.tooltip		"Select this button to open a dialog window to select certificate (issued by the choosen CA) for revocation">
+
+<!ENTITY keymgr.crltool.create.crl.certRevocationDate.label	"Cert Revocation Date ">
+<!ENTITY keymgr.crltool.create.crl.certRevocationDate.tooltip	"The date on which the revocation of the cert occurred.">
+<!ENTITY keymgr.crltool.create.crl.crlEntryReasonCode.label	"Revocation Reason Code ">
+<!ENTITY keymgr.crltool.create.crl.crlEntryReasonCode.tooltip	"(OPTIONAL) Identifies the reason for the certificate revocation. CRL issuers are strongly encouraged to include meaningful reason codes in CRL entries. If you do not want to specify this value, then select the 'unspecified' menu-item.">
+<!ENTITY keymgr.crltool.create.crl.crlEntryInvalidDate.label	"Invalidity Date ">
+<!ENTITY keymgr.crltool.create.crl.crlEntryInvalidDate.tooltip	"(OPTIONAL)the date on which it is known or suspected that the private key was compromised or that the certificate otherwise became invalid.  This date may be earlier than the revocation date in the CRL entry. If you do not want to specify this value, then remove the date from the text field - make it an  empty string.">
+<!ENTITY keymgr.crltool.create.crl.modify.status.text		"You must change the lastUpdate date and then click the 'Modify' button to persists the changes in CRL entries in the Cert-DB.">
+
+<!ENTITY keymgr.crltool.create.crl.info.label			"CRL File Info">
+<!ENTITY keymgr.crltool.create.crl.save.label			"Save the Created CRL">
+<!ENTITY keymgr.crltool.create.crl.save.tooltip			"Save the Created CRL">
+<!ENTITY keymgr.crltool.create.crl.outfile.label		"Out CRL File">
+<!ENTITY keymgr.crltool.create.crl.outfile.dialog.msg		"Choose CRL file to save">
+<!ENTITY keymgr.crltool.create.crl.outfile.type.msg		"CRL File">
+<!ENTITY keymgr.crltool.create.crl.outfile.tooltip		"Enter path to the CRL File">
+<!ENTITY keymgr.crltool.create.crl.outfile.browser.tooltip	"Use this button to select the path to the CRL File.">
+
+<!ENTITY keymgr.crltool.crlentry.add.dialog.title		"Add CRL Entry Dialog">
+
+<!ENTITY keymgr.crltool.certpicker.dialog.win.title		"Revoked Certificate Selector Dialog">
+<!ENTITY keymgr.crltool.certpicker.cacert.label			"Certificate to be revoked - Issued by : ">
+<!ENTITY keymgr.crltool.certpicker.cert.menu.tooltip		"Select the certificate to be revoked from the list">
+<!ENTITY keymgr.crltool.certpicker.cert.view.label		"View Cert">
+<!ENTITY keymgr.crltool.certpicker.cert.view.tooltip		"Click this button to view the selected certificate">
+

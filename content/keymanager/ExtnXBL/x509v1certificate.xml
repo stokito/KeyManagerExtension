@@ -1,0 +1,2099 @@
+<?xml version="1.0"?>
+<!-- @(#) $Id: x509v1certificate.xml,v 1.31 2011/02/04 18:54:53 subrata Exp $ -->
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is Avaya Labs Research, Avaya Inc. Code.
+   -
+   - The Initial Developer of the Original Code is
+   - Subrata Mazumdar, Avaya Labs Research, Avaya Inc.
+   - Portions created by the Initial Developer are Copyright (C) 2007.
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Subrata Mazumdar (mazum@avaya.com)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+
+<!DOCTYPE bindings SYSTEM "chrome://keymanager/locale/keyManager.dtd">
+
+<bindings id="x509v1certificateBindings"
+    xmlns="http://www.mozilla.org/xbl"
+    xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    xmlns:xbl="http://www.mozilla.org/xbl">
+
+    <binding id="keytypeBinding"
+	extends="chrome://keymanager/content/ExtnXBL/certextn.xml#certextnbaseBinding"
+	>
+	<content>
+	    <xul:hbox
+		pack="start" align="start"
+		flex="1"
+		>
+		<xul:radiogroup anonid="certmgr.certdetail.keyType" flex="1"
+		    xbl:inherits="disabled,readonly,value=keytype,tooltiptext"
+		    certPropName="keytype"
+		    >
+		    <xul:hbox flex="1"
+			pack="start" align="start"
+			>
+			<xul:radio anonid="certmgr.certdetail.keyType.rsa"
+			    xbl:inherits="disabled,readonly,selected=keytype_rsa,hidden=rsahidden"
+			    label="&certmgr.certdetail.keyType.rsa.label;"
+			    tooltiptext="&certmgr.certdetail.keyType.rsa.tooltip;"
+			    value="rsa"
+			    certPropName="keytype_rsa"
+			    defaultSigAlgorithm="SHA1"
+			    group="certmgr.certdetail.keyType"
+			    />
+			<xul:radio anonid="certmgr.certdetail.keyType.dsa"
+			    xbl:inherits="disabled,readonly,selected=keytype_dsa,hidden=dsahidden"
+			    label="&certmgr.certdetail.keyType.dsa.label;"
+			    tooltiptext="&certmgr.certdetail.keyType.dsa.tooltip;"
+			    value="dsa"
+			    certPropName="keytype_dsa"
+			    defaultSigAlgorithm="SHA1"
+			    group="certmgr.certdetail.keyType"
+			    />
+			<xul:radio anonid="certmgr.certdetail.keyType.ec"
+			    xbl:inherits="disabled,readonly,selected=keytype_ec,hidden=echidden"
+			    label="&certmgr.certdetail.keyType.ec.label;"
+			    tooltiptext="&certmgr.certdetail.keyType.ec.tooltip;"
+			    disabled="true"
+			    value="ec"
+			    certPropName="keytype_ec"
+			    defaultSigAlgorithm="SHA1"
+			    group="certmgr.certdetail.keyType"
+			    />
+		    </xul:hbox>
+		</xul:radiogroup>
+	    </xul:hbox>
+	</content>
+	<implementation>
+	    <field name="mKeyTypeRSAElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certmgr.certdetail.keyType.rsa");
+	    </field>
+	    <field name="mKeyTypeDSAElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certmgr.certdetail.keyType.dsa");
+	    </field>
+	    <field name="mKeyTypeECElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certmgr.certdetail.keyType.ec");
+	    </field>
+	    <field name="mKeyTypeGroupElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certmgr.certdetail.keyType");
+	    </field>
+	    <property name="readonly"
+		onget="return this.hasAttribute('readonly');"
+		onset="if (val) this.setAttribute('readonly',true);
+		       else this.removeAttribute('readonly');
+		       return val;"
+		/>
+	    <property name="value"
+		onget="return this.mKeyTypeGroupElem.selectedItem.value;"
+		onset="if (val == 'ec') {this.mKeyTypeGroupElem.selectedItem = this.mKeyTypeECElem;}
+		       else if (val == 'dsa') {this.mKeyTypeGroupElem.selectedItem = this.mKeyTypeDSAElem;}
+		       else {this.mKeyTypeGroupElem.selectedItem = this.mKeyTypeRSAElem;}
+		       return val;"
+		/>
+	    <property name="keyType"
+		onget="return this.value;"
+		onset="this.value=val; return val;"
+		/>
+	</implementation>
+    </binding>
+
+    <binding id="keysizeBinding"
+	extends="chrome://keymanager/content/ExtnXBL/certextn.xml#certextnbaseBinding"
+	>
+	<content>
+	    <xul:hbox
+		pack="start" align="start"
+		flex="1"
+		>
+		<xul:menulist anonid="certmgr.certdetail.keySize.type.menu"
+		    xbl:inherits="disabled,disabled=readonly,value=keysize,tooltiptext"
+		    value="1024"
+		    tooltiptext="&certmgr.certdetail.keySize.tooltip;"
+		    certPropName="keysizeType"
+		    xoncommand="getBindingParent(this).handleKeySizeTypeChange(this, event)"
+		    >
+		    <xul:menupopup>
+			<xul:menuitem anonid="certmgr.certdetail.keySize.1024"
+			    label="&certmgr.certdetail.keySize.1024.label;"
+			    value="1024"
+			    />
+			<xul:menuitem anonid="certmgr.certdetail.keySize.2048"
+			    label="&certmgr.certdetail.keySize.2048.label;"
+			    value="2048"
+			    />
+		    </xul:menupopup>
+	       </xul:menulist>
+	    </xul:hbox>
+	</content>
+	<implementation>
+	    <field name="mKeySizeTypeMenuElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certmgr.certdetail.keySize.type.menu");
+	    </field>
+	    <property name="readonly"
+		onget="return this.hasAttribute('readonly');"
+		onset="if (val) this.setAttribute('readonly',true);
+		       else this.removeAttribute('readonly');
+		       return val;"
+		/>
+	    <property name="value"
+		onget="return this.mKeySizeTypeMenuElem.value;"
+		onset="this.mKeySizeTypeMenuElem.value=val; return val;"
+		/>
+	    <property name="keySize"
+		onget="return this.value;"
+		onset="this.value=val; return val;"
+		/>
+	</implementation>
+    </binding>
+
+    <binding id="subjectBinding"
+	extends="chrome://keymanager/content/ExtnXBL/certextn.xml#certextnbaseBinding"
+	>
+	<!--
+	<resources>
+	    <script type="application/x-javascript" src="chrome://keymanager/content/ExtnXBL/certextn2props.js"/>
+	    <stylesheet src="chrome://keymanager/skin/kmbindings.css"/>
+	</resources>
+	-->
+	<!-- content, property, method and event descriptions go here -->
+	<content>
+	    <xul:grid anonid="certmgr.certdetail.subject.info" flex="1"> 
+		<xul:columns>
+		    <xul:column/>
+		    <xul:column flex="1"/>
+		</xul:columns>
+		<xul:rows flex="1">
+		    <xul:row 
+			xbl:inherits="hidden=hidefirstname"
+			>
+			<xul:label control="certmgr.certdetail.firstName" value="&certmgr.certdetail.firstName.label;"/> 
+			<xul:textbox anonid="certmgr.certdetail.firstName" value=""
+			    xbl:inherits="disabled,readonly,value=firstName"
+			    tooltiptext="&certmgr.certdetail.firstName.tooltip;"
+	  		    type="autocomplete" 
+	  		    autocompletesearch="form-history" 
+	  		    completeselectedindex="true"
+	  		    autocompletesearchparam="keymgr.certdetail.firstName"
+			    certPropName="firstName"
+			    x500PropName="fn"
+	  		    onkeyup="if (event.keyCode == 13)
+	  			{getBindingParent(this).certFormFieldAutoCompleteAction(this, event)};"
+			    onchange="getBindingParent(this).modifySubjectCommonName(this, 'fn', event)"
+			    zonselect="getBindingParent(this).modifySubjectCommonName(this, 'fn', event)"
+			    />
+		    </xul:row>
+		    <xul:row 
+			xbl:inherits="hidden=hidelastname"
+			>
+			<xul:label control="certmgr.certdetail.lastName" value="&certmgr.certdetail.lastName.label;"/> 
+			<xul:textbox anonid="certmgr.certdetail.lastName" value=""
+			    xbl:inherits="disabled,readonly,value=lastName"
+			    tooltiptext="&certmgr.certdetail.lastName.tooltip;"
+	  		    type="autocomplete" 
+	  		    autocompletesearch="form-history" 
+	  		    completeselectedindex="true"
+	  		    autocompletesearchparam="keymgr.certdetail.lastName"
+			    certPropName="lastName"
+			    x500PropName="sn"
+	  		    onkeyup="if (event.keyCode == 13)
+	  			{getBindingParent(this).certFormFieldAutoCompleteAction(this, event)};"
+			    onchange="getBindingParent(this).modifySubjectCommonName(this, 'sn', event)"
+			    zonselect="getBindingParent(this).modifySubjectCommonName(this, 'sn', event)"
+			    />
+		    </xul:row>
+
+		    <xul:row 
+			xbl:inherits="hidden=hidecommonname"
+			>
+			<xul:label control="certmgr.certdetail.commonName" value="&certmgr.certdetail.commonName.label;"/> 
+			<xul:textbox anonid="certmgr.certdetail.commonName" value=""
+			    xbl:inherits="disabled,readonly,value=commonName"
+			    tooltiptext="&certmgr.certdetail.commonName.tooltip;"
+	  		    type="autocomplete" 
+	  		    autocompletesearch="form-history" 
+	  		    completeselectedindex="true"
+	  		    autocompletesearchparam="keymgr.certdetail.commonName"
+			    certPropName="name"
+			    x500PropName="cn"
+	  		    onkeyup="if (event.keyCode == 13)
+	  			{getBindingParent(this).certFormFieldAutoCompleteAction(this, event)};"
+			    onchange="getBindingParent(this).modifySubject(this, 'cn', event)"
+			    zonselect="getBindingParent(this).modifySubject(this, 'cn', event)"
+			    />
+		    </xul:row>
+
+		    <xul:row 
+			xbl:inherits="hidden=hideemail"
+			>
+			<xul:label control="certmgr.certdetail.email" value="&certmgr.certdetail.email.label;"/> 
+			<xul:hbox flex="1" align="start">
+			    <xul:checkbox anonid="certmgr.certdetail.email.subjaltname"
+				xbl:inherits="disabled=readonly,checked=email_subjaltname"
+				label="&certmgr.certdetail.email.subjaltname.label;"
+				tooltiptext="&certmgr.certdetail.email.subjaltname.tooltip;"
+				certPropName="email_subjaltname"
+				hidden="true"
+				/>
+			    <xul:radiogroup anonid="certmgr.certdetail.email.type"
+				xbl:inherits="disabled=readonly,value=email_type"
+				certPropName="email_type"
+				>
+				<xul:hbox>
+				    <xul:radio anonid="certmgr.certdetail.email.type.rfc1274"
+					xbl:inherits="disabled=readonly"
+					label="&certmgr.certdetail.email.type.rfc1274.label;"
+					tooltiptext="&certmgr.certdetail.email.type.rfc1274.tooltip;"
+					selected="true"
+					value="rfc1274"
+					x500PropName="mail"
+					oncommand="getBindingParent(this).modifySubject(this, 'mail', event)"
+					group="certmgr.certdetail.email.type"/>
+				    <xul:radio anonid="certmgr.certdetail.email.type.pkcs9"
+					xbl:inherits="disabled=readonly"
+					label="&certmgr.certdetail.email.type.pkcs9.label;"
+					tooltiptext="&certmgr.certdetail.email.type.pkcs9.tooltip;"
+					value="pkcs9"
+					x500PropName="e"
+					oncommand="getBindingParent(this).modifySubject(this, 'e', event)"
+					group="certmgr.certdetail.email.type"/>
+				</xul:hbox>
+			    </xul:radiogroup>
+			    <xul:textbox anonid="certmgr.certdetail.email" value="" flex="1"
+				xbl:inherits="disabled,readonly,value=email"
+				tooltiptext="&certmgr.certdetail.email.tooltip;"
+	  			type="autocomplete" 
+	  			autocompletesearch="form-history" 
+	  			completeselectedindex="true"
+	  			autocompletesearchparam="keymgr.certdetail.email"
+				certPropName="email"
+				x500PropName="email"
+	  			onkeyup="if (event.keyCode == 13)
+	  			    {getBindingParent(this).certFormFieldAutoCompleteAction(this, event)};"
+				onchange="getBindingParent(this).modifySubject(this, 'email', event); getBindingParent(this).handleEmailChange(this)"
+				/>
+			</xul:hbox>
+		    </xul:row>
+		    <xul:row 
+			xbl:inherits="hidden=hideuid"
+			>
+			<xul:label control="certmgr.certdetail.uid" value="&certmgr.certdetail.uid.label;"/> 
+			<xul:textbox anonid="certmgr.certdetail.uid" value=""
+			    xbl:inherits="disabled,readonly,value=uid"
+			    certPropName="uid"
+			    x500PropName="uid"
+	  		    type="autocomplete" 
+	  		    autocompletesearch="form-history" 
+	  		    completeselectedindex="true"
+	  		    autocompletesearchparam="keymgr.certdetail.uid"
+			    tooltiptext="&certmgr.certdetail.uid.tooltip;"
+	  		    onkeyup="if (event.keyCode == 13)
+	  			{getBindingParent(this).certFormFieldAutoCompleteAction(this, event)};"
+			    onchange="getBindingParent(this).modifySubject(this, 'uid', event)"
+			    />
+		    </xul:row>
+		    <xul:row 
+			xbl:inherits="hidden=hideorgunit"
+			>
+			<xul:label control="certmgr.certdetail.orgUnit" value="&certmgr.certdetail.orgUnit.label;"/> 
+			<xul:textbox anonid="certmgr.certdetail.orgUnit" value=""
+			    xbl:inherits="disabled,readonly,value=org_unit"
+			    certPropName="org_unit"
+			    x500PropName="ou"
+			    tooltiptext="&certmgr.certdetail.orgUnit.tooltip;"
+	  		    type="autocomplete" 
+	  		    autocompletesearch="form-history" 
+	  		    completeselectedindex="true"
+	  		    autocompletesearchparam="keymgr.certdetail.orgUnit"
+	  		    onkeyup="if (event.keyCode == 13)
+	  			    {getBindingParent(this).certFormFieldAutoCompleteAction(this, event)};"
+			    onchange="getBindingParent(this).modifySubject(this, 'ou', event)"
+			    />
+		    </xul:row>
+		    <xul:row 
+			xbl:inherits="hidden=hideorg"
+			>
+			<xul:label control="certmgr.certdetail.org" value="&certmgr.certdetail.org.label;"/> 
+			<xul:textbox anonid="certmgr.certdetail.org" value="" 
+			    xbl:inherits="disabled,readonly,value=org"
+			    certPropName="org"
+			    x500PropName="o"
+			    tooltiptext="&certmgr.certdetail.org.tooltip;"
+			    onchange="getBindingParent(this).modifySubject(this, 'o', event)" 
+			    />
+		    </xul:row>
+		    <xul:row 
+			xbl:inherits="hidden=hidelocality"
+			>
+			<xul:label control="certmgr.certdetail.locality" value="&certmgr.certdetail.locality.label;"/> 
+			<xul:textbox anonid="certmgr.certdetail.locality" value="" 
+			    xbl:inherits="disabled,readonly,value=locality"
+			    tooltiptext="&certmgr.certdetail.locality.tooltip;"
+			    certPropName="locality"
+			    x500PropName="l"
+			    onchange="getBindingParent(this).modifySubject(this, 'l', event)" 
+			    />
+		    </xul:row>
+		    <xul:row 
+			xbl:inherits="hidden=hidestate"
+			>
+			<xul:label control="certmgr.certdetail.state" value="&certmgr.certdetail.state.label;"/> 
+			<xul:textbox anonid="certmgr.certdetail.state" value="" 
+			    xbl:inherits="disabled,readonly,value=state"
+			    certPropName="state"
+			    x500PropName="st"
+			    tooltiptext="&certmgr.certdetail.state.tooltip;"
+			    onchange="getBindingParent(this).modifySubject(this, 'st', event)" 
+			    />
+		    </xul:row>
+		    <xul:row 
+			xbl:inherits="hidden=hidecountry"
+			>
+			<xul:label control="certmgr.certdetail.country" value="&certmgr.certdetail.country.label;"/> 
+			<xul:textbox anonid="certmgr.certdetail.country" value="" 
+			    xbl:inherits="disabled,readonly,value=country"
+			    certPropName="country"
+			    x500PropName="c"
+			    tooltiptext="&certmgr.certdetail.country.tooltip;"
+			    onchange="getBindingParent(this).modifySubject(this, 'c', event)" 
+			    />
+		    </xul:row>
+		    <xul:row 
+			xbl:inherits="hidden=hidesubjdnsuffix"
+			>
+			<xul:label control="certmgr.certdetail.subjdnsuffix" value="&certmgr.certdetail.subjdnsuffix.label;"/> 
+			<xul:textbox anonid="certmgr.certdetail.subjdnsuffix" value="" 
+			    xbl:inherits="disabled,readonly,value=subjdnsuffix"
+			    certPropName="subjdnsuffix"
+			    tooltiptext="&certmgr.certdetail.subjdnsuffix.tooltip;"
+			    onchange="getBindingParent(this).modifySubject(this, '', event)" 
+			    />
+		    </xul:row>
+		    <xul:row 
+			xbl:inherits="hidden=hidesubject"
+			>
+			<xul:label value="&certmgr.certdetail.subject.label;"/> 
+			<xul:textbox anonid="certmgr.certdetail.subject"
+			    xbl:inherits="disabled,readonly,value=subject,tooltiptext=subjecttooltip"
+			    value=""
+			    readonly="true"
+			    certPropName="subject"
+			    x500PropName="dn"
+			    tooltiptext="&certmgr.certdetail.subject.tooltip;"
+			    />
+		    </xul:row>
+		    <xul:row 
+			xbl:inherits="hidden=hidealias"
+			>
+			<xul:label control="certmgr.certdetail.alias" value="&certmgr.certdetail.alias.label;"/> 
+			<xul:hbox align="start">
+			    <xul:textbox anonid="certmgr.certdetail.alias" value="" onchange="doAliasChange(this)"
+				xbl:inherits="disabled,readonly,value=nickName"
+				size="40" maxlength="40"
+				tooltiptext="&certmgr.certdetail.alias.tooltip;"
+				certPropName="nickName"
+				/>
+			    <xul:spacer flex="1"/>
+			</xul:hbox>
+		    </xul:row>
+		    <children includes="row"/>
+		</xul:rows>
+	    </xul:grid>
+	</content>
+	<implementation>
+	    <field name="mBaseExtnElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certmgr.certdetail.subject.info");
+	    </field>
+	    <field name="mCommonNameElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certmgr.certdetail.commonName");
+	    </field>
+	    <field name="mSubjectDNSuffixElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certmgr.certdetail.subjdnsuffix");
+	    </field>
+	    <field name="mSubjectElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certmgr.certdetail.subject");
+	    </field>
+	    <field name="mAliasElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certmgr.certdetail.alias");
+	    </field>
+	    <field name="mSubjEmailTypeElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certmgr.certdetail.email.type");
+	    </field>
+
+	    <property name="readonly"
+		onget="return this.hasAttribute('readonly');"
+		onset="if (val) this.setAttribute('readonly',true);
+		       else this.removeAttribute('readonly');
+		       this.setReadonly(this.mBaseExtnElem, val);
+		       if(!val) {this.refresh();}
+		       return val;"
+		/>
+	    <property name="alias"
+		onget="return this.mAliasElem.value;"
+		onset="this.mAliasElem.value=val;
+		       return val;"
+		/>
+	    <property name="commonName"
+		onget="return this.mCommonNameElem.value;"
+		onset="this.mCommonNameElem.value=val;
+		       this.modifySubject(this.mCommonNameElem, 'cn');
+		       return val;"
+		/>
+	    <property name="subjectDNSuffix"
+		onget="return this.mSubjectDNSuffixElem.value;"
+		onset="this.mSubjectDNSuffixElem.value=val;
+		       return val;"
+		/>
+	    <property name="subjectDN"
+		onget="return this.mSubjectElem.value;"
+		onset="this.mSubjectElem.value=val;
+		       return val;"
+		/>
+
+	    <constructor>
+		<![CDATA[
+		// this.mMaxLogLevel = 9;
+		this.LogTrace("subjectBinding.constructor():......................Start.");
+		]]>
+	    </constructor>
+
+	    <method name="refresh">
+		<body>
+		<![CDATA[
+		this.LogTrace("subjectBinding.refresh(" + this.getAttribute("anonid") + "):......................Start.");
+
+		this.LogDebug("subjectBinding.refresh(" + this.getAttribute("anonid") + "): readonly: " + this.getAttribute("readonly") + "");
+		if (this.getAttribute("readonly")) {
+		    return;
+		}
+
+		this.LogDebug("subjectBinding.refresh(): this.mCommonNameElem.value: |" + this.mCommonNameElem.value + "|");
+		this.LogDebug("subjectBinding.refresh(): this.mSubjectElem.value: |" + this.mSubjectElem.value + "|");
+
+		if (this.mCommonNameElem.value == "") {
+		    var firstNameElem = document.getAnonymousElementByAttribute(this, "anonid", "certmgr.certdetail.firstName");
+		    this.modifySubjectCommonName(firstNameElem, "fn");
+		}
+
+		this.LogDebug("subjectBinding.refresh(): this.mSubjectElem.value: |" + this.mSubjectElem.value + "|");
+		if (this.mSubjectElem.value == "") {
+		    this.modifySubject(this.mCommonNameElem, 'cn');
+		}
+
+		this.LogDebug("subjectBinding.refresh(): this.mSubjectElem.value: |" + this.mSubjectElem.value + "|");
+
+		this.LogTrace("subjectBinding.refresh():......................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="activateSubjectItemElem">
+		<parameter name="aCertPropName"/>
+		<parameter name="aStatusFalg"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("activateSubjectItemElem(): aCertPropName: " + aCertPropName + " aStatusFalg: " + aStatusFalg + "");
+		var /* NodeList */ subjItemElemList = this.mBaseExtnElem.getElementsByAttribute("certPropName", aCertPropName);
+		this.LogDebug("subjItemElemList.length: " + subjItemElemList.length + "");
+		for (var i = 0; i < subjItemElemList.length; i++) {
+		    var certPropElem = subjItemElemList.item(i);
+		    if (certPropElem == null) {
+			continue;
+		    }
+		    this.LogDebug("certPropElem: " + certPropElem.getAttribute("anonid") + "");
+		    certPropElem.disabled = !aStatusFalg;
+		    certPropElem.readonly = !aStatusFalg;
+		    break;
+		}
+		]]>
+		</body>
+	    </method>
+	    <method name="handleEmailChange">
+		<parameter name="aEmailElem"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("handleEmailChange():.......................Start.");
+
+		var emailSubjAltNameElem = document.getAnonymousElementByAttribute(this, "anonid", "certmgr.certdetail.email.subjaltname");
+		if ((aEmailElem.value == "") || (aEmailElem.value == "(no email address)")) {
+		    emailSubjAltNameElem.hidden = true;
+		    return;
+		}
+		emailSubjAltNameElem.hidden = false;
+	    
+		this.LogTrace("handleEmailChange():.......................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="modifySubjectCommonName">
+		<parameter name="aSubjItemElem"/>
+		<parameter name="aSubjItemDirAttrName"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("subjectBinding.modifySubjectCommonName():......................Start.");
+
+		var firstNameElem = document.getAnonymousElementByAttribute(this, "anonid", "certmgr.certdetail.firstName");
+		var lastNameElem = document.getAnonymousElementByAttribute(this, "anonid", "certmgr.certdetail.lastName");
+
+		var firstName = firstNameElem.value;
+		var lastName = lastNameElem.value;
+		if ((firstName == "") && (lastName == "")) {
+		    if (ev) {
+			this.commonName = "";
+		    }
+		    else {
+			this.mCommonNameElem.value = "";
+		    }
+		    return;
+		}
+
+		var formFiledValue = "";
+		if (firstName != "") {
+		    formFiledValue = firstName;
+		}
+		if (lastName != "") {
+		    if (formFiledValue != "") {
+			formFiledValue += " ";
+		    }
+		    formFiledValue += lastName;
+		}
+		if (ev) {
+		    this.commonName = formFiledValue;
+		}
+		else {
+		    this.mCommonNameElem.value = formFiledValue;
+		}
+
+		this.LogTrace("subjectBinding.modifySubjectCommonName():......................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="modifySubject">
+		<parameter name="aSubjItemElem"/>
+		<parameter name="aSubjItemDirAttrName"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("subjectBinding.modifySubject():......................Start.");
+		this.LogDebug("subjectBinding.modifySubject(): this.mSubjectElem.value: |" + this.mSubjectElem.value + "|");
+
+		/*
+		if (ev) {
+		    ev.stopPropagation();
+		}
+		*/
+		var aliasElem = document.getAnonymousElementByAttribute(this, "anonid", "certmgr.certdetail.alias");
+
+		var subjDNElemUINameList = new Array('email', 'commonName', 'uid', 'orgUnit', 'org', 'locality', 'state', 'country');
+		var subjDNElemRDNIdList  = new Array('mail',  'CN',         'uid', 'OU',      'O',   'L',        'ST',    'C');
+
+		var subjDNAttrList = new Array();
+		var subjElem = null;
+		var subjElemRDNId = null;
+		var subjElemRDNValue = null;
+		var subjElemRDN = null;
+		var totSubjElem = 0;
+
+		var subjectDNValue = "";
+		var subjDNElemIdPrefix = "certmgr.certdetail.";
+		var subjElemName = null;
+		var subjDNElemId = "";
+		for (var i = 0; i < subjDNElemUINameList.length; i++) {
+		    subjElemName = subjDNElemUINameList[i];
+		    subjDNElemId = subjDNElemIdPrefix + subjElemName;
+		    subjElem = document.getAnonymousElementByAttribute(this, "anonid", subjDNElemId);
+		    if (!subjElem) {
+			this.LogDebug("modifySubject(): document.getAnonymousElementByAttribute() failed for " + subjDNElemId + "");
+			continue;
+		    }
+		    subjElemRDNValue = this.trim(subjElem.value);
+		    if (!subjElemRDNValue || (subjElemRDNValue == "")) {
+			continue;
+		    }
+		    if (subjElemRDNValue.length == 0) {
+			continue;
+		    }
+		    if (subjElemName == "email") {
+			if (subjElemRDNValue == "") {
+			    continue;
+			}
+			if (subjElemRDNValue == "(no email address)") {
+			    continue;
+			}
+		    }
+		    if (subjElemName == "commonName") {
+			if (aliasElem && (aliasElem.value == "")) {
+				var cnList = subjElemRDNValue.split(" "); // get the first word from common name 
+				var cn = cnList[0];
+				var cnItemList = cn.split(".");
+				aliasElem.value = cnItemList[0];
+			}
+		    }
+		    if (subjElemName == "uid") {
+			if (aliasElem && (aliasElem.value == "")) {
+			    if (this.commonName == "") {
+				aliasElem.value = subjElemRDNValue;
+			    }
+			}
+		    }
+	    
+		    subjElemRDNId = subjElem.getAttribute("x500PropName");
+		    // dump("modifySubject(): subjElemName: " + subjElemName + "\t==> " + subjElemRDNId + "");
+		    if (!subjElemRDNId) {
+			subjElemRDNId = subjDNElemRDNIdList[i];
+		    }
+
+		    if (subjElemName == "email") {
+			var emailTypeRadioGroupElem = document.getAnonymousElementByAttribute(this, "anonid", "certmgr.certdetail.email.type");
+			// this.LogDebug("emailTypeRadioGroupElem.selectedItem: " + emailTypeRadioGroupElem.selectedItem.value + "");
+			if (this.mSubjEmailTypeElem.selectedItem.value == "rfc1274") {
+			    subjElemRDNId = "mail";
+			}
+			else {
+			    subjElemRDNId = "e";
+			}
+			this.LogDebug("subjElemRDNId: " + subjElemRDNId + "");
+		    }
+		    subjElemRDN = subjElemRDNId + "=" + subjElemRDNValue;
+	    
+		    if (totSubjElem > 0) {
+			subjectDNValue = subjectDNValue + ",";
+		    }
+		    subjectDNValue = subjectDNValue + subjElemRDN;
+		    totSubjElem++;
+		}
+		var subjectDNSuffix = this.trim(this.mSubjectDNSuffixElem.value);
+		if (subjectDNSuffix != "") {
+		    if (totSubjElem > 0) {
+			subjectDNValue = subjectDNValue + ",";
+		    }
+		    subjectDNValue = subjectDNValue + subjectDNSuffix;
+		}
+	    
+		this.mSubjectElem.value = subjectDNValue;
+
+		this.LogDebug("subjectBinding.modifySubject(): this.mSubjectElem.value: |" + this.mSubjectElem.value + "|");
+		this.LogTrace("subjectBinding.modifySubject():......................End.");
+		return;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="certFormFieldAutoCompleteAction">
+		<parameter name="aSrcTextBoxElem"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		if (ev) {
+		    ev.stopPropagation();
+		}
+		var formFieldKey = aSrcTextBoxElem.getAttribute("anonid");
+		var formFieldValue = aSrcTextBoxElem.value;
+
+		/*
+		var formhistory = Components.classes["@mozilla.org/satchel/form-history;1"].
+			getService(Components.interfaces.nsIFormHistory);
+		*/
+		var formhistory = null;
+		if ("nsIFormHistory" in Components.interfaces){
+			formhistory = Components.classes["@mozilla.org/satchel/form-history;1"].
+				getService(Components.interfaces.nsIFormHistory);
+		}
+		else if ("nsIFormHistory2" in Components.interfaces){
+			formhistory = Components.classes["@mozilla.org/satchel/form-history;1"].
+						getService(Components.interfaces.nsIFormHistory2);
+		}
+		if (!formhistory) {
+		    return;
+		}
+		
+		// use the same value for key as "autocompletesearchparam" in textbox:
+		formhistory.addEntry(formFieldKey, formFieldValue);
+		]]>
+		</body>
+	    </method>
+
+
+	    <method name="doAliasChange">
+		<parameter name="aAliasElem"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("subjectBinding.doAliasChange():......................Start.");
+		/*
+		if (ev) {
+		    ev.stopPropagation();
+		}
+		*/
+		this.LogTrace("subjectBinding.doAliasChange():......................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="reset">
+		<body>
+		<![CDATA[
+		this.LogTrace("subjectBinding.reset():......................Start.");
+
+		this.resetCertExtn(this.mBaseExtnElem);
+
+		this.LogTrace("subjectBinding.reset():......................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="toCertProps">
+		<parameter name="aCertProps"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("subjectBinding.toCertProps():......................Start.");
+		this.LogTrace("subjectBinding.toCertProps(): mBaseExtnElem: " + this.mBaseExtnElem + "");
+
+		this.certExtnToProps(this.mBaseExtnElem, aCertProps);
+
+		this.LogTrace("subjectBinding.toCertProps():......................End.");
+		]]>
+		</body>
+	    </method>
+
+
+	    <method name="updateCertProps">
+		<parameter name="aCertProps"/>
+		<body>
+		<![CDATA[
+		// this.mMaxLogLevel = 9;
+		this.LogTrace("subjectBinding.updateCertProps():......................Start.");
+
+		this.LogDebug("subjectBinding.updateCertProps(): subjectDN: " + this.subjectDN);
+
+		if (! this.containsAnyProperty(this.mBaseExtnElem, aCertProps)) {
+		    return;
+		}
+
+		// this.dumpProperties(aCertProps, "Subject-toCertProps");
+
+		this.reset();
+		this.LogDebug("subjectBinding.updateCertProps(): subjectDN: " + this.subjectDN);
+
+		this.updateCertExtnProps(this.mBaseExtnElem, aCertProps);
+		this.LogDebug("subjectBinding.updateCertProps(): subjectDN: " + this.subjectDN);
+
+		this.refresh();
+		this.LogDebug("subjectBinding.updateCertProps(): subjectDN: " + this.subjectDN);
+
+		this.LogTrace("subjectBinding.updateCertProps():......................End.");
+		// this.mMaxLogLevel = 4;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="mergeCertProps">
+		<parameter name="aCertProps"/>
+		<body>
+		<![CDATA[
+		// this.mMaxLogLevel = 9;
+		this.LogTrace("subjectBinding.mergeCertProps():......................Start.");
+
+		if (! this.containsAnyProperty(this.mBaseExtnElem, aCertProps)) {
+		    return;
+		}
+
+		this.updateCertExtnProps(this.mBaseExtnElem, aCertProps, true);
+
+		this.refresh();
+
+		this.LogTrace("subjectBinding.mergeCertProps():......................End.");
+		// this.mMaxLogLevel = 4;
+		]]>
+		</body>
+	    </method>
+
+	</implementation>
+    </binding>
+
+
+
+    <binding id="eccurvemenulistBinding"
+	extends="chrome://keymanager/content/ExtnXBL/certextn.xml#certextnbaseBinding"
+	>
+	<!--
+	<resources>
+	    <script type="application/x-javascript" src="chrome://keymanager/content/ExtnXBL/certextn2props.js"/>
+	    <stylesheet src="chrome://keymanager/skin/kmbindings.css"/>
+	</resources>
+	-->
+	<!-- content, property, method and event descriptions go here -->
+	<content>
+	    <xul:hbox>
+	    <xul:menulist anonid="certmgr.certdetail.keyType.ec.curve.menulist"
+		xbl:inherits="tooltiptext,value,disabled"
+		tooltiptext="&certmgr.certdetail.keyType.ec.curve.menulist.tooltip;"
+		certPropName="ecCurveName"
+		oncommand="getBindingParent(this).ecCurveMenuListChanged(this, event)"
+		>
+		<xul:menupopup>
+		</xul:menupopup>
+	    </xul:menulist>
+	    </xul:hbox>
+	</content>
+		    <!--
+		    <menuitem anonid="certmgr.certdetail.key.ec.curve.sect163k1"
+			label="&certmgr.certdetail.key.ec.curve.sect163k1.label;"
+			selected="true"
+			tooltiptext="&certmgr.certdetail.sigAlgName.tooltip;"
+			value="sect163k1"
+			/>
+		    -->
+	<implementation>
+	    <field name="mECCurveMenuInitialized">
+	    false
+	    </field>
+	    <field name="mECCurveMenuListElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certmgr.certdetail.keyType.ec.curve.menulist");
+	    </field>
+
+	    <property name="value"
+		onget="return this.mECCurveMenuListElem.value;"
+		onset="this.mECCurveMenuListElem.value=val;
+		       return val;"
+		/>
+	    <property name="readonly"
+		onget="return this.hasAttribute('readonly');"
+		onset="if (val) this.setAttribute('readonly',true);
+		       else this.removeAttribute('readonly');
+		       this.mECCurveMenuListElem.disabled=val;
+		       if(!val) {this.refresh();}
+		       return val;"
+		/>
+
+	    <constructor>
+		<![CDATA[
+		this.LogTrace("eccurvemenulistBinding.constructor():......................Start.");
+		this.initECCurveMenuList();
+		]]>
+	    </constructor>
+
+	    <method name="refresh">
+		<body>
+		<![CDATA[
+		this.ecCurveMenuListChanged(this.mECCurveMenuListElem);
+		]]>
+		</body>
+	    </method>
+
+	    <method name="ecCurveMenuListChanged">
+		<parameter name="aECCurveMenuListElem"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		/*
+		if (ev) {
+		    ev.stopPropagation();
+		}
+		*/
+		]]>
+		</body>
+	    </method>
+
+	    <method name="initECCurveMenuList">
+		<body>
+		<![CDATA[
+/*
+ For more info : 
+ 	1. http://www.ietf.org/rfc/rfc4492.txt
+	2. http://dev.experimentalstuff.com:8082/
+	3. .../mozilla/security/nss/cmd/lib/secutil.[ch]
+ */
+
+const ECC_CurveNameList = [
+   "sect163k1", "nistk163", "sect163r1", "sect163r2", 
+   "nistb163", "sect193r1", "sect193r2", "sect233k1", 
+   "nistk233", "sect233r1", "nistb233", "sect239k1", 
+   "sect283k1", "nistk283", "sect283r1", "nistb283", 
+   "sect409k1", "nistk409", "sect409r1", "nistb409", 
+   "sect571k1", "nistk571", "sect571r1", "nistb571", 
+   "secp160k1", "secp160r1", "secp160r2", "secp192k1", 
+   "secp192r1", "nistp192", "secp224k1", "secp224r1", 
+   "nistp224", "secp256k1", "secp256r1", "nistp256", 
+   "secp384r1", "nistp384", "secp521r1", "nistp521", 
+
+   "prime192v1",  "prime192v2",  "prime192v3",  "prime239v1",  
+   "prime239v2",  "prime239v3",  
+   "c2pnb163v1",  "c2pnb163v2",  "c2pnb163v3",  "c2pnb176v1",  
+   "c2tnb191v1",  "c2tnb191v2",  "c2tnb191v3",  "c2onb191v4",  
+   "c2onb191v5",  "c2pnb208w1",  "c2tnb239v1",  "c2tnb239v2",  
+   "c2tnb239v3",  "c2onb239v4",  "c2onb239v5",  "c2pnb272w1",  
+   "c2pnb304w1",  "c2tnb359v1",  "c2pnb368w1",  "c2tnb431r1",  
+
+   "secp112r1", "secp112r2", "secp128r1", "secp128r2", 
+
+   "sect113r1", "sect113r2", "sect131r1", "sect131r2"
+	];
+const ECC_CurveNameList_DEFAULT_ITEM = "secp384r1";
+
+		this.LogTrace("initECCurveMenuList():.......................Start.");
+
+		if (this.mECCurveMenuInitialized) {
+		    return;
+		}
+		this.LogDebug("initECCurveMenuList():ECC_CurveNameList.length: " + ECC_CurveNameList.length + ".");
+
+		var defaultItem = ECC_CurveNameList_DEFAULT_ITEM;
+
+		var selectedIndex = 0;
+		var selectedItem = 0;
+		for (var i = 0; i < ECC_CurveNameList.length; i++) {
+		    var menuItemName = ECC_CurveNameList[i];
+		    var menuItemNode = this.mECCurveMenuListElem.appendItem(menuItemName, menuItemName);
+		    if (menuItemName == defaultItem) {
+			selectedIndex = i;
+			selectedItem = menuItemNode;
+		    }
+		}
+		this.mECCurveMenuListElem.selectedIndex = selectedIndex;
+		this.mECCurveMenuInitialized = true;
+
+		this.LogDebug("initECCurveMenuList():selectedIndex: " + selectedIndex + ".");
+
+		this.LogTrace("initECCurveMenuList():.......................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="reset">
+		<body>
+		<![CDATA[
+		// this.mBaseExtnElem.reset();
+		]]>
+		</body>
+	    </method>
+
+	</implementation>
+    </binding>
+
+    <binding id="subjectpublickeyinfoBinding"
+	extends="chrome://keymanager/content/ExtnXBL/certextn.xml#certextnbaseBinding"
+	>
+	<!--
+	<resources>
+	    <script type="application/x-javascript" src="chrome://keymanager/content/ExtnXBL/certextn2props.js"/>
+	    <stylesheet src="chrome://keymanager/skin/kmbindings.css"/>
+	</resources>
+	-->
+	<!-- content, property, method and event descriptions go here -->
+	<content>
+	    <xul:grid anonid="certmgr.certdetail.subject.publickey.info" flex="1"> 
+		<xul:columns>
+		    <xul:column/>
+		    <xul:column flex="1"/>
+		</xul:columns>
+		<xul:rows flex="1">
+		    <xul:row 
+			xbl:inherits="hidden=hidekeytype"
+			align="center"
+			>
+			<xul:label control="certmgr.certdetail.keyType" value="&certmgr.certdetail.keyType.label;"/> 
+			<xul:hbox
+			    align="center"
+			    >
+			    <xul:radiogroup anonid="certmgr.certdetail.keyType"
+				xbl:inherits="disabled,readonly,value=keytype"
+				certPropName="keytype"
+				onclick="getBindingParent(this).handleKeyTypeChange(this, event)"
+				>
+				<xul:groupbox
+				    pack="start"
+				    align="center"
+				    orient="horizontal"
+				    >
+				    <xul:radio anonid="certmgr.certdetail.keyType.rsa"
+					xbl:inherits="disabled,readonly,selected=keytype_rsa"
+					label="&certmgr.certdetail.keyType.rsa.label;"
+					tooltiptext="&certmgr.certdetail.keyType.rsa.tooltip;"
+					selected="true"
+					value="rsa"
+					certPropName="keytype_rsa"
+					defaultSigAlgorithm="SHA1"
+					group="certmgr.certdetail.keyType"
+					/>
+				    <xul:radio anonid="certmgr.certdetail.keyType.dsa"
+					xbl:inherits="disabled,readonly,selected=keytype_dsa"
+					label="&certmgr.certdetail.keyType.dsa.label;"
+					tooltiptext="&certmgr.certdetail.keyType.dsa.tooltip;"
+					value="dsa"
+					certPropName="keytype_dsa"
+					defaultSigAlgorithm="SHA1"
+					group="certmgr.certdetail.keyType"
+					/>
+				    <xul:radio anonid="certmgr.certdetail.keyType.ec"
+					xbl:inherits="disabled,readonly,selected=keytype_ec"
+					label="&certmgr.certdetail.keyType.ec.label;"
+					tooltiptext="&certmgr.certdetail.keyType.ec.tooltip;"
+					disabled="true"
+					value="ec"
+					certPropName="keytype_ec"
+					defaultSigAlgorithm="SHA1"
+					group="certmgr.certdetail.keyType"
+					/>
+				</xul:groupbox>
+			    </xul:radiogroup>
+			    <xul:hbox anonid="certmgr.certdetail.keyType.ec.curve"
+				flex="1"
+				pack="start"
+				align="center"
+				hidden="true"
+				>
+				<xul:label value="&certmgr.certdetail.keyType.ec.curve.label;"/> 
+				<xul:eccurvemenulist anonid="certmgr.certdetail.keyType.ec.curve.menu"
+					xbl:inherits="disabled,readonly,value=ecCurveName"
+					flex="1"
+					tooltiptext="&certmgr.certdetail.keyType.ec.curve.menulist.tooltip;"
+					certPropName="ecCurveName"
+					oncommand="getBindingParent(this).ecCurveMenuListChanged(this, event)"
+					/>
+			    </xul:hbox>
+			    <!--
+			    <xul:spring flex="1"/>
+			    -->
+			    <xul:hbox
+				pack="start"
+				align="center"
+				>
+				<xul:label value="&certmgr.certdetail.sigAlgName.label;"/>
+				<xul:hashalgmenu anonid="certmgr.certdetail.sigAlgName.menulist"
+				    xbl:inherits="disabled=xreadonly,value=sigAlgorithm"
+				    value="SHA1"
+				    certPropName="sigAlgorithm"
+				    oncommand="getBindingParent(this).handleSigAlgorithmChange(this, event);"
+				    />
+				<xul:textbox anonid="certmgr.certdetail.sigAlgName"
+				    hidden="true"
+				    value=""
+				    certPropName="sigAlgorithmX"
+				    />
+			    </xul:hbox>
+			</xul:hbox>
+		    </xul:row>
+		    <xul:row anonid="certmgr.certdetail.keySize.row"
+			xbl:inherits="hidden=hidekeysize"
+			align="center"
+			>
+			<xul:label control="certmgr.certdetail.keySize" value="&certmgr.certdetail.keySize.label;"/> 
+			<xul:hbox flex="1"
+			    align="center"
+			    >
+			    <xul:textbox anonid="certmgr.certdetail.keySize.value"
+				size="9"
+				maxlength="9"
+				xreadonly="false"
+				tooltiptext="&certmgr.certdetail.keySize.value.tooltip;"
+				certPropName="keysize"
+				/>
+			    <xul:menulist anonid="certmgr.certdetail.keySize.type.menu"
+				  xbl:inherits="disabled,disabled=readonly,value=keysize"
+				  value="1024"
+				  tooltiptext="&certmgr.certdetail.keySize.tooltip;"
+				  certPropName="keysizeType"
+				  oncommand="getBindingParent(this).handleKeySizeTypeChange(this, event)"
+		  		  >
+				<xul:menupopup>
+				    <xul:menuitem anonid="certmgr.certdetail.keySize.512"
+					label="&certmgr.certdetail.keySize.512.label;"
+					selected="true"
+					value="512"/>
+				    <xul:menuitem anonid="certmgr.certdetail.keySize.768"
+					label="&certmgr.certdetail.keySize.768.label;"
+					value="768"/>
+				    <xul:menuitem anonid="certmgr.certdetail.keySize.1024"
+					label="&certmgr.certdetail.keySize.1024.label;"
+					value="1024"/>
+				    <xul:menuitem anonid="certmgr.certdetail.keySize.2048"
+					label="&certmgr.certdetail.keySize.2048.label;"
+					value="2048"/>
+				    <xul:menuitem anonid="certmgr.certdetail.keySize.other"
+					label="&certmgr.certdetail.keySize.other.label;"
+					value="other"/>
+				</xul:menupopup>
+			    </xul:menulist>
+			    <xul:spring flex="1"/>
+			    <xul:hbox anonid="certmgr.certdetail.keyType.dsa.pqg.file" flex="1" hidden="true"
+				align="center"
+				>
+				<xul:label value="&certmgr.certdetail.keyType.dsa.pqg.file.label;"/>
+				<xul:fileselector anonid="certmgr.certdetail.keyType.dsa.pqg.file.path"
+				    xbl:inherits="disabled,readonly,value=dsaPQGFilePath"
+				    formathidden="true"
+				    filetooltiptext="&certmgr.certdetail.keyType.dsa.pqg.file.path.tooltip;"
+	  			    autocompletesearchparam="keymgr.certdetail.keyType.dsa.pqg.file.path"
+				    fileMode="open"
+				    fileDialogMsg="Choose DSA PQG File"
+				    fileTypeMsg="DSA PQG File"
+				    fileTypeFilters="*.pqg; *.dat"
+	  			    browselabel="&keymanager.file.path.browse.label;"
+				    browsetooltiptext="&certmgr.certdetail.keyType.dsa.pqg.file.browse.tooltip;"
+				    certPropName="dsaPQGFilePath"
+				    />
+			    </xul:hbox>
+			</xul:hbox>
+		    </xul:row>
+		    <xul:row 
+			xbl:inherits="hidden=hideescrowkey"
+			align="center"
+			>
+			<xul:label control="certmgr.certdetail.key.escrow" value="&certmgr.certdetail.key.escrow.label;"/> 
+			<xul:hbox align="start">
+			    <xul:checkbox anonid="certmgr.certdetail.key.escrow"
+				xbl:inherits="disabled,checked=escrowKey"
+				disabled="true"
+				tooltiptext="&certmgr.certdetail.key.escrow.tooltip;"
+				certPropName="escrowKey"
+				/>
+			    <xul:spacer flex="1"/>
+			</xul:hbox>
+		    </xul:row>
+		</xul:rows>
+	    </xul:grid>
+	</content>
+	<implementation>
+	    <field name="mBaseExtnElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certmgr.certdetail.subject.publickey.info");
+	    </field>
+	    <field name="mKeyTypeGroupElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certmgr.certdetail.keyType");
+	    </field>
+	    <field name="mECCurveMenuElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certmgr.certdetail.keyType.ec.curve.menu");
+	    </field>
+	    <field name="mSigAlgorithmMenuElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certmgr.certdetail.sigAlgName.menulist");
+	    </field>
+	    <field name="mKeySizeTypeMenuElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certmgr.certdetail.keySize.type.menu");
+	    </field>
+	    <field name="mKeySizeValueElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certmgr.certdetail.keySize.value");
+	    </field>
+	    <property name="readonly"
+		onget="return this.hasAttribute('readonly');"
+		>
+		<setter>
+		<![CDATA[
+		if (val) {
+		    this.setAttribute('readonly',true);
+		}
+		else {
+		    this.removeAttribute('readonly');
+		}
+		this.setReadonly(this.mBaseExtnElem, val);
+		if (val){
+		    // this is a special hack to enable SigAlgorithm when all other elements of 
+		    // SubjectPublicKey.
+		    this.mSigAlgorithmMenuElem.removeAttribute('disabled');
+		}
+		if(!val) {
+		    this.refresh();
+		}
+		return val;
+		]]>
+		</setter>
+	    </property>
+
+	    <constructor>
+		<![CDATA[
+		// this.mMaxLogLevel = 9;
+		this.LogTrace("subjectpublickeyinfoBinding.constructor():......................Start.");
+		]]>
+	    </constructor>
+
+	    <method name="refresh">
+		<body>
+		<![CDATA[
+		if ((this.mKeySizeTypeMenuElem.value != "other")
+		    && (this.mKeySizeTypeMenuElem.value != this.mKeySizeValueElem.value)) {
+		    var keySizeIntVal = parseInt(this.mKeySizeValueElem.value);
+		    switch(keySizeIntVal) {
+			case 512:
+			    this.mKeySizeTypeMenuElem.value = "512";
+			    break;
+			case 768:
+			    this.mKeySizeTypeMenuElem.value = "768";
+			    break;
+			case 1024:
+			    this.mKeySizeTypeMenuElem.value = "1024";
+			    break;
+			case 2048:
+			    this.mKeySizeTypeMenuElem.value = "2048";
+			    break;
+			default :
+			    this.mKeySizeTypeMenuElem.value = "other";
+			    break;
+		    }
+		}
+
+		this.handleKeyTypeChange(this.mKeyTypeGroupElem);
+		if (this.getAttribute("readonly")) {
+		    return;
+		}
+
+		this.handleKeySizeTypeChange(this.mKeySizeTypeMenuElem);
+
+		]]>
+		</body>
+	    </method>
+
+	    <method name="ecCurveMenuListChanged">
+		<parameter name="aECCurveMenuListElem"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		/*
+		if (ev) {
+		    ev.stopPropagation();
+		}
+		*/
+		var selectedMenuItemElem = aECCurveMenuListElem.selectedItem;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="handleSigAlgorithmChange">
+		<parameter name="aSigAlgMenuListElem"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		/*
+		if (ev) {
+		    ev.stopPropagation();
+		}
+		*/
+		var selectedMenuItemElem = aSigAlgMenuListElem.selectedItem;
+
+		var sigAlgElem = document.getAnonymousElementByAttribute(this, "anonid", 'certmgr.certdetail.sigAlgName');
+		sigAlgElem.value = aSigAlgMenuListElem.value;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="handleKeyTypeChange">
+		<parameter name="keyTypeGroupElem"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("subjectpublickeyinfoBinding.handleKeyTypeChange():......................Start.");
+		/*
+		if (ev) {
+		    this.LogDebug("subjectpublickeyinfoBinding.handleKeyTypeChange(): ev: " + ev + "");
+		    ev.stopPropagation();
+		}
+		*/
+		var selectedKeyTypeElem = keyTypeGroupElem.selectedItem;
+
+		var ecCurveHBox = document.getAnonymousElementByAttribute(this, "anonid", "certmgr.certdetail.keyType.ec.curve");
+		var pqgFileElem = document.getAnonymousElementByAttribute(this, "anonid", "certmgr.certdetail.keyType.dsa.pqg.file");
+		var keySizeRowElem = document.getAnonymousElementByAttribute(this, "anonid", "certmgr.certdetail.keySize.row");
+
+		ecCurveHBox.hidden = true;
+		pqgFileElem.hidden = true;
+		keySizeRowElem.hidden = false;
+
+		if (selectedKeyTypeElem.value == "ec") {
+		    ecCurveHBox.hidden = false;
+		    keySizeRowElem.hidden = true;
+		    this.ecCurveMenuListChanged(this.mECCurveMenuElem);
+		}
+		else {
+		    if (selectedKeyTypeElem.value == "dsa") {
+			pqgFileElem.hidden = false;
+		    }
+		}
+		this.LogTrace("subjectpublickeyinfoBinding.handleKeyTypeChange():......................End.");
+		]]>
+		</body>
+	    </method>
+
+
+	    <method name="handleKeySizeTypeChange">
+		<parameter name="aKeySizeMenuElem"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		/*
+		if (ev) {
+		    ev.stopPropagation();
+		}
+		*/
+
+		this.LogDebug("handleKeySizeTypeChange(): aKeySizeMenuElem.value: " + aKeySizeMenuElem);
+
+		this.mKeySizeValueElem.removeAttribute("readonly");
+		if (aKeySizeMenuElem.value != "other") {
+		    this.mKeySizeValueElem.value = aKeySizeMenuElem.value;
+		    this.mKeySizeValueElem.setAttribute("readonly", true);
+		}
+		/*
+		else {
+		    // this.mKeySizeValueElem.value = "";
+		    //this.mKeySizeValueElem.removeAttribute("readonly");
+		}
+		*/
+		]]>
+		</body>
+	    </method>
+
+	    <method name="reset">
+		<body>
+		<![CDATA[
+		this.resetCertExtn(this.mBaseExtnElem);
+		]]>
+		</body>
+	    </method>
+
+	    <method name="toCertProps">
+		<parameter name="aCertProps"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("subjectpublickeyinfoBinding.toCertProps():......................Start.");
+		this.LogDebug("subjectpublickeyinfoBinding.toCertProps(): mBaseExtnElem: " + this.mBaseExtnElem + "");
+
+		this.certExtnToProps(this.mBaseExtnElem, aCertProps);
+		// this.dumpProperties(aCertProps, "SPKI-toCertProps");
+
+		this.LogTrace("subjectpublickeyinfoBinding.toCertProps():......................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="updateCertProps">
+		<parameter name="aCertProps"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("subjectpublickeyinfoBinding.updateCertProps():......................Start.");
+
+		if (! this.containsAnyProperty(this.mBaseExtnElem, aCertProps)) {
+		    return;
+		}
+
+		// this.dumpProperties(aCertProps, "SPKI-updateCertProps");
+
+		this.reset();
+		this.updateCertExtnProps(this.mBaseExtnElem, aCertProps);
+		
+		this.refresh();
+
+		this.LogTrace("subjectpublickeyinfoBinding.updateCertProps():......................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="mergeCertProps">
+		<parameter name="aCertProps"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("subjectpublickeyinfoBinding.mergeCertProps():......................Start.");
+
+		if (! this.containsAnyProperty(this.mBaseExtnElem, aCertProps)) {
+		    return;
+		}
+
+		this.updateCertExtnProps(this.mBaseExtnElem, aCertProps, true);
+		this.refresh();
+		this.LogTrace("subjectpublickeyinfoBinding.mergeCertProps():......................End.");
+		]]>
+		</body>
+	    </method>
+
+	</implementation>
+    </binding>
+
+    <binding id="certvalidityBinding"
+	extends="chrome://keymanager/content/ExtnXBL/certextn.xml#certextnbaseBinding"
+	>
+	<!--
+	<resources>
+	    <script type="application/x-javascript" src="chrome://keymanager/content/ExtnXBL/certextn2props.js"/>
+	    <stylesheet src="chrome://keymanager/skin/kmbindings.css"/>
+	</resources>
+	-->
+	<!-- content, property, method and event descriptions go here -->
+	<content>
+	    <xul:groupbox anonid="certmgr.certdetail.validity" flex="1" 
+		pack="start">
+		<xul:radiogroup anonid="certmgr.certdetail.validityGroup"
+		    xbl:inherits="disabled=readonly,value=validity"
+		    onclick="getBindingParent(this).handleValidityChange(this, event)"
+		    certPropName="validity"
+		    >
+		    <xul:vbox>
+			<xul:hbox align="center">
+			    <xul:radio anonid="certmgr.certdetail.validityAutoGen"
+				xbl:inherits="disabled=readonly,selected=validity_auto"
+				label="&certmgr.certdetail.validityAutoGen.label;"
+				tooltiptext="&certmgr.certdetail.validityAutoGen.tooltip;"
+				selected="true"
+				value="auto"
+				certPropName="validity_auto"
+				group="certmgr.certdetail.validityGroup"/>
+			    <xul:spacer flex="1"/>
+			    <xul:groupbox align="center" orient="horizontal">
+				<xul:label value="&certmgr.certdetail.validity.duration.label;"/>
+				<xul:textbox anonid="certmgr.certdetail.validity.duration"
+				    xbl:inherits="disabled,readonly,value=validityDuration"
+				    size="4" maxlength="4" value="36"
+				    certPropName="validityDuration"
+				    tooltiptext="&certmgr.certdetail.validity.duration.tooltip;"
+				    />
+				<xul:radio anonid="certmgr.certdetail.validityInMonths"
+				    xbl:inherits="disabled=readonly,selected=validity_months"
+				    label="&certmgr.certdetail.validityInMonths.label;"
+				    tooltiptext="&certmgr.certdetail.validityInMonths.tooltip;"
+				    value="months"
+				    certPropName="validity_months"
+				    group="certmgr.certdetail.validityGroup"/>
+				<xul:radio anonid="certmgr.certdetail.validityInDays"
+				    xbl:inherits="disabled=readonly,selected=validity_days"
+				    label="&certmgr.certdetail.validityInDays.label;"
+				    tooltiptext="&certmgr.certdetail.validityInDays.tooltip;"
+				    value="days"
+				    certPropName="validity_days"
+				    group="certmgr.certdetail.validityGroup"/>
+				<xul:radio anonid="certmgr.certdetail.validityInHours"
+				    xbl:inherits="disabled=readonly,selected=validity_hours"
+				    label="&certmgr.certdetail.validityInHours.label;"
+				    tooltiptext="&certmgr.certdetail.validityInHours.tooltip;"
+				    value="hours"
+				    certPropName="validity_hours"
+				    group="certmgr.certdetail.validityGroup"/>
+			    </xul:groupbox>
+		  	</xul:hbox>
+			<xul:hbox flex="1">
+			    <xul:radio anonid="certmgr.certdetail.validityInput"
+				    xbl:inherits="disabled=readonly,selected=validity_input"
+				    label="&certmgr.certdetail.validityInput.label;"
+				    tooltiptext="&certmgr.certdetail.validityInput.tooltip;"
+				    value="input"
+				    certPropName="validity_input"
+				    group="certmgr.certdetail.validityGroup"/>
+			    <xul:groupbox anonid="certmgr.certdetail.validityInputVbox" flex="1">
+				<xul:grid flex="1"> 
+				    <xul:columns>
+					<xul:column/>
+					<xul:column flex="1"/>
+				    </xul:columns>
+				    <xul:rows flex="1">
+					<xul:row flex="1"
+					    align="center"
+					    >
+					    <xul:label value="&certmgr.certdetail.validityNotBefore.label;"/> 
+					    <xul:textbox anonid="certmgr.certdetail.validityNotBefore"
+						xbl:inherits="disabled,readonly,value=notBefore"
+						flex="1" size="15" maxlength="40"
+						certPropName="notBefore"
+						/>
+	  				</xul:row>
+	  				<xul:row flex="1"
+					    align="center"
+					    >
+					    <xul:label value="&certmgr.certdetail.validityDateFormat.legend.label;"/>
+					    <xul:label value="&certmgr.certdetail.validityDateFormat.value.label;"/> 
+	  				</xul:row>
+	  				<xul:row flex="1" 
+					    align="center"
+					    >
+					    <xul:label value="&certmgr.certdetail.validityNotAfter.label;"/> 
+					    <xul:textbox anonid="certmgr.certdetail.validityNotAfter"
+						flex="1" size="15" maxlength="40"
+						xbl:inherits="disabled,readonly,value=notAfter"
+						certPropName="notAfter"
+						/>
+	  				</xul:row>
+				    </xul:rows>
+				</xul:grid>
+			    </xul:groupbox>
+			</xul:hbox>
+		    </xul:vbox>
+		</xul:radiogroup>
+	    </xul:groupbox>
+	</content>
+	<implementation>
+	    <field name="mBaseExtnElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certmgr.certdetail.validity");
+	    </field>
+	    <property name="readonly"
+		onget="return this.hasAttribute('readonly');"
+		onset="if (val) this.setAttribute('readonly',true);
+		       else this.removeAttribute('readonly');
+		       this.setReadonly(this.mBaseExtnElem, val);
+		       if(!val) {this.refresh();}
+		       return val;"
+		/>
+
+	    <constructor>
+		<![CDATA[
+		this.LogTrace("certvalidityBinding.constructor():......................Start.");
+		this.LogTrace("certvalidityBinding.constructor():......................End.");
+		]]>
+	    </constructor>
+
+	    <method name="refresh">
+		<body>
+		<![CDATA[
+		]]>
+		</body>
+	    </method>
+
+	    <method name="handleValidityChange">
+		<parameter name="aValidityGroupElem"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		if (ev) {
+		    ev.stopPropagation();
+		}
+		]]>
+		</body>
+	    </method>
+
+	    <method name="reset">
+		<body>
+		<![CDATA[
+		this.resetCertExtn(this.mBaseExtnElem);
+		]]>
+		</body>
+	    </method>
+
+	    <method name="toCertProps">
+		<parameter name="aCertProps"/>
+		<body>
+		<![CDATA[
+		this.certExtnToProps(this.mBaseExtnElem, aCertProps);
+		]]>
+		</body>
+	    </method>
+
+	    <method name="updateCertProps">
+		<parameter name="aCertProps"/>
+		<body>
+		<![CDATA[
+
+		if (! this.containsAnyProperty(this.mBaseExtnElem, aCertProps)) {
+		    return;
+		}
+
+		this.reset();
+		this.updateCertExtnProps(this.mBaseExtnElem, aCertProps);
+		this.refresh();
+		]]>
+		</body>
+	    </method>
+
+	    <method name="mergeCertProps">
+		<parameter name="aCertProps"/>
+		<body>
+		<![CDATA[
+
+		if (! this.containsAnyProperty(this.mBaseExtnElem, aCertProps)) {
+		    return;
+		}
+		this.updateCertExtnProps(this.mBaseExtnElem, aCertProps, true);
+		this.refresh();
+		]]>
+		</body>
+	    </method>
+
+	</implementation>
+    </binding>
+
+
+    <binding id="certattributeBinding"
+	extends="chrome://keymanager/content/ExtnXBL/certextn.xml#certextnbaseBinding"
+	>
+	<!--
+	<resources>
+	    <script type="application/x-javascript" src="chrome://keymanager/content/ExtnXBL/certextn2props.js"/>
+	    <stylesheet src="chrome://keymanager/skin/kmbindings.css"/>
+	</resources>
+	-->
+	<!-- content, property, method and event descriptions go here -->
+	<content>
+	    <xul:grid anonid="certmgr.certdetail.attrs" flex="1"> 
+		<xul:columns>
+		    <xul:column/>
+		    <xul:column flex="1"/>
+		</xul:columns>
+		<xul:rows flex="1">
+		    <xul:row
+			align="center"
+			>
+			<xul:label control="certmgr.certdetail.serialnumberGroup" value="&certmgr.certdetail.serialNumber.label;"/> 
+			<xul:radiogroup anonid="certmgr.certdetail.serialnumberGroup" flex="1"
+			    xbl:inherits="disabled=readonly,value=serial"
+			    onclick="getBindingParent(this).handleSerialnumberChange(this, event)"
+			    certPropName="serial"
+			    >
+			    <xul:hbox
+				pack="start"
+				>
+				<xul:radio anonid="certmgr.certdetail.autoGenerateSerialNo"
+				    xbl:inherits="disabled=readonly,selected=serial-auto"
+				    label="&certmgr.certdetail.autoGenerateSerialNo.label;"
+				    tooltiptext="&certmgr.certdetail.autoGenerateSerialNo.tooltip;"
+				    selected="true"
+				    value="auto"
+				    certPropName="serial-auto"
+				    group="certmgr.certdetail.serialnumberGroup"/>
+				<xul:radio anonid="certmgr.certdetail.inputSerialNo"
+				    xbl:inherits="disabled=readonly,selected=serial_input"
+				    label="&certmgr.certdetail.inputSerialNo.label;"
+				    tooltiptext="&certmgr.certdetail.inputSerialNo.tooltip;"
+				    value="input"
+				    certPropName="serial_input"
+				    group="certmgr.certdetail.serialnumberGroup"/>
+				<xul:textbox anonid="certmgr.certdetail.serialnumber"
+				    xbl:inherits="disabled,readonly,value=serial_value"
+				    size="16" maxlength="16"
+				    tooltiptext="&certmgr.certdetail.serialnumber.tooltip;"
+				    certPropName="serial_value"
+				    />
+			    </xul:hbox>
+			</xul:radiogroup>
+		    </xul:row>
+		    <xul:row
+			align="center"
+			>
+			<xul:label control="certmgr.certdetail.x509VersionGroup" value="&certmgr.certdetail.x509Version.label;"/> 
+			<xul:radiogroup anonid="certmgr.certdetail.x509VersionGroup" flex="1"
+			    xbl:inherits="disabled=readonly,value=version"
+			    onclick="getBindingParent(this).handlex509VersionChange(this, event.target)"
+			    certPropName="version"
+			    >
+			    <xul:hbox
+				pack="start"
+				>
+				<xul:radio anonid="certmgr.certdetail.x509Version1"
+				    xbl:inherits="disabled=readonly,selected=version_1"
+				    label="&certmgr.certdetail.x509Version1.label;"
+				    tooltiptext="&certmgr.certdetail.x509Version1.tooltip;"
+				    value="1"
+				    certPropName="version_1"
+				    group="certmgr.certdetail.x509VersionGroup"/>
+				<xul:radio anonid="certmgr.certdetail.x509Version3"
+				    xbl:inherits="disabled=readonly,selected=version_3"
+				    label="&certmgr.certdetail.x509Version3.label;"
+				    tooltiptext="&certmgr.certdetail.x509Version3.tooltip;"
+				    selected="true"
+				    value="3"
+				    certPropName="version_3"
+				    group="certmgr.certdetail.x509VersionGroup"/>
+			    </xul:hbox>
+			</xul:radiogroup>
+		    </xul:row>
+		    <xul:row
+			align="center"
+			>
+			<xul:label control="certmgr.certdetail.validityGroup"
+			    value="&certmgr.certdetail.validity.label;"
+			    /> 
+			<xul:hbox
+			    pack="start"
+			    >
+			    <!--
+			    <xul:certvalidity anonid="certmgr.certdetail.validity"
+				/>
+			    -->
+			    <xul:certvaliditycal anonid="certmgr.certdetail.validity"
+			    	dateformat="utctime"
+				validity_auto="true"
+				xvalidityInputInDays="365"
+				/>
+			</xul:hbox>
+		    </xul:row>
+		</xul:rows>
+	    </xul:grid>
+	</content>
+	<implementation>
+	    <field name="mBaseExtnElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certmgr.certdetail.attrs");
+	    </field>
+	    <field name="mCertValidityElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "certmgr.certdetail.validity");
+	    </field>
+	    <property name="readonly"
+		onget="return this.hasAttribute('readonly');"
+		onset="if (val) this.setAttribute('readonly',true);
+		       else this.removeAttribute('readonly');
+		       this.setReadonly(this.mBaseExtnElem, val);
+		       this.mCertValidityElem.readonly=val;
+		       if(!val) {this.refresh();}
+		       return val;"
+		/>
+
+	    <constructor>
+		<![CDATA[
+		this.LogTrace("certattributeBinding.constructor():......................Start.");
+		]]>
+	    </constructor>
+
+	    <method name="refresh">
+		<body>
+		<![CDATA[
+		]]>
+		</body>
+	    </method>
+
+
+	    <method name="handlex509VersionChange">
+		<parameter name="aX509VersionTypeGroupElem"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		/*
+		if (ev) {
+		    ev.stopPropagation();
+		}
+		*/
+		]]>
+		</body>
+	    </method>
+
+	    <method name="handleSerialnumberChange">
+		<parameter name="aSerialNumGroupElem"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		if (ev) {
+		    ev.stopPropagation();
+		}
+		/*
+		var autoGenerateSerialNoElem = document.getElementById('autoGenerateSerialNoElem');
+		var inputSerialNoElem = document.getElementById('inputSerialNo');
+
+		modSrialnumberElemId = modSrialnumberElem.id;
+		var serialnumberElem = document.getElementById('certmgr.certdetail.serialnumber');
+		if (modSrialnumberElemId == 'certmgr.certdetail.autoGenerateSerialNo') {
+		    serialnumberElem.value = ((new java.util.Date()).getTime()/100);
+		}
+		*/
+		]]>
+		</body>
+	    </method>
+
+	    <method name="reset">
+		<body>
+		<![CDATA[
+		this.resetCertExtn(this.mBaseExtnElem);
+		this.mCertValidityElem.reset();
+		]]>
+		</body>
+	    </method>
+
+	    <method name="toCertProps">
+		<parameter name="aCertProps"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("certattributeBinding.toCertProps():......................Start.");
+		this.LogDebug("certattributeBinding.toCertProps(): mBaseExtnElem: " + this.mBaseExtnElem + "");
+
+		this.certExtnToProps(this.mBaseExtnElem, aCertProps);
+		this.mCertValidityElem.toCertProps(aCertProps);
+
+		this.LogTrace("certattributeBinding.toCertProps():......................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="updateCertProps">
+		<parameter name="aCertProps"/>
+		<body>
+		<![CDATA[
+		this.reset();
+		this.updateCertExtnProps(this.mBaseExtnElem, aCertProps);
+		this.mCertValidityElem.updateCertProps(aCertProps);
+		this.refresh();
+		]]>
+		</body>
+	    </method>
+
+	    <method name="mergeCertProps">
+		<parameter name="aCertProps"/>
+		<body>
+		<![CDATA[
+		this.updateCertExtnProps(this.mBaseExtnElem, aCertProps, true);
+		this.mCertValidityElem.mergeCertProps(aCertProps);
+		this.refresh();
+		]]>
+		</body>
+	    </method>
+
+	</implementation>
+    </binding>
+
+    <binding id="x509v1certificateBinding"
+	extends="chrome://keymanager/content/ExtnXBL/certextn.xml#certextnbaseBinding"
+	>
+	<!--
+	<resources>
+	    <script type="application/x-javascript" src="chrome://keymanager/content/ExtnXBL/certextn2props.js"/>
+	    <stylesheet src="chrome://keymanager/skin/kmbindings.css"/>
+	</resources>
+	-->
+	<!-- content, property, method and event descriptions go here -->
+	<content>
+	    <xul:vbox anonid="keymgr.cert.form.v1cert"
+		class="box-padded"
+		flex="1"
+		xstyle="overflow:auto; height:475px;"
+		onchange="getBindingParent(this).handleX509v1CertChange(this, event)"
+		>
+		<xul:groupbox anonid="keymgr.cert.form.v1cert.subject.info.gbox" xflex="1">
+		    <xul:caption class="header" label="&keymgr.cert.csr.form.tabpanel.general.subject.info.label;"/>
+		    <xul:x509certsubject anonid="keymgr.cert.form.v1cert.subject"
+			xbl:inherits="hiderowcontrol,hidefirstname,firstName,hidelastname,lastName,hidecommonname,commonName,hideemail,email_subjaltname,email_type,email,hideuid,uid,hideorgunit,org_unit,hideorg,org,hidelocality,locality,hidestate,state,hidecountry,country,hidedc,dc,hidesubject,subject,subjecttooltip,hidesubjdnsuffix,hidealias,nickName"
+			hidefirstname="true"
+			hidelastname="true"
+			hideemail="true"
+			hidesubjdnsuffix="true"
+			/>
+		</xul:groupbox>
+  
+		<xul:groupbox anonid="certmgr.certdetail.key.userInfo" xflex="1">
+		    <xul:caption class="header" label="&certmgr.certdetail.key.userInfo.label;"/>
+		    <xul:subjectpublickeyinfo anonid="keymgr.cert.form.v1cert.subject.publickeyinfo"
+			/>
+		</xul:groupbox>
+  
+		<xul:groupbox anonid="keymgr.cert.form.v1cert.attributes.info" xflex="1">
+		    <xul:caption class="header" label="&certmgr.certdetail.cert.info.label;"/>
+		    <xul:certattribute anonid="keymgr.cert.form.v1cert.attr"
+			/>
+		</xul:groupbox>
+	    </xul:vbox>
+	</content>
+	<implementation>
+	    <field name="mBaseExtnElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.cert.form.v1cert");
+	    </field>
+	    <field name="mSubjectElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.cert.form.v1cert.subject");
+	    </field>
+	    <field name="mSPKIElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.cert.form.v1cert.subject.publickeyinfo");
+	    </field>
+	    <field name="mCertAttrElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "keymgr.cert.form.v1cert.attr");
+	    </field>
+
+	    <property name="readonlySubject"
+		onget="return this.mSubjectElem.readonly;"
+		onset="this.mSubjectElem.readonly=val;
+		       return val;"
+		/>
+	    <property name="readonlySPKI"
+		onget="return this.mSPKIElem.readonly;"
+		onset="this.mSPKIElem.readonly=val;
+		       return val;"
+		/>
+	    <property name="readonlyCertAttr"
+		onget="return this.mCertAttrElem.readonly;"
+		onset="this.mCertAttrElem.readonly=val;
+		       return val;"
+		/>
+	    <property name="readonly"
+		onget="return this.mSubjectElem.readonly;"
+		onset="this.mSubjectElem.readonly=val;
+		       this.mSPKIElem.readonly=val;
+		       this.mCertAttrElem.readonly=val;
+		       return val;"
+		/>
+
+
+	    <constructor>
+		<![CDATA[
+		// this.mMaxLogLevel = 9;
+		this.LogTrace("x509v1certificateBinding.constructor():......................Start.");
+		]]>
+	    </constructor>
+
+	    <method name="refresh">
+		<body>
+		<![CDATA[
+		this.mSubjectElem.refresh();
+		this.mSPKIElem.refresh();
+		this.mCertAttrElem.refresh();
+		]]>
+		</body>
+	    </method>
+
+
+	    <method name="handleX509v1CertChange">
+		<parameter name="aParam1"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		if (ev) {
+		    ev.stopPropagation();
+		}
+		]]>
+		</body>
+	    </method>
+
+	    <method name="reset">
+		<body>
+		<![CDATA[
+		this.mSubjectElem.reset();
+		this.mSPKIElem.reset();
+		this.mCertAttrElem.reset();
+		]]>
+		</body>
+	    </method>
+
+	    <method name="toCertProps">
+		<parameter name="aCertProps"/>
+		<body>
+		<![CDATA[
+		this.mSubjectElem.toCertProps(aCertProps);
+		this.mSPKIElem.toCertProps(aCertProps);
+		this.mCertAttrElem.toCertProps(aCertProps);
+		]]>
+		</body>
+	    </method>
+
+	    <method name="mergeSubjectCertProps">
+		<parameter name="aCertProps"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("x509v1certificateBinding.updateSubjectCertProps():......................Start.");
+
+		this.mSubjectElem.mergeCertProps(aCertProps);
+
+		this.LogTrace("x509v1certificateBinding.updateSubjectCertProps():......................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="updateSubjectCertProps">
+		<parameter name="aCertProps"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("x509v1certificateBinding.updateSubjectCertProps():......................Start.");
+
+		this.mSubjectElem.updateCertProps(aCertProps);
+
+		this.LogTrace("x509v1certificateBinding.updateSubjectCertProps():......................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="updateCertProps">
+		<parameter name="aCertProps"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("x509v1certificateBinding.updateCertProps():......................Start.");
+
+		this.mSubjectElem.updateCertProps(aCertProps);
+		this.mSPKIElem.updateCertProps(aCertProps);
+		this.mCertAttrElem.updateCertProps(aCertProps);
+
+		this.LogTrace("x509v1certificateBinding.updateCertProps():......................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="mergeCertProps">
+		<parameter name="aCertProps"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("x509v1certificateBinding.mergeCertProps():......................Start.");
+
+		this.mSubjectElem.mergeCertProps(aCertProps);
+		this.mSPKIElem.mergeCertProps(aCertProps);
+		this.mCertAttrElem.mergeCertProps(aCertProps);
+
+		// this.refresh();
+		this.LogTrace("x509v1certificateBinding.mergeCertProps():......................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="activateCertItem">
+		<parameter name="aCertItemTagName"/>
+		<parameter name="aStatusFlag"/>
+		<body>
+		<![CDATA[
+		var /* NodeList */ certItemNodeList = this.mBaseExtnElem.getElementsByTagName(aCertItemTagName);
+		if (certItemNodeList.length <= 0) {
+		    if (aCertItemTagName.indexOf("xul:") < 0) {
+			var tagName = "xul:" + aCertItemTagName;
+			certItemNodeList = this.mBaseExtnElem.getElementsByTagName(tagName);
+		    }
+		}
+		this.LogDebug("x509v1certificateBinding.activateCertItem(" + aCertItemTagName + "): certItemNodeList.length: " + certItemNodeList.length + "");
+		for (var i = 0; i < certItemNodeList.length; i++) {
+		    var certItemElem = certItemNodeList.item(i);
+		    certItemElem.readonly = !aStatusFlag;
+		    return true;
+		}
+		return false;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="activateTaggedItemList">
+		<parameter name="aTagNameListStr"/>
+		<parameter name="aStatusFlag"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("x509v1certificateBinding.activateTaggedItemList(" + aTagNameListStr + "):....................Start.");
+		if (!aTagNameListStr) {
+		    return;
+		}
+		var tagNameList = aTagNameListStr.split(",");
+		if (tagNameList.length <= 0) {
+		    return;
+		}
+		for (var i = 0; i < tagNameList.length; i++) {
+		    // var nsTagName = "xul:" + tagNameList[i];
+		    var nsTagName = this.trim(tagNameList[i]);
+		    this.activateCertItem(nsTagName, aStatusFlag); 
+		}
+		this.LogTrace("x509v1certificateBinding.activateTaggedItemList(" + aTagNameListStr + "):....................End.");
+		]]>
+		</body>
+	    </method>
+
+	</implementation>
+    </binding>
+
+
+</bindings>
+

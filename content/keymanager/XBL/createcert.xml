@@ -1,0 +1,937 @@
+<?xml version="1.0"?>
+<!-- @(#) $Id: createcert.xml,v 1.12 2010/03/03 17:01:05 subrata Exp $ -->
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is Avaya Labs Research, Avaya Inc. Code.
+   -
+   - The Initial Developer of the Original Code is
+   - Subrata Mazumdar, Avaya Labs Research, Avaya Inc.
+   - Portions created by the Initial Developer are Copyright (C) 2007.
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Subrata Mazumdar (mazum@avaya.com)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+
+
+<!--
+<!DOCTYPE bindings
+	[
+	<!ENTITY % keyManager.dtd SYSTEM "chrome://keymanager/locale/keyManager.dtd">
+	%keyManager.dtd;
+	]>
+-->
+<!DOCTYPE bindings SYSTEM "chrome://keymanager/locale/keyManager.dtd">
+
+<bindings id="createcertBindings"
+    xmlns="http://www.mozilla.org/xbl"
+    xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    xmlns:xbl="http://www.mozilla.org/xbl">
+
+
+		<!--
+		<xul:menulist anonid="create.cert.optype.menu"
+		    >
+		</xul:menulist>
+		-->
+    <binding id="createcertBinding"
+	extends="chrome://keymanager/content/XBL/x509certbase.xml#x509certbase"
+        >
+	<xbl:resources>
+	    <stylesheet src="chrome://keymanager/skin/kmbindings.css"/>
+	</xbl:resources>
+
+	<!-- content, property, method and event descriptions go here -->
+	<content>
+	    <xul:hbox pack="start" align="start"
+		xbl:inherits="hidden"
+		>
+		<xul:button anonid="create.cert.optype.menu"
+		    xbl:inherits="value=createCertOp,hidden=optypehidden,disabled,disabled=optypedisabled,tooltiptext=optypetooltip,oncommand=onoptypechange,label=optypelabel"
+		    type="menu"
+		    label="Create Cert"
+		    hidden="true"
+		    readonly="true"
+		    ztooltiptext=""
+		    style="border: 1px solid black"
+		    oncommand="getBindingParent(this).handleOpTypeMenuChange(this, event)"
+		    >
+		    <xul:menupopup>
+			<xul:menuitem anonid="create.cert.optype.selfsigned.simple"
+			    xbl:inherits="label=selfsignedsimplelabel,hidden=selfsignedsimplehidden,disabled=selfsignedsimpledisabled,tooltiptext=selfsignedsimpletooltip"
+			    label="Create Self-Signed Cert(Simple)"
+			    tooltiptext="Simple Option: Create public/private key-pair and then generate Self-Signed certificate "
+			    value="createSelfSignedCertSimple"
+			    />
+			<xul:menuitem anonid="create.cert.optype.selfsigned"
+			    xbl:inherits="label=selfsignedlabel,hidden=selfsignedhidden,disabled=selfsigneddisabled,tooltiptext=selfsignedtooltip"
+			    label="Create Self-Signed Cert"
+			    tooltiptext="Advanced Option: Create public/private key-pair and then generate Self-Signed certificate with customiztaion of certifcate extensions."
+			    value="createSelfSignedCert"
+			    />
+			<xul:menuitem anonid="create.cert.optype.casigned"
+			    xbl:inherits="label=casignedlabel,hidden=casignedhidden,disabled=casigneddisabled,tooltiptext=casignedtooltip"
+			    label="Create CA-Signed Cert"
+			    tooltiptext="Create a self-signed cert and then enroll publick key with with a CA and finally import the CA-sugned cert."
+			    value="createCASignedCert"
+			    />
+			<xul:menuitem anonid="create.cert.optype.selfproxy"
+			    xbl:inherits="label=selfproxylabel,hidden=selfproxyhidden,disabled=selfproxydisabled,tooltiptext=selfproxytooltip"
+			    label="Create Self-Proxy Cert"
+			    tooltiptext="Create public/private key-pair and then create Proxy certficate by signing with the selected cert."
+			    value="createSelfProxyCert"
+			    />
+			<xul:menuitem anonid="create.cert.optype.otpk"
+			    xbl:inherits="label=otpklabel,hidden=otpkhidden,disabled=otpkdisabled,tooltiptext=otpktooltip"
+			    label="Create OTPK Cert"
+			    tooltiptext="Create CA signed cert for one time private key (OTPK)"
+			    value="createOTPKCert"
+			    />
+		    </xul:menupopup>
+		</xul:button>
+
+		<xul:button anonid="create.cert.op.button"
+		    xbl:inherits="label=oplabel,disabled,disabled=opdisabled,hidden=ophidden,tooltiptext=optooltip"
+		    label="Create Cert"
+		    oncommand="getBindingParent(this).handleCreateOp(this, event)"
+		    />
+		 <xul:x509certprofile anonid="create.cert.profile"
+		    xbl:inherits="profile,profilehidden,profiledisabled,customprofilepath,profilecertsubject, profilecertspki, profilecertall"
+		    hidden="true"
+		    certtype="user"
+		    profilecertsubject="true"
+		    profilecertspki="true"
+		    oncommand="getBindingParent(this).handleCertProfileChange(this, event)"
+		    />
+	    </xul:hbox>
+	</content>
+	<implementation>
+	    <field name="mKeyManager">
+		Components.classes["@avaya.com/pkm/keymanager;1"]
+			.getService(Components.interfaces.alrIKeyManager);
+	    </field>
+	    <field name="mCertDB">
+		Components.classes["@mozilla.org/security/x509certdb;1"]
+			.getService(Components.interfaces.nsIX509CertDB);
+	    </field>
+	    <field name="mXmlSerializer">new XMLSerializer();</field>
+	    <field name="mCreateCertOpTypeMenuElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "create.cert.optype.menu");
+	    </field>
+	    <field name="mCreateCertButtonElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "create.cert.op.button");
+	    </field>
+	    <field name="mCertProfileElem">
+		document.getAnonymousElementByAttribute(this, "anonid", "create.cert.profile");
+	    </field>
+
+	    <field name="mSelfX509Cert">null</field>
+	    <field name="mSignerX509Cert">null</field>
+	    <field name="mNewX509Cert">null</field>
+	    <field name="mCertProfileXmlData">null</field>
+	    <field name="mCustomProfilePath">null</field>
+	    <!--
+	    <field name="mRefresh">this.refresh();</field>
+	    -->
+	    <property name="createCertOp"
+		onget="return this.mCreateCertOpTypeMenuElem.value;"
+		onset="this.mCreateCertOpTypeMenuElem.value=val;
+			this.handleOpTypeMenuChange(this.mCreateCertOpTypeMenuElem);
+			return val;"
+		/>
+	    <property name="profileType"
+		onget="return this.getAttribute('profileType');"
+		onset="this.mCertProfileElem.profile=val;
+			this.handleCertProfileChange(this.mCertProfileElem);
+			return val;"
+		/>
+	    <property name="profiledata"
+		onget="return this.mCertProfileXmlData;"
+		onset="this.mCertProfileXmlData=val;
+			return val;"
+		/>
+	    <property name="profilepath"
+		onget="return this.mCertProfileElem.profilepath;"
+		onset="this.mCertProfileElem.profilepath=val;
+			return val;"
+		/>
+	    <property name="profilecert"
+		onget="return this.mCertProfileElem.profilecert;"
+		onset="this.mCertProfileElem.profilecert=val;
+			return val;"
+		/>
+	    <property name="selfX509Cert"
+		onget="return this.mSelfX509Cert;"
+		onset="this.mSelfX509Cert=val;
+			return val;"
+		/>
+	    <property name="signerX509Cert"
+		onget="return this.mSignerX509Cert;"
+		onset="this.mSignerX509Cert=val; return val;"
+		/>
+	    <property name="certCommonName"
+		onget="return this.getAttribute('certCommonName');"
+		onset="this.setAttribute('certCommonName', val); return val;"
+		/>
+	    <property name="newCert" readonly="true"
+		onget="return this.mNewX509Cert;"
+		/>
+	    <constructor>
+		<![CDATA[
+		// this.mMaxLogLevel = 9;
+		this.LogTrace("createcertBinding.constructor():......................Start.");
+
+		this.LogTrace("createcertBinding.constructor():......................End.");
+		]]>
+	    </constructor>
+	    <method name="refresh">
+		<body>
+		<![CDATA[
+		this.LogTrace("createcertBinding.refresh():......................Start.");
+
+		this.handleOpTypeMenuChange(this.mCreateCertOpTypeMenuElem);
+
+		this.LogTrace("createcertBinding.refresh():......................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="handleOpTypeMenuChange">
+		<parameter name="aCreateCertOpTypeMenuElem"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("createcertBinding.handleOpTypeMenuChange():......................Start.");
+		/*
+		if (ev) {
+		    ev.stopPropagation();
+		}
+		*/
+
+		var selectedMenuItemElem = null;
+		if (ev) {
+		    selectedMenuItemElem = ev.originalTarget;
+		}
+		else {
+		    var createCertOpAttr = this.getAttribute("createCertOp");
+		    this.LogDebug("createcertBinding.handleOpTypeMenuChange(): createCertOpAttr: " + createCertOpAttr);
+                    var /* NodeList */ selectedMenuItemElemList = null;
+		    if (createCertOpAttr) {
+		    	selectedMenuItemElemList = aCreateCertOpTypeMenuElem.getElementsByAttribute("value", createCertOpAttr);
+		    	this.LogDebug("createcertBinding.handleOpTypeMenuChange(): selectedMenuItemElemList.length: " + selectedMenuItemElemList.length);
+		    }
+		    if (!selectedMenuItemElemList || (selectedMenuItemElemList.length <= 0)) { 
+		    	selectedMenuItemElemList = aCreateCertOpTypeMenuElem.getElementsByTagName("xul:menuitem");
+		    }
+		    selectedMenuItemElem = selectedMenuItemElemList[0];
+		}
+		this.LogDebug("createcertBinding.handleOpTypeMenuChange(): selectedMenuItemElem: " + selectedMenuItemElem);
+
+		var createCertOpType = selectedMenuItemElem.value;
+		this.LogDebug("createcertBinding.handleOpTypeMenuChange(): createCertOpType: " + createCertOpType);
+
+		aCreateCertOpTypeMenuElem.value = createCertOpType;
+		// this.mCreateCertButtonElem.label = createCertOpType;
+		this.setAttribute("createCertOp", createCertOpType);
+
+		var profileType = this.profileType;
+		this.LogDebug("createcertBinding.handleOpTypeMenuChange(): profileType: " + profileType);
+		if (!profileType) {
+		    profileType = "sig_dataencipherment";
+		}
+
+		if (createCertOpType == "createSelfProxyCert") {
+		    var proxyCommonName = this.getAttribute("certCommonName");
+		    if (!proxyCommonName) {
+			proxyCommonName = "P1";
+		    }
+		    this.setAttribute("proxyCommonName", proxyCommonName);
+		    profileType = "proxycert";
+		}
+		else {
+		    this.removeAttribute("proxyCommonName");
+		}
+
+		this.profileType = profileType;
+		this.LogDebug("createcertBinding.handleOpTypeMenuChange(): profileType: " + profileType);
+
+		this.LogTrace("createcertBinding.handleOpTypeMenuChange():......................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="handleCertProfileChange">
+		<parameter name="aCertProfileElem"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("createcertBinding.handleCertProfileChange():......................Start.");
+		if (ev) {
+		    ev.stopPropagation();
+		}
+		var profileType = aCertProfileElem.profile;
+		this.LogDebug("createcertBinding.handleCertProfileChange(): profileType: " + profileType + "");
+		this.setAttribute("profile", profileType);
+
+		/*
+		if (aCertProfileElem.profile == 'certificate') {
+		    if (!this.mCertProfileElem.profilecert) {
+			this.mCertProfileElem.profilecert = this.mSelfX509Cert;
+		    }
+		}
+		*/
+		this.LogTrace("createcertBinding.handleCertProfileChange():......................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="handleCreateOp">
+		<parameter name="aButtonElem"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("createcertBinding.handleCreateOp():......................Start.");
+
+		this.LogDebug("createcertBinding.handleCreateOp(): \n" + this.mXmlSerializer.serializeToString(this) + "\n");
+
+		var profileType = this.getAttribute("profile");
+		var certEnrollType = this.getAttribute("certEnrollType");
+		var certCommonName = this.getAttribute("certCommonName");
+		var profileX509Cert = null;
+		var selfX509Cert = null;
+		var selfX509CertAlias = null;
+		var proxyCommonName = null;
+		var signerX509Cert = null;
+
+
+		var createCertOp = this.getAttribute("createCertOp");
+		createCertOp = this.mCreateCertOpTypeMenuElem.value;
+		if (!createCertOp || (createCertOp == "")) {
+		    this.LogTrace("createcertBinding.handleCreateOp():......................End(1).");
+		    return;
+		}
+
+		profileX509Cert = this.profilecert;
+		selfX509Cert = this.selfX509Cert;
+		signerX509Cert = this.signerX509Cert;
+
+		this.LogDebug("createcertBinding.handleCreateOp():\n" + 
+					"\tcreateCertOp: " + createCertOp + " " + 
+					"profileType: " + profileType + "\n" + 
+					"\tcertCommonName: " + certCommonName + " " + 
+					"profileX509Cert: " + profileX509Cert + "\n" + 
+					"\tselfX509Cert: " + selfX509Cert + " " + 
+					"signerX509Cert: " + signerX509Cert + " " + 
+					"");
+
+		var newX509Cert = null;
+		if (profileType == "certificate") {
+		    profileX509Cert = this.profilecert;
+		    selfX509Cert = this.selfX509Cert;
+		}
+		if (createCertOp == "createSelfSignedCert") {
+		    newX509Cert = this.createSelfSignedCert(profileType, selfX509Cert);
+		}
+		else if (createCertOp == "createSelfSignedCertSimple") {
+		    newX509Cert = this.createSelfSignedCertSimple(profileType, selfX509Cert);
+		}
+		else if (createCertOp == "createCASignedCert") {
+		    signerX509Cert = this.signerX509Cert;
+		    newX509Cert = this.createCASignedCert(profileType, profileX509Cert, selfX509Cert, signerX509Cert, certEnrollType);
+		}
+		else if (createCertOp == "createSelfProxyCert") {
+		    signerX509Cert = this.signerX509Cert;
+		    newX509Cert = this.createSelfProxyCert(certCommonName, signerX509Cert);
+		}
+		else if (createCertOp == "createOTPKCert") {
+		    signerX509Cert = this.signerX509Cert;
+		    newX509Cert = this.createOTPKCert(selfX509Cert, signerX509Cert, certEnrollType);
+		}
+		else {
+		    newX509Cert = null;
+		}
+		this.mNewX509Cert = newX509Cert;
+
+		this.LogTrace("createcertBinding.handleCreateOp():......................End.");
+		]]>
+		</body>
+	    </method>
+
+	    <method name="createSelfSignedCertSimple">
+		<parameter name="aCertProfileType"/>
+		<parameter name="aCertProfileX509Cert"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("createcertBinding.createSelfSignedCertSimple():......................Start.");
+
+		var certProfileId = aCertProfileType;
+		if (aCertProfileX509Cert) {
+		    certProfileId = "certificate";
+		}
+
+		var certCommonName = this.getAttribute("certCommonName");
+		if (certCommonName && (certCommonName == "")) {
+		    certCommonName = null;
+		}
+		var certSubjectName = this.getAttribute("certSubjectName");
+		if (certSubjectName && (certSubjectName == "")) {
+		    certSubjectName = null;
+		}
+		if (!certSubjectName && certCommonName) {
+		    certSubjectName = "CN=" + certCommonName;
+		}
+		// var certAlias = certCommonName;
+
+		/*
+	    	certSubjectDN = dialogParams.GetString(0);
+	    	certAlias = dialogParams.GetString(1);
+	    	certKeyType = dialogParams.GetString(2);
+	    	certKeySize = dialogParams.GetString(3);
+	    	certValidityInDays = dialogParams.GetString(4);
+	    	certProfileType = dialogParams.GetString(5);
+		*/
+		var certSubjectDN = certSubjectName;
+		var certAlias = certCommonName;
+		var certKeyType = null;
+		var certKeySize = null;
+		var certValidityInDays = null;
+		var certProfileType = null;
+		this.LogDebug("createcertBinding.createSelfSignedCertSimple(): " + 
+				"    certSubjectDN: " + certSubjectDN + "\n" + 
+				"    certAlias: " + certAlias + "\n" + 
+				"    certKeyType: " + certKeyType + "\n" + 
+				"    certKeySize: " + certKeySize + "\n" + 
+				"    certValidityInDays: " + certValidityInDays + "\n" + 
+				"    certProfileType: " + certProfileType + "\n" + 
+				"");
+
+		var pkiParams = Components.classes["@mozilla.org/security/pkiparamblock;1"]
+					.createInstance(Components.interfaces.nsIPKIParamBlock);
+		var dialogParams = pkiParams.QueryInterface(Components.interfaces.nsIDialogParamBlock);
+
+		var strIdx = 0;
+		if (certSubjectDN && (certSubjectDN != "")) {
+		    pkiParams.SetString(strIdx, certSubjectDN);
+		}
+
+		strIdx++;
+		if (certAlias && (certAlias != "")) {
+		    pkiParams.SetString(strIdx, certAlias);
+		}
+
+		strIdx++;
+		if (certKeyType && (certKeyType != "")) {
+		    pkiParams.SetString(strIdx, certKeyType);
+		}
+
+		strIdx++;
+		if (certKeySize && (certKeySize != "")) {
+		    pkiParams.SetString(strIdx, certKeySize);
+		}
+
+		strIdx++;
+		if (certValidityInDays && (certValidityInDays != "")) {
+		    pkiParams.SetString(strIdx, certValidityInDays);
+		}
+
+		strIdx++;
+		if (certProfileType && (certProfileType != "")) {
+		    pkiParams.SetString(strIdx, certProfileType);
+		}
+
+		/*
+		if (!certProfileId) {
+		    certProfileId = "xmldoc";
+		}
+		this.LogDebug("createcertBinding.createSelfSignedCertSimple(): certProfileId: " + certProfileId + "");
+		this.LogDebug("createcertBinding.createSelfSignedCertSimple(): mCertProfileXmlData:\n" + this.mCertProfileXmlData + "");
+
+		pkiParams.SetString(1, certProfileId);
+		if (certProfileId == "certificate") {
+		    pkiParams.setISupportAtIndex(1, aSelfX509Cert);
+		}
+		else if (certProfileId == "xmldoc") {
+		    var certProfileDataStr = null;
+		    if (this.mCertProfileXmlData) {
+			certProfileDataStr = this.mCertProfileXmlData;
+		    }
+		    else {
+			certProfileDataStr = 
+"<CertProfile \n" +
+"    baseProfileType=\"" + aCertProfileType + "\"\n" + 
+"    > \n" +
+(certCommonName?"    <profileItem name=\"name\" value=\"" + certCommonName + "\"/>\n":"") + 
+(certAlias?"    <profileItem name=\"nickName\" value=\"" + certAlias + "\"/>\n":"")  + 
+"";
+			certProfileDataStr += 
+"</CertProfile>\n" + 
+"\n";
+		    }
+		    this.LogDebug("createcertBinding.createSelfSignedCertSimple(): certProfileDataStr:\n" + certProfileDataStr + "\n");
+		    dialogParams.SetString(2, certProfileDataStr);
+		}
+		else if (certProfileId == "custom") {
+		    var customFilePath = this.profilepath;
+		    if (!customFilePath) {
+			customFilePath = "";
+		    }
+		    dialogParams.SetString(2, customFilePath);
+		}
+		*/
+
+		var genKeyCSRDialogURL = 'chrome://keymanager/content/tools/genkeycsr/createCertSimpleDialog.xul';
+    		// this.parentNode.setAttribute("wait-cursor", true);
+		var genKeyCSRDialog = window.openDialog(
+						genKeyCSRDialogURL, "",
+						'chrome,centerscreen,resizable,modal',
+						pkiParams
+						);
+    		// this.parentNode.removeAttribute("wait-cursor");
+
+		var retVal = dialogParams.GetInt(0);
+		if (retVal == 0) {
+		    this.LogError("createcertBinding.createSelfSignedCertSimple(): failed to create self-signed cert.");
+		    return null;
+		}
+
+		var /* nsIX509Cert */ retX509Cert = null;
+		var retCert = pkiParams.getISupportAtIndex(1);
+		if (retCert) {
+		    retX509Cert = retCert.QueryInterface(Components.interfaces.nsIX509Cert);
+		}
+
+		this.LogTrace("createcertBinding.createSelfSignedCertSimple():......................End.");
+		return retX509Cert;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="createSelfSignedCert">
+		<parameter name="aCertProfileType"/>
+		<parameter name="aCertProfileX509Cert"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("createcertBinding.createSelfSignedCert():......................Start.");
+
+		var certCommonName = this.getAttribute("certCommonName");
+		if (certCommonName && (certCommonName == "")) {
+		    certCommonName = null;
+		}
+		var certSubjectName = this.getAttribute("certSubjectName");
+		if (certSubjectName && (certSubjectName == "")) {
+		    certSubjectName = null;
+		}
+		var certAlias = certCommonName;
+
+		var pkiParams = Components.classes["@mozilla.org/security/pkiparamblock;1"]
+					.createInstance(Components.interfaces.nsIPKIParamBlock);
+		var dialogParams = pkiParams.QueryInterface(Components.interfaces.nsIDialogParamBlock);
+		dialogParams.SetString(0, "generateSelfSignedCert");
+
+		var certProfileId = aCertProfileType;
+		if (aCertProfileX509Cert) {
+		    certProfileId = "certificate";
+		}
+		if (!certProfileId) {
+		    certProfileId = "xmldoc";
+		}
+		this.LogDebug("createcertBinding.createSelfSignedCert(): certProfileId: " + certProfileId + "");
+		this.LogDebug("createcertBinding.createSelfSignedCert(): mCertProfileXmlData:\n" + this.mCertProfileXmlData + "");
+
+		pkiParams.SetString(1, certProfileId);
+		if (certProfileId == "certificate") {
+		    pkiParams.setISupportAtIndex(1, aSelfX509Cert);
+		}
+		else if (certProfileId == "xmldoc") {
+		    var certProfileDataStr = null;
+		    if (this.mCertProfileXmlData) {
+			certProfileDataStr = this.mCertProfileXmlData;
+		    }
+		    else {
+			certProfileDataStr = 
+"<CertProfile \n" +
+"    baseProfileType=\"" + aCertProfileType + "\"\n" + 
+"    > \n" +
+(certCommonName?"    <profileItem name=\"name\" value=\"" + certCommonName + "\"/>\n":"") + 
+(certAlias?"    <profileItem name=\"nickName\" value=\"" + certAlias + "\"/>\n":"")  + 
+"";
+			certProfileDataStr += 
+"</CertProfile>\n" + 
+"\n";
+		    }
+		    this.LogDebug("createcertBinding.createSelfSignedCert(): certProfileDataStr:\n" + certProfileDataStr + "\n");
+		    dialogParams.SetString(2, certProfileDataStr);
+		}
+		else if (certProfileId == "custom") {
+		    var customFilePath = this.profilepath;
+		    if (!customFilePath) {
+			customFilePath = "";
+		    }
+		    dialogParams.SetString(2, customFilePath);
+		}
+
+		var genKeyCSRDialogURL = 'chrome://keymanager/content/tools/genkeycsr/generatePKCS10CSR.xul';
+    		// this.parentNode.setAttribute("wait-cursor", true);
+		var genKeyCSRDialog = window.openDialog(
+						genKeyCSRDialogURL, "",
+						'chrome,centerscreen,resizable,modal',
+						pkiParams
+						);
+    		// this.parentNode.removeAttribute("wait-cursor");
+
+		var retVal = dialogParams.GetInt(0);
+		if (retVal == 0) {
+		    this.LogError("createcertBinding.createSelfSignedCert(): failed to create self-signed cert.");
+		    return null;
+		}
+
+		var /* nsIX509Cert */ retX509Cert = null;
+		var retCert = pkiParams.getISupportAtIndex(1);
+		if (retCert) {
+		    retX509Cert = retCert.QueryInterface(Components.interfaces.nsIX509Cert);
+		}
+
+		this.LogTrace("createcertBinding.createSelfSignedCert():......................End.");
+		return retX509Cert;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="createCASignedCert">
+		<parameter name="aCertProfileType"/>
+		<parameter name="aCertProfileX509Cert"/>
+		<parameter name="aSelfX509Cert"/>
+		<parameter name="aSignerX509Cert"/>
+		<parameter name="aCertEnrolType"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("createcertBinding.createCASignedCert():......................Start.");
+
+		this.LogDebug("createcertBinding.createCASignedCert():\n" + 
+					"aCertProfileType: " + aCertProfileType + " " + 
+					"aCertProfileX509Cert: " + aCertProfileX509Cert + " " + 
+					"aSelfX509Cert: " + aSelfX509Cert + " " + 
+					"aSignerX509Cert: " + aSignerX509Cert + " " + 
+					"aCertEnrolType: " + aCertEnrolType + " " + 
+					"");
+		var pkiParams = Components.classes["@mozilla.org/security/pkiparamblock;1"]
+					.createInstance(Components.interfaces.nsIPKIParamBlock);
+		var dialogParams = pkiParams.QueryInterface(Components.interfaces.nsIDialogParamBlock);
+		var strArgCnt = 0;
+
+		var parmUserCertProfileType = aCertProfileType;
+		dialogParams.SetString(0, parmUserCertProfileType); strArgCnt++;
+
+		var paramCertEnrollType = aCertEnrolType;
+		if (!paramCertEnrollType || (paramCertEnrollType == "")) {
+		    paramCertEnrollType = "pkcs10CA";
+		}
+		dialogParams.SetString(1, paramCertEnrollType); strArgCnt++;
+
+		var certCommonName = this.getAttribute("certCommonName");
+		this.LogDebug("createcertBinding.createCASignedCert(): certCommonName: " + certCommonName + "");
+		if (certCommonName) {
+		    dialogParams.SetString(2, certCommonName); strArgCnt++;
+		}
+		var certAlias = certCommonName;
+
+		if (aCertProfileType == "xmldoc") {
+		    this.LogDebug("createcertBinding.createCASignedCert(): mCertProfileXmlData:\n" + this.mCertProfileXmlData + "");
+		    if (this.mCertProfileXmlData) {
+		    	dialogParams.SetString(3, this.mCertProfileXmlData); strArgCnt++;
+		    }
+		}
+
+		// Hack: Force the allocation mSupports array in PKIParamBlock.
+		//       Otherwise, it will crash the browser.
+		pkiParams.setISupportAtIndex(1, null);
+
+		if (aCertProfileX509Cert) {
+		    pkiParams.setISupportAtIndex(1, aCertProfileX509Cert);
+		}
+		if (aSelfX509Cert) {
+		    pkiParams.setISupportAtIndex(2, aSelfX509Cert);
+		}
+		if (aSignerX509Cert) {
+		    pkiParams.setISupportAtIndex(3, aSignerX509Cert);
+		}
+
+		var createAndEnrollCertDialogURL = "chrome://keymanager/content/tools/certenroll/CertEnrollWizard.xul";
+    		// this.setAttribute("wait-cursor", true);
+		var createAndEnrollCertDialog = window.openDialog(
+						createAndEnrollCertDialogURL, "",
+						'chrome,centerscreen,resizable,modal',
+						pkiParams
+						);
+    		// this.removeAttribute("wait-cursor");
+
+		var retVal = dialogParams.GetInt(0);
+		if (retVal == 0) {
+		    this.LogError("createCASignedCert(): failed to create/enroll  cert.");
+		    this.LogTrace("createcertBinding.createCASignedCert():......................End(1).");
+		    return null;
+		}
+
+		var /* nsIX509Cert */ newX509Cert = null;
+		var newCert = pkiParams.getISupportAtIndex(1);
+		if (newCert) {
+		    newX509Cert = newCert.QueryInterface(Components.interfaces.nsIX509Cert);
+		    this.LogDebug("createcertBinding.createCASignedCert(): newX509Cert: " + newX509Cert + "");
+		}
+
+		this.LogTrace("createcertBinding.createCASignedCert():......................End.");
+		return newX509Cert;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="createTempSelfSignedCert">
+		<parameter name="aCertCommonName"/>
+		<parameter name="aCertSubjectName"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("createcertBinding.createTempSelfSignedCert():......................Start.");
+
+		var now = new Date();
+		var certNickName = aCertCommonName.split(" ")[0];
+		certNickName = "Temp_" + certNickName + "_" + now.getTime();
+		var certProps = Components.classes["@mozilla.org/persistent-properties;1"].
+			createInstance(Components.interfaces.nsIPersistentProperties);
+
+		this.LogDebug("createcertBinding.createTempSelfSignedCert(): aCertCommonName: " + aCertCommonName + "");
+		this.LogDebug("createcertBinding.createTempSelfSignedCert(): aCertSubjectName: " + aCertSubjectName + "");
+		this.LogDebug("createcertBinding.createTempSelfSignedCert(): certNickName: " + certNickName + "");
+
+		certProps.setStringProperty("nickName", certNickName);
+		certProps.setStringProperty("subject", aCertSubjectName);
+		// certProps.setStringProperty("temporaryCert", "true");
+
+		var /* nsIX509 */ selfSignedX509Cert = null;
+		try {
+		    selfSignedX509Cert = this.mKeyManager.generateKeyAndImportSelfSignCertByForm(
+				null,
+				certNickName,
+				aCertSubjectName,
+				certProps
+				);
+		} catch (ex) {
+		    this.LogError("generateKeyAndImportSelfSignCertByForm() failed - ex: " + ex + "");
+		    this.LogError("createcertBinding.createTempSelfSignedCert():......................End(2).");
+		    return null;
+		}
+		this.LogDebug("createcertBinding.createTempSelfSignedCert(): selfSignedX509Cert: " + selfSignedX509Cert + "");
+
+		this.LogTrace("createcertBinding.createTempSelfSignedCert():......................End.");
+		return selfSignedX509Cert;
+		]]>
+		</body>
+	    </method>
+
+
+	    <method name="createSelfProxyCert">
+		<parameter name="aProxyCommonName"/>
+		<parameter name="aSignerX509Cert"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("createcertBinding.createSelfProxyCert():......................Start.");
+
+		var certCommonName = this.getAttribute("certCommonName");
+		if (!certCommonName) {
+		    var now = new Date();
+		    certCommonName = "Proxy_" + now.getTime();
+		}
+		var certSubjectName = "CN=" + aProxyCommonName + ",O=TmpSelfProxy";
+		var tmpSelfSignedCert = this.createTempSelfSignedCert(aProxyCommonName, certSubjectName);
+		if (!tmpSelfSignedCert) {
+		    this.LogError("createcertBinding.createSelfProxyCert():......................End(1).");
+		    return null;
+		}
+		this.LogDebug("createcertBinding.createSelfProxyCert(): tmpSelfSignedCert: " + tmpSelfSignedCert + " (" + tmpSelfSignedCert.nickname + ")");
+
+		var pkiParams = Components.classes["@mozilla.org/security/pkiparamblock;1"]
+					.createInstance(Components.interfaces.nsIPKIParamBlock);
+		var dialogParams = pkiParams.QueryInterface(Components.interfaces.nsIDialogParamBlock);
+		var strArgCnt = 0;
+
+		var numCerts = 0;
+		// Set signer cert option
+		pkiParams.setISupportAtIndex(1, null);
+		if (aSignerX509Cert) {
+		    dialogParams.SetString(1, aSignerX509Cert.dbKey);  
+		    pkiParams.setISupportAtIndex(1, aSignerX509Cert);
+		    numCerts = 1;
+		}
+		dialogParams.SetInt(0, numCerts);
+
+		// Set proxy siging option
+		dialogParams.SetInt(1, 1);
+		dialogParams.SetString(0, "signProxyCert");
+
+		// Set the proxy cert option
+		pkiParams.setISupportAtIndex(2, tmpSelfSignedCert);
+
+    		var signProxyCertDialogURL = "chrome://keymanager/content/tools/signcerttool/signProxyCertTool.xul";
+    		// this.setAttribute("wait-cursor", true);
+		var signProxyCertDialog = window.openDialog(
+						signProxyCertDialogURL, "",
+						'chrome,centerscreen,resizable,modal,titlebar',
+						pkiParams
+						);
+    		// this.removeAttribute("wait-cursor");
+
+		this.mCertDB.deleteCertificate(tmpSelfSignedCert);
+		if (dialogParams.GetInt(0) == 0) { // Selected Cancel or failed.
+		    this.LogError("createcertBinding.createSelfProxyCert():......................End(2).");
+		    return null;
+		}
+
+		var /* nsIX509Cert */ proxyX509Cert = null;
+		var proxyCert = pkiParams.getISupportAtIndex(1);
+		if (proxyCert) {
+		    proxyX509Cert = proxyCert.QueryInterface(Components.interfaces.nsIX509Cert);
+		}
+		this.LogDebug("createcertBinding.createSelfProxyCert(): proxyX509Cert: " + proxyX509Cert + "");
+
+		this.LogTrace("createcertBinding.createSelfProxyCert():......................End.");
+		return proxyX509Cert;
+		]]>
+		</body>
+	    </method>
+
+	    <method name="createOTPKCert">
+		<parameter name="aSelfX509Cert"/>
+		<parameter name="aCertProfileType"/>
+		<parameter name="aSignerX509Cert"/>
+		<parameter name="aCertEnrolType"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("createcertBinding.createOTPKCert():......................Start.");
+
+		var certCommonName = this.getAttribute("certCommonName");
+		if (!certCommonName) {
+		    var now = new Date();
+		    certCommonName = "SelfOTPK_" + now.getTime();
+		}
+
+		var certSubjectName = "CN=" + certCommonName + ",O=TmpSelfOTPK";
+		var otpkSelfSignedCert = this.createTempSelfSignedCert(certCommonName, certSubjectName);
+		if (!otpkSelfSignedCert) {
+		    this.LogError("createcertBinding.createOTPKCert():......................End(1).");
+		    return null;
+		}
+		var otpkCASignedX509Cert = this.createCASignedCert(
+					aCertProfileType,
+					otpkSelfSignedCert,
+					null,
+					aSignerX509Cert,
+					aCertEnrolType
+					);
+		this.LogTrace("createcertBinding.createOTPKCert():......................10.");
+		this.mCertDB.deleteCertificate(otpkSelfSignedCert);
+		if (dialogParams.GetInt(0) == 0) { // Selected Cancel or failed.
+		    this.LogError("createcertBinding.createOTPKCert():......................End(2).");
+		    return null;
+		}
+
+		var /* nsIX509Cert */ otpkX509Cert = null;
+		var otpkCert = pkiParams.getISupportAtIndex(1);
+		if (otpkCert) {
+		    otpkX509Cert = otpkCert.QueryInterface(Components.interfaces.nsIX509Cert);
+		}
+		this.LogDebug("createcertBinding.createOTPKCert(): otpkX509Cert: " + otpkX509Cert + "");
+
+		this.LogTrace("createcertBinding.createOTPKCert():......................End.");
+		return otpkX509Cert;
+		]]>
+		</body>
+	    </method>
+
+	</implementation>
+    </binding>
+
+	<!--
+	<content>
+            <xul:createcert id="keymanager.createcert.menu.1"
+		xbl:inherits="hidden,createCertOp,optypehidden,disabled,optypetooltip,selfsignedlabel,selfsignedhidden,casignedlabel"
+		zcreateCertOp="createOTPKCert"
+		zcertCommonName="OTPKCN2"
+		createCertOp="createSelfSignedCert"
+		certCommonName="CreateCertMenuSelfCN1"
+                oncommand="CreateCertExample.handleCreateCertMenuEvent(this, event)"
+		/>
+	</content>
+	-->
+
+    <binding id="createcertmenuBinding"
+	extends="#createcertBinding"
+        >
+	<xbl:resources>
+	    <stylesheet src="chrome://keymanager/skin/kmbindings.css"/>
+	</xbl:resources>
+	<implementation>
+	    <constructor>
+		<![CDATA[
+		this.LogTrace("createcertmenuBinding.constructor():......................Start.");
+
+	    	this.mCreateCertButtonElem.hidden = true;
+
+		this.mCreateCertOpTypeMenuElem.removeAttribute("hidden");
+	    	this.mCreateCertOpTypeMenuElem.hidden = false;
+		this.setAttribute('onoptypechange', "getBindingParent(this).handleCreateOpTypeMenuChange(this, event)");
+
+		this.LogTrace("createcertmenuBinding.constructor():......................End.");
+		]]>
+	    </constructor>
+
+	    <method name="handleCreateOpTypeMenuChange">
+		<parameter name="aCreateCertOpTypeMenuElem"/>
+		<parameter name="ev"/>
+		<body>
+		<![CDATA[
+		this.LogTrace("createcertmenuBinding.handleCreateOpTypeMenuChange():......................Start.");
+		/*
+		if (ev) {
+		    ev.stopPropagation();
+		}
+		*/
+
+		this.handleOpTypeMenuChange(aCreateCertOpTypeMenuElem, ev);
+
+	    	this.handleCreateOp(this.mCreateCertButtonElem);
+
+		this.LogTrace("createcertmenuBinding.handleCreateOpTypeMenuChange():......................End.");
+		]]>
+		</body>
+	    </method>
+
+	</implementation>
+    </binding>
+
+</bindings>
+

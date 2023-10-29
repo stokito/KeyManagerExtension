@@ -1,0 +1,131 @@
+<?xml version="1.0"?>
+<!-- @(#) $Id: CertEnrollSelectCertUser.xul,v 1.3 2012/10/03 14:20:34 subrata Exp $ -->
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is Avaya Labs Research, Avaya Inc. Code.
+   -
+   - The Initial Developer of the Original Code is
+   - Subrata Mazumdar, Avaya Labs Research, Avaya Inc.
+   - Portions created by the Initial Developer are Copyright (C) 2007.
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Subrata Mazumdar (mazum@avaya.com)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://keymanager/skin/kmbindings.css" type="text/css"?>
+
+<!DOCTYPE wizard SYSTEM "chrome://keymanager/locale/certenroll.dtd">
+
+<overlay id="keymgr.certenroll.wizard.initprofile.overlay" 
+    xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    >
+
+    <script type="application/x-javascript" src="chrome://keymanager/content/tools/certenroll/scep/CertEnrollSelectCertUser.js"/>
+
+    <vbox id="keymgr.certenroll.scep.page.selectcert.user.form">
+	<grid> 
+	    <columns>
+		<column/>
+		<column flex="1"/>
+	    </columns>
+	    <rows>
+		<row
+		    align="center"
+		    >
+		    <label value="&keymgr.certenroll.scep.param.data.user.cert.label;"/> 
+		    <vbox 
+			pack="start"
+			>
+		      <hbox
+			pack="start"
+			xhidden="true"
+			>
+			<textbox id="keymgr.certenroll.scep.page.selectcert.user.subjectdn"
+			    flex="1"
+			    tooltiptext="&keymgr.certenroll.scep.param.data.user.subjectdn.tooltip;"
+			    onchange="avpki.keymanager.CertEnrollSelectCertUser.handleUserSubjectDNChange(this, event);"
+			    certPropName="subject"
+			    x500PropName="dn"
+			    />
+		    	<button 
+			    label="&keymgr.certenroll.scep.param.data.user.subjectdn.format.label;"
+			    tooltiptext="&keymgr.certenroll.scep.param.data.user.subjectdn.format.tooltip;"
+			    oncommand="avpki.keymanager.CertEnrollSelectCertUser.formatUserSubjectDN(event);"
+			    />
+		      </hbox>
+		      <hbox
+			pack="start"
+			>
+			<certpicker id="keymgr.certenroll.scep.page.selectcert.user.certpicker"
+  		            menutooltiptext="&keymgr.certenroll.scep.param.data.user.cert.tooltip;"
+			    tokentypehidden="true"
+			    certtype="user"
+			    certtypehidden="true"
+			    certusage="EmailRecipient"
+			    certusagehidden="false"
+			    certusagedisabled="true"
+			    viewhidden="false"
+	  	            viewlabel="&keymgr.certenroll.scep.cert.view.label;"
+  		            viewtooltiptext="&keymgr.certenroll.scep.param.data.user.cert.view.tooltip;"
+			    includeTokenInfo="true"
+	       	            oncommand="avpki.keymanager.CertEnrollSelectCertUser.handleUserCertPickerChange(this, event);"
+			    />
+	    		<createcert id="keymgr.certenroll.scep.page.selectcert.user.createcert"
+			    class="menu"
+			    optypelabel="&keymgr.certenroll.scep.param.data.user.cert.create.label;"
+			    casignedhidden="true"
+			    selfproxyhidden="true"
+			    otpkhidden="true"
+			    oncommand="avpki.keymanager.CertEnrollSelectCertUser.handleUserCertCreate(this, event)"
+			    />
+		      </hbox>
+		    </vbox> 
+		</row>
+		<row
+		    align="center"
+		    >
+		    <label value="&keymgr.certenroll.scep.param.data.user.challengepw.label;"/>
+		    <hbox pack="start">
+			<textbox id="keymgr.certenroll.scep.page.selectcert.user.challengepw"
+			    type="password"
+			    tooltiptext="&keymgr.certenroll.scep.param.data.user.challengepw.tooltip;"
+			    />
+	      	        <button id="keymgr.certenroll.scep.page.selectcert.user.challengepw.retrieve"
+			    label="&keymgr.certenroll.scep.param.data.user.challengepw.retrieve.label;"
+  		      	    tooltiptext="&keymgr.certenroll.scep.param.data.user.challengepw.retrieve.tooltip;"
+			    oncommand="avpki.keymanager.CertEnrollSelectCertUser.getUserChallengePassword(event);"
+			    /> 
+		    </hbox>
+		</row>
+	    </rows>
+	</grid>
+    </vbox>
+
+</overlay>

@@ -1,0 +1,356 @@
+<?xml version="1.0"?>
+<!-- @(#) $Id: SignTextWizardOverlay.xul,v 1.3 2010/12/24 20:04:36 subrata Exp $ -->
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is Avaya Labs Research, Avaya Inc. Code.
+   -
+   - The Initial Developer of the Original Code is
+   -     Subrata Mazumdar, Avaya Labs Research, Avaya Inc.
+   - Portions created by the Initial Developer are Copyright (C) 2007.
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Subrata Mazumdar (mazum@avaya.com)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://keymanager/skin/kmbindings.css" type="text/css"?>
+
+<!--
+<!DOCTYPE wizard
+	[
+	<!ENTITY % xmldsigffext.dtd SYSTEM "chrome://xmldsigffext/locale/xmldsigffext.dtd">
+	%xmldsigffext.dtd;
+	]>
+-->
+
+<!DOCTYPE overlay SYSTEM "chrome://keymanager/locale/keyManager.dtd">
+
+<overlay id="keymgr.signtext.overlay.win"
+    xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    >
+
+    <script type="application/x-javascript" src="SignTextWizardOverlay.js"/>
+
+    <wizardpage
+    	id="keymgr.signtext.doc.sign"
+    	pageid="keymgr.signtext.doc.sign"
+    	description="&keymgr.signtext.doc.sign.label;"
+    	zflex="1"
+	onpageshow="return SignTextWizardOverlay.signPageShow(this);"
+	onpageadvanced="return SignTextWizardOverlay.signPageAdvanced(this);"
+    	next="keymgr.signtext.doc.verify"
+	nextlabel="&keymgr.signtext.doc.sign.next.label;"
+    	>
+	<vbox class="box-padded" id="keymgr.signtext.doc.verify.vbox"
+	    flex="1"
+	    >
+	    <grid id="keymgr.signtext.saml.token.sign.input.grid"
+	        zflex="1"
+		> 
+		<columns>
+		    <column/>
+		    <column flex="1"/>
+		</columns>
+		<rows>
+		    <row id="keymgr.signtext.doc.unsigned.file.row">
+			<label class="header" value="&keymgr.signtext.doc.unsigned.file.label;"/>
+			<fileselector id="keymgr.signtext.doc.unsigned.file.path" flex="1"
+			    readonly="true"
+			    browsehidden="true"
+			    formathidden="true"
+			    ascii="true"
+			    fileDialogMsg="Select the Path of Unsigned text File"
+			    fileTypeMsg="Text file"
+			    fileTypeFilters="*.txt"
+			    filetooltiptext="&keymgr.signtext.doc.unsigned.file.path.tooltip;"
+			    browselabel="&keymgr.signtext.file.browser.label;"
+			    browsetooltiptext="&keymgr.signtext.doc.unsigned.file.browser.tooltip;"
+			    onpopuphiding="SignTextWizardOverlay.handleSignInTxtFilePathChange(this, event);"
+			    onchange="SignTextWizardOverlay.handleSignInTxtFilePathChange(this, event);"
+			    oncommand="SignTextWizardOverlay.handleSignInTxtFilePathChange(this, event);"
+			    />
+		    </row>
+		    <row id="keymgr.signtext.doc.unsigned.signerca.row">
+			<label value="Signer Cert's CA"/> 
+			<hbox 
+			    pack="start"
+			    >
+			<checkbox id="keymgr.signtext.doc.unsigned.signer.cafilter"
+			    label="Filter Signer Cert by CA"
+		       	    oncommand="SignTextWizardOverlay.handleSignerCACertFilterOptionChange(this, event);"
+			    />
+			<certpicker id="keymgr.signtext.doc.unsigned.signer.cacertpicker"
+			    flex="1"
+			    includeTokenInfo="true"
+			    persist="value"
+			    tokentypehidden="true"
+			    certtype="ca"
+			    certtypehidden="true"
+			    certusage="VerifyCA"
+			    certusagehidden="true"
+			    certusagedisabled="true"
+			    viewhidden="false"
+		       	    oncommand="SignTextWizardOverlay.handleSignerCACertPickerChange(this, event);"
+			    />
+			</hbox>
+		    </row>
+		</rows>
+	    </grid>
+
+	    <spacer flex="1"/>
+	    <grid id="keymgr.signtext.saml.token.out.grid"
+	        flex="1"
+		> 
+		<columns>
+		    <column/>
+		    <column flex="1"/>
+		</columns>
+		<rows>
+		    <row id="keymgr.signtext.doc.signed.file.row">
+			<label class="header" value="&keymgr.signtext.doc.signed.file.label;"/>
+			<fileselector id="keymgr.signtext.doc.signed.file.path" flex="1"
+			    formathidden="true"
+			    ascii="true"
+			    fileMode="save"
+			    fileDialogMsg="Select the Path of Signed text File"
+			    fileTypeMsg="Text file"
+			    fileTypeFilters="*.txt; *.p7m; *.pk7"
+			    filetooltiptext="&keymgr.signtext.doc.signed.file.path.tooltip;"
+			    browselabel="&keymgr.signtext.file.browser.label;"
+			    browsetooltiptext="&keymgr.signtext.doc.signed.file.browser.tooltip;"
+			    />
+		    </row>
+		</rows>
+	    </grid>
+	</vbox>
+    </wizardpage>
+
+    <wizardpage
+    	id="keymgr.signtext.doc.verify"
+    	pageid="keymgr.signtext.doc.verify"
+    	description="&keymgr.signtext.doc.verify.label;"
+    	flex="1"
+	onpageshow="return SignTextWizardOverlay.verifyPageShow(this);"
+	onpageadvanced="return SignTextWizardOverlay.verifyPageAdvanced(this);"
+    	next="keymgr.signtext.doc.encrypt"
+	nextlabel="&keymgr.signtext.doc.verify.next.label;"
+    	>
+	<vbox class="box-padded" id="keymgr.signtext.doc.verify.vbox"
+	    flex="1"
+	    >
+	    <grid id="keymgr.signtext.doc.verify.file.grid"
+	        zflex="1"
+		> 
+		<columns>
+		    <column/>
+		    <column flex="1"/>
+		</columns>
+		<rows>
+		    <row id="keymgr.signtext.doc.verify.file.row">
+			<label class="header" value="&keymgr.signtext.doc.signed.file.label;"/>
+	                <fileselector id="keymgr.signtext.doc.verify.file.path"
+	    	            flex="1"
+			    readonly="true"
+			    browsehidden="true"
+			    formathidden="true"
+			    ascii="true"
+			    fileDialogMsg="Select the Path of Signed text File"
+			    fileTypeMsg="Text file"
+			    fileTypeFilters="*.txt; *.p7m; *.pk7"
+			    filetooltiptext="&keymgr.signtext.doc.signed.file.path.tooltip;"
+			    browselabel="&keymgr.signtext.file.browser.label;"
+			    browsetooltiptext="&keymgr.signtext.doc.signed.file.browser.tooltip;"
+			    onpopuphiding="SignTextWizardOverlay.handleVerifyInTxtFilePathChange(this, event);"
+			    onchange="SignTextWizardOverlay.handleVerifyInTxtFilePathChange(this, event);"
+			    oncommand="SignTextWizardOverlay.handleVerifyInTxtFilePathChange(this, event);"
+			    />
+		    </row>
+		    <row id="keymgr.signtext.doc.verify.signer.row">
+			<label class="header" value="Signer Cert"/>
+		        <hbox
+			    pack="start"
+			    align="start"
+			    >
+			    <certitem id="keymgr.signtext.doc.verify.signer.certitem"
+			        />
+		        </hbox>
+		    </row>
+		</rows>
+	    </grid>
+	</vbox>
+    </wizardpage>
+
+    <wizardpage
+    	id="keymgr.signtext.doc.encrypt"
+    	pageid="keymgr.signtext.doc.encrypt"
+    	description="&keymgr.signtext.doc.encrypt.label;"
+    	flex="1"
+	onpageshow="return SignTextWizardOverlay.enryptPageShow(this);"
+	onpageadvanced="return SignTextWizardOverlay.enryptPageAdvanced(this);"
+    	next="keymgr.signtext.doc.decrypt"
+    	nextlabel="&keymgr.signtext.doc.encrypt.next.label;"
+    	>
+	<vbox class="box-padded" id="keymgr.signtext.doc.encrypt.vbox"
+	    flex="1"
+	    >
+	</vbox>
+    </wizardpage>
+
+    <wizardpage
+    	id="keymgr.signtext.doc.decrypt"
+    	pageid="keymgr.signtext.doc.decrypt"
+    	description="&keymgr.signtext.doc.decrypt.label;"
+    	flex="1"
+	onpageshow="return SignTextWizardOverlay.decryptPageShow(this);"
+	onpageadvanced="return SignTextWizardOverlay.decryptPageAdvanced(this);"
+    	next="keymgr.signtext.doc.verify2"
+    	nextlabel="&keymgr.signtext.doc.decrypt.next.label;"
+    	>
+	<vbox class="box-padded" id="keymgr.signtext.doc.decrypt.vbox"
+	    flex="1"
+	    >
+	    <!--
+	    <grid id="keymgr.signtext.doc.decrypt.grid"
+	        zflex="1"
+		> 
+		<columns>
+		    <column/>
+		    <column flex="1"/>
+		</columns>
+		<rows>
+		    <row id="keymgr.signtext.doc.decrypt.in.file.row">
+			<label class="header" value="&keymgr.signtext.doc.encrypt.file.label;"/>
+			<fileselector id="keymgr.signtext.doc.decrypt.in.file.path" flex="1"
+			    xreadonly="true"
+			    xbrowsehidden="true"
+			    formathidden="true"
+			    ascii="true"
+			    fileDialogMsg="Select the Path to the Encrypted SAML Token File"
+			    fileTypeMsg="XML file"
+			    fileTypeFilters="*.xml"
+			    filetooltiptext="&keymgr.signtext.doc.decrypt.file.path.tooltip;"
+			    browselabel="&keymgr.signtext.file.browser.label;"
+			    browsetooltiptext="&keymgr.signtext.doc.decrypt.file.browser.tooltip;"
+			    onpopuphiding="SignTextWizardOverlay.handleDecryptInTxtFilePathChange(this, event);"
+			    onchange="SignTextWizardOverlay.handleDecryptInTxtFilePathChange(this, event);"
+			    oncommand="SignTextWizardOverlay.handleDecryptInTxtFilePathChange(this, event);"
+			    />
+		    </row>
+		</rows>
+	    </grid>
+
+	    <spacer flex="1"/>
+	    <grid flex="1" id="keymgr.signtext.doc.decrypt.grid"> 
+		<columns>
+		    <column/>
+		    <column flex="1"/>
+		</columns>
+		<rows>
+		    <row id="keymgr.signtext.doc.decrypt.out.file.row">
+			<label class="header" value="&keymgr.signtext.doc.decrypt.file.label;"/>
+	    		<fileselector id="keymgr.signtext.doc.decrypt.out.file.path" flex="1"
+			    persists="value"
+			    formathidden="true"
+			    ascii="true"
+			    fileMode="save"
+			    fileDialogMsg="Select the Path to the Decrypted XML File"
+			    fileTypeMsg="XML file"
+			    fileTypeFilters="*.xml"
+			    filetooltiptext="&keymgr.signtext.doc.decrypt.file.path.tooltip;"
+			    browselabel="&keymgr.signtext.file.browser.label;"
+			    browsetooltiptext="&keymgr.signtext.doc.decrypt.file.browser.tooltip;"
+			    onpopuphiding="SignTextWizardOverlay.handleDecryptedTxtFilePathChange(this, event);"
+			    onchange="SignTextWizardOverlay.handleDecryptedTxtFilePathChange(this, event);"
+			    oncommand="SignTextWizardOverlay.handleDecryptedTxtFilePathChange(this, event);"
+			    />
+		    </row>
+		</rows>
+	    </grid>
+	    -->
+	    <!--
+	    <label id="keymgr.signtext.doc.decrypt.next"
+    	                value="&keymgr.signtext.doc.decrypt.next.label;"
+			collapsed="true"/>
+	    -->
+	</vbox>
+    </wizardpage>
+
+    <wizardpage
+    	id="keymgr.signtext.doc.verify2"
+    	pageid="keymgr.signtext.doc.verify2"
+    	description="&keymgr.signtext.doc.verify.label;"
+    	flex="1"
+	onpageshow="return SignTextWizardOverlay.verify2PageShow(this);"
+	onpageadvanced="return SignTextWizardOverlay.verify2PageAdvanced(this);"
+    	next="keymgr.signtext.doc.finish"
+    	nextlabel="&keymgr.signtext.doc.verify.next.label;"
+    	>
+	<vbox class="box-padded" id="keymgr.signtext.doc.verify2.vbox"
+	    flex="1"
+	    >
+	    <!--
+	    <grid id="keymgr.signtext.doc.verify2.file.grid"
+	        zflex="1"
+		> 
+		<columns>
+		    <column/>
+		    <column flex="1"/>
+		</columns>
+		<rows>
+		    <row id="keymgr.signtext.doc.verify2.file.row">
+			<label class="header" value="&keymgr.signtext.doc.signed.file.label;"/>
+	                <fileselector id="keymgr.signtext.doc.verify2.file.path" flex="1"
+			    readonly="true"
+			    browsehidden="true"
+			    formathidden="true"
+			    ascii="true"
+			    fileDialogMsg="Select the Path of Signed XML File"
+			    fileTypeMsg="XML file"
+			    fileTypeFilters="*.xml"
+			    filetooltiptext="&keymgr.signtext.doc.signed.file.path.tooltip;"
+			    browselabel="&keymgr.signtext.file.browser.label;"
+			    browsetooltiptext="&keymgr.signtext.doc.signed.file.browser.tooltip;"
+			    />
+		    </row>
+		</rows>
+	    </grid>
+	    -->
+
+	    <!--
+	    <label id="keymgr.signtext.doc.verify2.next"
+    	                value="&keymgr.signtext.doc.verify.next.label;"
+			collapsed="true"/>
+	    -->
+	</vbox>
+    </wizardpage>
+
+
+</overlay>
+
